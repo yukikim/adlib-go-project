@@ -1,0 +1,82 @@
+datasource db {
+  provider = "postgresql" // 必要に応じて変更
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Participant {
+  id        String   @id @default(uuid())
+  name      String
+  instrument Instrument
+
+  requestedSongs ParticipantSongRequest[]
+  drumSessions   SessionSet[]        @relation("DrumSessions")
+  bassSessions   SessionSet[]        @relation("BassSessions")
+  pianoSessions  SessionSet[]        @relation("PianoSessions")
+  sessionMembers SessionSetMember[]
+}
+
+model Song {
+  id    String  @id @default(uuid())
+  title String  @unique
+
+  requests    ParticipantSongRequest[]
+  sessionSets SessionSet[]
+}
+
+model ParticipantSongRequest {
+  id             String       @id @default(uuid())
+  participant    Participant  @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  participantId  String
+  song           Song         @relation(fields: [songId], references: [id], onDelete: Cascade)
+  songId         String
+  keyName        String?      // vocal の場合のみ必須（アプリ側でバリデーション）
+  round          Int          // 1 or 2（アプリ側でバリデーション）
+
+  @@unique([participantId, songId])
+}
+
+model SessionSet {
+  id       String   @id @default(uuid())
+  title    String
+  song     Song     @relation(fields: [songId], references: [id])
+  songId   String
+
+  drum     Participant? @relation("DrumSessions", fields: [drumId], references: [id])
+  drumId   String?
+  bass     Participant? @relation("BassSessions", fields: [bassId], references: [id])
+  bassId   String?
+  piano    Participant? @relation("PianoSessions", fields: [pianoId], references: [id])
+  pianoId  String?
+
+  keyName  String?
+
+  members  SessionSetMember[]
+}
+
+model SessionSetMember {
+  id             String      @id @default(uuid())
+  sessionSet     SessionSet  @relation(fields: [sessionSetId], references: [id], onDelete: Cascade)
+  sessionSetId   String
+  participant    Participant @relation(fields: [participantId], references: [id])
+  participantId  String
+  role           MemberRole
+
+  @@unique([sessionSetId, participantId, role])
+}
+
+enum Instrument {
+  drum
+  bass
+  piano
+  front
+  vocal
+}
+
+enum MemberRole {
+  front
+  vocal
+}
