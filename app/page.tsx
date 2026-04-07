@@ -8,6 +8,15 @@ interface Participant {
   id: string;
   name: string;
   instrument: Instrument;
+  requestedSongs: {
+    id: string;
+    round: 1 | 2;
+    keyName?: string | null;
+    song: {
+      id: string;
+      title: string;
+    };
+  }[];
 }
 
 interface Song {
@@ -22,8 +31,8 @@ interface SessionSetView {
   drum: { id: string; name: string } | null;
   bass: { id: string; name: string } | null;
   piano: { id: string; name: string } | null;
-  front: { id: string; name: string }[];
-  vocal: { id: string; name: string }[];
+  front?: { id: string; name: string }[];
+  vocal?: { id: string; name: string }[];
 }
 
 export default function HomePage() {
@@ -216,8 +225,60 @@ export default function HomePage() {
         </div>
         <ul style={{ marginTop: "0.5rem" }}>
           {participants.map((p) => (
-            <li key={p.id}>
-              {p.name} ({p.instrument})
+            <li key={p.id} style={{ marginBottom: "0.75rem" }}>
+              {(() => {
+                const round1Requests = [...p.requestedSongs]
+                  .filter((request) => request.round === 1)
+                  .sort((a, b) => a.song.title.localeCompare(b.song.title));
+                const round2Requests = [...p.requestedSongs]
+                  .filter((request) => request.round === 2)
+                  .sort((a, b) => a.song.title.localeCompare(b.song.title));
+
+                return (
+                  <>
+                    <div>
+                      <strong>{p.name}</strong> ({p.instrument})
+                    </div>
+                    {p.requestedSongs.length === 0 ? (
+                      <div style={{ color: "#666" }}>希望曲なし</div>
+                    ) : (
+                      <div style={{ marginTop: "0.25rem" }}>
+                        <div>
+                          <strong>Round 1</strong>
+                        </div>
+                        {round1Requests.length === 0 ? (
+                          <div style={{ color: "#666" }}>なし</div>
+                        ) : (
+                          <ul style={{ marginTop: "0.15rem" }}>
+                            {round1Requests.map((request) => (
+                              <li key={request.id}>
+                                {request.song.title}
+                                {request.keyName ? ` (key: ${request.keyName})` : ""}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+
+                        <div style={{ marginTop: "0.35rem" }}>
+                          <strong>Round 2</strong>
+                        </div>
+                        {round2Requests.length === 0 ? (
+                          <div style={{ color: "#666" }}>なし</div>
+                        ) : (
+                          <ul style={{ marginTop: "0.15rem" }}>
+                            {round2Requests.map((request) => (
+                              <li key={request.id}>
+                                {request.song.title}
+                                {request.keyName ? ` (key: ${request.keyName})` : ""}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
             </li>
           ))}
         </ul>
@@ -344,10 +405,10 @@ export default function HomePage() {
                       {s.piano?.name ?? "-"}
                     </td>
                     <td style={{ border: "1px solid #ccc", padding: "0.25rem" }}>
-                      {s.front.map((f) => f.name).join(", ") || "-"}
+                      {(s.front ?? []).map((f) => f.name).join(", ") || "-"}
                     </td>
                     <td style={{ border: "1px solid #ccc", padding: "0.25rem" }}>
-                      {s.vocal.map((v) => v.name).join(", ") || "-"}
+                      {(s.vocal ?? []).map((v) => v.name).join(", ") || "-"}
                     </td>
                   </tr>
                 ))}

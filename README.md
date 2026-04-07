@@ -189,6 +189,23 @@ npm run dev
 
 - ブラウザで `http://localhost:3000` にアクセスすると管理 UI が表示されます。
 
+6. ダミーデータ投入（任意）
+
+- 参加者 30 人、曲マスタ 20 曲、希望曲データをまとめて入れる場合:
+
+```bash
+npm run seed:demo
+```
+
+- これは既存の参加者・曲・希望曲・sessionSet を一度削除してから再投入します。
+- 個別実行したい場合は次を使います。
+
+```bash
+npm run seed:reset
+npm run seed:participants
+npm run seed:requests
+```
+
 ---
 
 ## 典型的な利用フロー
@@ -200,6 +217,23 @@ npm run dev
 	 - 曲は既存タイトルからのみ選ぶ。
 4. 「sessionSet を自動生成」ボタンを押すか、`POST /api/session-sets/generate` を叩く。
 5. `GET /api/session-sets` あるいは UI のテーブルで、曲ごとの構成を確認。
+
+### sessionSet 生成確認コマンド
+
+開発サーバ起動後に、API から sessionSet を生成して結果件数を確認できます。
+
+```bash
+curl -sS -X POST http://localhost:3000/api/session-sets/generate
+```
+
+生成済みデータを件数つきで確認する例:
+
+```bash
+node -e "fetch('http://localhost:3000/api/session-sets').then(r=>r.json()).then(d=>console.log(JSON.stringify({count:d.sessionSets.length, sample:d.sessionSets.slice(0,3)}, null, 2)))"
+```
+
+- 生成前にダミーデータを入れ直したい場合は `npm run seed:demo` を実行してください。
+- `sessionSet` が 0 件のときは、まだ生成していないか、参加者・希望曲データが不足しています。
 
 ---
 
