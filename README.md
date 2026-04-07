@@ -138,22 +138,50 @@ npm install
 
 2. DB 設定
 
-- ルートに `.env` を作成し、`DATABASE_URL` を設定します。
+- ルートの `.env.example` を `.env` にコピーして使います。
 
-例（PostgreSQL）:
-
-```env
-DATABASE_URL="postgresql://user:password@localhost:5432/jazz_session_planner?schema=public"
+```bash
+cp .env.example .env
 ```
 
-3. Prisma マイグレーション & クライアント生成
+`.env` の例:
+
+```env
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=jazz_session_planner
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/jazz_session_planner?schema=public"
+```
+
+3. PostgreSQL 起動
+
+```bash
+docker compose up -d
+```
+
+- PostgreSQL は `localhost:5432` で待ち受けます。
+- データは Docker volume `postgres_data` に永続化されます。
+
+停止する場合:
+
+```bash
+docker compose down
+```
+
+データも削除する場合:
+
+```bash
+docker compose down -v
+```
+
+4. Prisma マイグレーション & クライアント生成
 
 ```bash
 npx prisma migrate dev --name init
 npx prisma generate
 ```
 
-4. 開発サーバ起動
+5. 開発サーバ起動
 
 ```bash
 npm run dev
