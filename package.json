@@ -9,6 +9,7 @@
     "lint": "next lint",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio",
     "seed:reset": "node prisma/reset-demo-data.mjs",
     "seed:participants": "node prisma/seed-participants.mjs",
     "seed:requests": "node prisma/seed-requests.mjs",

@@ -35,10 +35,23 @@ interface SessionSetView {
   vocal?: { id: string; name: string }[];
 }
 
+interface SkippedSongView {
+  songTitle: string;
+  reasons: string[];
+}
+
+interface ForcedSessionSetView {
+  songTitle: string;
+  forcedInstruments: Instrument[];
+  requesterCount: number;
+}
+
 export default function HomePage() {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [songs, setSongs] = useState<Song[]>([]);
   const [sessionSets, setSessionSets] = useState<SessionSetView[]>([]);
+  const [skippedSongs, setSkippedSongs] = useState<SkippedSongView[]>([]);
+  const [forcedSessionSets, setForcedSessionSets] = useState<ForcedSessionSetView[]>([]);
 
   const [newParticipantName, setNewParticipantName] = useState("");
   const [newParticipantInstrument, setNewParticipantInstrument] =
@@ -69,6 +82,8 @@ export default function HomePage() {
       setParticipants(pJson.participants ?? []);
       setSongs(sJson.songs ?? []);
       setSessionSets(ssJson.sessionSets ?? []);
+      setSkippedSongs([]);
+      setForcedSessionSets([]);
     } catch (e) {
       console.error(e);
       setMessage("データ取得に失敗しました");
@@ -182,7 +197,11 @@ export default function HomePage() {
         throw new Error(j.error ?? "failed");
       }
       setSessionSets(j.sessionSets ?? []);
-      setMessage("sessionSet を生成しました");
+      setSkippedSongs(j.skippedSongs ?? []);
+      setForcedSessionSets(j.forcedSessionSets ?? []);
+      setMessage(
+        `sessionSet を生成しました: ${j.sessionSets?.length ?? 0} 曲、強制追加 ${j.forcedSessionSets?.length ?? 0} 曲、未生成 ${j.skippedSongs?.length ?? 0} 曲`,
+      );
     } catch (e: any) {
       setMessage(`sessionSet 生成に失敗しました: ${e.message ?? e}`);
     } finally {
@@ -414,6 +433,42 @@ export default function HomePage() {
                 ))}
               </tbody>
             </table>
+          )}
+        </div>
+
+        <div style={{ marginTop: "1rem" }}>
+          <h3>強制参加で追加生成された曲</h3>
+          {forcedSessionSets.length === 0 ? (
+            <p>強制追加された曲はありません。</p>
+          ) : (
+            <ul>
+              {forcedSessionSets.map((song) => (
+                <li key={song.songTitle} style={{ marginBottom: "0.5rem" }}>
+                  <strong>{song.songTitle}</strong>
+                  {` : 強制参加 ${song.forcedInstruments.join(", ")} / 他の希望者 ${song.requesterCount} 名`}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div style={{ marginTop: "1rem" }}>
+          <h3>生成されなかった曲</h3>
+          {skippedSongs.length === 0 ? (
+            <p>未生成の曲はありません。</p>
+          ) : (
+            <ul>
+              {skippedSongs.map((song) => (
+                <li key={song.songTitle} style={{ marginBottom: "0.5rem" }}>
+                  <strong>{song.songTitle}</strong>
+                  <ul style={{ marginTop: "0.15rem" }}>
+                    {song.reasons.map((reason) => (
+                      <li key={reason}>{reason}</li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </ul>
           )}
         </div>
       </section>

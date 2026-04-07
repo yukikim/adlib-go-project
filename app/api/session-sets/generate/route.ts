@@ -26,7 +26,7 @@ export async function POST(_req: NextRequest) {
   }));
 
   // 3. ロジックで sessionSets を生成
-  const sessionSets = generateSessionSets(domainParticipants);
+  const { sessionSets, skippedSongs, forcedSessionSets } = generateSessionSets(domainParticipants);
 
   // 4. DB に保存（既存をクリアしてから再生成）
   await prisma.$transaction(async (tx) => {
@@ -94,5 +94,5 @@ export async function POST(_req: NextRequest) {
       .map((m) => ({ id: m.participant.id, name: m.participant.name })),
   }));
 
-  return NextResponse.json({ sessionSets: data });
+  return NextResponse.json({ sessionSets: data, skippedSongs, forcedSessionSets });
 }

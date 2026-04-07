@@ -1,31 +1,7 @@
 import { PrismaClient } from '@prisma/client';
+import { songTitles, vocalKeys } from './demo-data.mjs';
 
 const prisma = new PrismaClient();
-
-const songTitles = [
-  'Autumn Leaves',
-  'Blue Bossa',
-  'All The Things You Are',
-  'Stella By Starlight',
-  'There Will Never Be Another You',
-  'On Green Dolphin Street',
-  'Take The A Train',
-  'Misty',
-  'Satin Doll',
-  'My Funny Valentine',
-  'Fly Me To The Moon',
-  'Days Of Wine And Roses',
-  'Solar',
-  'Softly, As In A Morning Sunrise',
-  'Just Friends',
-  'There Is No Greater Love',
-  'Someday My Prince Will Come',
-  'How High The Moon',
-  'Beautiful Love',
-  'Night And Day',
-];
-
-const vocalKeys = ['C', 'Eb', 'F', 'G', 'Bb', 'D'];
 
 function pickUniqueSongs(startIndex, count, excludedTitles = []) {
   const selections = [];

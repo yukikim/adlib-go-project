@@ -31,3 +31,20 @@ export interface SessionSet {
   front: string[]; // participant.id の配列（front + vocal を含めてもよい）
   key?: string;    // vocal が歌うときのキー
 }
+
+export interface SkippedSong {
+  songTitle: string;
+  reasons: string[];
+}
+
+export interface ForcedSessionSet {
+  songTitle: string;
+  forcedInstruments: Instrument[];
+  requesterCount: number;
+}
+
+export interface SessionGenerationResult {
+  sessionSets: SessionSet[];
+  skippedSongs: SkippedSong[];
+  forcedSessionSets: ForcedSessionSet[];
+}
