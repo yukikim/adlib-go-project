@@ -1,9 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { requireAdmin } from '@/lib/adminApi';
 
 // POST /api/requests
 // body: { participantId: string; songTitle: string; keyName?: string; round: 1 | 2 }
 export async function POST(req: NextRequest) {
+  const { response } = await requireAdmin(req);
+  if (response) {
+    return response;
+  }
+
   const body = await req.json().catch(() => null) as
     | { participantId?: string; songTitle?: string; keyName?: string; round?: number }
     | null;

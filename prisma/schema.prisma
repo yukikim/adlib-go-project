@@ -87,6 +87,8 @@ model UserAccount {
   updatedAt         DateTime           @updatedAt
 
   memberProfile     MemberProfile?
+  authSessions      AuthSession[]
+  passwordResetTokens PasswordResetToken[]
   sessionRatings    SessionSetRating[]
   sessionArchives   SessionArchive[]   @relation("ArchiveCreator")
   adminAuditLogs    AdminAuditLog[]
@@ -246,6 +248,26 @@ model AdminAuditLog {
   sessionArchive    SessionArchive?  @relation(fields: [sessionArchiveId], references: [id], onDelete: SetNull)
   sessionArchiveId  String?
   performedAt       DateTime         @default(now())
+}
+
+model AuthSession {
+  id               String       @id @default(uuid())
+  userAccount      UserAccount  @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
+  userAccountId    String
+  sessionTokenHash String       @unique
+  expiresAt        DateTime
+  lastAccessedAt   DateTime     @default(now())
+  createdAt        DateTime     @default(now())
+}
+
+model PasswordResetToken {
+  id               String       @id @default(uuid())
+  userAccount      UserAccount  @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
+  userAccountId    String
+  tokenHash        String       @unique
+  expiresAt        DateTime
+  usedAt           DateTime?
+  createdAt        DateTime     @default(now())
 }
 
 enum Instrument {

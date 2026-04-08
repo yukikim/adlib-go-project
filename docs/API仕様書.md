@@ -10,9 +10,159 @@
 - 管理系 API は admin 権限を持つユーザーのみ利用できる
 - レスポンスは JSON とする
 
-## 2. セッションイベント API
+## 2. 認証 API
 
-### 2.1 POST /api/session-events
+### 2.1 POST /api/auth/signup
+
+用途:
+
+- メンバーアカウントとプロフィールを新規作成する
+
+request:
+
+```json
+{
+  "email": "member31@adolib-go.local",
+  "password": "password123",
+  "displayName": "新規 参加者",
+  "mainInstrument": "front"
+}
+```
+
+response 201:
+
+```json
+{
+  "user": {
+    "id": "user-id",
+    "email": "member31@adolib-go.local",
+    "role": "member",
+    "memberProfile": {
+      "displayName": "新規 参加者",
+      "mainInstrument": "front"
+    }
+  }
+}
+```
+
+### 2.2 POST /api/auth/signin
+
+用途:
+
+- サインインして httpOnly cookie セッションを発行する
+
+request:
+
+```json
+{
+  "email": "admin@adolib-go.local",
+  "password": "demo-admin-password"
+}
+```
+
+response 200:
+
+```json
+{
+  "user": {
+    "id": "user-id",
+    "email": "admin@adolib-go.local",
+    "role": "admin",
+    "memberProfile": null
+  }
+}
+```
+
+### 2.3 POST /api/auth/signout
+
+用途:
+
+- 現在のセッションを削除し cookie を無効化する
+
+response 200:
+
+```json
+{
+  "ok": true
+}
+```
+
+### 2.4 GET /api/auth/me
+
+用途:
+
+- 現在のサインイン状態を返す
+
+response 200:
+
+```json
+{
+  "user": {
+    "id": "user-id",
+    "email": "admin@adolib-go.local",
+    "role": "admin",
+    "status": "active",
+    "memberProfile": null
+  }
+}
+```
+
+### 2.5 POST /api/auth/forgot-password
+
+用途:
+
+- パスワード再設定トークンを発行する
+
+補足:
+
+- nodemailer を使用する
+- `SMTP_HOST` などが未設定の開発環境では `jsonTransport` を使い、レスポンスに `resetToken` を含める
+- SMTP が設定されている環境では `APP_BASE_URL` を使って再設定 URL を組み立て、実メール送信する
+
+### 2.6 POST /api/auth/reset-password
+
+用途:
+
+- 再設定トークンを使ってパスワードを更新する
+
+request:
+
+```json
+{
+  "token": "reset-token",
+  "password": "new-password-123"
+}
+```
+
+## 3. セッションイベント API
+
+### 3.0 GET /api/session-events
+
+用途:
+
+- SessionEvent 一覧を返す
+
+response 200:
+
+```json
+{
+  "sessionEvents": [
+    {
+      "id": "event-id",
+      "title": "2026年5月セッション",
+      "venue": "渋谷 Jazz Spot",
+      "eventDate": "2026-05-17T00:00:00.000Z",
+      "status": "draft",
+      "_count": {
+        "sessionEntries": 24,
+        "sessionSets": 12
+      }
+    }
+  ]
+}
+```
+
+### 3.1 POST /api/session-events
 
 用途:
 
@@ -57,13 +207,23 @@ response 400:
 
 ```json
 {
-  "error": "eventDate is required"
+  "error": "Invalid body"
 }
 ```
 
-## 3. セッション参加 API
+### 3.2 PATCH /api/session-events/:id
 
-### 3.1 POST /api/session-entries
+用途:
+
+- 管理者が SessionEvent の基本情報や status を更新する
+
+権限:
+
+- admin
+
+## 4. セッション参加 API
+
+### 4.1 POST /api/session-entries
 
 用途:
 
@@ -100,11 +260,15 @@ response 201:
 
 ```json
 {
-  "sessionEntry": {
+  "entry": {
     "id": "entry-id",
     "sessionEventId": "event-id",
     "memberProfileId": "member-id",
     "attendanceStatus": "attending",
+    "sessionEvent": {
+      "id": "event-id",
+      "title": "2026年5月セッション"
+    },
     "requests": [
       {
         "id": "entry-request-id-1",
@@ -118,9 +282,83 @@ response 201:
 }
 ```
 
-## 4. レイティング API
+### 4.2 GET /api/session-entries
 
-### 4.1 POST /api/session-sets/:id/ratings
+用途:
+
+- サインイン中メンバーの SessionEntry 一覧を返す
+
+権限:
+
+- member
+
+query:
+
+- `sessionEventId` は任意
+
+response 200:
+
+```json
+{
+  "entries": [
+    {
+      "id": "entry-id",
+      "attendanceStatus": "attending",
+      "sessionEvent": {
+        "id": "event-id",
+        "title": "2026年5月セッション",
+        "venue": "渋谷 Jazz Spot",
+        "eventDate": "2026-05-17T00:00:00.000Z"
+      },
+      "requests": [
+        {
+          "id": "entry-request-id-1",
+          "songTitleSnapshot": "Autumn Leaves",
+          "round": 1,
+          "priority": 1,
+          "keyName": null
+        }
+      ]
+    }
+  ]
+}
+```
+
+## 4.5 メンバープロフィール API
+
+### 4.5.1 GET /api/members/me
+
+用途:
+
+- サインイン中メンバーのプロフィールを取得する
+
+権限:
+
+- member
+
+### 4.5.2 PATCH /api/members/me
+
+用途:
+
+- サインイン中メンバーのプロフィールを更新する
+
+権限:
+
+- member
+
+request:
+
+```json
+{
+  "nickname": "テスト更新",
+  "area": "横浜市",
+  "bio": "Phase1 profile update test"
+}
+```
+
+## 5. レイティング API
+
+### 5.1 POST /api/session-sets/:id/ratings
 
 用途:
 
@@ -176,7 +414,7 @@ response 409:
 }
 ```
 
-### 4.2 GET /api/session-sets/:id/ratings/summary
+### 5.2 GET /api/session-sets/:id/ratings/summary
 
 用途:
 
@@ -208,9 +446,9 @@ response 200:
 }
 ```
 
-## 5. アーカイブ API
+## 6. アーカイブ API
 
-### 5.1 GET /api/session-archives
+### 6.1 GET /api/session-archives
 
 用途:
 
@@ -219,10 +457,6 @@ response 200:
 権限:
 
 - admin
-
-補足:
-
-- 現段階の暫定実装では x-user-role: admin と x-user-id ヘッダーを要求する
 - includeDeleted=true を付与すると削除済みを含めて返す
 
 response 200:
@@ -260,7 +494,7 @@ response 200:
 }
 ```
 
-### 5.2 GET /api/session-events/:id/archive-preview
+### 6.2 GET /api/session-events/:id/archive-preview
 
 用途:
 
@@ -285,7 +519,7 @@ response 200:
 }
 ```
 
-### 5.3 POST /api/session-sets/:id/archive
+### 6.3 POST /api/session-sets/:id/archive
 
 用途:
 
@@ -318,7 +552,7 @@ response 201:
 }
 ```
 
-### 5.4 DELETE /api/session-archives/:id
+### 6.4 DELETE /api/session-archives/:id
 
 用途:
 
@@ -352,7 +586,7 @@ response 404:
 }
 ```
 
-## 6. 共通エラー形式
+## 7. 共通エラー形式
 
 ```json
 {

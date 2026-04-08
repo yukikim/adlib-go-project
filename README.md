@@ -4,6 +4,7 @@ Jazz セッションの参加者、希望曲、キー情報を登録し、曲ご
 
 このリポジトリには以下が含まれます。
 
+- 認証、セッション、パスワード再設定の基礎 API
 - 参加者、曲、希望曲を管理する REST API
 - PostgreSQL + Prisma の永続化層
 - sessionSet を生成する割り当てロジック
@@ -367,6 +368,11 @@ app/page.tsx で以下を提供します。
 
 ## 使い方
 
+### デモログイン情報
+
+- 管理者: admin@adolib-go.local / demo-admin-password
+- メンバー例: member01@adolib-go.local / demo-member-password
+
 ### セットアップ
 
 1. 依存関係をインストール
@@ -388,7 +394,16 @@ POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 POSTGRES_DB=jazz_session_planner
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/jazz_session_planner?schema=public"
+APP_BASE_URL="http://localhost:3000"
+MAIL_FROM="no-reply@adolib-go.local"
+SMTP_HOST=""
+SMTP_PORT=""
+SMTP_SECURE="false"
+SMTP_USER=""
+SMTP_PASS=""
 ```
+
+`/api/auth/forgot-password` は nodemailer を使います。`SMTP_HOST` などが未設定の開発環境では `jsonTransport` で動作し、レスポンスに `resetToken` を返します。SMTP を設定すると実メール送信に切り替わります。
 
 3. PostgreSQL を起動
 
@@ -412,6 +427,39 @@ npm run dev
 6. 必要なら Prisma Studio を起動
 
 ```bash
+### Phase 1 実装済み機能
+
+- Cookie セッションによるサインイン / サインアップ / サインアウト
+- nodemailer ベースのパスワード再設定メール送信基盤
+- メンバーのプロフィール自己編集
+- 管理者向け SessionEvent 作成 API / 画面
+- メンバー向け SessionEntry 登録 API / 画面
+
+### Phase 1 API 確認例
+
+SessionEvent 一覧:
+
+```bash
+curl -sS http://localhost:3000/api/session-events
+```
+
+SessionEvent 作成:
+
+```bash
+curl -sS -X POST http://localhost:3000/api/session-events \
+	-H "Content-Type: application/json" \
+	-b cookies.txt -c cookies.txt \
+	-d '{"title":"2026年7月セッション","venue":"代官山 Session Lab","eventDate":"2026-07-10"}'
+```
+
+SessionEntry 登録:
+
+```bash
+curl -sS -X POST http://localhost:3000/api/session-entries \
+	-H "Content-Type: application/json" \
+	-b cookies.txt -c cookies.txt \
+	-d '{"sessionEventId":"event-id","attendanceStatus":"attending","requests":[{"songTitle":"Autumn Leaves","round":1,"priority":1}]}'
+```
 npm run prisma:studio
 ```
 

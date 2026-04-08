@@ -1,7 +1,16 @@
 import { PrismaClient } from '@prisma/client';
+import { randomBytes, scrypt as scryptCallback } from 'crypto';
+import { promisify } from 'util';
 import { adminSeedUsers, participants } from './demo-data.mjs';
 
 const prisma = new PrismaClient();
+const scrypt = promisify(scryptCallback);
+
+async function hashPassword(password) {
+  const salt = randomBytes(16).toString('hex');
+  const derivedKey = await scrypt(password, salt, 64);
+  return `scrypt$${salt}$${Buffer.from(derivedKey).toString('hex')}`;
+}
 
 function buildMemberEmail(index) {
   return `member${String(index + 1).padStart(2, '0')}@adolib-go.local`;
@@ -10,18 +19,20 @@ function buildMemberEmail(index) {
 async function main() {
   let adminCount = 0;
   let memberCount = 0;
+  const adminPasswordHash = await hashPassword('demo-admin-password');
+  const memberPasswordHash = await hashPassword('demo-member-password');
 
   for (const adminUser of adminSeedUsers) {
     await prisma.userAccount.upsert({
       where: { email: adminUser.email },
       update: {
-        passwordHash: adminUser.passwordHash,
+        passwordHash: adminPasswordHash,
         role: 'admin',
         status: 'active',
       },
       create: {
         email: adminUser.email,
-        passwordHash: adminUser.passwordHash,
+        passwordHash: adminPasswordHash,
         role: 'admin',
         status: 'active',
       },
@@ -42,13 +53,13 @@ async function main() {
     const user = await prisma.userAccount.upsert({
       where: { email: buildMemberEmail(index) },
       update: {
-        passwordHash: 'demo-member-password',
+        passwordHash: memberPasswordHash,
         role: 'member',
         status: 'active',
       },
       create: {
         email: buildMemberEmail(index),
-        passwordHash: 'demo-member-password',
+        passwordHash: memberPasswordHash,
         role: 'member',
         status: 'active',
       },

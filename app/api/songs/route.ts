@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { requireAdmin } from '@/lib/adminApi';
 
 // GET /api/songs
 export async function GET() {
@@ -13,6 +14,11 @@ export async function GET() {
 // POST /api/songs
 // body: { title: string }
 export async function POST(req: NextRequest) {
+  const { response } = await requireAdmin(req);
+  if (response) {
+    return response;
+  }
+
   const body = await req.json().catch(() => null);
 
   if (!body || typeof body.title !== 'string' || !body.title.trim()) {

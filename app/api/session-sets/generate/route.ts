@@ -2,8 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { generateSessionSets } from '@/session-planner/generateSessionSets';
 import type { Participant as DomainParticipant } from '@/session-planner/domain';
+import { requireAdmin } from '@/lib/adminApi';
 
-export async function POST(_req: NextRequest) {
+export async function POST(req: NextRequest) {
+  const { response } = await requireAdmin(req);
+  if (response) {
+    return response;
+  }
+
   // 1. DB から参加者 + 希望曲を取得
   const participants = await prisma.participant.findMany({
     include: {
