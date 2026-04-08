@@ -290,16 +290,96 @@
 - createdBy
 - status
 
+### 3.14 SessionSetRating
+
+用途:
+
+- メンバーが各 sessionSet に対して入力したレイティングを保持する
+
+主なカラム案:
+
+- id
+- sessionEventId
+- sessionSetId
+- memberProfileId
+- rating
+- comment
+- ratedAt
+- updatedAt
+
+制約案:
+
+- sessionSetId + memberProfileId をユニークにする
+
+### 3.15 SessionArchive
+
+用途:
+
+- セッション実施情報のアーカイブ本体を保持する
+
+主なカラム案:
+
+- id
+- sessionEventId
+- title
+- eventDate
+- venue
+- participantCount
+- participantListSnapshot
+- note
+- createdBy
+- createdAt
+
+### 3.16 SessionArchiveSet
+
+用途:
+
+- アーカイブ保存時点の各セット情報を保持する
+
+主なカラム案:
+
+- id
+- sessionArchiveId
+- songTitle
+- setOrder
+- drumName
+- bassName
+- pianoName
+- frontSnapshot
+- vocalSnapshot
+- keyName
+
+### 3.17 SessionArchiveRatingSummary
+
+用途:
+
+- アーカイブ保存時点のセットごとのレイティング集計を保持する
+
+主なカラム案:
+
+- id
+- sessionArchiveSetId
+- ratingCount
+- averageRating
+- minRating
+- maxRating
+- distributionJson
+
 ## 4. リレーション方針
 
 - UserAccount 1 : 1 MemberProfile
 - SessionEvent 1 : N SessionEntry
 - SessionEntry 1 : N SessionEntryRequest
 - SessionEvent 1 : N SessionSet
+- SessionEvent 1 : N SessionSetRating
+- SessionEvent 1 : N SessionArchive
 - SessionSet 1 : N SessionSetMember
+- SessionSet 1 : N SessionSetRating
 - DirectMessageRoom 1 : N DirectMessage
 - GroupChat 1 : N GroupMessage
 - GroupChat 1 : N GroupChatMember
+- SessionArchive 1 : N SessionArchiveSet
+- SessionArchiveSet 1 : 1 SessionArchiveRatingSummary
 
 ## 5. マスタ項目案
 
@@ -325,7 +405,9 @@
 3. SessionEvent
 4. SessionEntry
 5. SessionEntryRequest
-6. Announcement
-7. MailLog
-8. Column
-9. DirectMessage / GroupChat 系
+6. SessionSetRating
+7. SessionArchive / SessionArchiveSet / SessionArchiveRatingSummary
+8. Announcement
+9. MailLog
+10. Column
+11. DirectMessage / GroupChat 系
