@@ -428,6 +428,9 @@ npm run seed:demo
 - seed:reset
 - seed:participants
 - seed:requests
+- seed:auth
+- seed:events
+- seed:ratings-archives
 
 個別実行:
 
@@ -435,6 +438,9 @@ npm run seed:demo
 npm run seed:reset
 npm run seed:participants
 npm run seed:requests
+npm run seed:auth
+npm run seed:events
+npm run seed:ratings-archives
 ```
 
 現在のダミーデータ内容:
@@ -443,6 +449,20 @@ npm run seed:requests
 - vocal 3 人
 - 曲マスタ 20 曲
 - 希望曲データ 117 件
+- 管理者アカウント 1 件
+- メンバー用 UserAccount 30 件
+- MemberProfile 30 件
+- SessionEvent 1 件
+- SessionEntry 30 件
+- SessionSet 20 件
+- SessionSetRating 100 件
+- SessionArchive 1 件
+- アーカイブ作成監査ログ 1 件
+
+認証系デモデータ補足:
+
+- 現時点では本番用ログイン未実装のため、passwordHash はデモ値です
+- 管理 API の暫定確認には admin@adolib-go.local を使う想定です
 
 ### sessionSet 生成
 

@@ -3,11 +3,24 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.sessionSetMember.deleteMany();
-  await prisma.sessionSet.deleteMany();
-  await prisma.participantSongRequest.deleteMany();
-  await prisma.participant.deleteMany();
-  await prisma.song.deleteMany();
+  await prisma.$transaction(async (tx) => {
+    await tx.adminAuditLog.deleteMany();
+    await tx.sessionArchiveRatingSummary.deleteMany();
+    await tx.sessionArchiveSet.deleteMany();
+    await tx.sessionArchiveParticipant.deleteMany();
+    await tx.sessionArchive.deleteMany();
+    await tx.sessionSetRating.deleteMany();
+    await tx.sessionSetMember.deleteMany();
+    await tx.sessionSet.deleteMany();
+    await tx.sessionEntryRequest.deleteMany();
+    await tx.sessionEntry.deleteMany();
+    await tx.memberProfile.deleteMany();
+    await tx.userAccount.deleteMany();
+    await tx.sessionEvent.deleteMany();
+    await tx.participantSongRequest.deleteMany();
+    await tx.participant.deleteMany();
+    await tx.song.deleteMany();
+  });
 
   console.log(JSON.stringify({ reset: true }, null, 2));
 }
