@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/adminApi';
+import { createSessionArchive } from '@/lib/sessionArchive';
 
 // GET /api/session-archives?includeDeleted=true
 export async function GET(request: NextRequest) {
@@ -64,4 +65,37 @@ export async function GET(request: NextRequest) {
   }));
 
   return NextResponse.json({ archives: data, includeDeleted });
+}
+
+export async function POST(request: NextRequest) {
+  const { admin, response } = await requireAdmin(request);
+  if (response) {
+    return response;
+  }
+
+  const body = (await request.json().catch(() => null)) as {
+    sessionEventId?: string;
+    title?: string;
+    note?: string | null;
+  } | null;
+
+  if (!body?.sessionEventId) {
+    return NextResponse.json({ error: 'sessionEventId is required' }, { status: 400 });
+  }
+
+  try {
+    const archive = await createSessionArchive({
+      sessionEventId: body.sessionEventId,
+      title: body.title,
+      note: body.note,
+      createdById: admin!.userId,
+    });
+
+    return NextResponse.json({ archive }, { status: 201 });
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Failed to create archive' },
+      { status: 400 },
+    );
+  }
 }

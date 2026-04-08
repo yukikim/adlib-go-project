@@ -221,6 +221,21 @@ response 400:
 
 - admin
 
+request 例:
+
+```json
+{
+  "status": "recruiting_round1",
+  "round1StartAt": "2026-04-10T10:00:00.000Z",
+  "round1EndAt": "2026-04-17T14:59:59.000Z"
+}
+```
+
+補足:
+
+- `draft` → `recruiting_round1` → `recruiting_round2` → `generating` / `published` / `closed` の順で使う
+- SessionEntry 受付可否は `status` と round ごとの期間で判定する
+
 ## 4. セッション参加 API
 
 ### 4.1 POST /api/session-entries
@@ -232,6 +247,12 @@ response 400:
 権限:
 
 - member
+
+補足:
+
+- `recruiting_round1` の間は `round=1` のみ受付
+- `recruiting_round2` の間は `round=2` のみ受付
+- round ごとに既存リクエストだけ差し替えるため、Round 1 登録後に Round 2 を追加できる
 
 request:
 
@@ -279,6 +300,14 @@ response 201:
       }
     ]
   }
+}
+```
+
+response 400 例:
+
+```json
+{
+  "error": "round2 の募集期間外です"
 }
 ```
 
@@ -342,21 +371,61 @@ response 200:
 
 - サインイン中メンバーのプロフィールを更新する
 
+## 5. sessionSet 生成 API
+
+### 5.1 POST /api/session-sets/generate
+
+用途:
+
+- 指定 SessionEvent の SessionEntryRequest を元に sessionSet を生成する
+
 権限:
 
-- member
+- admin
 
 request:
 
 ```json
 {
-  "nickname": "テスト更新",
-  "area": "横浜市",
-  "bio": "Phase1 profile update test"
+  "sessionEventId": "event-id"
+}
+```
+
+補足:
+
+- `ParticipantSongRequest` は生成元に使わない
+- 募集受付中の SessionEvent には実行できない
+
+response 200:
+
+```json
+{
+  "sessionEventId": "event-id",
+  "sessionSets": [],
+  "forcedSessionSets": [],
+  "skippedSongs": []
+}
+```
+
+response 400 例:
+
+```json
+{
+  "error": "SessionEvent is still accepting entries"
 }
 ```
 
 ## 5. レイティング API
+
+### 5.0 POST /api/session-events/:id/publish
+
+用途:
+
+- 指定 SessionEvent に属する sessionSet を公開確定する
+
+権限:
+
+- admin
 
 ### 5.1 POST /api/session-sets/:id/ratings
 
@@ -372,7 +441,6 @@ request:
 
 ```json
 {
-  "sessionEventId": "event-id",
   "rating": 4,
   "comment": "テンポ感が良かったです"
 }
@@ -381,7 +449,8 @@ request:
 バリデーション:
 
 - rating は 1 以上 5 以下の整数
-- 同一ユーザーの同一 sessionSet への登録は 1 件まで
+- 同一ユーザーの同一 sessionSet への保存は upsert とし、再投稿時は上書きする
+- 公開済みかつ SessionEvent が `published` または `closed` の場合のみ評価できる
 
 response 201:
 
@@ -403,14 +472,6 @@ response 400:
 ```json
 {
   "error": "rating must be an integer between 1 and 5"
-}
-```
-
-response 409:
-
-```json
-{
-  "error": "rating already exists for this session set"
 }
 ```
 
@@ -445,6 +506,16 @@ response 200:
   }
 }
 ```
+
+### 5.3 GET /api/session-events/:id/ratings-summary
+
+用途:
+
+- 管理者が対象イベント配下の全 sessionSet の集計結果を一覧で確認する
+
+権限:
+
+- admin
 
 ## 6. アーカイブ API
 
@@ -519,11 +590,11 @@ response 200:
 }
 ```
 
-### 6.3 POST /api/session-sets/:id/archive
+### 6.3 POST /api/session-archives
 
 用途:
 
-- 管理者が任意時点の sessionSet をアーカイブ保存する
+- 管理者が指定 SessionEvent の公開済み sessionSet をアーカイブ保存する
 
 権限:
 

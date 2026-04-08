@@ -2,6 +2,41 @@
 
 import { useEffect, useState } from "react";
 
+const formatDateTimeLocal = (value?: string | null) => {
+  if (!value) return "";
+  const date = new Date(value);
+  const offset = date.getTimezoneOffset();
+  const localDate = new Date(date.getTime() - offset * 60_000);
+  return localDate.toISOString().slice(0, 16);
+};
+
+const getEventEntryState = (event?: SessionEventView | null) => {
+  if (!event) {
+    return { canSubmit: false, round: null as 1 | 2 | null, reason: "イベントを選択してください" };
+  }
+
+  const now = new Date();
+  const isWithinWindow = (start?: string | null, end?: string | null) => {
+    const startDate = start ? new Date(start) : null;
+    const endDate = end ? new Date(end) : null;
+    if (startDate && now < startDate) return false;
+    if (endDate && now > endDate) return false;
+    return true;
+  };
+
+  if (event.status === "recruiting_round1") {
+    const active = isWithinWindow(event.round1StartAt, event.round1EndAt);
+    return { canSubmit: active, round: 1 as const, reason: active ? null : "round1 の募集期間外です" };
+  }
+
+  if (event.status === "recruiting_round2") {
+    const active = isWithinWindow(event.round2StartAt, event.round2EndAt);
+    return { canSubmit: active, round: 2 as const, reason: active ? null : "round2 の募集期間外です" };
+  }
+
+  return { canSubmit: false, round: null as 1 | 2 | null, reason: "現在は募集受付中ではありません" };
+};
+
 type Instrument = "drum" | "bass" | "piano" | "front" | "vocal";
 
 interface Participant {
@@ -26,6 +61,9 @@ interface Song {
 
 interface SessionSetView {
   id: string;
+  sessionEventId?: string | null;
+  setOrder?: number | null;
+  isPublished?: boolean;
   songTitle: string;
   key?: string | null;
   drum: { id: string; name: string } | null;
@@ -100,6 +138,36 @@ interface SessionEntryView {
   }[];
 }
 
+interface RatingSummaryView {
+  sessionSetId: string;
+  songTitle: string;
+  ratingCount: number;
+  averageRating: number | null;
+  minRating: number | null;
+  maxRating: number | null;
+  distribution: Record<string, number>;
+  ratedMemberCount: number;
+}
+
+interface ArchiveView {
+  id: string;
+  sessionEventId: string;
+  sessionEventTitle: string;
+  title: string;
+  version: number;
+  eventDate: string;
+  venue: string;
+  participantCount: number;
+  setCount: number;
+  ratingCount: number;
+  deletedAt?: string | null;
+  createdAt: string;
+  createdBy: {
+    id: string;
+    email: string;
+  };
+}
+
 export default function HomePage() {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [songs, setSongs] = useState<Song[]>([]);
@@ -108,6 +176,9 @@ export default function HomePage() {
   const [forcedSessionSets, setForcedSessionSets] = useState<ForcedSessionSetView[]>([]);
   const [sessionEvents, setSessionEvents] = useState<SessionEventView[]>([]);
   const [sessionEntries, setSessionEntries] = useState<SessionEntryView[]>([]);
+  const [memberSessionSets, setMemberSessionSets] = useState<SessionSetView[]>([]);
+  const [ratingSummaries, setRatingSummaries] = useState<RatingSummaryView[]>([]);
+  const [archives, setArchives] = useState<ArchiveView[]>([]);
 
   const [newParticipantName, setNewParticipantName] = useState("");
   const [newParticipantInstrument, setNewParticipantInstrument] =
@@ -140,6 +211,22 @@ export default function HomePage() {
   const [eventTitle, setEventTitle] = useState("2026年6月 セッション");
   const [eventVenue, setEventVenue] = useState("渋谷 Jazz Spot");
   const [eventDate, setEventDate] = useState("2026-06-21");
+  const [selectedAdminEventId, setSelectedAdminEventId] = useState("");
+  const [editEventTitle, setEditEventTitle] = useState("");
+  const [editEventVenue, setEditEventVenue] = useState("");
+  const [editEventDate, setEditEventDate] = useState("");
+  const [editEventStatus, setEditEventStatus] = useState("draft");
+  const [editRound1StartAt, setEditRound1StartAt] = useState("");
+  const [editRound1EndAt, setEditRound1EndAt] = useState("");
+  const [editRound2StartAt, setEditRound2StartAt] = useState("");
+  const [editRound2EndAt, setEditRound2EndAt] = useState("");
+  const [archiveTitle, setArchiveTitle] = useState("");
+  const [archiveNote, setArchiveNote] = useState("");
+  const [archivePreview, setArchivePreview] = useState<{
+    participantCount: number;
+    setCount: number;
+    ratingSummaryIncluded: boolean;
+  } | null>(null);
   const [memberEventId, setMemberEventId] = useState("");
   const [memberAttendanceStatus, setMemberAttendanceStatus] = useState<"attending" | "absent" | "undecided">("attending");
   const [memberRound1Song1, setMemberRound1Song1] = useState("");
@@ -150,8 +237,13 @@ export default function HomePage() {
   const [memberRound1Key2, setMemberRound1Key2] = useState("");
   const [memberRound2Key1, setMemberRound2Key1] = useState("");
   const [memberRound2Key2, setMemberRound2Key2] = useState("");
+  const [memberRatings, setMemberRatings] = useState<Record<string, number>>({});
+  const [memberRatingComments, setMemberRatingComments] = useState<Record<string, string>>({});
   const isAdmin = currentUser?.role === "admin";
   const isMember = currentUser?.role === "member";
+  const selectedMemberEvent = sessionEvents.find((event) => event.id === memberEventId) ?? null;
+  const selectedAdminEvent = sessionEvents.find((event) => event.id === selectedAdminEventId) ?? null;
+  const memberEntryState = getEventEntryState(selectedMemberEvent);
 
   const loadCurrentUser = async () => {
     const res = await fetch("/api/auth/me");
@@ -163,10 +255,14 @@ export default function HomePage() {
     setLoading(true);
     setMessage(null);
     try {
+      const sessionSetUrl = selectedAdminEventId
+        ? `/api/session-sets?sessionEventId=${selectedAdminEventId}`
+        : "/api/session-sets";
+
       const [pRes, sRes, ssRes, seRes, meRes] = await Promise.all([
         fetch("/api/participants"),
         fetch("/api/songs"),
-        fetch("/api/session-sets"),
+        fetch(sessionSetUrl),
         fetch("/api/session-events"),
         fetch("/api/auth/me"),
       ]);
@@ -186,6 +282,13 @@ export default function HomePage() {
         setSessionEntries(entryJson.entries ?? []);
       } else {
         setSessionEntries([]);
+      }
+      if (meJson.user?.role === "admin") {
+        const archiveRes = await fetch("/api/session-archives");
+        const archiveJson = await archiveRes.json().catch(() => ({}));
+        setArchives(archiveJson.archives ?? []);
+      } else {
+        setArchives([]);
       }
       setSkippedSongs([]);
       setForcedSessionSets([]);
@@ -216,6 +319,110 @@ export default function HomePage() {
       setMemberEventId(sessionEvents[0].id);
     }
   }, [memberEventId, sessionEvents]);
+
+  useEffect(() => {
+    if (!selectedAdminEventId && sessionEvents.length > 0) {
+      setSelectedAdminEventId(sessionEvents[0].id);
+    }
+  }, [selectedAdminEventId, sessionEvents]);
+
+  useEffect(() => {
+    if (!selectedAdminEvent) {
+      return;
+    }
+
+    setEditEventTitle(selectedAdminEvent.title ?? "");
+    setEditEventVenue(selectedAdminEvent.venue ?? "");
+    setEditEventDate(selectedAdminEvent.eventDate.slice(0, 10));
+    setEditEventStatus(selectedAdminEvent.status ?? "draft");
+    setEditRound1StartAt(formatDateTimeLocal(selectedAdminEvent.round1StartAt));
+    setEditRound1EndAt(formatDateTimeLocal(selectedAdminEvent.round1EndAt));
+    setEditRound2StartAt(formatDateTimeLocal(selectedAdminEvent.round2StartAt));
+    setEditRound2EndAt(formatDateTimeLocal(selectedAdminEvent.round2EndAt));
+  }, [selectedAdminEvent]);
+
+  useEffect(() => {
+    const currentEntry = sessionEntries.find((entry) => entry.sessionEventId === memberEventId);
+    if (!currentEntry) {
+      setMemberAttendanceStatus("attending");
+      setMemberRound1Song1("");
+      setMemberRound1Song2("");
+      setMemberRound2Song1("");
+      setMemberRound2Song2("");
+      setMemberRound1Key1("");
+      setMemberRound1Key2("");
+      setMemberRound2Key1("");
+      setMemberRound2Key2("");
+      return;
+    }
+
+    setMemberAttendanceStatus(currentEntry.attendanceStatus);
+    const round1 = currentEntry.requests.filter((request) => request.round === 1).sort((a, b) => a.priority - b.priority);
+    const round2 = currentEntry.requests.filter((request) => request.round === 2).sort((a, b) => a.priority - b.priority);
+    setMemberRound1Song1(round1[0]?.songTitleSnapshot ?? "");
+    setMemberRound1Song2(round1[1]?.songTitleSnapshot ?? "");
+    setMemberRound2Song1(round2[0]?.songTitleSnapshot ?? "");
+    setMemberRound2Song2(round2[1]?.songTitleSnapshot ?? "");
+    setMemberRound1Key1(round1[0]?.keyName ?? "");
+    setMemberRound1Key2(round1[1]?.keyName ?? "");
+    setMemberRound2Key1(round2[0]?.keyName ?? "");
+    setMemberRound2Key2(round2[1]?.keyName ?? "");
+  }, [memberEventId, sessionEntries]);
+
+  useEffect(() => {
+    const loadSessionSets = async () => {
+      const url = selectedAdminEventId
+        ? `/api/session-sets?sessionEventId=${selectedAdminEventId}`
+        : "/api/session-sets";
+      const res = await fetch(url);
+      const json = await res.json().catch(() => ({}));
+      setSessionSets(json.sessionSets ?? []);
+    };
+
+    loadSessionSets().catch((error) => {
+      console.error(error);
+    });
+  }, [selectedAdminEventId]);
+
+  useEffect(() => {
+    if (!memberEventId || !isMember) {
+      setMemberSessionSets([]);
+      return;
+    }
+
+    const loadMemberSessionSets = async () => {
+      const res = await fetch(`/api/session-sets?sessionEventId=${memberEventId}`);
+      const json = await res.json().catch(() => ({}));
+      setMemberSessionSets((json.sessionSets ?? []).filter((sessionSet: SessionSetView) => sessionSet.isPublished));
+    };
+
+    loadMemberSessionSets().catch((error) => {
+      console.error(error);
+    });
+  }, [isMember, memberEventId]);
+
+  useEffect(() => {
+    if (!selectedAdminEventId || !isAdmin) {
+      setRatingSummaries([]);
+      setArchivePreview(null);
+      return;
+    }
+
+    const loadAdminPanels = async () => {
+      const [summaryRes, previewRes] = await Promise.all([
+        fetch(`/api/session-events/${selectedAdminEventId}/ratings-summary`),
+        fetch(`/api/session-events/${selectedAdminEventId}/archive-preview`),
+      ]);
+      const summaryJson = await summaryRes.json().catch(() => ({}));
+      const previewJson = await previewRes.json().catch(() => ({}));
+      setRatingSummaries(summaryJson.summaries ?? []);
+      setArchivePreview(previewJson.preview ?? null);
+    };
+
+    loadAdminPanels().catch((error) => {
+      console.error(error);
+    });
+  }, [isAdmin, selectedAdminEventId]);
 
   const handleSignIn = async () => {
     setLoading(true);
@@ -384,15 +591,55 @@ export default function HomePage() {
     }
   };
 
+  const handleUpdateSessionEvent = async () => {
+    if (!selectedAdminEventId) return;
+    setLoading(true);
+    setMessage(null);
+    try {
+      const res = await fetch(`/api/session-events/${selectedAdminEventId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: editEventTitle,
+          venue: editEventVenue,
+          eventDate: editEventDate,
+          status: editEventStatus,
+          round1StartAt: editRound1StartAt ? new Date(editRound1StartAt).toISOString() : null,
+          round1EndAt: editRound1EndAt ? new Date(editRound1EndAt).toISOString() : null,
+          round2StartAt: editRound2StartAt ? new Date(editRound2StartAt).toISOString() : null,
+          round2EndAt: editRound2EndAt ? new Date(editRound2EndAt).toISOString() : null,
+        }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(json.error ?? "failed");
+      }
+      await loadAll();
+      setMessage("セッションイベントを更新しました");
+    } catch (e: any) {
+      setMessage(`セッションイベント更新に失敗しました: ${e.message ?? e}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmitSessionEntry = async () => {
     if (!memberEventId) return;
 
-    const requests = [
-      { songTitle: memberRound1Song1.trim(), round: 1 as const, priority: 1, keyName: memberRound1Key1.trim() || null },
-      { songTitle: memberRound1Song2.trim(), round: 1 as const, priority: 2, keyName: memberRound1Key2.trim() || null },
-      { songTitle: memberRound2Song1.trim(), round: 2 as const, priority: 1, keyName: memberRound2Key1.trim() || null },
-      { songTitle: memberRound2Song2.trim(), round: 2 as const, priority: 2, keyName: memberRound2Key2.trim() || null },
-    ].filter((item) => item.songTitle);
+    if (!memberEntryState.canSubmit || !memberEntryState.round) {
+      setMessage(memberEntryState.reason ?? "現在は登録できません");
+      return;
+    }
+
+    const requests = memberEntryState.round === 1
+      ? [
+          { songTitle: memberRound1Song1.trim(), round: 1 as const, priority: 1, keyName: memberRound1Key1.trim() || null },
+          { songTitle: memberRound1Song2.trim(), round: 1 as const, priority: 2, keyName: memberRound1Key2.trim() || null },
+        ].filter((item) => item.songTitle)
+      : [
+          { songTitle: memberRound2Song1.trim(), round: 2 as const, priority: 1, keyName: memberRound2Key1.trim() || null },
+          { songTitle: memberRound2Song2.trim(), round: 2 as const, priority: 2, keyName: memberRound2Key2.trim() || null },
+        ].filter((item) => item.songTitle);
 
     setLoading(true);
     setMessage(null);
@@ -509,11 +756,14 @@ export default function HomePage() {
   };
 
   const handleGenerateSessionSets = async () => {
+    if (!selectedAdminEventId) return;
     setLoading(true);
     setMessage(null);
     try {
       const res = await fetch("/api/session-sets/generate", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionEventId: selectedAdminEventId }),
       });
       const j = await res.json().catch(() => ({}));
       if (!res.ok) {
@@ -527,6 +777,106 @@ export default function HomePage() {
       );
     } catch (e: any) {
       setMessage(`sessionSet 生成に失敗しました: ${e.message ?? e}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePublishSessionSets = async () => {
+    if (!selectedAdminEventId) return;
+    setLoading(true);
+    setMessage(null);
+    try {
+      const res = await fetch(`/api/session-events/${selectedAdminEventId}/publish`, {
+        method: "POST",
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(json.error ?? "failed");
+      }
+      await loadAll();
+      setMessage(`公開しました: ${json.publishedSetCount ?? 0} セット`);
+    } catch (e: any) {
+      setMessage(`公開に失敗しました: ${e.message ?? e}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSaveRating = async (sessionSetId: string) => {
+    const rating = memberRatings[sessionSetId];
+    if (!rating) {
+      setMessage("星評価を選択してください");
+      return;
+    }
+
+    setLoading(true);
+    setMessage(null);
+    try {
+      const res = await fetch(`/api/session-sets/${sessionSetId}/ratings`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          rating,
+          comment: memberRatingComments[sessionSetId] ?? "",
+        }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(json.error ?? "failed");
+      }
+      setMessage("評価を保存しました");
+    } catch (e: any) {
+      setMessage(`評価保存に失敗しました: ${e.message ?? e}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCreateArchive = async () => {
+    if (!selectedAdminEventId) return;
+    setLoading(true);
+    setMessage(null);
+    try {
+      const res = await fetch("/api/session-archives", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sessionEventId: selectedAdminEventId,
+          title: archiveTitle,
+          note: archiveNote,
+        }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(json.error ?? "failed");
+      }
+      await loadAll();
+      setArchiveTitle("");
+      setArchiveNote("");
+      setMessage("アーカイブを作成しました");
+    } catch (e: any) {
+      setMessage(`アーカイブ作成に失敗しました: ${e.message ?? e}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteArchive = async (archiveId: string) => {
+    setLoading(true);
+    setMessage(null);
+    try {
+      const res = await fetch(`/api/session-archives/${archiveId}`, {
+        method: "DELETE",
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(json.error ?? "failed");
+      }
+      await loadAll();
+      setMessage("アーカイブを削除しました");
+    } catch (e: any) {
+      setMessage(`アーカイブ削除に失敗しました: ${e.message ?? e}`);
     } finally {
       setLoading(false);
     }
@@ -641,7 +991,7 @@ export default function HomePage() {
                 <ul>
                   {sessionEvents.map((event) => (
                     <li key={event.id}>
-                      <strong>{event.title}</strong> / {event.venue} / {new Date(event.eventDate).toLocaleDateString("ja-JP")}
+                      <strong>{event.title}</strong> / {event.venue} / {new Date(event.eventDate).toLocaleDateString("ja-JP")} / {event.status}
                     </li>
                   ))}
                 </ul>
@@ -650,6 +1000,11 @@ export default function HomePage() {
 
             <div>
               <h3>セッションエントリー</h3>
+              <p style={{ color: memberEntryState.canSubmit ? "#555" : "#a33" }}>
+                {memberEntryState.canSubmit
+                  ? `現在入力できるのは Round ${memberEntryState.round} です。`
+                  : memberEntryState.reason}
+              </p>
               <div style={{ display: "grid", gap: "0.5rem" }}>
                 <select value={memberEventId} onChange={(e) => setMemberEventId(e.target.value)}>
                   <option value="">イベントを選択</option>
@@ -664,20 +1019,28 @@ export default function HomePage() {
                   <option value="undecided">undecided</option>
                   <option value="absent">absent</option>
                 </select>
-                <input type="text" placeholder="Round 1 - 1曲目" value={memberRound1Song1} onChange={(e) => setMemberRound1Song1(e.target.value)} list="song-titles" />
-                <input type="text" placeholder="Round 1 - 1曲目 key" value={memberRound1Key1} onChange={(e) => setMemberRound1Key1(e.target.value)} />
-                <input type="text" placeholder="Round 1 - 2曲目" value={memberRound1Song2} onChange={(e) => setMemberRound1Song2(e.target.value)} list="song-titles" />
-                <input type="text" placeholder="Round 1 - 2曲目 key" value={memberRound1Key2} onChange={(e) => setMemberRound1Key2(e.target.value)} />
-                <input type="text" placeholder="Round 2 - 1曲目" value={memberRound2Song1} onChange={(e) => setMemberRound2Song1(e.target.value)} list="song-titles" />
-                <input type="text" placeholder="Round 2 - 1曲目 key" value={memberRound2Key1} onChange={(e) => setMemberRound2Key1(e.target.value)} />
-                {!currentUser?.memberProfile || currentUser.memberProfile.mainInstrument !== "vocal" ? (
+                {memberEntryState.round === 1 && (
                   <>
-                    <input type="text" placeholder="Round 2 - 2曲目" value={memberRound2Song2} onChange={(e) => setMemberRound2Song2(e.target.value)} list="song-titles" />
-                    <input type="text" placeholder="Round 2 - 2曲目 key" value={memberRound2Key2} onChange={(e) => setMemberRound2Key2(e.target.value)} />
+                    <input type="text" placeholder="Round 1 - 1曲目" value={memberRound1Song1} onChange={(e) => setMemberRound1Song1(e.target.value)} list="song-titles" />
+                    <input type="text" placeholder="Round 1 - 1曲目 key" value={memberRound1Key1} onChange={(e) => setMemberRound1Key1(e.target.value)} />
+                    <input type="text" placeholder="Round 1 - 2曲目" value={memberRound1Song2} onChange={(e) => setMemberRound1Song2(e.target.value)} list="song-titles" />
+                    <input type="text" placeholder="Round 1 - 2曲目 key" value={memberRound1Key2} onChange={(e) => setMemberRound1Key2(e.target.value)} />
                   </>
-                ) : null}
+                )}
+                {memberEntryState.round === 2 && (
+                  <>
+                    <input type="text" placeholder="Round 2 - 1曲目" value={memberRound2Song1} onChange={(e) => setMemberRound2Song1(e.target.value)} list="song-titles" />
+                    <input type="text" placeholder="Round 2 - 1曲目 key" value={memberRound2Key1} onChange={(e) => setMemberRound2Key1(e.target.value)} />
+                    {!currentUser?.memberProfile || currentUser.memberProfile.mainInstrument !== "vocal" ? (
+                      <>
+                        <input type="text" placeholder="Round 2 - 2曲目" value={memberRound2Song2} onChange={(e) => setMemberRound2Song2(e.target.value)} list="song-titles" />
+                        <input type="text" placeholder="Round 2 - 2曲目 key" value={memberRound2Key2} onChange={(e) => setMemberRound2Key2(e.target.value)} />
+                      </>
+                    ) : null}
+                  </>
+                )}
                 <div>
-                  <button type="button" onClick={handleSubmitSessionEntry} disabled={loading || !memberEventId}>
+                  <button type="button" onClick={handleSubmitSessionEntry} disabled={loading || !memberEventId || !memberEntryState.canSubmit}>
                     エントリー保存
                   </button>
                 </div>
@@ -706,6 +1069,55 @@ export default function HomePage() {
                 </ul>
               )}
             </div>
+
+            <div>
+              <h3>公開済み sessionSet の評価</h3>
+              {memberSessionSets.length === 0 ? (
+                <p>評価対象の公開済み sessionSet はありません。</p>
+              ) : (
+                <ul>
+                  {memberSessionSets.map((sessionSet) => (
+                    <li key={sessionSet.id} style={{ marginBottom: "1rem" }}>
+                      <strong>{sessionSet.songTitle}</strong>
+                      <div style={{ display: "grid", gap: "0.35rem", marginTop: "0.35rem" }}>
+                        <select
+                          value={String(memberRatings[sessionSet.id] ?? "")}
+                          onChange={(e) =>
+                            setMemberRatings((current) => ({
+                              ...current,
+                              [sessionSet.id]: Number(e.target.value),
+                            }))
+                          }
+                        >
+                          <option value="">星を選択</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </select>
+                        <textarea
+                          rows={2}
+                          placeholder="コメント"
+                          value={memberRatingComments[sessionSet.id] ?? ""}
+                          onChange={(e) =>
+                            setMemberRatingComments((current) => ({
+                              ...current,
+                              [sessionSet.id]: e.target.value,
+                            }))
+                          }
+                        />
+                        <div>
+                          <button type="button" onClick={() => handleSaveRating(sessionSet.id)} disabled={loading}>
+                            評価を保存
+                          </button>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
         </section>
       )}
@@ -724,6 +1136,40 @@ export default function HomePage() {
                 イベント作成
               </button>
             </div>
+            <div style={{ marginTop: "1rem", display: "grid", gap: "0.5rem" }}>
+              <select value={selectedAdminEventId} onChange={(e) => setSelectedAdminEventId(e.target.value)}>
+                <option value="">編集するイベントを選択</option>
+                {sessionEvents.map((event) => (
+                  <option key={event.id} value={event.id}>
+                    {event.title}
+                  </option>
+                ))}
+              </select>
+              {selectedAdminEvent && (
+                <>
+                  <input type="text" placeholder="イベント名" value={editEventTitle} onChange={(e) => setEditEventTitle(e.target.value)} />
+                  <input type="text" placeholder="会場" value={editEventVenue} onChange={(e) => setEditEventVenue(e.target.value)} />
+                  <input type="date" value={editEventDate} onChange={(e) => setEditEventDate(e.target.value)} />
+                  <select value={editEventStatus} onChange={(e) => setEditEventStatus(e.target.value)}>
+                    <option value="draft">draft</option>
+                    <option value="recruiting_round1">recruiting_round1</option>
+                    <option value="recruiting_round2">recruiting_round2</option>
+                    <option value="generating">generating</option>
+                    <option value="published">published</option>
+                    <option value="closed">closed</option>
+                  </select>
+                  <input type="datetime-local" value={editRound1StartAt} onChange={(e) => setEditRound1StartAt(e.target.value)} />
+                  <input type="datetime-local" value={editRound1EndAt} onChange={(e) => setEditRound1EndAt(e.target.value)} />
+                  <input type="datetime-local" value={editRound2StartAt} onChange={(e) => setEditRound2StartAt(e.target.value)} />
+                  <input type="datetime-local" value={editRound2EndAt} onChange={(e) => setEditRound2EndAt(e.target.value)} />
+                  <div>
+                    <button type="button" onClick={handleUpdateSessionEvent} disabled={loading}>
+                      イベント更新
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
             <ul style={{ marginTop: "0.5rem" }}>
               {sessionEvents.map((event) => (
                 <li key={event.id}>
@@ -732,6 +1178,62 @@ export default function HomePage() {
                 </li>
               ))}
             </ul>
+          </div>
+
+          <div>
+            <h3>評価集計</h3>
+            {ratingSummaries.length === 0 ? (
+              <p>まだ評価集計はありません。</p>
+            ) : (
+              <ul>
+                {ratingSummaries.map((summary) => (
+                  <li key={summary.sessionSetId} style={{ marginBottom: "0.5rem" }}>
+                    <strong>{summary.songTitle}</strong>
+                    {` / 件数 ${summary.ratingCount} / 平均 ${summary.averageRating?.toFixed(2) ?? "-"}`}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <div>
+            <h3>アーカイブ管理</h3>
+            {archivePreview ? (
+              <p style={{ color: "#555" }}>
+                保存対象: 参加者 {archivePreview.participantCount} 名 / sessionSet {archivePreview.setCount} 曲 / 評価集計 {archivePreview.ratingSummaryIncluded ? "あり" : "なし"}
+              </p>
+            ) : (
+              <p style={{ color: "#555" }}>アーカイブ preview はありません。</p>
+            )}
+            <div style={{ display: "grid", gap: "0.5rem", maxWidth: 480 }}>
+              <input type="text" placeholder="アーカイブ名" value={archiveTitle} onChange={(e) => setArchiveTitle(e.target.value)} />
+              <textarea rows={2} placeholder="メモ" value={archiveNote} onChange={(e) => setArchiveNote(e.target.value)} />
+              <div>
+                <button type="button" onClick={handleCreateArchive} disabled={loading || !selectedAdminEventId}>
+                  アーカイブ作成
+                </button>
+              </div>
+            </div>
+            {archives.length === 0 ? (
+              <p>アーカイブはまだありません。</p>
+            ) : (
+              <ul style={{ marginTop: "0.75rem" }}>
+                {archives.map((archive) => (
+                  <li key={archive.id} style={{ marginBottom: "0.75rem" }}>
+                    <strong>{archive.title}</strong>
+                    {` / v${archive.version} / ${archive.sessionEventTitle} / sets ${archive.setCount} / ratings ${archive.ratingCount}`}
+                    {archive.deletedAt ? ` / deleted ${new Date(archive.deletedAt).toLocaleString("ja-JP")}` : ""}
+                    {!archive.deletedAt && (
+                      <div>
+                        <button type="button" onClick={() => handleDeleteArchive(archive.id)} disabled={loading}>
+                          アーカイブ削除
+                        </button>
+                      </div>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
       </section>
@@ -902,9 +1404,24 @@ export default function HomePage() {
 
       <section style={{ marginTop: "2rem" }}>
         <h2>4. sessionSet の生成</h2>
-        <button type="button" onClick={handleGenerateSessionSets} disabled={loading || !isAdmin}>
+        <div style={{ display: "grid", gap: "0.5rem", maxWidth: 420 }}>
+          <select value={selectedAdminEventId} onChange={(e) => setSelectedAdminEventId(e.target.value)}>
+            <option value="">生成対象イベントを選択</option>
+            {sessionEvents.map((event) => (
+              <option key={event.id} value={event.id}>
+                {event.title}
+              </option>
+            ))}
+          </select>
+        <button type="button" onClick={handleGenerateSessionSets} disabled={loading || !isAdmin || !selectedAdminEventId}>
           sessionSet を自動生成
         </button>
+        </div>
+        <div style={{ marginTop: "0.5rem" }}>
+          <button type="button" onClick={handlePublishSessionSets} disabled={loading || !isAdmin || !selectedAdminEventId || sessionSets.length === 0}>
+            sessionSet を公開確定
+          </button>
+        </div>
         {!isAdmin && <p style={{ color: "#a33" }}>生成操作には管理者サインインが必要です。</p>}
 
         <div style={{ marginTop: "1rem" }}>

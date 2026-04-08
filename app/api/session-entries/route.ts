@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireMemberUser } from '@/lib/auth';
+import { getSessionEventEntryState } from '@/lib/sessionEventWindow';
 
 export async function GET(request: NextRequest) {
   const auth = await requireMemberUser(request);
@@ -55,7 +56,19 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'SessionEvent not found' }, { status: 404 });
   }
 
+  const entryState = getSessionEventEntryState(sessionEvent);
+  if (!entryState.canSubmit || !entryState.round) {
+    return NextResponse.json({ error: entryState.reason ?? 'Entry is not allowed' }, { status: 400 });
+  }
+
   const requests = body.requests ?? [];
+  if (requests.some((item) => item.round !== entryState.round)) {
+    return NextResponse.json(
+      { error: `Only round=${entryState.round} requests are accepted right now` },
+      { status: 400 },
+    );
+  }
+
   const uniqueKeys = new Set(requests.map((item) => `${item.round}:${item.songTitle.trim().toLowerCase()}`));
   if (uniqueKeys.size !== requests.length) {
     return NextResponse.json({ error: 'Duplicate song requests are not allowed' }, { status: 400 });
@@ -101,7 +114,12 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    await tx.sessionEntryRequest.deleteMany({ where: { sessionEntryId: upsertedEntry.id } });
+    await tx.sessionEntryRequest.deleteMany({
+      where: {
+        sessionEntryId: upsertedEntry.id,
+        round: entryState.round,
+      },
+    });
 
     for (const item of requests.sort((a, b) => a.priority - b.priority)) {
       let song = songByTitle.get(item.songTitle.trim());

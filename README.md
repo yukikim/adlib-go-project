@@ -427,13 +427,22 @@ npm run dev
 6. 必要なら Prisma Studio を起動
 
 ```bash
+npm run prisma:studio
+```
+
 ### Phase 1 実装済み機能
 
 - Cookie セッションによるサインイン / サインアップ / サインアウト
 - nodemailer ベースのパスワード再設定メール送信基盤
 - メンバーのプロフィール自己編集
-- 管理者向け SessionEvent 作成 API / 画面
+- 管理者向け SessionEvent 作成 / 更新 / 募集状態切替 API / 画面
 - メンバー向け SessionEntry 登録 API / 画面
+- Round 1 / Round 2 の募集期間に応じた入力制御
+- SessionEntry ベースの sessionSet 生成
+- sessionSet 公開確定フロー
+- メンバーによる星 1-5 の sessionSet 評価
+- 管理者による評価集計確認
+- SessionArchive preview / 作成 / 削除
 
 ### Phase 1 API 確認例
 
@@ -452,6 +461,15 @@ curl -sS -X POST http://localhost:3000/api/session-events \
 	-d '{"title":"2026年7月セッション","venue":"代官山 Session Lab","eventDate":"2026-07-10"}'
 ```
 
+SessionEvent 更新と募集状態変更:
+
+```bash
+curl -sS -X PATCH http://localhost:3000/api/session-events/event-id \
+	-H "Content-Type: application/json" \
+	-b cookies.txt -c cookies.txt \
+	-d '{"status":"recruiting_round1","round1StartAt":"2026-04-10T10:00:00.000Z","round1EndAt":"2026-04-17T14:59:59.000Z"}'
+```
+
 SessionEntry 登録:
 
 ```bash
@@ -460,7 +478,53 @@ curl -sS -X POST http://localhost:3000/api/session-entries \
 	-b cookies.txt -c cookies.txt \
 	-d '{"sessionEventId":"event-id","attendanceStatus":"attending","requests":[{"songTitle":"Autumn Leaves","round":1,"priority":1}]}'
 ```
-npm run prisma:studio
+
+補足:
+
+- `recruiting_round1` の間は Round 1 のみ登録できます
+- `recruiting_round2` の間は Round 2 のみ登録できます
+- 募集期間外は SessionEntry を保存できません
+
+sessionSet 生成:
+
+```bash
+curl -sS -X POST http://localhost:3000/api/session-sets/generate \
+	-H "Content-Type: application/json" \
+	-b cookies.txt -c cookies.txt \
+	-d '{"sessionEventId":"event-id"}'
+```
+
+補足:
+
+- sessionSet 生成元は `ParticipantSongRequest` ではなく `SessionEntryRequest` です
+- 生成対象イベントが募集受付中の場合は生成できません
+
+sessionSet 公開確定:
+
+```bash
+curl -sS -X POST http://localhost:3000/api/session-events/event-id/publish \
+	-b cookies.txt -c cookies.txt
+```
+
+rating 保存:
+
+```bash
+curl -sS -X POST http://localhost:3000/api/session-sets/set-id/ratings \
+	-H "Content-Type: application/json" \
+	-b cookies.txt -c cookies.txt \
+	-d '{"rating":5,"comment":"とても良かったです"}'
+```
+
+archive preview と作成:
+
+```bash
+curl -sS http://localhost:3000/api/session-events/event-id/archive-preview \
+	-b cookies.txt -c cookies.txt
+
+curl -sS -X POST http://localhost:3000/api/session-archives \
+	-H "Content-Type: application/json" \
+	-b cookies.txt -c cookies.txt \
+	-d '{"sessionEventId":"event-id","title":"2026年5月セッション 初版アーカイブ","note":"当日確定版"}'
 ```
 
 ### ダミーデータ投入
@@ -509,7 +573,7 @@ npm run seed:ratings-archives
 
 認証系デモデータ補足:
 
-- 現時点では本番用ログイン未実装のため、passwordHash はデモ値です
+- デモアカウントの passwordHash は seed 時にハッシュ化済みです
 - 管理 API の暫定確認には admin@adolib-go.local を使う想定です
 
 ### sessionSet 生成
@@ -521,7 +585,9 @@ UI から生成:
 API から生成:
 
 ```bash
-curl -sS -X POST http://localhost:3000/api/session-sets/generate
+curl -sS -X POST http://localhost:3000/api/session-sets/generate \
+	-H "Content-Type: application/json" \
+	-d '{"sessionEventId":"event-id"}'
 ```
 
 生成結果確認:

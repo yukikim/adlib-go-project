@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { generateSessionSets } from '@/session-planner/generateSessionSets';
 import type { Participant as DomainParticipant } from '@/session-planner/domain';
 import { requireAdmin } from '@/lib/adminApi';
+import { getSessionEventEntryState } from '@/lib/sessionEventWindow';
 
 export async function POST(req: NextRequest) {
   const { response } = await requireAdmin(req);
@@ -10,44 +11,91 @@ export async function POST(req: NextRequest) {
     return response;
   }
 
-  // 1. DB から参加者 + 希望曲を取得
-  const participants = await prisma.participant.findMany({
+  const body = (await req.json().catch(() => null)) as { sessionEventId?: string } | null;
+  if (!body?.sessionEventId) {
+    return NextResponse.json({ error: 'sessionEventId is required' }, { status: 400 });
+  }
+
+  const sessionEvent = await prisma.sessionEvent.findUnique({
+    where: { id: body.sessionEventId },
     include: {
-      requestedSongs: {
-        include: { song: true },
+      sessionEntries: {
+        where: { attendanceStatus: 'attending' },
+        include: {
+          memberProfile: true,
+          requests: {
+            orderBy: [{ round: 'asc' }, { priority: 'asc' }],
+          },
+        },
       },
     },
   });
 
-  // 2. ドメインモデルに変換
-  const domainParticipants: DomainParticipant[] = participants.map((p) => ({
-    id: p.id,
-    name: p.name,
-    instrument: p.instrument as DomainParticipant['instrument'],
-    requestedSongs: p.requestedSongs.map((rs) => ({
-      title: rs.song.title,
-      key: rs.keyName ?? undefined,
-      round: (rs.round === 2 ? 2 : 1),
-    })),
-  }));
+  if (!sessionEvent) {
+    return NextResponse.json({ error: 'SessionEvent not found' }, { status: 404 });
+  }
 
-  // 3. ロジックで sessionSets を生成
+  const entryState = getSessionEventEntryState(sessionEvent);
+  if (entryState.round !== null) {
+    return NextResponse.json({ error: 'SessionEvent is still accepting entries' }, { status: 400 });
+  }
+
+  const participants = await prisma.participant.findMany({
+    select: { id: true, name: true, instrument: true },
+  });
+
+  const participantByKey = new Map(
+    participants.map((participant) => [
+      `${participant.name}::${participant.instrument}`,
+      participant,
+    ]),
+  );
+
+  const domainParticipants: DomainParticipant[] = sessionEvent.sessionEntries.flatMap((entry) => {
+    const participant = participantByKey.get(
+      `${entry.memberProfile.displayName}::${entry.memberProfile.mainInstrument}`,
+    );
+
+    if (!participant) {
+      return [];
+    }
+
+    return [
+      {
+        id: participant.id,
+        name: participant.name,
+        instrument: participant.instrument as DomainParticipant['instrument'],
+        requestedSongs: entry.requests.map((request) => ({
+          title: request.songTitleSnapshot,
+          key: request.keyName ?? undefined,
+          round: request.round === 2 ? 2 : 1,
+        })),
+      },
+    ];
+  });
+
+  if (domainParticipants.length === 0) {
+    return NextResponse.json({ error: 'No participating members could be mapped to planner participants' }, { status: 400 });
+  }
+
   const { sessionSets, skippedSongs, forcedSessionSets } = generateSessionSets(domainParticipants);
 
-  // 4. DB に保存（既存をクリアしてから再生成）
   await prisma.$transaction(async (tx) => {
-    await tx.sessionSetMember.deleteMany();
-    await tx.sessionSet.deleteMany();
+    await tx.sessionSetMember.deleteMany({ where: { sessionSet: { sessionEventId: body.sessionEventId } } });
+    await tx.sessionSet.deleteMany({ where: { sessionEventId: body.sessionEventId } });
 
-    for (const s of sessionSets) {
+    for (const [index, s] of sessionSets.entries()) {
       const song = await tx.song.findUniqueOrThrow({
         where: { title: s.songTitle },
       });
 
       const created = await tx.sessionSet.create({
         data: {
+          sessionEventId: body.sessionEventId,
           title: s.songTitle,
           songId: song.id,
+          setOrder: index + 1,
+          isPublished: false,
           drumId: s.drum ?? null,
           bassId: s.bass ?? null,
           pianoId: s.piano ?? null,
@@ -73,6 +121,7 @@ export async function POST(req: NextRequest) {
   });
 
   const persistedSessionSets = await prisma.sessionSet.findMany({
+    where: { sessionEventId: body.sessionEventId },
     include: {
       song: true,
       drum: true,
@@ -82,7 +131,7 @@ export async function POST(req: NextRequest) {
         include: { participant: true },
       },
     },
-    orderBy: { title: 'asc' },
+    orderBy: [{ setOrder: 'asc' }, { title: 'asc' }],
   });
 
   const data = persistedSessionSets.map((s) => ({
@@ -100,5 +149,10 @@ export async function POST(req: NextRequest) {
       .map((m) => ({ id: m.participant.id, name: m.participant.name })),
   }));
 
-  return NextResponse.json({ sessionSets: data, skippedSongs, forcedSessionSets });
+  return NextResponse.json({
+    sessionEventId: body.sessionEventId,
+    sessionSets: data,
+    skippedSongs,
+    forcedSessionSets,
+  });
 }

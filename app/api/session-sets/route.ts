@@ -1,9 +1,12 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
 // GET /api/session-sets
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const sessionEventId = request.nextUrl.searchParams.get('sessionEventId');
+
   const sessionSets = await prisma.sessionSet.findMany({
+    where: sessionEventId ? { sessionEventId } : undefined,
     include: {
       song: true,
       drum: true,
@@ -13,13 +16,16 @@ export async function GET() {
         include: { participant: true },
       },
     },
-    orderBy: { title: 'asc' },
+    orderBy: [{ setOrder: 'asc' }, { title: 'asc' }],
   });
 
   // レスポンスを少しフラットな形に整形
   const data = sessionSets.map((s) => ({
     id: s.id,
+    sessionEventId: s.sessionEventId,
     songTitle: s.song.title,
+    setOrder: s.setOrder,
+    isPublished: s.isPublished,
     key: s.keyName,
     drum: s.drum ? { id: s.drum.id, name: s.drum.name } : null,
     bass: s.bass ? { id: s.bass.id, name: s.bass.name } : null,
@@ -32,5 +38,5 @@ export async function GET() {
       .map((m) => ({ id: m.participant.id, name: m.participant.name })),
   }));
 
-  return NextResponse.json({ sessionSets: data });
+  return NextResponse.json({ sessionSets: data, sessionEventId });
 }
