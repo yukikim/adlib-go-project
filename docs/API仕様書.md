@@ -263,7 +263,6 @@ response 201:
     "id": "archive-id",
     "sessionEventId": "event-id",
     "version": 1,
-    "retentionUntil": "2029-05-17T00:00:00.000Z",
     "createdAt": "2026-05-17T03:00:00.000Z"
   }
 }

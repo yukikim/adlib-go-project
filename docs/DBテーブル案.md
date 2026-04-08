@@ -328,14 +328,12 @@
 - participantCount
 - participantListSnapshot
 - note
-- retentionUntil
 - deletedAt
 - createdBy
 - createdAt
 
 運用案:
 
-- 過去 3 年分を保存対象とする
 - 管理者は必要に応じて削除できる
 
 ### 3.16 SessionArchiveSet
@@ -377,7 +375,7 @@
 
 用途:
 
-- 管理者の重要操作と保持期限切れ処理の監査ログを保持する
+- 管理者の重要操作の監査ログを保持する
 
 主なカラム案:
 

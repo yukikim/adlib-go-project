@@ -192,7 +192,6 @@ model SessionArchive {
   venue                     String
   participantCount          Int
   note                      String?
-  retentionUntil            DateTime
   deletedAt                 DateTime?
   createdBy                 UserAccount                  @relation("ArchiveCreator", fields: [createdById], references: [id])
   createdById               String

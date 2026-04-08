@@ -187,7 +187,6 @@ model SessionArchive {
   venue             String
   participantCount  Int
   note              String?
-  retentionUntil    DateTime
   deletedAt         DateTime?
   createdBy         UserAccount                 @relation("ArchiveCreator", fields: [createdById], references: [id])
   createdById       String
@@ -291,6 +290,5 @@ enum SessionEventStatus {
 enum AuditAction {
   archive_created
   archive_deleted
-  archive_retention_expired
   session_rating_deleted
 }
