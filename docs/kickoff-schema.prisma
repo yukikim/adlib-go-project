@@ -1,0 +1,361 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model UserAccount {
+  id              String          @id @default(uuid())
+  email           String          @unique
+  passwordHash    String
+  role            UserRole        @default(member)
+  status          AccountStatus   @default(active)
+  lastSignedInAt  DateTime?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  memberProfile   MemberProfile?
+  sessionRatings  SessionSetRating[]
+  archivesCreated SessionArchive[] @relation("ArchiveCreator")
+}
+
+model MemberProfile {
+  id                     String               @id @default(uuid())
+  userAccount            UserAccount          @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
+  userAccountId          String               @unique
+  displayName            String
+  nickname               String?
+  mainInstrument         Instrument
+  subInstrument          String?
+  gender                 String?
+  ageRange               String?
+  area                   String?
+  bio                    String?
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @updatedAt
+
+  sessionEntries         SessionEntry[]
+  sessionEntryRequests   SessionEntryRequest[]
+  sessionRatings         SessionSetRating[]
+  archiveParticipants    SessionArchiveParticipant[]
+}
+
+model Participant {
+  id                String                  @id @default(uuid())
+  name              String
+  instrument        Instrument
+  requestedSongs    ParticipantSongRequest[]
+  drumSessions      SessionSet[]            @relation("DrumSessions")
+  bassSessions      SessionSet[]            @relation("BassSessions")
+  pianoSessions     SessionSet[]            @relation("PianoSessions")
+  sessionMembers    SessionSetMember[]
+  archiveMembers    SessionArchiveSet[]     @relation("ArchiveDrum")
+  archiveBassSets   SessionArchiveSet[]     @relation("ArchiveBass")
+  archivePianoSets  SessionArchiveSet[]     @relation("ArchivePiano")
+}
+
+model Song {
+  id                   String                 @id @default(uuid())
+  title                String                 @unique
+  requests             ParticipantSongRequest[]
+  sessionEntryRequests SessionEntryRequest[]
+  sessionSets          SessionSet[]
+}
+
+model ParticipantSongRequest {
+  id             String       @id @default(uuid())
+  participant    Participant  @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  participantId  String
+  song           Song         @relation(fields: [songId], references: [id], onDelete: Cascade)
+  songId         String
+  keyName        String?
+  round          Int
+
+  @@unique([participantId, songId])
+}
+
+model SessionEvent {
+  id                String                @id @default(uuid())
+  title             String
+  description       String?
+  venue             String
+  eventDate         DateTime
+  startTime         DateTime?
+  endTime           DateTime?
+  round1StartAt     DateTime?
+  round1EndAt       DateTime?
+  round2StartAt     DateTime?
+  round2EndAt       DateTime?
+  status            SessionEventStatus    @default(draft)
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt
+
+  sessionEntries    SessionEntry[]
+  sessionSets       SessionSet[]
+  sessionRatings    SessionSetRating[]
+  sessionArchives   SessionArchive[]
+}
+
+model SessionEntry {
+  id                String                @id @default(uuid())
+  sessionEvent      SessionEvent          @relation(fields: [sessionEventId], references: [id], onDelete: Cascade)
+  sessionEventId    String
+  memberProfile     MemberProfile         @relation(fields: [memberProfileId], references: [id], onDelete: Cascade)
+  memberProfileId   String
+  attendanceStatus  AttendanceStatus      @default(attending)
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt
+
+  requests          SessionEntryRequest[]
+
+  @@unique([sessionEventId, memberProfileId])
+}
+
+model SessionEntryRequest {
+  id                String           @id @default(uuid())
+  sessionEntry      SessionEntry     @relation(fields: [sessionEntryId], references: [id], onDelete: Cascade)
+  sessionEntryId    String
+  memberProfile     MemberProfile    @relation(fields: [memberProfileId], references: [id], onDelete: Cascade)
+  memberProfileId   String
+  song              Song?            @relation(fields: [songId], references: [id], onDelete: SetNull)
+  songId            String?
+  songTitleSnapshot String
+  keyName           String?
+  round             Int
+  priority          Int
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+}
+
+model SessionSet {
+  id               String              @id @default(uuid())
+  sessionEvent     SessionEvent?       @relation(fields: [sessionEventId], references: [id], onDelete: Cascade)
+  sessionEventId   String?
+  title            String
+  song             Song                @relation(fields: [songId], references: [id])
+  songId           String
+  setOrder         Int?
+  isPublished      Boolean             @default(false)
+  keyName          String?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  drum             Participant?        @relation("DrumSessions", fields: [drumId], references: [id])
+  drumId           String?
+  bass             Participant?        @relation("BassSessions", fields: [bassId], references: [id])
+  bassId           String?
+  piano            Participant?        @relation("PianoSessions", fields: [pianoId], references: [id])
+  pianoId          String?
+
+  members          SessionSetMember[]
+  ratings          SessionSetRating[]
+}
+
+model SessionSetMember {
+  id             String      @id @default(uuid())
+  sessionSet     SessionSet  @relation(fields: [sessionSetId], references: [id], onDelete: Cascade)
+  sessionSetId   String
+  participant    Participant @relation(fields: [participantId], references: [id])
+  participantId  String
+  role           MemberRole
+
+  @@unique([sessionSetId, participantId, role])
+}
+
+model SessionSetRating {
+  id             String        @id @default(uuid())
+  sessionEvent   SessionEvent  @relation(fields: [sessionEventId], references: [id], onDelete: Cascade)
+  sessionEventId String
+  sessionSet     SessionSet    @relation(fields: [sessionSetId], references: [id], onDelete: Cascade)
+  sessionSetId   String
+  userAccount    UserAccount   @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
+  userAccountId  String
+  memberProfile  MemberProfile @relation(fields: [memberProfileId], references: [id], onDelete: Cascade)
+  memberProfileId String
+  rating         Int
+  comment        String?
+  ratedAt        DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@unique([sessionSetId, userAccountId])
+}
+
+model SessionArchive {
+  id                        String                       @id @default(uuid())
+  sessionEvent              SessionEvent                 @relation(fields: [sessionEventId], references: [id], onDelete: Cascade)
+  sessionEventId            String
+  version                   Int
+  title                     String
+  eventDate                 DateTime
+  venue                     String
+  participantCount          Int
+  note                      String?
+  retentionUntil            DateTime
+  deletedAt                 DateTime?
+  createdBy                 UserAccount                  @relation("ArchiveCreator", fields: [createdById], references: [id])
+  createdById               String
+  createdAt                 DateTime                     @default(now())
+
+  participants              SessionArchiveParticipant[]
+  sets                      SessionArchiveSet[]
+
+  @@unique([sessionEventId, version])
+}
+
+model SessionArchiveParticipant {
+  id                String          @id @default(uuid())
+  sessionArchive    SessionArchive  @relation(fields: [sessionArchiveId], references: [id], onDelete: Cascade)
+  sessionArchiveId  String
+  memberProfile     MemberProfile?  @relation(fields: [memberProfileId], references: [id], onDelete: SetNull)
+  memberProfileId   String?
+  displayName       String
+  mainInstrument    Instrument?
+}
+
+model SessionArchiveSet {
+  id                 String                       @id @default(uuid())
+  sessionArchive     SessionArchive               @relation(fields: [sessionArchiveId], references: [id], onDelete: Cascade)
+  sessionArchiveId   String
+  songTitle          String
+  setOrder           Int?
+  keyName            String?
+  drum               Participant?                 @relation("ArchiveDrum", fields: [drumId], references: [id], onDelete: SetNull)
+  drumId             String?
+  bass               Participant?                 @relation("ArchiveBass", fields: [bassId], references: [id], onDelete: SetNull)
+  bassId             String?
+  piano              Participant?                 @relation("ArchivePiano", fields: [pianoId], references: [id], onDelete: SetNull)
+  pianoId            String?
+  frontSnapshot      Json?
+  vocalSnapshot      Json?
+  ratingSummary      SessionArchiveRatingSummary?
+}
+
+model SessionArchiveRatingSummary {
+  id                  String             @id @default(uuid())
+  sessionArchiveSet   SessionArchiveSet  @relation(fields: [sessionArchiveSetId], references: [id], onDelete: Cascade)
+  sessionArchiveSetId String             @unique
+  ratingCount         Int                @default(0)
+  averageRating       Decimal?           @db.Decimal(3, 2)
+  minRating           Int?
+  maxRating           Int?
+  distributionJson    Json?
+}
+
+model Announcement {
+  id          String    @id @default(uuid())
+  title       String
+  body        String
+  publishedAt DateTime?
+  targetType  String
+  createdBy   String
+}
+
+model DirectMessageRoom {
+  id          String    @id @default(uuid())
+  memberAId   String
+  memberBId   String
+  createdAt   DateTime  @default(now())
+
+  messages    DirectMessage[]
+}
+
+model DirectMessage {
+  id          String             @id @default(uuid())
+  room        DirectMessageRoom  @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  roomId      String
+  senderId    String
+  body        String
+  sentAt      DateTime           @default(now())
+  readAt      DateTime?
+}
+
+model GroupChat {
+  id          String             @id @default(uuid())
+  name        String
+  createdBy   String
+  createdAt   DateTime           @default(now())
+
+  members     GroupChatMember[]
+  messages    GroupMessage[]
+}
+
+model GroupChatMember {
+  id               String       @id @default(uuid())
+  groupChat        GroupChat    @relation(fields: [groupChatId], references: [id], onDelete: Cascade)
+  groupChatId      String
+  memberProfileId  String
+  joinedAt         DateTime     @default(now())
+}
+
+model GroupMessage {
+  id           String      @id @default(uuid())
+  groupChat    GroupChat   @relation(fields: [groupChatId], references: [id], onDelete: Cascade)
+  groupChatId  String
+  senderId     String
+  body         String
+  sentAt       DateTime    @default(now())
+}
+
+model MailLog {
+  id           String    @id @default(uuid())
+  mailType     String
+  toAddress    String
+  subject      String
+  bodySummary  String?
+  status       String
+  errorMessage String?
+  sentAt       DateTime?
+}
+
+model Column {
+  id           String    @id @default(uuid())
+  title        String
+  slug         String    @unique
+  summary      String?
+  body         String
+  thumbnailUrl String?
+  publishedAt  DateTime?
+  createdBy    String
+  status       String
+}
+
+enum Instrument {
+  drum
+  bass
+  piano
+  front
+  vocal
+}
+
+enum MemberRole {
+  front
+  vocal
+}
+
+enum UserRole {
+  member
+  admin
+}
+
+enum AccountStatus {
+  active
+  suspended
+  invited
+}
+
+enum AttendanceStatus {
+  attending
+  absent
+  undecided
+}
+
+enum SessionEventStatus {
+  draft
+  recruiting_round1
+  recruiting_round2
+  generating
+  published
+  closed
+}
