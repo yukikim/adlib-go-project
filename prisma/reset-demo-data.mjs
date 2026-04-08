@@ -4,6 +4,8 @@ const prisma = new PrismaClient();
 
 async function main() {
   await prisma.$transaction(async (tx) => {
+    await tx.mailLog.deleteMany();
+    await tx.announcement.deleteMany();
     await tx.adminAuditLog.deleteMany();
     await tx.sessionArchiveRatingSummary.deleteMany();
     await tx.sessionArchiveSet.deleteMany();

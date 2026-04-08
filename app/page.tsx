@@ -168,6 +168,96 @@ interface ArchiveView {
   };
 }
 
+interface AnnouncementView {
+  id: string;
+  title: string;
+  body: string;
+  isPublished: boolean;
+  publishedAt?: string | null;
+  createdAt: string;
+  createdBy: {
+    id: string;
+    email: string;
+  };
+}
+
+interface MemberListView {
+  id: string;
+  displayName: string;
+  nickname?: string | null;
+  mainInstrument: Instrument;
+  area?: string | null;
+  bio?: string | null;
+  createdAt: string;
+  entryCount: number;
+  userAccount: {
+    id: string;
+    email: string;
+    role: "member" | "admin";
+    status: string;
+    createdAt: string;
+  };
+}
+
+interface MemberDetailView {
+  id: string;
+  displayName: string;
+  nickname?: string | null;
+  mainInstrument: Instrument;
+  subInstrument?: string | null;
+  area?: string | null;
+  bio?: string | null;
+  userAccount: {
+    id: string;
+    email: string;
+    role: "member" | "admin";
+    status: string;
+    createdAt: string;
+    lastSignedInAt?: string | null;
+  };
+  sessionEntries: SessionEntryView[];
+}
+
+interface MemberRatingHistoryView {
+  id: string;
+  rating: number;
+  comment?: string | null;
+  ratedAt: string;
+  sessionEvent: {
+    id: string;
+    title: string;
+    eventDate: string;
+  };
+  sessionSet: {
+    id: string;
+    title: string;
+  };
+}
+
+interface ActivityLogView {
+  id: string;
+  action: string;
+  targetType: string;
+  targetId?: string | null;
+  summary?: string | null;
+  performedAt: string;
+  performedBy: {
+    id: string;
+    email: string;
+  };
+}
+
+interface MailLogView {
+  id: string;
+  mailType: string;
+  toAddress: string;
+  subject: string;
+  status: string;
+  errorMessage?: string | null;
+  createdAt: string;
+  sentAt?: string | null;
+}
+
 export default function HomePage() {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [songs, setSongs] = useState<Song[]>([]);
@@ -179,6 +269,13 @@ export default function HomePage() {
   const [memberSessionSets, setMemberSessionSets] = useState<SessionSetView[]>([]);
   const [ratingSummaries, setRatingSummaries] = useState<RatingSummaryView[]>([]);
   const [archives, setArchives] = useState<ArchiveView[]>([]);
+  const [announcements, setAnnouncements] = useState<AnnouncementView[]>([]);
+  const [members, setMembers] = useState<MemberListView[]>([]);
+  const [selectedMemberId, setSelectedMemberId] = useState("");
+  const [selectedMemberDetail, setSelectedMemberDetail] = useState<MemberDetailView | null>(null);
+  const [selectedMemberRatings, setSelectedMemberRatings] = useState<MemberRatingHistoryView[]>([]);
+  const [activityLogs, setActivityLogs] = useState<ActivityLogView[]>([]);
+  const [mailLogs, setMailLogs] = useState<MailLogView[]>([]);
 
   const [newParticipantName, setNewParticipantName] = useState("");
   const [newParticipantInstrument, setNewParticipantInstrument] =
@@ -239,6 +336,11 @@ export default function HomePage() {
   const [memberRound2Key2, setMemberRound2Key2] = useState("");
   const [memberRatings, setMemberRatings] = useState<Record<string, number>>({});
   const [memberRatingComments, setMemberRatingComments] = useState<Record<string, string>>({});
+  const [adminMemberRole, setAdminMemberRole] = useState<"member" | "admin">("member");
+  const [adminMemberStatus, setAdminMemberStatus] = useState<"active" | "suspended" | "invited">("active");
+  const [announcementTitle, setAnnouncementTitle] = useState("");
+  const [announcementBody, setAnnouncementBody] = useState("");
+  const [announcementPublished, setAnnouncementPublished] = useState(true);
   const isAdmin = currentUser?.role === "admin";
   const isMember = currentUser?.role === "member";
   const selectedMemberEvent = sessionEvents.find((event) => event.id === memberEventId) ?? null;
@@ -276,6 +378,19 @@ export default function HomePage() {
       setSessionSets(ssJson.sessionSets ?? []);
       setSessionEvents(seJson.sessionEvents ?? []);
       setCurrentUser(meJson.user ?? null);
+      if (meJson.user) {
+        const [announcementRes, memberRes] = await Promise.all([
+          fetch("/api/announcements"),
+          fetch("/api/members"),
+        ]);
+        const announcementJson = await announcementRes.json().catch(() => ({}));
+        const memberJson = await memberRes.json().catch(() => ({}));
+        setAnnouncements(announcementJson.announcements ?? []);
+        setMembers(memberJson.members ?? []);
+      } else {
+        setAnnouncements([]);
+        setMembers([]);
+      }
       if (meJson.user?.role === "member") {
         const entryRes = await fetch("/api/session-entries");
         const entryJson = await entryRes.json().catch(() => ({}));
@@ -284,11 +399,21 @@ export default function HomePage() {
         setSessionEntries([]);
       }
       if (meJson.user?.role === "admin") {
-        const archiveRes = await fetch("/api/session-archives");
+        const [archiveRes, activityRes, mailLogRes] = await Promise.all([
+          fetch("/api/session-archives"),
+          fetch("/api/admin/activity"),
+          fetch("/api/admin/mail-logs"),
+        ]);
         const archiveJson = await archiveRes.json().catch(() => ({}));
+        const activityJson = await activityRes.json().catch(() => ({}));
+        const mailLogJson = await mailLogRes.json().catch(() => ({}));
         setArchives(archiveJson.archives ?? []);
+        setActivityLogs(activityJson.activity ?? []);
+        setMailLogs(mailLogJson.mailLogs ?? []);
       } else {
         setArchives([]);
+        setActivityLogs([]);
+        setMailLogs([]);
       }
       setSkippedSongs([]);
       setForcedSessionSets([]);
@@ -327,6 +452,12 @@ export default function HomePage() {
   }, [selectedAdminEventId, sessionEvents]);
 
   useEffect(() => {
+    if (!selectedMemberId && members.length > 0) {
+      setSelectedMemberId(members[0].id);
+    }
+  }, [members, selectedMemberId]);
+
+  useEffect(() => {
     if (!selectedAdminEvent) {
       return;
     }
@@ -340,6 +471,34 @@ export default function HomePage() {
     setEditRound2StartAt(formatDateTimeLocal(selectedAdminEvent.round2StartAt));
     setEditRound2EndAt(formatDateTimeLocal(selectedAdminEvent.round2EndAt));
   }, [selectedAdminEvent]);
+
+  useEffect(() => {
+    if (!selectedMemberId || !currentUser) {
+      setSelectedMemberDetail(null);
+      setSelectedMemberRatings([]);
+      return;
+    }
+
+    const loadMemberDetail = async () => {
+      const res = await fetch(`/api/members/${selectedMemberId}`);
+      const json = await res.json().catch(() => ({}));
+      setSelectedMemberDetail(json.member ?? null);
+      setSelectedMemberRatings(json.ratings ?? []);
+    };
+
+    loadMemberDetail().catch((error) => {
+      console.error(error);
+    });
+  }, [currentUser, selectedMemberId]);
+
+  useEffect(() => {
+    if (!selectedMemberDetail) {
+      return;
+    }
+
+    setAdminMemberRole(selectedMemberDetail.userAccount.role);
+    setAdminMemberStatus(selectedMemberDetail.userAccount.status as "active" | "suspended" | "invited");
+  }, [selectedMemberDetail]);
 
   useEffect(() => {
     const currentEntry = sessionEntries.find((entry) => entry.sessionEventId === memberEventId);
@@ -882,6 +1041,62 @@ export default function HomePage() {
     }
   };
 
+  const handleUpdateMemberAdmin = async () => {
+    if (!selectedMemberId) return;
+    setLoading(true);
+    setMessage(null);
+    try {
+      const res = await fetch(`/api/members/${selectedMemberId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          role: adminMemberRole,
+          status: adminMemberStatus,
+        }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(json.error ?? "failed");
+      }
+      await loadAll();
+      setMessage("メンバー設定を更新しました");
+    } catch (e: any) {
+      setMessage(`メンバー設定更新に失敗しました: ${e.message ?? e}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCreateAnnouncement = async () => {
+    if (!announcementTitle.trim() || !announcementBody.trim()) return;
+    setLoading(true);
+    setMessage(null);
+    try {
+      const res = await fetch("/api/announcements", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: announcementTitle,
+          body: announcementBody,
+          isPublished: announcementPublished,
+        }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(json.error ?? "failed");
+      }
+      await loadAll();
+      setAnnouncementTitle("");
+      setAnnouncementBody("");
+      setAnnouncementPublished(true);
+      setMessage("お知らせを作成しました");
+    } catch (e: any) {
+      setMessage(`お知らせ作成に失敗しました: ${e.message ?? e}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <main style={{ padding: "2rem", fontFamily: "system-ui", maxWidth: 1000, margin: "0 auto" }}>
       <h1>Jazz Session Planner</h1>
@@ -983,6 +1198,73 @@ export default function HomePage() {
         <section style={{ marginTop: "2rem", padding: "1rem", border: "1px solid #ddd", borderRadius: "0.5rem" }}>
           <h2>メンバー画面</h2>
           <div style={{ display: "grid", gap: "1rem" }}>
+            <div>
+              <h3>お知らせ</h3>
+              {announcements.length === 0 ? (
+                <p>公開中のお知らせはありません。</p>
+              ) : (
+                <ul>
+                  {announcements.map((announcement) => (
+                    <li key={announcement.id} style={{ marginBottom: "0.75rem" }}>
+                      <strong>{announcement.title}</strong>
+                      <div style={{ color: "#555" }}>{announcement.body}</div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            <div>
+              <h3>メンバー一覧</h3>
+              <div style={{ display: "grid", gridTemplateColumns: "minmax(220px, 280px) 1fr", gap: "1rem" }}>
+                <ul style={{ margin: 0, paddingLeft: "1rem" }}>
+                  {members.map((member) => (
+                    <li key={member.id} style={{ marginBottom: "0.5rem" }}>
+                      <button type="button" onClick={() => setSelectedMemberId(member.id)} disabled={loading}>
+                        {member.displayName} ({member.mainInstrument})
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                <div>
+                  {selectedMemberDetail ? (
+                    <>
+                      <h4>{selectedMemberDetail.displayName}</h4>
+                      <p>{selectedMemberDetail.area || "地域未設定"}</p>
+                      <p>{selectedMemberDetail.bio || "自己紹介未設定"}</p>
+                      <p>楽器: {selectedMemberDetail.mainInstrument}</p>
+                      <h5>セッション履歴</h5>
+                      {selectedMemberDetail.sessionEntries.length === 0 ? (
+                        <p>履歴はありません。</p>
+                      ) : (
+                        <ul>
+                          {selectedMemberDetail.sessionEntries.map((entry) => (
+                            <li key={entry.id}>
+                              {entry.sessionEvent.title} / {entry.attendanceStatus} / {entry.requests.length} 曲
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                      <h5>評価履歴</h5>
+                      {selectedMemberRatings.length === 0 ? (
+                        <p>評価履歴はありません。</p>
+                      ) : (
+                        <ul>
+                          {selectedMemberRatings.slice(0, 5).map((rating) => (
+                            <li key={rating.id}>
+                              {rating.sessionEvent.title} / {rating.sessionSet.title} / {rating.rating} 星
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </>
+                  ) : (
+                    <p>メンバーを選択してください。</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
             <div>
               <h3>セッションイベント一覧</h3>
               {sessionEvents.length === 0 ? (
@@ -1230,6 +1512,103 @@ export default function HomePage() {
                         </button>
                       </div>
                     )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <div>
+            <h3>メンバー管理</h3>
+            <div style={{ display: "grid", gridTemplateColumns: "minmax(220px, 280px) 1fr", gap: "1rem" }}>
+              <ul style={{ margin: 0, paddingLeft: "1rem" }}>
+                {members.map((member) => (
+                  <li key={member.id} style={{ marginBottom: "0.5rem" }}>
+                    <button type="button" onClick={() => setSelectedMemberId(member.id)} disabled={loading}>
+                      {member.displayName} / {member.userAccount.status}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <div>
+                {selectedMemberDetail ? (
+                  <div style={{ display: "grid", gap: "0.5rem", maxWidth: 420 }}>
+                    <div>{selectedMemberDetail.userAccount.email}</div>
+                    <select value={adminMemberRole} onChange={(e) => setAdminMemberRole(e.target.value as "member" | "admin") }>
+                      <option value="member">member</option>
+                      <option value="admin">admin</option>
+                    </select>
+                    <select value={adminMemberStatus} onChange={(e) => setAdminMemberStatus(e.target.value as "active" | "suspended" | "invited") }>
+                      <option value="active">active</option>
+                      <option value="suspended">suspended</option>
+                      <option value="invited">invited</option>
+                    </select>
+                    <div>
+                      <button type="button" onClick={handleUpdateMemberAdmin} disabled={loading}>
+                        メンバー設定保存
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <p>メンバーを選択してください。</p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3>アクティビティ履歴</h3>
+            {activityLogs.length === 0 ? (
+              <p>履歴はありません。</p>
+            ) : (
+              <ul>
+                {activityLogs.map((log) => (
+                  <li key={log.id} style={{ marginBottom: "0.5rem" }}>
+                    {new Date(log.performedAt).toLocaleString("ja-JP")} / {log.action} / {log.summary || log.targetType}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <div>
+            <h3>お知らせ配信</h3>
+            <div style={{ display: "grid", gap: "0.5rem", maxWidth: 520 }}>
+              <input type="text" placeholder="タイトル" value={announcementTitle} onChange={(e) => setAnnouncementTitle(e.target.value)} />
+              <textarea rows={3} placeholder="本文" value={announcementBody} onChange={(e) => setAnnouncementBody(e.target.value)} />
+              <label>
+                <input type="checkbox" checked={announcementPublished} onChange={(e) => setAnnouncementPublished(e.target.checked)} /> 公開する
+              </label>
+              <div>
+                <button type="button" onClick={handleCreateAnnouncement} disabled={loading}>
+                  お知らせ作成
+                </button>
+              </div>
+            </div>
+            {announcements.length === 0 ? (
+              <p>お知らせはまだありません。</p>
+            ) : (
+              <ul style={{ marginTop: "0.75rem" }}>
+                {announcements.map((announcement) => (
+                  <li key={announcement.id}>
+                    <strong>{announcement.title}</strong>
+                    {` / ${announcement.isPublished ? "published" : "draft"}`}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <div>
+            <h3>MailLog</h3>
+            {mailLogs.length === 0 ? (
+              <p>メール送信ログはありません。</p>
+            ) : (
+              <ul>
+                {mailLogs.map((log) => (
+                  <li key={log.id} style={{ marginBottom: "0.5rem" }}>
+                    {new Date(log.createdAt).toLocaleString("ja-JP")} / {log.mailType} / {log.toAddress} / {log.status}
+                    {log.errorMessage ? ` / ${log.errorMessage}` : ""}
                   </li>
                 ))}
               </ul>

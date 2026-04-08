@@ -89,3 +89,16 @@ export const ratingComments = [
   '雰囲気がとても良かったです',
   'またこの編成で聴きたいです',
 ];
+
+export const announcements = [
+  {
+    title: '5月セッション募集開始',
+    body: 'Round 1 の希望曲登録を開始しました。期限内の入力をお願いします。',
+    isPublished: true,
+  },
+  {
+    title: '当日の集合案内',
+    body: '開場は 12:30、集合は 12:45 です。譜面と必要機材を忘れずに持参してください。',
+    isPublished: true,
+  },
+];
