@@ -210,7 +210,57 @@ response 200:
 
 ## 5. アーカイブ API
 
-### 5.1 GET /api/session-events/:id/archive-preview
+### 5.1 GET /api/session-archives
+
+用途:
+
+- 管理者がアーカイブ一覧を取得する
+
+権限:
+
+- admin
+
+補足:
+
+- 現段階の暫定実装では x-user-role: admin と x-user-id ヘッダーを要求する
+- includeDeleted=true を付与すると削除済みを含めて返す
+
+response 200:
+
+```json
+{
+  "archives": [
+    {
+      "id": "archive-id",
+      "sessionEventId": "event-id",
+      "sessionEventTitle": "2026年5月セッション",
+      "title": "2026年5月セッション 初版アーカイブ",
+      "version": 1,
+      "eventDate": "2026-05-17T00:00:00.000Z",
+      "venue": "渋谷 Jazz Spot",
+      "participantCount": 28,
+      "participants": [
+        {
+          "id": "archive-participant-id",
+          "displayName": "佐藤 匠",
+          "mainInstrument": "drum"
+        }
+      ],
+      "setCount": 12,
+      "ratingCount": 48,
+      "deletedAt": null,
+      "createdAt": "2026-05-17T03:00:00.000Z",
+      "createdBy": {
+        "id": "admin-user-id",
+        "email": "admin@example.com"
+      }
+    }
+  ],
+  "includeDeleted": false
+}
+```
+
+### 5.2 GET /api/session-events/:id/archive-preview
 
 用途:
 
@@ -235,7 +285,7 @@ response 200:
 }
 ```
 
-### 5.2 POST /api/session-sets/:id/archive
+### 5.3 POST /api/session-sets/:id/archive
 
 用途:
 
@@ -268,7 +318,7 @@ response 201:
 }
 ```
 
-### 5.3 DELETE /api/session-archives/:id
+### 5.4 DELETE /api/session-archives/:id
 
 用途:
 
