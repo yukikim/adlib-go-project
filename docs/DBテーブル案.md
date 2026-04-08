@@ -310,6 +310,7 @@
 制約案:
 
 - sessionSetId + memberProfileId をユニークにする
+- rating は 1 から 5 の整数に制限する
 
 ### 3.15 SessionArchive
 
@@ -327,8 +328,15 @@
 - participantCount
 - participantListSnapshot
 - note
+- retentionUntil
+- deletedAt
 - createdBy
 - createdAt
+
+運用案:
+
+- 過去 3 年分を保存対象とする
+- 管理者は必要に応じて削除できる
 
 ### 3.16 SessionArchiveSet
 
