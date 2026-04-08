@@ -373,6 +373,24 @@
 - maxRating
 - distributionJson
 
+### 3.18 AdminAuditLog
+
+用途:
+
+- 管理者の重要操作と保持期限切れ処理の監査ログを保持する
+
+主なカラム案:
+
+- id
+- action
+- targetType
+- targetId
+- summary
+- payload
+- performedById
+- sessionArchiveId
+- performedAt
+
 ## 4. リレーション方針
 
 - UserAccount 1 : 1 MemberProfile
@@ -388,6 +406,8 @@
 - GroupChat 1 : N GroupChatMember
 - SessionArchive 1 : N SessionArchiveSet
 - SessionArchiveSet 1 : 1 SessionArchiveRatingSummary
+- UserAccount 1 : N AdminAuditLog
+- SessionArchive 1 : N AdminAuditLog
 
 ## 5. マスタ項目案
 
@@ -415,7 +435,8 @@
 5. SessionEntryRequest
 6. SessionSetRating
 7. SessionArchive / SessionArchiveSet / SessionArchiveRatingSummary
-8. Announcement
-9. MailLog
-10. Column
-11. DirectMessage / GroupChat 系
+8. AdminAuditLog
+9. Announcement
+10. MailLog
+11. Column
+12. DirectMessage / GroupChat 系

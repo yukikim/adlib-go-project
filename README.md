@@ -399,7 +399,7 @@ docker compose up -d
 4. Prisma マイグレーションを適用
 
 ```bash
-npx prisma migrate dev --name init
+npx prisma migrate dev
 npx prisma generate
 ```
 
@@ -478,6 +478,17 @@ node -e 'fetch("http://localhost:3000/api/session-sets/generate",{method:"POST"}
 - skippedSongs
 	- 最終的に生成できなかった曲
 	- reasons に不足理由が入る
+
+### 拡張計画ドキュメント
+
+- docs/要件定義書.md
+- docs/基本設計書.md
+- docs/詳細設計書.md
+- docs/DBテーブル案.md
+- docs/実装計画書.md
+- docs/API仕様書.md
+- docs/アーカイブ運用ルール.md
+- docs/kickoff-schema.prisma
 
 ---
 
