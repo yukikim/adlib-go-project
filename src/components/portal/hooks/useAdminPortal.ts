@@ -49,6 +49,8 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
   const [columns, setColumns] = useState<ColumnView[]>([]);
   const [selectedManagedMemberId, setSelectedManagedMemberId] = useState('');
   const [selectedManagedMemberDetail, setSelectedManagedMemberDetail] = useState<MemberDetailView | null>(null);
+  const [memberUpdateMessage, setMemberUpdateMessage] = useState<string | null>(null);
+  const [memberUpdateMessageTone, setMemberUpdateMessageTone] = useState<'success' | 'error' | null>(null);
   const [memberSearchQuery, setMemberSearchQuery] = useState('');
   const [adminMemberDisplayName, setAdminMemberDisplayName] = useState('');
   const [adminMemberNickname, setAdminMemberNickname] = useState('');
@@ -76,6 +78,28 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
 
   const isAdmin = currentUser?.role === 'admin';
   const selectedAdminEvent = sessionEvents.find((event) => event.id === selectedAdminEventId) ?? null;
+
+  async function loadManagedMemberDetail(memberId: string) {
+    const response = await fetch(`/api/members/${memberId}`);
+    const json = await parseJson(response);
+    if (!response.ok) {
+      throw new Error(json.error ?? 'メンバー詳細の取得に失敗しました');
+    }
+
+    setSelectedManagedMemberDetail(json.member ?? null);
+    if (json.member?.userAccount) {
+      setAdminMemberDisplayName(json.member.displayName ?? '');
+      setAdminMemberNickname(json.member.nickname ?? '');
+      setAdminMemberMainInstrument(json.member.mainInstrument ?? 'front');
+      setAdminMemberSubInstrument(json.member.subInstrument ?? '');
+      setAdminMemberGender(json.member.gender ?? '');
+      setAdminMemberAgeRange(json.member.ageRange ?? '');
+      setAdminMemberArea(json.member.area ?? '');
+      setAdminMemberBio(json.member.bio ?? '');
+      setAdminMemberRole(json.member.userAccount.role);
+      setAdminMemberStatus(json.member.userAccount.status);
+    }
+  }
 
   function resetColumnForm() {
     setEditingColumnSlug('');
@@ -172,25 +196,13 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
       setSelectedManagedMemberDetail(null);
       return;
     }
-    fetch(`/api/members/${selectedManagedMemberId}`)
-      .then(parseJson)
-      .then((json) => {
-        setSelectedManagedMemberDetail(json.member ?? null);
-        if (json.member?.userAccount) {
-          setAdminMemberDisplayName(json.member.displayName ?? '');
-          setAdminMemberNickname(json.member.nickname ?? '');
-          setAdminMemberMainInstrument(json.member.mainInstrument ?? 'front');
-          setAdminMemberSubInstrument(json.member.subInstrument ?? '');
-          setAdminMemberGender(json.member.gender ?? '');
-          setAdminMemberAgeRange(json.member.ageRange ?? '');
-          setAdminMemberArea(json.member.area ?? '');
-          setAdminMemberBio(json.member.bio ?? '');
-          setAdminMemberRole(json.member.userAccount.role);
-          setAdminMemberStatus(json.member.userAccount.status);
-        }
-      })
-      .catch((error) => console.error(error));
-  }, [isAdmin, selectedManagedMemberId]);
+    loadManagedMemberDetail(selectedManagedMemberId).catch((error) => console.error(error));
+  }, [isAdmin, members, selectedManagedMemberId]);
+
+  useEffect(() => {
+    setMemberUpdateMessage(null);
+    setMemberUpdateMessageTone(null);
+  }, [selectedManagedMemberId]);
 
   useEffect(() => {
     if (adminMemberMainInstrument !== 'front') {
@@ -319,7 +331,18 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     const json = await parseJson(res);
     if (!res.ok) throw new Error(json.error ?? 'メンバー更新に失敗しました');
     await reloadShared();
-  }, 'メンバー設定を更新しました');
+    await loadManagedMemberDetail(selectedManagedMemberId);
+  }, 'メンバー設定を更新しました', {
+    skipGlobalMessage: true,
+    onSuccess: (message) => {
+      setMemberUpdateMessage(message ?? 'メンバー設定を更新しました');
+      setMemberUpdateMessageTone('success');
+    },
+    onError: (message) => {
+      setMemberUpdateMessage(message);
+      setMemberUpdateMessageTone('error');
+    },
+  });
 
   const handleDeleteMember = async () => runAction(async () => {
     if (!selectedManagedMemberId) throw new Error('削除対象のメンバーを選択してください');
@@ -443,6 +466,8 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     selectedManagedMemberId,
     setSelectedManagedMemberId,
     selectedManagedMemberDetail,
+    memberUpdateMessage,
+    memberUpdateMessageTone,
     memberSearchQuery,
     setMemberSearchQuery,
     adminMemberDisplayName,

@@ -52,6 +52,8 @@ type AdminPortalSectionProps = {
   members: MemberListView[];
   selectedManagedMemberId: string;
   selectedManagedMemberDetail: MemberDetailView | null;
+  memberUpdateMessage: string | null;
+  memberUpdateMessageTone: 'success' | 'error' | null;
   memberSearchQuery: string;
   adminMemberDisplayName: string;
   adminMemberNickname: string;
@@ -161,6 +163,8 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     members,
     selectedManagedMemberId,
     selectedManagedMemberDetail,
+    memberUpdateMessage,
+    memberUpdateMessageTone,
     memberSearchQuery,
     adminMemberDisplayName,
     adminMemberNickname,
@@ -430,6 +434,11 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                   {' '}
                   <button type="button" onClick={onDeleteMember} disabled={loading || selectedManagedMemberDetail.userAccount.role === 'admin'}>メンバー削除</button>
                 </div>
+                {memberUpdateMessage && (
+                  <p style={{ color: memberUpdateMessageTone === 'error' ? '#b42318' : '#027a48', margin: 0 }}>
+                    {memberUpdateMessage}
+                  </p>
+                )}
                 {selectedManagedMemberDetail.userAccount.role === 'admin' && <p style={{ color: '#666', margin: 0 }}>管理者アカウントは削除せず、role を member に戻して管理してください。</p>}
               </div>
             ) : <p>メンバーを選択してください。</p>}

@@ -24,16 +24,23 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
   const [members, setMembers] = useState<MemberListView[]>([]);
   const [sessionEvents, setSessionEvents] = useState<SessionEventView[]>([]);
 
-  const runAction = async (action: () => Promise<void>, successMessage?: string) => {
+  const runAction = async (action: () => Promise<void>, successMessage?: string, options?: { onSuccess?: (message?: string) => void; onError?: (message: string) => void; skipGlobalMessage?: boolean }) => {
     setLoading(true);
-    setMessage(null);
+    if (!options?.skipGlobalMessage) {
+      setMessage(null);
+    }
     try {
       await action();
-      if (successMessage) {
+      if (successMessage && !options?.skipGlobalMessage) {
         setMessage(successMessage);
       }
+      options?.onSuccess?.(successMessage);
     } catch (error: any) {
-      setMessage(error?.message ?? "処理に失敗しました");
+      const nextMessage = error?.message ?? "処理に失敗しました";
+      if (!options?.skipGlobalMessage) {
+        setMessage(nextMessage);
+      }
+      options?.onError?.(nextMessage);
     } finally {
       setLoading(false);
     }
@@ -222,6 +229,8 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           members={members}
           selectedManagedMemberId={admin.selectedManagedMemberId}
           selectedManagedMemberDetail={admin.selectedManagedMemberDetail}
+          memberUpdateMessage={admin.memberUpdateMessage}
+          memberUpdateMessageTone={admin.memberUpdateMessageTone}
           memberSearchQuery={admin.memberSearchQuery}
           adminMemberDisplayName={admin.adminMemberDisplayName}
           adminMemberNickname={admin.adminMemberNickname}

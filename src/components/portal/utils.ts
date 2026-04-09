@@ -1,6 +1,16 @@
 import type { SessionEventView } from './types';
 
-export type RunPortalAction = (action: () => Promise<void>, successMessage?: string) => Promise<void>;
+export type RunPortalActionOptions = {
+  onSuccess?: (message?: string) => void;
+  onError?: (message: string) => void;
+  skipGlobalMessage?: boolean;
+};
+
+export type RunPortalAction = (
+  action: () => Promise<void>,
+  successMessage?: string,
+  options?: RunPortalActionOptions,
+) => Promise<void>;
 
 export function formatDateTimeLocal(value?: string | null) {
   if (!value) return '';

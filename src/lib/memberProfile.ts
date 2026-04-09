@@ -78,6 +78,19 @@ type ValidateMemberProfileOptions = {
   currentMainInstrument?: string | null;
 };
 
+function pickMemberProfileInput(input: MemberProfileInput) {
+  return {
+    displayName: input.displayName,
+    nickname: input.nickname,
+    mainInstrument: input.mainInstrument,
+    subInstrument: input.subInstrument,
+    gender: input.gender,
+    ageRange: input.ageRange,
+    area: input.area,
+    bio: input.bio,
+  };
+}
+
 const trimmedOptionalString = z.preprocess((value) => {
   if (typeof value !== 'string') {
     return value;
@@ -159,7 +172,7 @@ export function normalizeOptionalText(value: string | null | undefined) {
 }
 
 export function validateMemberProfileInput(input: MemberProfileInput, options: ValidateMemberProfileOptions = {}) {
-  const parsed = memberProfileInputSchema.safeParse(input);
+  const parsed = memberProfileInputSchema.safeParse(pickMemberProfileInput(input));
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? 'Invalid body' as const };
   }
