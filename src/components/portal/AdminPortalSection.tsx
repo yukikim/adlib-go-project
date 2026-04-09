@@ -300,7 +300,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
         )}
       </Section>
 
-      <Section title="メンバー管理">
+      <Section title="メンバー / 管理者管理">
         <div style={{ display: 'grid', gridTemplateColumns: 'minmax(220px, 280px) 1fr', gap: '1rem' }}>
           <ul style={{ margin: 0, paddingLeft: '1rem' }}>
             {members.map((member) => (
@@ -310,6 +310,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
             ))}
           </ul>
           <div>
+            <p style={{ color: '#666', marginTop: 0 }}>既存メンバーの role を admin に変更すると管理者として追加されます。管理者の編集もこの画面で行います。</p>
             {selectedManagedMemberDetail ? (
               <div style={{ display: 'grid', gap: '0.75rem', maxWidth: 420 }}>
                 <div>{selectedManagedMemberDetail.userAccount.email}</div>

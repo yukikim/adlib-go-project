@@ -87,13 +87,14 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
 
   return (
     <main style={{ padding: "2rem", maxWidth: 1000, margin: "0 auto" }}>
-      <h1>{view === "admin" ? "管理ダッシュボード" : view === "member" ? "メンバーページ" : view === "signup" ? "サインアップ" : "サインイン"}</h1>
+      <h1>{view === "admin" ? "管理ダッシュボード" : view === "member" ? "メンバーページ" : view === "signup" ? "メンバーサインアップ" : view === "admin-signin" ? "管理者サインイン" : "メンバーサインイン"}</h1>
       {message && <p style={{ color: "darkgreen" }}>{message}</p>}
       {loading && <p style={{ color: "#666" }}>処理中...</p>}
 
-      {(view === "signin" || view === "signup") && (
+      {(view === "signin" || view === "signup" || view === "admin-signin") && (
         <AuthPortalSection
           view={view}
+          authTarget={view === "admin-signin" ? "admin" : "member"}
           loading={loading}
           authEmail={auth.authEmail}
           authPassword={auth.authPassword}
@@ -110,7 +111,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           setResetEmail={auth.setResetEmail}
           setResetToken={auth.setResetToken}
           setResetPassword={auth.setResetPassword}
-          onSignIn={auth.handleSignIn}
+          onSignIn={() => auth.handleSignIn(view === "admin-signin" ? "admin" : "member")}
           onSignUp={auth.handleSignUp}
           onForgotPassword={auth.handleForgotPassword}
           onResetPassword={auth.handleResetPassword}

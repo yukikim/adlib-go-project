@@ -2,7 +2,8 @@ import { Section } from './Section';
 import type { Instrument } from './types';
 
 type AuthPortalSectionProps = {
-  view: 'signin' | 'signup';
+  view: 'signin' | 'signup' | 'admin-signin';
+  authTarget: 'member' | 'admin';
   loading: boolean;
   authEmail: string;
   authPassword: string;
@@ -28,6 +29,7 @@ type AuthPortalSectionProps = {
 export function AuthPortalSection(props: AuthPortalSectionProps) {
   const {
     view,
+    authTarget,
     loading,
     authEmail,
     authPassword,
@@ -52,8 +54,12 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
 
   return (
     <>
-      <Section title="認証">
-        <p style={{ color: '#666' }}>デモ管理者: admin@adolib-go.local / demo-admin-password</p>
+      <Section title={authTarget === 'admin' ? '管理者認証' : 'メンバー認証'}>
+        <p style={{ color: '#666' }}>
+          {authTarget === 'admin'
+            ? '管理者専用サインインです。デモ管理者: admin@adolib-go.local / demo-admin-password'
+            : 'メンバー専用サインインです。管理者は /admin/signin からサインインしてください。'}
+        </p>
         <div style={{ display: 'grid', gap: '0.75rem', maxWidth: 560 }}>
           <input type="email" placeholder="メールアドレス" value={authEmail} onChange={(event) => setAuthEmail(event.target.value)} />
           <input type="password" placeholder="パスワード" value={authPassword} onChange={(event) => setAuthPassword(event.target.value)} />

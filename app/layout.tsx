@@ -14,8 +14,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <div style={{ maxWidth: 1000, margin: '0 auto', padding: '1rem 2rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
             <a href="/">トップ</a>
             <a href="/columns">コラム</a>
-            <a href="/signin">サインイン</a>
-            <a href="/signup">サインアップ</a>
+            <a href="/signin">メンバーサインイン</a>
+            <a href="/signup">メンバーサインアップ</a>
+            <a href="/admin/signin">管理者サインイン</a>
             <a href="/member">メンバー</a>
             <a href="/admin">管理</a>
             <a href="/about">adolib-go について</a>

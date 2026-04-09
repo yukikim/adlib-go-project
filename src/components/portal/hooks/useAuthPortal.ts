@@ -18,11 +18,11 @@ export function useAuthPortal({ runAction, setCurrentUser, reloadShared }: UseAu
   const [resetPassword, setResetPassword] = useState('');
   const [issuedResetToken, setIssuedResetToken] = useState<string | null>(null);
 
-  const handleSignIn = async () => runAction(async () => {
+  const handleSignIn = async (roleTarget: 'member' | 'admin') => runAction(async () => {
     const res = await fetch('/api/auth/signin', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: authEmail, password: authPassword }),
+      body: JSON.stringify({ email: authEmail, password: authPassword, roleTarget }),
     });
     const json = await parseJson(res);
     if (!res.ok) throw new Error(json.error ?? 'サインインに失敗しました');

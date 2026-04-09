@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-export type PortalView = 'signin' | 'signup' | 'member' | 'admin';
+export type PortalView = 'signin' | 'signup' | 'admin-signin' | 'member' | 'admin';
 export type Instrument = 'drum' | 'bass' | 'piano' | 'front' | 'vocal';
 export type AttendanceStatus = 'attending' | 'absent' | 'undecided';
 
