@@ -139,29 +139,31 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
         </div>
       </Section>
 
-      <Section title="パスワード再設定">
-        <div style={{ display: 'grid', gap: '0.75rem', maxWidth: 560 }}>
-          <label style={{ display: 'grid', gap: '0.35rem' }}>
-            <span>メールアドレス</span>
-            <input type="email" value={resetEmail} onChange={(event) => setResetEmail(event.target.value)} />
-          </label>
-          <div>
-            <button type="button" onClick={onForgotPassword} disabled={loading}>再設定トークンを発行</button>
+      {view !== 'signup' && (
+        <Section title="パスワード再設定">
+          <div style={{ display: 'grid', gap: '0.75rem', maxWidth: 560 }}>
+            <label style={{ display: 'grid', gap: '0.35rem' }}>
+              <span>メールアドレス</span>
+              <input type="email" value={resetEmail} onChange={(event) => setResetEmail(event.target.value)} />
+            </label>
+            <div>
+              <button type="button" onClick={onForgotPassword} disabled={loading}>再設定トークンを発行</button>
+            </div>
+            {issuedResetToken && <p style={{ wordBreak: 'break-all', color: '#666' }}>開発用トークン: {issuedResetToken}</p>}
+            <label style={{ display: 'grid', gap: '0.35rem' }}>
+              <span>再設定トークン</span>
+              <input type="text" value={resetToken} onChange={(event) => setResetToken(event.target.value)} />
+            </label>
+            <label style={{ display: 'grid', gap: '0.35rem' }}>
+              <span>新しいパスワード</span>
+              <input type="password" value={resetPassword} onChange={(event) => setResetPassword(event.target.value)} />
+            </label>
+            <div>
+              <button type="button" onClick={onResetPassword} disabled={loading}>パスワード更新</button>
+            </div>
           </div>
-          {issuedResetToken && <p style={{ wordBreak: 'break-all', color: '#666' }}>開発用トークン: {issuedResetToken}</p>}
-          <label style={{ display: 'grid', gap: '0.35rem' }}>
-            <span>再設定トークン</span>
-            <input type="text" value={resetToken} onChange={(event) => setResetToken(event.target.value)} />
-          </label>
-          <label style={{ display: 'grid', gap: '0.35rem' }}>
-            <span>新しいパスワード</span>
-            <input type="password" value={resetPassword} onChange={(event) => setResetPassword(event.target.value)} />
-          </label>
-          <div>
-            <button type="button" onClick={onResetPassword} disabled={loading}>パスワード更新</button>
-          </div>
-        </div>
-      </Section>
+        </Section>
+      )}
     </>
   );
 }

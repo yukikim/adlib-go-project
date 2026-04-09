@@ -155,32 +155,67 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
       <Section title="プロフィール">
         <p>{currentUser?.email}</p>
         <div style={{ display: 'grid', gap: '0.75rem', maxWidth: 560 }}>
-          <input type="text" placeholder="表示名" value={profileDisplayName} onChange={(event) => onProfileDisplayNameChange(event.target.value)} />
-          <select value={profileMainInstrument} onChange={(event) => onProfileMainInstrumentChange(event.target.value as Instrument)}>
-            <option value="drum">drum</option>
-            <option value="bass">bass</option>
-            <option value="piano">piano</option>
-            <option value="front">front</option>
-            <option value="vocal">vocal</option>
-          </select>
-          <input type="text" placeholder="ニックネーム" value={profileNickname} onChange={(event) => onProfileNicknameChange(event.target.value)} />
-          {profileMainInstrument === 'front' && <input type="text" placeholder="演奏楽器" value={profileSubInstrument} onChange={(event) => onProfileSubInstrumentChange(event.target.value)} />}
-          <select value={profileArea} onChange={(event) => onProfileAreaChange(event.target.value)}>
-            <option value="">居住地域を選択</option>
-            {PREFECTURE_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
-          </select>
-          <select value={profileGender} onChange={(event) => onProfileGenderChange(event.target.value)}>
-            <option value="">性別を選択</option>
-            {GENDER_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
-          </select>
-          <select value={profileAgeRange} onChange={(event) => onProfileAgeRangeChange(event.target.value)}>
-            <option value="">年代を選択</option>
-            {AGE_RANGE_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
-          </select>
-          <textarea rows={3} placeholder="自己紹介" value={profileBio} onChange={(event) => onProfileBioChange(event.target.value)} />
-          <input type="password" placeholder="現在のパスワード（変更時のみ）" value={profileCurrentPassword} onChange={(event) => onProfileCurrentPasswordChange(event.target.value)} />
-          <input type="password" placeholder="新しいパスワード（変更時のみ）" value={profileNewPassword} onChange={(event) => onProfileNewPasswordChange(event.target.value)} />
-          <input type="password" placeholder="新しいパスワード確認" value={profileNewPasswordConfirm} onChange={(event) => onProfileNewPasswordConfirmChange(event.target.value)} />
+          <label htmlFor="member-profile-display-name">
+            表示名
+            <input id="member-profile-display-name" type="text" placeholder="表示名" value={profileDisplayName} onChange={(event) => onProfileDisplayNameChange(event.target.value)} />
+          </label>
+          <label htmlFor="member-profile-main-instrument">
+            メイン楽器
+            <select id="member-profile-main-instrument" value={profileMainInstrument} onChange={(event) => onProfileMainInstrumentChange(event.target.value as Instrument)}>
+              <option value="drum">drum</option>
+              <option value="bass">bass</option>
+              <option value="piano">piano</option>
+              <option value="front">front</option>
+              <option value="vocal">vocal</option>
+            </select>
+          </label>
+          <label htmlFor="member-profile-nickname">
+            ニックネーム
+            <input id="member-profile-nickname" type="text" placeholder="ニックネーム" value={profileNickname} onChange={(event) => onProfileNicknameChange(event.target.value)} />
+          </label>
+          {profileMainInstrument === 'front' && (
+            <label htmlFor="member-profile-sub-instrument">
+              演奏楽器
+              <input id="member-profile-sub-instrument" type="text" placeholder="演奏楽器" value={profileSubInstrument} onChange={(event) => onProfileSubInstrumentChange(event.target.value)} />
+            </label>
+          )}
+          <label htmlFor="member-profile-area">
+            居住地域
+            <select id="member-profile-area" value={profileArea} onChange={(event) => onProfileAreaChange(event.target.value)}>
+              <option value="">居住地域を選択</option>
+              {PREFECTURE_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
+            </select>
+          </label>
+          <label htmlFor="member-profile-gender">
+            性別
+            <select id="member-profile-gender" value={profileGender} onChange={(event) => onProfileGenderChange(event.target.value)}>
+              <option value="">性別を選択</option>
+              {GENDER_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
+            </select>
+          </label>
+          <label htmlFor="member-profile-age-range">
+            年代
+            <select id="member-profile-age-range" value={profileAgeRange} onChange={(event) => onProfileAgeRangeChange(event.target.value)}>
+              <option value="">年代を選択</option>
+              {AGE_RANGE_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
+            </select>
+          </label>
+          <label htmlFor="member-profile-bio">
+            自己紹介
+            <textarea id="member-profile-bio" rows={3} placeholder="自己紹介" value={profileBio} onChange={(event) => onProfileBioChange(event.target.value)} />
+          </label>
+          <label htmlFor="member-profile-current-password">
+            現在のパスワード
+            <input id="member-profile-current-password" type="password" placeholder="現在のパスワード（変更時のみ）" value={profileCurrentPassword} onChange={(event) => onProfileCurrentPasswordChange(event.target.value)} />
+          </label>
+          <label htmlFor="member-profile-new-password">
+            新しいパスワード
+            <input id="member-profile-new-password" type="password" placeholder="新しいパスワード（変更時のみ）" value={profileNewPassword} onChange={(event) => onProfileNewPasswordChange(event.target.value)} />
+          </label>
+          <label htmlFor="member-profile-new-password-confirm">
+            新しいパスワード確認
+            <input id="member-profile-new-password-confirm" type="password" placeholder="新しいパスワード確認" value={profileNewPasswordConfirm} onChange={(event) => onProfileNewPasswordConfirmChange(event.target.value)} />
+          </label>
           <div style={{ display: 'flex', gap: '0.75rem' }}>
             <button type="button" onClick={onProfileUpdate} disabled={loading}>プロフィール保存</button>
             <button type="button" onClick={onSignOut} disabled={loading}>サインアウト</button>

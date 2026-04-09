@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { AdminPortalSection } from "@/components/portal/AdminPortalSection";
 import { AuthPortalSection } from "@/components/portal/AuthPortalSection";
 import { MemberPortalSection } from "@/components/portal/MemberPortalSection";
@@ -17,6 +18,7 @@ import {
 import { parseJson } from "@/components/portal/utils";
 
 export default function PortalWorkspace({ view }: { view: PortalView }) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
@@ -77,7 +79,16 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
     }
   };
 
-  const auth = useAuthPortal({ runAction, setCurrentUser, reloadShared });
+  const auth = useAuthPortal({
+    runAction,
+    setCurrentUser,
+    reloadShared,
+    onSignInSuccess: (roleTarget) => {
+      if (view === "signin" && roleTarget === "member") {
+        router.push("/member");
+      }
+    },
+  });
   const member = useMemberPortal({ currentUser, members, sessionEvents, runAction, reloadShared });
   const admin = useAdminPortal({ currentUser, members, sessionEvents, runAction, reloadShared });
 

@@ -6,9 +6,10 @@ type UseAuthPortalArgs = {
   runAction: RunPortalAction;
   setCurrentUser: (user: AuthUser | null) => void;
   reloadShared: () => Promise<void>;
+  onSignInSuccess?: (roleTarget: 'member' | 'admin') => void;
 };
 
-export function useAuthPortal({ runAction, setCurrentUser, reloadShared }: UseAuthPortalArgs) {
+export function useAuthPortal({ runAction, setCurrentUser, reloadShared, onSignInSuccess }: UseAuthPortalArgs) {
   const [authEmail, setAuthEmail] = useState('admin@adolib-go.local');
   const [authPassword, setAuthPassword] = useState('demo-admin-password');
   const [signupDisplayName, setSignupDisplayName] = useState('');
@@ -38,6 +39,7 @@ export function useAuthPortal({ runAction, setCurrentUser, reloadShared }: UseAu
     if (!res.ok) throw new Error(json.error ?? 'サインインに失敗しました');
     setCurrentUser(json.user ?? null);
     await reloadShared();
+    onSignInSuccess?.(roleTarget);
   }, 'サインインしました');
 
   const handleSignUp = async () => runAction(async () => {
