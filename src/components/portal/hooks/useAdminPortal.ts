@@ -193,7 +193,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
   }, [isAdmin, selectedManagedMemberId]);
 
   useEffect(() => {
-    if (adminMemberMainInstrument === 'vocal') {
+    if (adminMemberMainInstrument !== 'front') {
       setAdminMemberSubInstrument('');
     }
   }, [adminMemberMainInstrument]);
@@ -307,7 +307,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
         displayName: adminMemberDisplayName,
         nickname: adminMemberNickname,
         mainInstrument: adminMemberMainInstrument,
-        subInstrument: adminMemberMainInstrument === 'vocal' ? null : adminMemberSubInstrument,
+        subInstrument: adminMemberMainInstrument === 'front' ? adminMemberSubInstrument : null,
         gender: adminMemberGender,
         ageRange: adminMemberAgeRange,
         area: adminMemberArea,

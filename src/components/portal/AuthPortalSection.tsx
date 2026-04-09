@@ -78,33 +78,57 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
             : 'メンバー専用サインインです。管理者は /admin/signin からサインインしてください。'}
         </p>
         <div style={{ display: 'grid', gap: '0.75rem', maxWidth: 560 }}>
-          <input type="email" placeholder="メールアドレス" value={authEmail} onChange={(event) => setAuthEmail(event.target.value)} />
-          <input type="password" placeholder="パスワード" value={authPassword} onChange={(event) => setAuthPassword(event.target.value)} />
+          <label style={{ display: 'grid', gap: '0.35rem' }}>
+            <span>メールアドレス</span>
+            <input type="email" value={authEmail} onChange={(event) => setAuthEmail(event.target.value)} />
+          </label>
+          <label style={{ display: 'grid', gap: '0.35rem' }}>
+            <span>パスワード</span>
+            <input type="password" value={authPassword} onChange={(event) => setAuthPassword(event.target.value)} />
+          </label>
           {view === 'signup' && (
             <>
-              <input type="text" placeholder="表示名" value={signupDisplayName} onChange={(event) => setSignupDisplayName(event.target.value)} />
-              <select value={signupInstrument} onChange={(event) => setSignupInstrument(event.target.value as Instrument)}>
-                <option value="drum">drum</option>
-                <option value="bass">bass</option>
-                <option value="piano">piano</option>
-                <option value="front">front</option>
-                <option value="vocal">vocal</option>
-              </select>
-              {signupInstrument !== 'vocal' && (
-                <input type="text" placeholder="サブ楽器（任意）" value={signupSubInstrument} onChange={(event) => setSignupSubInstrument(event.target.value)} />
+              <label style={{ display: 'grid', gap: '0.35rem' }}>
+                <span>表示名</span>
+                <input type="text" value={signupDisplayName} onChange={(event) => setSignupDisplayName(event.target.value)} />
+              </label>
+              <label style={{ display: 'grid', gap: '0.35rem' }}>
+                <span>メイン楽器</span>
+                <select value={signupInstrument} onChange={(event) => setSignupInstrument(event.target.value as Instrument)}>
+                  <option value="drum">drum</option>
+                  <option value="bass">bass</option>
+                  <option value="piano">piano</option>
+                  <option value="front">front</option>
+                  <option value="vocal">vocal</option>
+                </select>
+              </label>
+              {signupInstrument === 'front' && (
+                <label style={{ display: 'grid', gap: '0.35rem' }}>
+                  <span>演奏楽器</span>
+                  <input type="text" value={signupSubInstrument} onChange={(event) => setSignupSubInstrument(event.target.value)} />
+                </label>
               )}
-              <select value={signupArea} onChange={(event) => setSignupArea(event.target.value)}>
-                <option value="">居住地域を選択</option>
-                {PREFECTURE_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
-              </select>
-              <select value={signupGender} onChange={(event) => setSignupGender(event.target.value)}>
-                <option value="">性別を選択</option>
-                {GENDER_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
-              </select>
-              <select value={signupAgeRange} onChange={(event) => setSignupAgeRange(event.target.value)}>
-                <option value="">年代を選択</option>
-                {AGE_RANGE_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
-              </select>
+              <label style={{ display: 'grid', gap: '0.35rem' }}>
+                <span>居住地域</span>
+                <select value={signupArea} onChange={(event) => setSignupArea(event.target.value)}>
+                  <option value="">居住地域を選択</option>
+                  {PREFECTURE_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
+                </select>
+              </label>
+              <label style={{ display: 'grid', gap: '0.35rem' }}>
+                <span>性別</span>
+                <select value={signupGender} onChange={(event) => setSignupGender(event.target.value)}>
+                  <option value="">性別を選択</option>
+                  {GENDER_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
+                </select>
+              </label>
+              <label style={{ display: 'grid', gap: '0.35rem' }}>
+                <span>年代</span>
+                <select value={signupAgeRange} onChange={(event) => setSignupAgeRange(event.target.value)}>
+                  <option value="">年代を選択</option>
+                  {AGE_RANGE_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
+                </select>
+              </label>
             </>
           )}
           <div>
@@ -117,13 +141,22 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
 
       <Section title="パスワード再設定">
         <div style={{ display: 'grid', gap: '0.75rem', maxWidth: 560 }}>
-          <input type="email" placeholder="メールアドレス" value={resetEmail} onChange={(event) => setResetEmail(event.target.value)} />
+          <label style={{ display: 'grid', gap: '0.35rem' }}>
+            <span>メールアドレス</span>
+            <input type="email" value={resetEmail} onChange={(event) => setResetEmail(event.target.value)} />
+          </label>
           <div>
             <button type="button" onClick={onForgotPassword} disabled={loading}>再設定トークンを発行</button>
           </div>
           {issuedResetToken && <p style={{ wordBreak: 'break-all', color: '#666' }}>開発用トークン: {issuedResetToken}</p>}
-          <input type="text" placeholder="再設定トークン" value={resetToken} onChange={(event) => setResetToken(event.target.value)} />
-          <input type="password" placeholder="新しいパスワード" value={resetPassword} onChange={(event) => setResetPassword(event.target.value)} />
+          <label style={{ display: 'grid', gap: '0.35rem' }}>
+            <span>再設定トークン</span>
+            <input type="text" value={resetToken} onChange={(event) => setResetToken(event.target.value)} />
+          </label>
+          <label style={{ display: 'grid', gap: '0.35rem' }}>
+            <span>新しいパスワード</span>
+            <input type="password" value={resetPassword} onChange={(event) => setResetPassword(event.target.value)} />
+          </label>
           <div>
             <button type="button" onClick={onResetPassword} disabled={loading}>パスワード更新</button>
           </div>

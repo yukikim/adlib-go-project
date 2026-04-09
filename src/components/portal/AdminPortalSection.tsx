@@ -402,7 +402,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                   <option value="front">front</option>
                   <option value="vocal">vocal</option>
                 </select>
-                {adminMemberMainInstrument !== 'vocal' && <input type="text" placeholder="サブ楽器（任意）" value={adminMemberSubInstrument} onChange={(event) => setAdminMemberSubInstrument(event.target.value)} />}
+                {adminMemberMainInstrument === 'front' && <input type="text" placeholder="演奏楽器" value={adminMemberSubInstrument} onChange={(event) => setAdminMemberSubInstrument(event.target.value)} />}
                 <select value={adminMemberArea} onChange={(event) => setAdminMemberArea(event.target.value)}>
                   <option value="">居住地域を選択</option>
                   {PREFECTURE_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}

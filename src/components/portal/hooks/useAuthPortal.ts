@@ -23,7 +23,7 @@ export function useAuthPortal({ runAction, setCurrentUser, reloadShared }: UseAu
   const [issuedResetToken, setIssuedResetToken] = useState<string | null>(null);
 
   useEffect(() => {
-    if (signupInstrument === 'vocal') {
+    if (signupInstrument !== 'front') {
       setSignupSubInstrument('');
     }
   }, [signupInstrument]);
@@ -49,7 +49,7 @@ export function useAuthPortal({ runAction, setCurrentUser, reloadShared }: UseAu
         password: authPassword,
         displayName: signupDisplayName,
         mainInstrument: signupInstrument,
-        subInstrument: signupInstrument === 'vocal' ? null : signupSubInstrument,
+        subInstrument: signupInstrument === 'front' ? signupSubInstrument : null,
         gender: signupGender,
         ageRange: signupAgeRange,
         area: signupArea,

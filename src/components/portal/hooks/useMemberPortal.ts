@@ -89,7 +89,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
   }, [currentUser]);
 
   useEffect(() => {
-    if (profileMainInstrument === 'vocal') {
+    if (profileMainInstrument !== 'front') {
       setProfileSubInstrument('');
     }
   }, [profileMainInstrument]);
@@ -163,7 +163,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
         ageRange: profileAgeRange,
         area: profileArea,
         bio: profileBio,
-        subInstrument: profileMainInstrument === 'vocal' ? null : profileSubInstrument,
+        subInstrument: profileMainInstrument === 'front' ? profileSubInstrument : null,
         currentPassword: profileCurrentPassword || undefined,
         newPassword: profileNewPassword || undefined,
       }),

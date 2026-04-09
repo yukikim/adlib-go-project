@@ -158,10 +158,14 @@ export function validateMemberProfileInput(input: MemberProfileInput, options: V
   }
 
   if (input.subInstrument !== undefined || options.requireRequiredSelections) {
-    if (effectiveInstrument === 'vocal') {
-      data.subInstrument = null;
+    if (effectiveInstrument === 'front') {
+      const subInstrument = normalizeOptionalText(input.subInstrument);
+      if (!subInstrument) {
+        return { error: 'playingInstrument is required for front' as const };
+      }
+      data.subInstrument = subInstrument;
     } else {
-      data.subInstrument = normalizeOptionalText(input.subInstrument);
+      data.subInstrument = null;
     }
   }
 

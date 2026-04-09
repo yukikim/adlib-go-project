@@ -164,7 +164,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             <option value="vocal">vocal</option>
           </select>
           <input type="text" placeholder="ニックネーム" value={profileNickname} onChange={(event) => onProfileNicknameChange(event.target.value)} />
-          {profileMainInstrument !== 'vocal' && <input type="text" placeholder="サブ楽器（任意）" value={profileSubInstrument} onChange={(event) => onProfileSubInstrumentChange(event.target.value)} />}
+          {profileMainInstrument === 'front' && <input type="text" placeholder="演奏楽器" value={profileSubInstrument} onChange={(event) => onProfileSubInstrumentChange(event.target.value)} />}
           <select value={profileArea} onChange={(event) => onProfileAreaChange(event.target.value)}>
             <option value="">居住地域を選択</option>
             {PREFECTURE_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
@@ -214,7 +214,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             {selectedMemberDetail ? (
               <>
                 <h3>{selectedMemberDetail.displayName}</h3>
-                <p>{selectedMemberDetail.mainInstrument}{selectedMemberDetail.subInstrument ? ` / sub ${selectedMemberDetail.subInstrument}` : ''}</p>
+                <p>{selectedMemberDetail.mainInstrument}{selectedMemberDetail.subInstrument ? ` / 演奏楽器 ${selectedMemberDetail.subInstrument}` : ''}</p>
                 <p>{selectedMemberDetail.area || '地域未設定'} / {selectedMemberDetail.gender || '性別未設定'} / {selectedMemberDetail.ageRange || '年代未設定'}</p>
                 <p>{selectedMemberDetail.bio || '自己紹介未設定'}</p>
                 <p>活動件数: {selectedMemberDetail.sessionEntries.length}</p>
