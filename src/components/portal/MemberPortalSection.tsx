@@ -249,7 +249,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             {selectedMemberDetail ? (
               <>
                 <h3>{selectedMemberDetail.displayName}</h3>
-                <p>{selectedMemberDetail.mainInstrument}{selectedMemberDetail.subInstrument ? ` / 演奏楽器 ${selectedMemberDetail.subInstrument}` : ''}</p>
+                <p>{selectedMemberDetail.mainInstrument}{selectedMemberDetail.mainInstrument === 'front' && selectedMemberDetail.subInstrument ? ` / 演奏楽器 ${selectedMemberDetail.subInstrument}` : ''}</p>
                 <p>{selectedMemberDetail.area || '地域未設定'} / {selectedMemberDetail.gender || '性別未設定'} / {selectedMemberDetail.ageRange || '年代未設定'}</p>
                 <p>{selectedMemberDetail.bio || '自己紹介未設定'}</p>
                 <p>活動件数: {selectedMemberDetail.sessionEntries.length}</p>
