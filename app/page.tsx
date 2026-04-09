@@ -258,7 +258,9 @@ interface MailLogView {
   sentAt?: string | null;
 }
 
-export default function HomePage() {
+type PortalView = "workspace" | "signin" | "signup" | "member" | "admin";
+
+export function PortalWorkspace({ view = "workspace" }: { view?: PortalView }) {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [songs, setSongs] = useState<Song[]>([]);
   const [sessionSets, setSessionSets] = useState<SessionSetView[]>([]);
@@ -341,6 +343,9 @@ export default function HomePage() {
   const [announcementTitle, setAnnouncementTitle] = useState("");
   const [announcementBody, setAnnouncementBody] = useState("");
   const [announcementPublished, setAnnouncementPublished] = useState(true);
+  const authOnly = view === "signin" || view === "signup";
+  const memberOnly = view === "member";
+  const adminOnly = view === "admin";
   const isAdmin = currentUser?.role === "admin";
   const isMember = currentUser?.role === "member";
   const selectedMemberEvent = sessionEvents.find((event) => event.id === memberEventId) ?? null;
@@ -428,6 +433,15 @@ export default function HomePage() {
   useEffect(() => {
     loadAll();
   }, []);
+
+  useEffect(() => {
+    if (view === "signin") {
+      setAuthMode("signin");
+    }
+    if (view === "signup") {
+      setAuthMode("signup");
+    }
+  }, [view]);
 
   useEffect(() => {
     if (currentUser?.memberProfile) {
@@ -1099,8 +1113,25 @@ export default function HomePage() {
 
   return (
     <main style={{ padding: "2rem", fontFamily: "system-ui", maxWidth: 1000, margin: "0 auto" }}>
-      <h1>Jazz Session Planner</h1>
-      <p>参加者・曲・希望曲を登録し、セッション構成を自動生成します。</p>
+      <h1>
+        {view === "admin"
+          ? "管理ダッシュボード"
+          : view === "member"
+            ? "メンバーページ"
+            : view === "signup"
+              ? "サインアップ"
+              : view === "signin"
+                ? "サインイン"
+                : "Adolib-go Portal"}
+      </h1>
+      <p>
+        {view === "admin"
+          ? "管理者向けのイベント運営、sessionSet 生成、公開、アーカイブ、通知を扱います。"
+          : view === "member"
+            ? "プロフィール、お知らせ、セッション参加登録、評価、履歴を扱います。"
+            : "認証と内部機能の入口です。"}
+      </p>
+      {(view === "workspace" || authOnly || (!currentUser && (memberOnly || adminOnly)) || (memberOnly && !isMember) || (adminOnly && !isAdmin)) && (
       <section style={{ marginTop: "1.5rem", padding: "1rem", border: "1px solid #ddd", borderRadius: "0.5rem" }}>
         <h2>認証</h2>
         <p style={{ color: "#555" }}>
@@ -1188,13 +1219,28 @@ export default function HomePage() {
           </div>
         )}
       </section>
+      )}
 
       {message && (
         <p style={{ color: "darkgreen", marginTop: "0.5rem" }}>{message}</p>
       )}
       {loading && <p style={{ color: "gray" }}>処理中...</p>}
 
-      {isMember && (
+      {memberOnly && !isMember && (
+        <section style={{ marginTop: "1.5rem", padding: "1rem", border: "1px solid #ddd", borderRadius: "0.5rem" }}>
+          <h2>メンバー権限が必要です</h2>
+          <p>このページはメンバー向けです。サインイン後にご利用ください。</p>
+        </section>
+      )}
+
+      {adminOnly && !isAdmin && (
+        <section style={{ marginTop: "1.5rem", padding: "1rem", border: "1px solid #ddd", borderRadius: "0.5rem" }}>
+          <h2>管理者権限が必要です</h2>
+          <p>このページは管理者向けです。管理者アカウントでサインインしてください。</p>
+        </section>
+      )}
+
+      {(view === "workspace" ? isMember : memberOnly && isMember) && (
         <section style={{ marginTop: "2rem", padding: "1rem", border: "1px solid #ddd", borderRadius: "0.5rem" }}>
           <h2>メンバー画面</h2>
           <div style={{ display: "grid", gap: "1rem" }}>
@@ -1404,7 +1450,7 @@ export default function HomePage() {
         </section>
       )}
 
-      {isAdmin && (
+      {(view === "workspace" ? isAdmin : adminOnly && isAdmin) && (
       <section style={{ marginTop: "2rem", padding: "1rem", border: "1px solid #ddd", borderRadius: "0.5rem" }}>
         <h2>管理者ダッシュボード</h2>
         <div style={{ display: "grid", gap: "1rem" }}>
@@ -1618,7 +1664,7 @@ export default function HomePage() {
       </section>
       )}
 
-      {isAdmin && (
+      {(view === "workspace" ? isAdmin : adminOnly && isAdmin) && (
       <>
       <section style={{ marginTop: "2rem" }}>
         <h2>1. 参加者の登録</h2>
@@ -1894,6 +1940,42 @@ export default function HomePage() {
       </section>
       </>
       )}
+    </main>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <main style={{ padding: "2rem", maxWidth: 1000, margin: "0 auto" }}>
+      <section style={{ padding: "1.5rem", border: "1px solid #ddd", borderRadius: "0.75rem" }}>
+        <p style={{ color: "#666", marginBottom: "0.5rem" }}>Adolib-go KICK-OFF</p>
+        <h1 style={{ marginTop: 0 }}>セッション運営とメンバー導線を分けたトップページ</h1>
+        <p>
+          要件定義書、基本設計書、実装計画書に合わせて、公開ページ、認証ページ、メンバーサイト、管理サイトを分割しました。
+        </p>
+        <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", marginTop: "1rem" }}>
+          <a href="/signin">サインイン</a>
+          <a href="/signup">サインアップ</a>
+          <a href="/member">メンバーページ</a>
+          <a href="/admin">管理ダッシュボード</a>
+          <a href="/about">adolib-go について</a>
+        </div>
+      </section>
+
+      <section style={{ marginTop: "1.5rem", display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
+        <article style={{ padding: "1rem", border: "1px solid #ddd", borderRadius: "0.75rem" }}>
+          <h2>公開サイト</h2>
+          <p>未ログイン利用者向けに、紹介、導線、今後のコラム領域を配置します。</p>
+        </article>
+        <article style={{ padding: "1rem", border: "1px solid #ddd", borderRadius: "0.75rem" }}>
+          <h2>メンバーサイト</h2>
+          <p>お知らせ、プロフィール、エントリー、履歴、レイティングを扱います。</p>
+        </article>
+        <article style={{ padding: "1rem", border: "1px solid #ddd", borderRadius: "0.75rem" }}>
+          <h2>管理サイト</h2>
+          <p>イベント運営、sessionSet 生成、メンバー管理、通知、アーカイブを集約しています。</p>
+        </article>
+      </section>
     </main>
   );
 }
