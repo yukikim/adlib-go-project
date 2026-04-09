@@ -5,9 +5,12 @@ Adolib-go KICK-OFF 向けの public site、member site、admin site をまとめ
 このリポジトリには以下が含まれます。
 
 - 公開トップ、コラム一覧、コラム詳細、about ページ
-- サインアップ、サインイン、パスワード再設定 API
-- メンバーページでのプロフィール編集、SessionEntry、レイティング
+- メンバー用サインアップ / サインイン、管理者用サインイン、パスワード再設定 API
+- メンバーサインアップ時の楽器、居住地域、性別、年代登録
+- メンバーページでのプロフィール編集、パスワード変更、SessionEntry、レイティング
 - 管理ダッシュボードでの SessionEvent、sessionSet、アーカイブ、お知らせ、コラム管理
+- コラムの表示順、予約公開、管理画面プレビュー
+- 管理ダッシュボードでのメンバー検索、role/status 更新、削除
 - PostgreSQL + Prisma の永続化層
 - sessionSet を生成する割り当てロジック
 - ダミーデータを一括投入する seed スクリプト
@@ -74,6 +77,7 @@ Adolib-go KICK-OFF 向けの public site、member site、admin site をまとめ
 	- app/signup/page.tsx
 	- app/member/page.tsx
 	- app/admin/page.tsx
+	- app/admin/signin/page.tsx
 	- app/columns/page.tsx
 	- app/columns/[slug]/page.tsx
 - API
@@ -97,6 +101,16 @@ Adolib-go KICK-OFF 向けの public site、member site、admin site をまとめ
 - DB
 	- prisma/schema.prisma
 	- src/lib/prisma.ts
+
+### 認証と公開制御
+
+- `/signin` と `/signup` はメンバー専用
+- 管理者サインインは `/admin/signin`
+- `/member` は member のみ、`/admin` は admin のみサーバーサイドで保護
+- サインアップ時は表示名、メイン楽器、居住地域、性別、年代が必須
+- vocal 以外はサブ楽器を任意登録できる
+- コラムは `isPublished=true` かつ `publishedAt <= now` のときだけ public 側に表示
+- public 側のコラム一覧は `displayOrder asc`、同順位内は `publishedAt desc` で表示
 
 ### データの流れ
 
@@ -156,6 +170,14 @@ Prisma スキーマは prisma/schema.prisma にあります。
 - SessionSetMember
 	- front と vocal のメンバーを保持
 	- role は front または vocal
+- Column
+	- 公開コラム本体
+	- `displayOrder` で表示順、`publishedAt` で予約公開日時を管理
+- UserAccount / MemberProfile
+	- ログイン情報とメンバープロフィール
+	- 楽器、居住地域、性別、年代、ニックネーム、自己紹介を保持
+	- member 自身がプロフィール編集とパスワード変更可能
+	- 管理画面から role/status とプロフィール編集、削除を実施
 
 ### sessionSet 生成ロジック
 
@@ -380,14 +402,37 @@ app/page.tsx で以下を提供します。
 - 強制参加で追加生成された曲の表示
 - 生成されなかった曲と理由の表示
 
+admin dashboard で以下を提供します。
+
+- SessionEvent と sessionSet の生成 / 公開
+- アーカイブ preview / 作成 / 削除
+- お知らせ作成
+- コラムの作成 / 更新 / 削除
+- コラムの表示順指定、予約公開日時指定、ライブプレビュー
+- メンバー検索
+- メンバーのプロフィール、role / status 更新
+- メンバー削除
+
 ---
 
 ## 使い方
 
 ### デモログイン情報
 
-- 管理者: admin@adolib-go.local / demo-admin-password
-- メンバー例: member01@adolib-go.local / demo-member-password
+- 管理者: `/admin/signin` から admin@adolib-go.local / demo-admin-password
+- メンバー例: `/signin` から member01@adolib-go.local / demo-member-password
+
+サインアップ / member プロフィールで扱う主な項目:
+
+- 表示名
+- メイン楽器
+- サブ楽器（vocal 以外で任意）
+- 居住地域（都道府県）
+- 性別
+- 年代（20代から80代）
+- ニックネーム
+- 自己紹介
+- パスワード変更
 
 ### セットアップ
 
@@ -446,11 +491,22 @@ npm run dev
 npm run prisma:studio
 ```
 
+7. デモデータをまとめて再投入する場合
+
+```bash
+npm run seed:demo
+```
+
+補足:
+
+- `npm run seed:columns` は upsert なので再実行しても既存 slug を更新できます
+- demo column には予約公開サンプルが 1 件含まれます
+
 ### Phase 1 実装済み機能
 
 - Cookie セッションによるサインイン / サインアップ / サインアウト
 - nodemailer ベースのパスワード再設定メール送信基盤
-- メンバーのプロフィール自己編集
+- メンバーのプロフィール自己編集とパスワード変更
 - 管理者向け SessionEvent 作成 / 更新 / 募集状態切替 API / 画面
 - メンバー向け SessionEntry 登録 API / 画面
 - Round 1 / Round 2 の募集期間に応じた入力制御
@@ -459,6 +515,9 @@ npm run prisma:studio
 - メンバーによる星 1-5 の sessionSet 評価
 - 管理者による評価集計確認
 - SessionArchive preview / 作成 / 削除
+- 管理者サインイン導線の分離
+- コラムの表示順 / 予約公開 / 管理画面プレビュー
+- メンバー検索、プロフィール編集、削除
 
 ### Phase 1 API 確認例
 

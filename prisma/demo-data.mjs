@@ -149,4 +149,18 @@ export const columnSeedEntries = [
       'アーカイブは削除可能ですが、運営上重要なスナップショットとして扱う前提です。削除時は監査ログとの整合に注意してください。',
     ],
   },
+  {
+    slug: 'next-month-preview',
+    title: '次回 KICK-OFF の準備メモ',
+    summary: '次回募集開始に合わせて公開される予定の案内記事です。',
+    authorName: 'Adolib-go 運営',
+    thumbnailLabel: 'Preview',
+    displayOrder: 40,
+    isPublished: true,
+    publishedAt: '2026-04-20T00:00:00.000Z',
+    body: [
+      'このコラムは予約公開サンプルです。公開日時までは public 側に表示されません。',
+      '管理ダッシュボードでは公開日時と表示順を指定しながらプレビュー確認できます。',
+    ],
+  },
 ];

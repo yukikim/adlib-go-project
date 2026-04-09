@@ -1,9 +1,11 @@
 import { Section } from './Section';
+import { AGE_RANGE_OPTIONS, GENDER_OPTIONS, PREFECTURE_OPTIONS } from '@/lib/memberProfile';
 import type {
   ActivityLogView,
   ArchiveView,
   ColumnView,
   GeneratedResult,
+  Instrument,
   MailLogView,
   MemberDetailView,
   MemberListView,
@@ -51,6 +53,14 @@ type AdminPortalSectionProps = {
   selectedManagedMemberId: string;
   selectedManagedMemberDetail: MemberDetailView | null;
   memberSearchQuery: string;
+  adminMemberDisplayName: string;
+  adminMemberNickname: string;
+  adminMemberMainInstrument: string;
+  adminMemberSubInstrument: string;
+  adminMemberGender: string;
+  adminMemberAgeRange: string;
+  adminMemberArea: string;
+  adminMemberBio: string;
   adminMemberRole: 'member' | 'admin';
   adminMemberStatus: 'active' | 'suspended' | 'invited';
   announcementTitle: string;
@@ -81,6 +91,14 @@ type AdminPortalSectionProps = {
   setEditRound2EndAt: (value: string) => void;
   setSelectedManagedMemberId: (value: string) => void;
   setMemberSearchQuery: (value: string) => void;
+  setAdminMemberDisplayName: (value: string) => void;
+  setAdminMemberNickname: (value: string) => void;
+  setAdminMemberMainInstrument: (value: Instrument) => void;
+  setAdminMemberSubInstrument: (value: string) => void;
+  setAdminMemberGender: (value: string) => void;
+  setAdminMemberAgeRange: (value: string) => void;
+  setAdminMemberArea: (value: string) => void;
+  setAdminMemberBio: (value: string) => void;
   setAdminMemberRole: (value: 'member' | 'admin') => void;
   setAdminMemberStatus: (value: 'active' | 'suspended' | 'invited') => void;
   setAnnouncementTitle: (value: string) => void;
@@ -144,6 +162,14 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     selectedManagedMemberId,
     selectedManagedMemberDetail,
     memberSearchQuery,
+    adminMemberDisplayName,
+    adminMemberNickname,
+    adminMemberMainInstrument,
+    adminMemberSubInstrument,
+    adminMemberGender,
+    adminMemberAgeRange,
+    adminMemberArea,
+    adminMemberBio,
     adminMemberRole,
     adminMemberStatus,
     announcementTitle,
@@ -174,6 +200,14 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     setEditRound2EndAt,
     setSelectedManagedMemberId,
     setMemberSearchQuery,
+    setAdminMemberDisplayName,
+    setAdminMemberNickname,
+    setAdminMemberMainInstrument,
+    setAdminMemberSubInstrument,
+    setAdminMemberGender,
+    setAdminMemberAgeRange,
+    setAdminMemberArea,
+    setAdminMemberBio,
     setAdminMemberRole,
     setAdminMemberStatus,
     setAnnouncementTitle,
@@ -359,6 +393,29 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
             {selectedManagedMemberDetail ? (
               <div style={{ display: 'grid', gap: '0.75rem', maxWidth: 420 }}>
                 <div>{selectedManagedMemberDetail.userAccount.email}</div>
+                <input type="text" placeholder="表示名" value={adminMemberDisplayName} onChange={(event) => setAdminMemberDisplayName(event.target.value)} />
+                <input type="text" placeholder="ニックネーム" value={adminMemberNickname} onChange={(event) => setAdminMemberNickname(event.target.value)} />
+                <select value={adminMemberMainInstrument} onChange={(event) => setAdminMemberMainInstrument(event.target.value as Instrument)}>
+                  <option value="drum">drum</option>
+                  <option value="bass">bass</option>
+                  <option value="piano">piano</option>
+                  <option value="front">front</option>
+                  <option value="vocal">vocal</option>
+                </select>
+                {adminMemberMainInstrument !== 'vocal' && <input type="text" placeholder="サブ楽器（任意）" value={adminMemberSubInstrument} onChange={(event) => setAdminMemberSubInstrument(event.target.value)} />}
+                <select value={adminMemberArea} onChange={(event) => setAdminMemberArea(event.target.value)}>
+                  <option value="">居住地域を選択</option>
+                  {PREFECTURE_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
+                </select>
+                <select value={adminMemberGender} onChange={(event) => setAdminMemberGender(event.target.value)}>
+                  <option value="">性別を選択</option>
+                  {GENDER_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
+                </select>
+                <select value={adminMemberAgeRange} onChange={(event) => setAdminMemberAgeRange(event.target.value)}>
+                  <option value="">年代を選択</option>
+                  {AGE_RANGE_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
+                </select>
+                <textarea rows={3} placeholder="自己紹介" value={adminMemberBio} onChange={(event) => setAdminMemberBio(event.target.value)} />
                 <select value={adminMemberRole} onChange={(event) => setAdminMemberRole(event.target.value as 'member' | 'admin')}>
                   <option value="member">member</option>
                   <option value="admin">admin</option>

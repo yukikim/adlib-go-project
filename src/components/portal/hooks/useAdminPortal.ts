@@ -5,6 +5,7 @@ import type {
   AuthUser,
   ColumnView,
   GeneratedResult,
+  Instrument,
   MemberDetailView,
   MemberListView,
   RatingSummaryView,
@@ -49,6 +50,14 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
   const [selectedManagedMemberId, setSelectedManagedMemberId] = useState('');
   const [selectedManagedMemberDetail, setSelectedManagedMemberDetail] = useState<MemberDetailView | null>(null);
   const [memberSearchQuery, setMemberSearchQuery] = useState('');
+  const [adminMemberDisplayName, setAdminMemberDisplayName] = useState('');
+  const [adminMemberNickname, setAdminMemberNickname] = useState('');
+  const [adminMemberMainInstrument, setAdminMemberMainInstrument] = useState<Instrument>('front');
+  const [adminMemberSubInstrument, setAdminMemberSubInstrument] = useState('');
+  const [adminMemberGender, setAdminMemberGender] = useState('');
+  const [adminMemberAgeRange, setAdminMemberAgeRange] = useState('');
+  const [adminMemberArea, setAdminMemberArea] = useState('');
+  const [adminMemberBio, setAdminMemberBio] = useState('');
   const [adminMemberRole, setAdminMemberRole] = useState<'member' | 'admin'>('member');
   const [adminMemberStatus, setAdminMemberStatus] = useState<'active' | 'suspended' | 'invited'>('active');
   const [announcementTitle, setAnnouncementTitle] = useState('');
@@ -168,12 +177,26 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
       .then((json) => {
         setSelectedManagedMemberDetail(json.member ?? null);
         if (json.member?.userAccount) {
+          setAdminMemberDisplayName(json.member.displayName ?? '');
+          setAdminMemberNickname(json.member.nickname ?? '');
+          setAdminMemberMainInstrument(json.member.mainInstrument ?? 'front');
+          setAdminMemberSubInstrument(json.member.subInstrument ?? '');
+          setAdminMemberGender(json.member.gender ?? '');
+          setAdminMemberAgeRange(json.member.ageRange ?? '');
+          setAdminMemberArea(json.member.area ?? '');
+          setAdminMemberBio(json.member.bio ?? '');
           setAdminMemberRole(json.member.userAccount.role);
           setAdminMemberStatus(json.member.userAccount.status);
         }
       })
       .catch((error) => console.error(error));
   }, [isAdmin, selectedManagedMemberId]);
+
+  useEffect(() => {
+    if (adminMemberMainInstrument === 'vocal') {
+      setAdminMemberSubInstrument('');
+    }
+  }, [adminMemberMainInstrument]);
 
   useEffect(() => {
     if (!editingColumnSlug) {
@@ -280,7 +303,18 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     const res = await fetch(`/api/members/${selectedManagedMemberId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ role: adminMemberRole, status: adminMemberStatus }),
+      body: JSON.stringify({
+        displayName: adminMemberDisplayName,
+        nickname: adminMemberNickname,
+        mainInstrument: adminMemberMainInstrument,
+        subInstrument: adminMemberMainInstrument === 'vocal' ? null : adminMemberSubInstrument,
+        gender: adminMemberGender,
+        ageRange: adminMemberAgeRange,
+        area: adminMemberArea,
+        bio: adminMemberBio,
+        role: adminMemberRole,
+        status: adminMemberStatus,
+      }),
     });
     const json = await parseJson(res);
     if (!res.ok) throw new Error(json.error ?? 'メンバー更新に失敗しました');
@@ -411,6 +445,22 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     selectedManagedMemberDetail,
     memberSearchQuery,
     setMemberSearchQuery,
+    adminMemberDisplayName,
+    setAdminMemberDisplayName,
+    adminMemberNickname,
+    setAdminMemberNickname,
+    adminMemberMainInstrument,
+    setAdminMemberMainInstrument,
+    adminMemberSubInstrument,
+    setAdminMemberSubInstrument,
+    adminMemberGender,
+    setAdminMemberGender,
+    adminMemberAgeRange,
+    setAdminMemberAgeRange,
+    adminMemberArea,
+    setAdminMemberArea,
+    adminMemberBio,
+    setAdminMemberBio,
     adminMemberRole,
     setAdminMemberRole,
     adminMemberStatus,

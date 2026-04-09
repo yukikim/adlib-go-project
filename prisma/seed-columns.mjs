@@ -10,8 +10,19 @@ async function main() {
   });
 
   for (const column of columnSeedEntries) {
-    await prisma.column.create({
-      data: {
+    await prisma.column.upsert({
+      where: { slug: column.slug },
+      update: {
+        title: column.title,
+        summary: column.summary,
+        body: column.body.join('\n\n'),
+        thumbnailLabel: column.thumbnailLabel,
+        authorName: column.authorName,
+        displayOrder: column.displayOrder ?? 0,
+        isPublished: column.isPublished,
+        publishedAt: column.publishedAt ? new Date(column.publishedAt) : null,
+      },
+      create: {
         slug: column.slug,
         title: column.title,
         summary: column.summary,

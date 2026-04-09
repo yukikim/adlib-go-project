@@ -16,6 +16,20 @@ function buildMemberEmail(index) {
   return `member${String(index + 1).padStart(2, '0')}@adolib-go.local`;
 }
 
+const genderOptions = ['男性', '女性', 'その他'];
+const ageRangeOptions = ['20代', '30代', '40代', '50代', '60代', '70代', '80代'];
+const prefectureOptions = ['東京都', '神奈川県', '埼玉県', '千葉県', '愛知県', '大阪府', '京都府'];
+
+function buildSubInstrument(instrument) {
+  if (instrument === 'vocal') {
+    return null;
+  }
+  if (instrument === 'front') {
+    return 'vocal';
+  }
+  return 'front';
+}
+
 async function main() {
   let adminCount = 0;
   let memberCount = 0;
@@ -72,7 +86,10 @@ async function main() {
         displayName: participant.name,
         nickname: participant.name.split(' ')[1] ?? null,
         mainInstrument: participant.instrument,
-        area: '東京都',
+        subInstrument: buildSubInstrument(participant.instrument),
+        gender: genderOptions[index % genderOptions.length],
+        ageRange: ageRangeOptions[index % ageRangeOptions.length],
+        area: prefectureOptions[index % prefectureOptions.length],
         bio: `${participant.name} のデモプロフィールです。`,
       },
       create: {
@@ -80,7 +97,10 @@ async function main() {
         displayName: participant.name,
         nickname: participant.name.split(' ')[1] ?? null,
         mainInstrument: participant.instrument,
-        area: '東京都',
+        subInstrument: buildSubInstrument(participant.instrument),
+        gender: genderOptions[index % genderOptions.length],
+        ageRange: ageRangeOptions[index % ageRangeOptions.length],
+        area: prefectureOptions[index % prefectureOptions.length],
         bio: `${participant.name} のデモプロフィールです。`,
       },
     });

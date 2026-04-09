@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { AGE_RANGE_OPTIONS, GENDER_OPTIONS, PREFECTURE_OPTIONS } from '@/lib/memberProfile';
 import type {
   AttendanceStatus,
   AuthUser,
+  Instrument,
   MemberDetailView,
   MemberListView,
   MemberRatingHistoryView,
@@ -21,10 +23,16 @@ type UseMemberPortalArgs = {
 
 export function useMemberPortal({ currentUser, members, sessionEvents, runAction, reloadShared }: UseMemberPortalArgs) {
   const [profileDisplayName, setProfileDisplayName] = useState('');
+  const [profileMainInstrument, setProfileMainInstrument] = useState<Instrument>('front');
   const [profileNickname, setProfileNickname] = useState('');
+  const [profileGender, setProfileGender] = useState('');
+  const [profileAgeRange, setProfileAgeRange] = useState('');
   const [profileArea, setProfileArea] = useState('');
   const [profileBio, setProfileBio] = useState('');
   const [profileSubInstrument, setProfileSubInstrument] = useState('');
+  const [profileCurrentPassword, setProfileCurrentPassword] = useState('');
+  const [profileNewPassword, setProfileNewPassword] = useState('');
+  const [profileNewPasswordConfirm, setProfileNewPasswordConfirm] = useState('');
   const [selectedMemberId, setSelectedMemberId] = useState('');
   const [selectedMemberDetail, setSelectedMemberDetail] = useState<MemberDetailView | null>(null);
   const [selectedMemberRatings, setSelectedMemberRatings] = useState<MemberRatingHistoryView[]>([]);
@@ -70,12 +78,21 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
   useEffect(() => {
     if (currentUser?.memberProfile) {
       setProfileDisplayName(currentUser.memberProfile.displayName ?? '');
+      setProfileMainInstrument(currentUser.memberProfile.mainInstrument ?? 'front');
       setProfileNickname(currentUser.memberProfile.nickname ?? '');
+      setProfileGender(currentUser.memberProfile.gender ?? '');
+      setProfileAgeRange(currentUser.memberProfile.ageRange ?? '');
       setProfileArea(currentUser.memberProfile.area ?? '');
       setProfileBio(currentUser.memberProfile.bio ?? '');
       setProfileSubInstrument(currentUser.memberProfile.subInstrument ?? '');
     }
   }, [currentUser]);
+
+  useEffect(() => {
+    if (profileMainInstrument === 'vocal') {
+      setProfileSubInstrument('');
+    }
+  }, [profileMainInstrument]);
 
   useEffect(() => {
     if (!memberEventId && sessionEvents.length > 0) {
@@ -114,19 +131,48 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
   }, [memberEventId, sessionEntries]);
 
   const handleProfileUpdate = async () => runAction(async () => {
+    if (!profileDisplayName.trim()) {
+      throw new Error('表示名を入力してください');
+    }
+    if (!GENDER_OPTIONS.includes(profileGender as (typeof GENDER_OPTIONS)[number])) {
+      throw new Error('性別を選択してください');
+    }
+    if (!AGE_RANGE_OPTIONS.includes(profileAgeRange as (typeof AGE_RANGE_OPTIONS)[number])) {
+      throw new Error('年代を選択してください');
+    }
+    if (!PREFECTURE_OPTIONS.includes(profileArea as (typeof PREFECTURE_OPTIONS)[number])) {
+      throw new Error('居住地域を選択してください');
+    }
+    if (profileNewPassword || profileCurrentPassword || profileNewPasswordConfirm) {
+      if (!profileCurrentPassword || !profileNewPassword) {
+        throw new Error('パスワード変更には現在のパスワードと新しいパスワードが必要です');
+      }
+      if (profileNewPassword !== profileNewPasswordConfirm) {
+        throw new Error('新しいパスワード確認が一致しません');
+      }
+    }
+
     const res = await fetch('/api/members/me', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         displayName: profileDisplayName,
+        mainInstrument: profileMainInstrument,
         nickname: profileNickname,
+        gender: profileGender,
+        ageRange: profileAgeRange,
         area: profileArea,
         bio: profileBio,
-        subInstrument: profileSubInstrument,
+        subInstrument: profileMainInstrument === 'vocal' ? null : profileSubInstrument,
+        currentPassword: profileCurrentPassword || undefined,
+        newPassword: profileNewPassword || undefined,
       }),
     });
     const json = await parseJson(res);
     if (!res.ok) throw new Error(json.error ?? 'プロフィール更新に失敗しました');
+    setProfileCurrentPassword('');
+    setProfileNewPassword('');
+    setProfileNewPasswordConfirm('');
     await reloadShared();
   }, 'プロフィールを更新しました');
 
@@ -175,14 +221,26 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
   return {
     profileDisplayName,
     setProfileDisplayName,
+    profileMainInstrument,
+    setProfileMainInstrument,
     profileNickname,
     setProfileNickname,
+    profileGender,
+    setProfileGender,
+    profileAgeRange,
+    setProfileAgeRange,
     profileArea,
     setProfileArea,
     profileBio,
     setProfileBio,
     profileSubInstrument,
     setProfileSubInstrument,
+    profileCurrentPassword,
+    setProfileCurrentPassword,
+    profileNewPassword,
+    setProfileNewPassword,
+    profileNewPasswordConfirm,
+    setProfileNewPasswordConfirm,
     selectedMemberId,
     setSelectedMemberId,
     selectedMemberDetail,

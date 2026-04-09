@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAuthenticatedUser } from '@/lib/auth';
 import { requireAdmin } from '@/lib/adminApi';
+import { validateMemberProfileInput } from '@/lib/memberProfile';
 
 export async function GET(request: NextRequest) {
   const auth = await requireAuthenticatedUser(request);
@@ -78,9 +79,14 @@ export async function PATCH(request: NextRequest) {
   }
 
   const body = (await request.json().catch(() => null)) as {
+    displayName?: string;
     role?: 'member' | 'admin';
     status?: 'active' | 'suspended' | 'invited';
     nickname?: string | null;
+    mainInstrument?: string;
+    subInstrument?: string | null;
+    gender?: string | null;
+    ageRange?: string | null;
     area?: string | null;
     bio?: string | null;
   } | null;
@@ -94,14 +100,17 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: 'member not found' }, { status: 404 });
   }
 
+  const profileValidation = validateMemberProfileInput(body, {
+    currentMainInstrument: member.mainInstrument,
+  });
+  if ('error' in profileValidation) {
+    return NextResponse.json({ error: profileValidation.error }, { status: 400 });
+  }
+
   const updated = await prisma.$transaction(async (tx) => {
     await tx.memberProfile.update({
       where: { id: memberId },
-      data: {
-        nickname: body.nickname === undefined ? undefined : body.nickname?.trim() || null,
-        area: body.area === undefined ? undefined : body.area?.trim() || null,
-        bio: body.bio === undefined ? undefined : body.bio?.trim() || null,
-      },
+      data: profileValidation.data,
     });
 
     if (body.role || body.status) {

@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { applySessionCookie, createSession } from '@/lib/auth';
 import { hashPassword } from '@/lib/password';
-
-const allowedInstruments = ['drum', 'bass', 'piano', 'front', 'vocal'] as const;
+import { validateMemberProfileInput } from '@/lib/memberProfile';
 
 export async function POST(request: NextRequest) {
   const body = (await request.json().catch(() => null)) as
@@ -11,13 +10,11 @@ export async function POST(request: NextRequest) {
         email?: string;
         password?: string;
         displayName?: string;
-        nickname?: string;
         mainInstrument?: string;
         subInstrument?: string;
         gender?: string;
         ageRange?: string;
         area?: string;
-        bio?: string;
       }
     | null;
 
@@ -37,9 +34,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Password must be at least 8 characters' }, { status: 400 });
   }
 
-  if (!allowedInstruments.includes(body.mainInstrument as (typeof allowedInstruments)[number])) {
-    return NextResponse.json({ error: 'Invalid mainInstrument' }, { status: 400 });
+  const profileValidation = validateMemberProfileInput(body, {
+    requireDisplayName: true,
+    requireRequiredSelections: true,
+  });
+  if ('error' in profileValidation) {
+    return NextResponse.json({ error: profileValidation.error }, { status: 400 });
   }
+  const profileData = profileValidation.data;
 
   const existing = await prisma.userAccount.findUnique({ where: { email } });
   if (existing) {
@@ -56,13 +58,13 @@ export async function POST(request: NextRequest) {
       memberProfile: {
         create: {
           displayName,
-          nickname: body.nickname?.trim() || null,
-          mainInstrument: body.mainInstrument as (typeof allowedInstruments)[number],
-          subInstrument: body.subInstrument?.trim() || null,
-          gender: body.gender?.trim() || null,
-          ageRange: body.ageRange?.trim() || null,
-          area: body.area?.trim() || null,
-          bio: body.bio?.trim() || null,
+          mainInstrument: profileData.mainInstrument!,
+          subInstrument: profileData.subInstrument ?? null,
+          gender: profileData.gender!,
+          ageRange: profileData.ageRange!,
+          area: profileData.area!,
+          nickname: null,
+          bio: null,
         },
       },
     },

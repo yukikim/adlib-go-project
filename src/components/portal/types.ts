@@ -14,6 +14,8 @@ export type AuthUser = {
     displayName: string;
     mainInstrument: Instrument;
     nickname?: string | null;
+    gender?: string | null;
+    ageRange?: string | null;
     area?: string | null;
     bio?: string | null;
     subInstrument?: string | null;
@@ -33,7 +35,11 @@ export type MemberListView = {
   displayName: string;
   nickname?: string | null;
   mainInstrument: Instrument;
+  subInstrument?: string | null;
+  gender?: string | null;
+  ageRange?: string | null;
   area?: string | null;
+  bio?: string | null;
   entryCount: number;
   userAccount: {
     email: string;
@@ -93,6 +99,10 @@ export type MemberDetailView = {
   id: string;
   displayName: string;
   mainInstrument: Instrument;
+  nickname?: string | null;
+  subInstrument?: string | null;
+  gender?: string | null;
+  ageRange?: string | null;
   area?: string | null;
   bio?: string | null;
   userAccount: {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { AuthUser, Instrument } from '../types';
 import { parseJson, type RunPortalAction } from '../utils';
 
@@ -13,10 +13,20 @@ export function useAuthPortal({ runAction, setCurrentUser, reloadShared }: UseAu
   const [authPassword, setAuthPassword] = useState('demo-admin-password');
   const [signupDisplayName, setSignupDisplayName] = useState('');
   const [signupInstrument, setSignupInstrument] = useState<Instrument>('front');
+  const [signupSubInstrument, setSignupSubInstrument] = useState('');
+  const [signupGender, setSignupGender] = useState('');
+  const [signupAgeRange, setSignupAgeRange] = useState('');
+  const [signupArea, setSignupArea] = useState('');
   const [resetEmail, setResetEmail] = useState('admin@adolib-go.local');
   const [resetToken, setResetToken] = useState('');
   const [resetPassword, setResetPassword] = useState('');
   const [issuedResetToken, setIssuedResetToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (signupInstrument === 'vocal') {
+      setSignupSubInstrument('');
+    }
+  }, [signupInstrument]);
 
   const handleSignIn = async (roleTarget: 'member' | 'admin') => runAction(async () => {
     const res = await fetch('/api/auth/signin', {
@@ -39,6 +49,10 @@ export function useAuthPortal({ runAction, setCurrentUser, reloadShared }: UseAu
         password: authPassword,
         displayName: signupDisplayName,
         mainInstrument: signupInstrument,
+        subInstrument: signupInstrument === 'vocal' ? null : signupSubInstrument,
+        gender: signupGender,
+        ageRange: signupAgeRange,
+        area: signupArea,
       }),
     });
     const json = await parseJson(res);
@@ -86,6 +100,14 @@ export function useAuthPortal({ runAction, setCurrentUser, reloadShared }: UseAu
     setSignupDisplayName,
     signupInstrument,
     setSignupInstrument,
+    signupSubInstrument,
+    setSignupSubInstrument,
+    signupGender,
+    setSignupGender,
+    signupAgeRange,
+    setSignupAgeRange,
+    signupArea,
+    setSignupArea,
     resetEmail,
     setResetEmail,
     resetToken,

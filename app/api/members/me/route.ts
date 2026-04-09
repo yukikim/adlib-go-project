@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAuthenticatedUser } from '@/lib/auth';
+import { applySessionCookie, createSession, getAuthenticatedUser, revokeAllSessionsForUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-
-const allowedInstruments = ['drum', 'bass', 'piano', 'front', 'vocal'] as const;
+import { hashPassword, verifyPassword } from '@/lib/password';
+import { validateMemberProfileInput } from '@/lib/memberProfile';
 
 export async function GET(request: NextRequest) {
   const user = await getAuthenticatedUser(request);
@@ -29,6 +29,8 @@ export async function PATCH(request: NextRequest) {
         ageRange?: string | null;
         area?: string | null;
         bio?: string | null;
+        currentPassword?: string;
+        newPassword?: string;
       }
     | null;
 
@@ -36,34 +38,52 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid body' }, { status: 400 });
   }
 
-  const data: Record<string, string | null> = {};
+  const profileValidation = validateMemberProfileInput(body, {
+    requireDisplayName: true,
+    requireRequiredSelections: true,
+    currentMainInstrument: user.memberProfile.mainInstrument,
+  });
+  if ('error' in profileValidation) {
+    return NextResponse.json({ error: profileValidation.error }, { status: 400 });
+  }
+  const memberProfileId = user.memberProfile.id;
 
-  if (typeof body.displayName === 'string') {
-    const value = body.displayName.trim();
-    if (!value) {
-      return NextResponse.json({ error: 'displayName is required' }, { status: 400 });
+  const shouldChangePassword = body.currentPassword || body.newPassword;
+  if (shouldChangePassword) {
+    if (!body.currentPassword || !body.newPassword) {
+      return NextResponse.json({ error: 'currentPassword and newPassword are required' }, { status: 400 });
     }
-    data.displayName = value;
+    if (body.newPassword.trim().length < 8) {
+      return NextResponse.json({ error: 'Password must be at least 8 characters' }, { status: 400 });
+    }
+    const validCurrentPassword = await verifyPassword(body.currentPassword, user.passwordHash);
+    if (!validCurrentPassword) {
+      return NextResponse.json({ error: 'currentPassword is incorrect' }, { status: 400 });
+    }
   }
 
-  if (typeof body.mainInstrument === 'string') {
-    if (!allowedInstruments.includes(body.mainInstrument as (typeof allowedInstruments)[number])) {
-      return NextResponse.json({ error: 'Invalid mainInstrument' }, { status: 400 });
+  const updated = await prisma.$transaction(async (tx) => {
+    const memberProfile = await tx.memberProfile.update({
+      where: { id: memberProfileId },
+      data: profileValidation.data,
+    });
+
+    if (shouldChangePassword && body.newPassword) {
+      await tx.userAccount.update({
+        where: { id: user.id },
+        data: { passwordHash: await hashPassword(body.newPassword.trim()) },
+      });
     }
-    data.mainInstrument = body.mainInstrument;
-  }
 
-  if ('nickname' in body) data.nickname = body.nickname?.trim() || null;
-  if ('subInstrument' in body) data.subInstrument = body.subInstrument?.trim() || null;
-  if ('gender' in body) data.gender = body.gender?.trim() || null;
-  if ('ageRange' in body) data.ageRange = body.ageRange?.trim() || null;
-  if ('area' in body) data.area = body.area?.trim() || null;
-  if ('bio' in body) data.bio = body.bio?.trim() || null;
-
-  const memberProfile = await prisma.memberProfile.update({
-    where: { id: user.memberProfile.id },
-    data,
+    return memberProfile;
   });
 
-  return NextResponse.json({ memberProfile });
+  const response = NextResponse.json({ memberProfile: updated });
+  if (shouldChangePassword) {
+    await revokeAllSessionsForUser(user.id);
+    const { token, expiresAt } = await createSession(user.id);
+    applySessionCookie(response, token, expiresAt);
+  }
+
+  return response;
 }

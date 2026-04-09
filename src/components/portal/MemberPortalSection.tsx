@@ -1,8 +1,10 @@
 import { Section } from './Section';
+import { AGE_RANGE_OPTIONS, GENDER_OPTIONS, PREFECTURE_OPTIONS } from '@/lib/memberProfile';
 import type {
   AnnouncementView,
   AttendanceStatus,
   AuthUser,
+  Instrument,
   MemberDetailView,
   MemberListView,
   MemberRatingHistoryView,
@@ -55,15 +57,27 @@ type MemberPortalSectionProps = {
   setMemberRatings: (updater: (current: Record<string, number>) => Record<string, number>) => void;
   setMemberRatingComments: (updater: (current: Record<string, string>) => Record<string, string>) => void;
   onProfileDisplayNameChange: (value: string) => void;
+  onProfileMainInstrumentChange: (value: Instrument) => void;
   onProfileNicknameChange: (value: string) => void;
+  onProfileGenderChange: (value: string) => void;
+  onProfileAgeRangeChange: (value: string) => void;
   onProfileAreaChange: (value: string) => void;
   onProfileBioChange: (value: string) => void;
   onProfileSubInstrumentChange: (value: string) => void;
+  onProfileCurrentPasswordChange: (value: string) => void;
+  onProfileNewPasswordChange: (value: string) => void;
+  onProfileNewPasswordConfirmChange: (value: string) => void;
   profileDisplayName: string;
+  profileMainInstrument: string;
   profileNickname: string;
+  profileGender: string;
+  profileAgeRange: string;
   profileArea: string;
   profileBio: string;
   profileSubInstrument: string;
+  profileCurrentPassword: string;
+  profileNewPassword: string;
+  profileNewPasswordConfirm: string;
   onProfileUpdate: () => void;
   onSignOut: () => void;
   onSubmitEntry: () => void;
@@ -109,15 +123,27 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     setMemberRatings,
     setMemberRatingComments,
     onProfileDisplayNameChange,
+    onProfileMainInstrumentChange,
     onProfileNicknameChange,
+    onProfileGenderChange,
+    onProfileAgeRangeChange,
     onProfileAreaChange,
     onProfileBioChange,
     onProfileSubInstrumentChange,
+    onProfileCurrentPasswordChange,
+    onProfileNewPasswordChange,
+    onProfileNewPasswordConfirmChange,
     profileDisplayName,
+    profileMainInstrument,
     profileNickname,
+    profileGender,
+    profileAgeRange,
     profileArea,
     profileBio,
     profileSubInstrument,
+    profileCurrentPassword,
+    profileNewPassword,
+    profileNewPasswordConfirm,
     onProfileUpdate,
     onSignOut,
     onSubmitEntry,
@@ -130,10 +156,31 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
         <p>{currentUser?.email}</p>
         <div style={{ display: 'grid', gap: '0.75rem', maxWidth: 560 }}>
           <input type="text" placeholder="表示名" value={profileDisplayName} onChange={(event) => onProfileDisplayNameChange(event.target.value)} />
+          <select value={profileMainInstrument} onChange={(event) => onProfileMainInstrumentChange(event.target.value as Instrument)}>
+            <option value="drum">drum</option>
+            <option value="bass">bass</option>
+            <option value="piano">piano</option>
+            <option value="front">front</option>
+            <option value="vocal">vocal</option>
+          </select>
           <input type="text" placeholder="ニックネーム" value={profileNickname} onChange={(event) => onProfileNicknameChange(event.target.value)} />
-          <input type="text" placeholder="住処" value={profileArea} onChange={(event) => onProfileAreaChange(event.target.value)} />
-          <input type="text" placeholder="サブ楽器" value={profileSubInstrument} onChange={(event) => onProfileSubInstrumentChange(event.target.value)} />
+          {profileMainInstrument !== 'vocal' && <input type="text" placeholder="サブ楽器（任意）" value={profileSubInstrument} onChange={(event) => onProfileSubInstrumentChange(event.target.value)} />}
+          <select value={profileArea} onChange={(event) => onProfileAreaChange(event.target.value)}>
+            <option value="">居住地域を選択</option>
+            {PREFECTURE_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
+          </select>
+          <select value={profileGender} onChange={(event) => onProfileGenderChange(event.target.value)}>
+            <option value="">性別を選択</option>
+            {GENDER_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
+          </select>
+          <select value={profileAgeRange} onChange={(event) => onProfileAgeRangeChange(event.target.value)}>
+            <option value="">年代を選択</option>
+            {AGE_RANGE_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
+          </select>
           <textarea rows={3} placeholder="自己紹介" value={profileBio} onChange={(event) => onProfileBioChange(event.target.value)} />
+          <input type="password" placeholder="現在のパスワード（変更時のみ）" value={profileCurrentPassword} onChange={(event) => onProfileCurrentPasswordChange(event.target.value)} />
+          <input type="password" placeholder="新しいパスワード（変更時のみ）" value={profileNewPassword} onChange={(event) => onProfileNewPasswordChange(event.target.value)} />
+          <input type="password" placeholder="新しいパスワード確認" value={profileNewPasswordConfirm} onChange={(event) => onProfileNewPasswordConfirmChange(event.target.value)} />
           <div style={{ display: 'flex', gap: '0.75rem' }}>
             <button type="button" onClick={onProfileUpdate} disabled={loading}>プロフィール保存</button>
             <button type="button" onClick={onSignOut} disabled={loading}>サインアウト</button>
@@ -167,7 +214,8 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             {selectedMemberDetail ? (
               <>
                 <h3>{selectedMemberDetail.displayName}</h3>
-                <p>{selectedMemberDetail.area || '地域未設定'}</p>
+                <p>{selectedMemberDetail.mainInstrument}{selectedMemberDetail.subInstrument ? ` / sub ${selectedMemberDetail.subInstrument}` : ''}</p>
+                <p>{selectedMemberDetail.area || '地域未設定'} / {selectedMemberDetail.gender || '性別未設定'} / {selectedMemberDetail.ageRange || '年代未設定'}</p>
                 <p>{selectedMemberDetail.bio || '自己紹介未設定'}</p>
                 <p>活動件数: {selectedMemberDetail.sessionEntries.length}</p>
                 <h4>最近の評価</h4>

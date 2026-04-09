@@ -1,5 +1,6 @@
 import { Section } from './Section';
 import type { Instrument } from './types';
+import { AGE_RANGE_OPTIONS, GENDER_OPTIONS, PREFECTURE_OPTIONS } from '@/lib/memberProfile';
 
 type AuthPortalSectionProps = {
   view: 'signin' | 'signup' | 'admin-signin';
@@ -9,6 +10,10 @@ type AuthPortalSectionProps = {
   authPassword: string;
   signupDisplayName: string;
   signupInstrument: Instrument;
+  signupSubInstrument: string;
+  signupGender: string;
+  signupAgeRange: string;
+  signupArea: string;
   resetEmail: string;
   resetToken: string;
   resetPassword: string;
@@ -17,6 +22,10 @@ type AuthPortalSectionProps = {
   setAuthPassword: (value: string) => void;
   setSignupDisplayName: (value: string) => void;
   setSignupInstrument: (value: Instrument) => void;
+  setSignupSubInstrument: (value: string) => void;
+  setSignupGender: (value: string) => void;
+  setSignupAgeRange: (value: string) => void;
+  setSignupArea: (value: string) => void;
   setResetEmail: (value: string) => void;
   setResetToken: (value: string) => void;
   setResetPassword: (value: string) => void;
@@ -35,6 +44,10 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
     authPassword,
     signupDisplayName,
     signupInstrument,
+    signupSubInstrument,
+    signupGender,
+    signupAgeRange,
+    signupArea,
     resetEmail,
     resetToken,
     resetPassword,
@@ -43,6 +56,10 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
     setAuthPassword,
     setSignupDisplayName,
     setSignupInstrument,
+    setSignupSubInstrument,
+    setSignupGender,
+    setSignupAgeRange,
+    setSignupArea,
     setResetEmail,
     setResetToken,
     setResetPassword,
@@ -72,6 +89,21 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
                 <option value="piano">piano</option>
                 <option value="front">front</option>
                 <option value="vocal">vocal</option>
+              </select>
+              {signupInstrument !== 'vocal' && (
+                <input type="text" placeholder="サブ楽器（任意）" value={signupSubInstrument} onChange={(event) => setSignupSubInstrument(event.target.value)} />
+              )}
+              <select value={signupArea} onChange={(event) => setSignupArea(event.target.value)}>
+                <option value="">居住地域を選択</option>
+                {PREFECTURE_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
+              </select>
+              <select value={signupGender} onChange={(event) => setSignupGender(event.target.value)}>
+                <option value="">性別を選択</option>
+                {GENDER_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
+              </select>
+              <select value={signupAgeRange} onChange={(event) => setSignupAgeRange(event.target.value)}>
+                <option value="">年代を選択</option>
+                {AGE_RANGE_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
               </select>
             </>
           )}
