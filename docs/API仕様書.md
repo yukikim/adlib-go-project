@@ -353,6 +353,119 @@ response 200:
 }
 ```
 
+## 8. お知らせ / コラム API
+
+### 8.1 GET /api/columns
+
+用途:
+
+- 公開中コラム一覧を返す
+
+query:
+
+- `includeDrafts=1` を付けた場合、admin 権限では draft を含めて返す
+
+response 200:
+
+```json
+{
+  "columns": [
+    {
+      "id": "column-id",
+      "slug": "kickoff-guide",
+      "title": "KICK-OFF セッションの歩き方",
+      "summary": "初参加メンバー向けに、当日までの流れと準備物を整理しました。",
+      "body": "1段落目\n\n2段落目",
+      "thumbnailLabel": "Guide",
+      "authorName": "Adolib-go 運営",
+      "isPublished": true,
+      "publishedAt": "2026-04-09T00:00:00.000Z"
+    }
+  ]
+}
+```
+
+### 8.2 POST /api/columns
+
+用途:
+
+- 管理者がコラムを新規作成する
+
+権限:
+
+- admin
+
+request:
+
+```json
+{
+  "title": "KICK-OFF セッションの歩き方",
+  "slug": "kickoff-guide",
+  "summary": "初参加メンバー向けに、当日までの流れと準備物を整理しました。",
+  "body": "1段落目\n\n2段落目",
+  "thumbnailLabel": "Guide",
+  "authorName": "Adolib-go 運営",
+  "isPublished": true
+}
+```
+
+response 201:
+
+```json
+{
+  "column": {
+    "id": "column-id",
+    "slug": "kickoff-guide",
+    "title": "KICK-OFF セッションの歩き方",
+    "isPublished": true
+  }
+}
+```
+
+response 409:
+
+```json
+{
+  "error": "slug already exists"
+}
+```
+
+### 8.3 GET /api/columns/:slug
+
+用途:
+
+- 指定した slug のコラム詳細を返す
+
+query:
+
+- `includeDraft=1` を付けた場合、admin 権限では draft も取得できる
+
+### 8.4 PATCH /api/columns/:slug
+
+用途:
+
+- 管理者が既存コラムを更新する
+
+権限:
+
+- admin
+
+補足:
+
+- `slug` 自体の変更も可能
+- `isPublished` を `true` にした時点で `publishedAt` が未設定なら現在時刻を入れる
+- `isPublished` を `false` にすると `publishedAt` は `null` になる
+
+### 8.5 DELETE /api/columns/:slug
+
+用途:
+
+- 管理者がコラムを削除する
+
+権限:
+
+- admin
+
 ## 4.5 メンバープロフィール API
 
 ### 4.5.1 GET /api/members/me

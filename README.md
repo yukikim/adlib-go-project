@@ -1,14 +1,15 @@
 # Jazz Session Planner
 
-Jazz セッションの参加者、希望曲、キー情報を登録し、曲ごとの sessionSet を自動生成する Next.js + Prisma + PostgreSQL アプリです。
+Adolib-go KICK-OFF 向けの public site、member site、admin site をまとめた Next.js + Prisma + PostgreSQL アプリです。
 
 このリポジトリには以下が含まれます。
 
-- 認証、セッション、パスワード再設定の基礎 API
-- 参加者、曲、希望曲を管理する REST API
+- 公開トップ、コラム一覧、コラム詳細、about ページ
+- サインアップ、サインイン、パスワード再設定 API
+- メンバーページでのプロフィール編集、SessionEntry、レイティング
+- 管理ダッシュボードでの SessionEvent、sessionSet、アーカイブ、お知らせ、コラム管理
 - PostgreSQL + Prisma の永続化層
 - sessionSet を生成する割り当てロジック
-- 生成結果と未生成理由を確認できる管理 UI
 - ダミーデータを一括投入する seed スクリプト
 
 ---
@@ -69,15 +70,30 @@ Jazz セッションの参加者、希望曲、キー情報を登録し、曲ご
 
 - UI
 	- app/page.tsx
+	- app/signin/page.tsx
+	- app/signup/page.tsx
+	- app/member/page.tsx
+	- app/admin/page.tsx
+	- app/columns/page.tsx
+	- app/columns/[slug]/page.tsx
 - API
-	- app/api/participants/route.ts
-	- app/api/songs/route.ts
-	- app/api/requests/route.ts
+	- app/api/auth/*
+	- app/api/members/*
+	- app/api/announcements/*
+	- app/api/columns/*
+	- app/api/session-events/*
 	- app/api/session-sets/route.ts
 	- app/api/session-sets/generate/route.ts
+	- app/api/session-archives/*
 - ロジック
 	- session-planner/src/domain.ts
 	- session-planner/src/generateSessionSets.ts
+- フロントエンド共通コンポーネント
+	- src/components/public/PublicHomePage.tsx
+	- src/components/portal/PortalWorkspace.tsx
+	- src/components/portal/hooks/useAuthPortal.ts
+	- src/components/portal/hooks/useMemberPortal.ts
+	- src/components/portal/hooks/useAdminPortal.ts
 - DB
 	- prisma/schema.prisma
 	- src/lib/prisma.ts
@@ -541,7 +557,9 @@ npm run seed:demo
 - seed:participants
 - seed:requests
 - seed:auth
+- seed:columns
 - seed:events
+- seed:notices
 - seed:ratings-archives
 
 個別実行:
@@ -551,7 +569,9 @@ npm run seed:reset
 npm run seed:participants
 npm run seed:requests
 npm run seed:auth
+npm run seed:columns
 npm run seed:events
+npm run seed:notices
 npm run seed:ratings-archives
 ```
 
@@ -569,12 +589,33 @@ npm run seed:ratings-archives
 - SessionSet 20 件
 - SessionSetRating 100 件
 - SessionArchive 1 件
+- Column 3 件
+- Announcement 2 件
 - アーカイブ作成監査ログ 1 件
 
 認証系デモデータ補足:
 
 - デモアカウントの passwordHash は seed 時にハッシュ化済みです
 - 管理 API の暫定確認には admin@adolib-go.local を使う想定です
+
+### 画面導線
+
+- public
+	- /
+	- /columns
+	- /columns/:slug
+	- /about
+- member
+	- /signin
+	- /signup
+	- /member
+- admin
+	- /admin
+
+補足:
+
+- /member と /admin は server-side で認証確認し、未認証時は /signin に redirect します
+- コラムは Prisma の Column モデルで管理され、admin 画面から作成、更新、削除、公開切替ができます
 
 ### sessionSet 生成
 

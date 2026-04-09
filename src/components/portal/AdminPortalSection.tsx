@@ -44,14 +44,15 @@ type AdminPortalSectionProps = {
   activityLogs: ActivityLogView[];
   mailLogs: MailLogView[];
   members: MemberListView[];
-  selectedMemberId: string;
-  selectedMemberDetail: MemberDetailView | null;
+  selectedManagedMemberId: string;
+  selectedManagedMemberDetail: MemberDetailView | null;
   adminMemberRole: 'member' | 'admin';
   adminMemberStatus: 'active' | 'suspended' | 'invited';
   announcementTitle: string;
   announcementBody: string;
   announcementPublished: boolean;
   columns: ColumnView[];
+  editingColumnSlug: string;
   columnTitle: string;
   columnSlug: string;
   columnSummary: string;
@@ -71,7 +72,7 @@ type AdminPortalSectionProps = {
   setEditRound1EndAt: (value: string) => void;
   setEditRound2StartAt: (value: string) => void;
   setEditRound2EndAt: (value: string) => void;
-  setSelectedMemberId: (value: string) => void;
+  setSelectedManagedMemberId: (value: string) => void;
   setAdminMemberRole: (value: 'member' | 'admin') => void;
   setAdminMemberStatus: (value: 'active' | 'suspended' | 'invited') => void;
   setAnnouncementTitle: (value: string) => void;
@@ -79,6 +80,7 @@ type AdminPortalSectionProps = {
   setAnnouncementPublished: (value: boolean) => void;
   setArchiveTitle: (value: string) => void;
   setArchiveNote: (value: string) => void;
+  setEditingColumnSlug: (value: string) => void;
   setColumnTitle: (value: string) => void;
   setColumnSlug: (value: string) => void;
   setColumnSummary: (value: string) => void;
@@ -96,6 +98,9 @@ type AdminPortalSectionProps = {
   onUpdateMember: () => void;
   onCreateAnnouncement: () => void;
   onCreateColumn: () => void;
+  onUpdateColumn: () => void;
+  onDeleteColumn: (slug?: string) => void;
+  onResetColumnForm: () => void;
 };
 
 export function AdminPortalSection(props: AdminPortalSectionProps) {
@@ -125,13 +130,15 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     activityLogs,
     mailLogs,
     members,
-    selectedMemberDetail,
+    selectedManagedMemberId,
+    selectedManagedMemberDetail,
     adminMemberRole,
     adminMemberStatus,
     announcementTitle,
     announcementBody,
     announcementPublished,
     columns,
+    editingColumnSlug,
     columnTitle,
     columnSlug,
     columnSummary,
@@ -151,7 +158,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     setEditRound1EndAt,
     setEditRound2StartAt,
     setEditRound2EndAt,
-    setSelectedMemberId,
+    setSelectedManagedMemberId,
     setAdminMemberRole,
     setAdminMemberStatus,
     setAnnouncementTitle,
@@ -159,6 +166,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     setAnnouncementPublished,
     setArchiveTitle,
     setArchiveNote,
+    setEditingColumnSlug,
     setColumnTitle,
     setColumnSlug,
     setColumnSummary,
@@ -176,6 +184,9 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     onUpdateMember,
     onCreateAnnouncement,
     onCreateColumn,
+    onUpdateColumn,
+    onDeleteColumn,
+    onResetColumnForm,
   } = props;
 
   return (
@@ -294,14 +305,14 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
           <ul style={{ margin: 0, paddingLeft: '1rem' }}>
             {members.map((member) => (
               <li key={member.id} style={{ marginBottom: '0.5rem' }}>
-                <button type="button" onClick={() => setSelectedMemberId(member.id)}>{member.displayName} / {member.userAccount.status}</button>
+                <button type="button" onClick={() => setSelectedManagedMemberId(member.id)}>{member.displayName} / {member.userAccount.status}</button>
               </li>
             ))}
           </ul>
           <div>
-            {selectedMemberDetail ? (
+            {selectedManagedMemberDetail ? (
               <div style={{ display: 'grid', gap: '0.75rem', maxWidth: 420 }}>
-                <div>{selectedMemberDetail.userAccount.email}</div>
+                <div>{selectedManagedMemberDetail.userAccount.email}</div>
                 <select value={adminMemberRole} onChange={(event) => setAdminMemberRole(event.target.value as 'member' | 'admin')}>
                   <option value="member">member</option>
                   <option value="admin">admin</option>
@@ -321,6 +332,15 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
       </Section>
 
       <Section title="コラム管理">
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap', marginBottom: '0.75rem' }}>
+          <select value={editingColumnSlug} onChange={(event) => setEditingColumnSlug(event.target.value)}>
+            <option value="">新規コラム</option>
+            {columns.map((column) => (
+              <option key={column.id} value={column.slug}>{column.title}</option>
+            ))}
+          </select>
+          <button type="button" onClick={onResetColumnForm} disabled={loading}>フォームをクリア</button>
+        </div>
         <div style={{ display: 'grid', gap: '0.75rem', maxWidth: 720 }}>
           <input type="text" placeholder="タイトル" value={columnTitle} onChange={(event) => setColumnTitle(event.target.value)} />
           <input type="text" placeholder="slug（任意）" value={columnSlug} onChange={(event) => setColumnSlug(event.target.value)} />
@@ -331,15 +351,21 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
           <label>
             <input type="checkbox" checked={columnPublished} onChange={(event) => setColumnPublished(event.target.checked)} /> 公開する
           </label>
-          <div>
+          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
             <button type="button" onClick={onCreateColumn} disabled={loading}>コラム作成</button>
+            <button type="button" onClick={onUpdateColumn} disabled={loading || !editingColumnSlug}>コラム更新</button>
+            <button type="button" onClick={() => onDeleteColumn()} disabled={loading || !editingColumnSlug}>コラム削除</button>
           </div>
         </div>
         {columns.length === 0 ? <p>登録済みコラムはありません。</p> : (
           <ul style={{ marginTop: '1rem' }}>
             {columns.map((column) => (
-              <li key={column.id}>
+              <li key={column.id} style={{ marginBottom: '0.5rem' }}>
                 {column.title} / {column.slug} / {column.isPublished ? 'published' : 'draft'} / {column.authorName}
+                {' '}
+                <button type="button" onClick={() => setEditingColumnSlug(column.slug)} disabled={loading}>編集</button>
+                {' '}
+                <button type="button" onClick={() => onDeleteColumn(column.slug)} disabled={loading}>削除</button>
               </li>
             ))}
           </ul>
