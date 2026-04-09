@@ -18,6 +18,10 @@ type ArchivePreview = {
   ratingSummaryIncluded: boolean;
 };
 
+function splitPreviewBody(body: string) {
+  return body.split(/\n{2,}/).map((paragraph) => paragraph.trim()).filter(Boolean);
+}
+
 type AdminPortalSectionProps = {
   loading: boolean;
   sessionEvents: SessionEventView[];
@@ -46,6 +50,7 @@ type AdminPortalSectionProps = {
   members: MemberListView[];
   selectedManagedMemberId: string;
   selectedManagedMemberDetail: MemberDetailView | null;
+  memberSearchQuery: string;
   adminMemberRole: 'member' | 'admin';
   adminMemberStatus: 'active' | 'suspended' | 'invited';
   announcementTitle: string;
@@ -59,6 +64,8 @@ type AdminPortalSectionProps = {
   columnBody: string;
   columnThumbnailLabel: string;
   columnAuthorName: string;
+  columnDisplayOrder: number;
+  columnPublishAt: string;
   columnPublished: boolean;
   setSelectedAdminEventId: (value: string) => void;
   setEventTitle: (value: string) => void;
@@ -73,6 +80,7 @@ type AdminPortalSectionProps = {
   setEditRound2StartAt: (value: string) => void;
   setEditRound2EndAt: (value: string) => void;
   setSelectedManagedMemberId: (value: string) => void;
+  setMemberSearchQuery: (value: string) => void;
   setAdminMemberRole: (value: 'member' | 'admin') => void;
   setAdminMemberStatus: (value: 'active' | 'suspended' | 'invited') => void;
   setAnnouncementTitle: (value: string) => void;
@@ -87,6 +95,8 @@ type AdminPortalSectionProps = {
   setColumnBody: (value: string) => void;
   setColumnThumbnailLabel: (value: string) => void;
   setColumnAuthorName: (value: string) => void;
+  setColumnDisplayOrder: (value: number) => void;
+  setColumnPublishAt: (value: string) => void;
   setColumnPublished: (value: boolean) => void;
   onCreateEvent: () => void;
   onUpdateEvent: () => void;
@@ -96,6 +106,7 @@ type AdminPortalSectionProps = {
   onCreateArchive: () => void;
   onDeleteArchive: (archiveId: string) => void;
   onUpdateMember: () => void;
+  onDeleteMember: () => void;
   onCreateAnnouncement: () => void;
   onCreateColumn: () => void;
   onUpdateColumn: () => void;
@@ -132,6 +143,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     members,
     selectedManagedMemberId,
     selectedManagedMemberDetail,
+    memberSearchQuery,
     adminMemberRole,
     adminMemberStatus,
     announcementTitle,
@@ -145,6 +157,8 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     columnBody,
     columnThumbnailLabel,
     columnAuthorName,
+    columnDisplayOrder,
+    columnPublishAt,
     columnPublished,
     setSelectedAdminEventId,
     setEventTitle,
@@ -159,6 +173,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     setEditRound2StartAt,
     setEditRound2EndAt,
     setSelectedManagedMemberId,
+    setMemberSearchQuery,
     setAdminMemberRole,
     setAdminMemberStatus,
     setAnnouncementTitle,
@@ -173,6 +188,8 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     setColumnBody,
     setColumnThumbnailLabel,
     setColumnAuthorName,
+    setColumnDisplayOrder,
+    setColumnPublishAt,
     setColumnPublished,
     onCreateEvent,
     onUpdateEvent,
@@ -182,12 +199,31 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     onCreateArchive,
     onDeleteArchive,
     onUpdateMember,
+    onDeleteMember,
     onCreateAnnouncement,
     onCreateColumn,
     onUpdateColumn,
     onDeleteColumn,
     onResetColumnForm,
   } = props;
+
+  const filteredMembers = members.filter((member) => {
+    const query = memberSearchQuery.trim().toLowerCase();
+    if (!query) {
+      return true;
+    }
+    return [
+      member.displayName,
+      member.nickname ?? '',
+      member.mainInstrument,
+      member.area ?? '',
+      member.userAccount.email,
+      member.userAccount.role,
+      member.userAccount.status,
+    ].some((value) => value.toLowerCase().includes(query));
+  });
+
+  const previewParagraphs = splitPreviewBody(columnBody);
 
   return (
     <>
@@ -302,13 +338,22 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
 
       <Section title="メンバー / 管理者管理">
         <div style={{ display: 'grid', gridTemplateColumns: 'minmax(220px, 280px) 1fr', gap: '1rem' }}>
-          <ul style={{ margin: 0, paddingLeft: '1rem' }}>
-            {members.map((member) => (
+          <div>
+            <input
+              type="search"
+              placeholder="名前、メール、role、status で検索"
+              value={memberSearchQuery}
+              onChange={(event) => setMemberSearchQuery(event.target.value)}
+              style={{ width: '100%', marginBottom: '0.75rem' }}
+            />
+            <ul style={{ margin: 0, paddingLeft: '1rem' }}>
+            {filteredMembers.map((member) => (
               <li key={member.id} style={{ marginBottom: '0.5rem' }}>
                 <button type="button" onClick={() => setSelectedManagedMemberId(member.id)}>{member.displayName} / {member.userAccount.status}</button>
               </li>
             ))}
-          </ul>
+            </ul>
+          </div>
           <div>
             <p style={{ color: '#666', marginTop: 0 }}>既存メンバーの role を admin に変更すると管理者として追加されます。管理者の編集もこの画面で行います。</p>
             {selectedManagedMemberDetail ? (
@@ -325,7 +370,10 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                 </select>
                 <div>
                   <button type="button" onClick={onUpdateMember} disabled={loading}>メンバー設定保存</button>
+                  {' '}
+                  <button type="button" onClick={onDeleteMember} disabled={loading || selectedManagedMemberDetail.userAccount.role === 'admin'}>メンバー削除</button>
                 </div>
+                {selectedManagedMemberDetail.userAccount.role === 'admin' && <p style={{ color: '#666', margin: 0 }}>管理者アカウントは削除せず、role を member に戻して管理してください。</p>}
               </div>
             ) : <p>メンバーを選択してください。</p>}
           </div>
@@ -348,6 +396,8 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
           <input type="text" placeholder="要約" value={columnSummary} onChange={(event) => setColumnSummary(event.target.value)} />
           <input type="text" placeholder="サムネイルラベル" value={columnThumbnailLabel} onChange={(event) => setColumnThumbnailLabel(event.target.value)} />
           <input type="text" placeholder="著者名" value={columnAuthorName} onChange={(event) => setColumnAuthorName(event.target.value)} />
+          <input type="number" placeholder="表示順" value={columnDisplayOrder} onChange={(event) => setColumnDisplayOrder(Number(event.target.value) || 0)} />
+          <input type="datetime-local" value={columnPublishAt} onChange={(event) => setColumnPublishAt(event.target.value)} />
           <textarea rows={8} placeholder="本文。段落ごとに空行で区切ります。" value={columnBody} onChange={(event) => setColumnBody(event.target.value)} />
           <label>
             <input type="checkbox" checked={columnPublished} onChange={(event) => setColumnPublished(event.target.checked)} /> 公開する
@@ -371,6 +421,14 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
             ))}
           </ul>
         )}
+        <div style={{ marginTop: '1rem', padding: '1rem', border: '1px solid #ddd', borderRadius: '0.75rem' }}>
+          <h3 style={{ marginTop: 0 }}>コラムプレビュー</h3>
+          <p style={{ color: '#666' }}>表示順 {columnDisplayOrder} / {columnPublishAt || '即時公開または未設定'} / {columnAuthorName || '著者未設定'}</p>
+          <div style={{ color: '#666', fontSize: '0.9rem' }}>{columnThumbnailLabel || 'Column'}</div>
+          <h4 style={{ marginBottom: '0.5rem' }}>{columnTitle || 'タイトル未入力'}</h4>
+          <p>{columnSummary || '要約未入力'}</p>
+          {previewParagraphs.length === 0 ? <p style={{ color: '#666' }}>本文未入力</p> : previewParagraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+        </div>
       </Section>
 
       <Section title="アクティビティ / 通知">

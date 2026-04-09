@@ -48,6 +48,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
   const [columns, setColumns] = useState<ColumnView[]>([]);
   const [selectedManagedMemberId, setSelectedManagedMemberId] = useState('');
   const [selectedManagedMemberDetail, setSelectedManagedMemberDetail] = useState<MemberDetailView | null>(null);
+  const [memberSearchQuery, setMemberSearchQuery] = useState('');
   const [adminMemberRole, setAdminMemberRole] = useState<'member' | 'admin'>('member');
   const [adminMemberStatus, setAdminMemberStatus] = useState<'active' | 'suspended' | 'invited'>('active');
   const [announcementTitle, setAnnouncementTitle] = useState('');
@@ -60,6 +61,8 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
   const [columnBody, setColumnBody] = useState('');
   const [columnThumbnailLabel, setColumnThumbnailLabel] = useState('Guide');
   const [columnAuthorName, setColumnAuthorName] = useState('Adolib-go 運営');
+  const [columnDisplayOrder, setColumnDisplayOrder] = useState(0);
+  const [columnPublishAt, setColumnPublishAt] = useState('');
   const [columnPublished, setColumnPublished] = useState(true);
 
   const isAdmin = currentUser?.role === 'admin';
@@ -73,6 +76,8 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     setColumnBody('');
     setColumnThumbnailLabel('Guide');
     setColumnAuthorName('Adolib-go 運営');
+    setColumnDisplayOrder(0);
+    setColumnPublishAt('');
     setColumnPublished(true);
   }
 
@@ -184,6 +189,8 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     setColumnBody(column.body);
     setColumnThumbnailLabel(column.thumbnailLabel ?? 'Guide');
     setColumnAuthorName(column.authorName);
+    setColumnDisplayOrder(column.displayOrder);
+    setColumnPublishAt(column.publishedAt ? formatDateTimeLocal(column.publishedAt) : '');
     setColumnPublished(column.isPublished);
   }, [columns, editingColumnSlug]);
 
@@ -280,6 +287,16 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     await reloadShared();
   }, 'メンバー設定を更新しました');
 
+  const handleDeleteMember = async () => runAction(async () => {
+    if (!selectedManagedMemberId) throw new Error('削除対象のメンバーを選択してください');
+    const res = await fetch(`/api/members/${selectedManagedMemberId}`, { method: 'DELETE' });
+    const json = await parseJson(res);
+    if (!res.ok) throw new Error(json.error ?? 'メンバー削除に失敗しました');
+    setSelectedManagedMemberId('');
+    setSelectedManagedMemberDetail(null);
+    await reloadShared();
+  }, 'メンバーを削除しました');
+
   const handleCreateAnnouncement = async () => runAction(async () => {
     const res = await fetch('/api/announcements', {
       method: 'POST',
@@ -305,7 +322,9 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
         body: columnBody,
         thumbnailLabel: columnThumbnailLabel,
         authorName: columnAuthorName,
+        displayOrder: columnDisplayOrder,
         isPublished: columnPublished,
+        publishedAt: columnPublishAt || null,
       }),
     });
     const json = await parseJson(res);
@@ -326,7 +345,9 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
         body: columnBody,
         thumbnailLabel: columnThumbnailLabel,
         authorName: columnAuthorName,
+        displayOrder: columnDisplayOrder,
         isPublished: columnPublished,
+        publishedAt: columnPublishAt || null,
       }),
     });
     const json = await parseJson(res);
@@ -388,6 +409,8 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     selectedManagedMemberId,
     setSelectedManagedMemberId,
     selectedManagedMemberDetail,
+    memberSearchQuery,
+    setMemberSearchQuery,
     adminMemberRole,
     setAdminMemberRole,
     adminMemberStatus,
@@ -412,6 +435,10 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     setColumnThumbnailLabel,
     columnAuthorName,
     setColumnAuthorName,
+    columnDisplayOrder,
+    setColumnDisplayOrder,
+    columnPublishAt,
+    setColumnPublishAt,
     columnPublished,
     setColumnPublished,
     handleCreateEvent,
@@ -421,6 +448,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     handleCreateArchive,
     handleDeleteArchive,
     handleUpdateMember,
+    handleDeleteMember,
     handleCreateAnnouncement,
     handleCreateColumn,
     handleUpdateColumn,

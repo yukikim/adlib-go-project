@@ -110,6 +110,7 @@ export const columnSeedEntries = [
     summary: '初参加メンバー向けに、当日までの流れと準備物を整理しました。',
     authorName: 'Adolib-go 運営',
     thumbnailLabel: 'Guide',
+    displayOrder: 10,
     isPublished: true,
     publishedAt: '2026-04-09T00:00:00.000Z',
     body: [
@@ -124,6 +125,7 @@ export const columnSeedEntries = [
     summary: 'sessionSet に採用されやすい登録の考え方を運営視点でまとめています。',
     authorName: 'Adolib-go 運営',
     thumbnailLabel: 'Tips',
+    displayOrder: 20,
     isPublished: true,
     publishedAt: '2026-04-08T00:00:00.000Z',
     body: [
@@ -138,6 +140,7 @@ export const columnSeedEntries = [
     summary: '演奏後のレイティング入力と、アーカイブ保存の目的を説明します。',
     authorName: 'Adolib-go 運営',
     thumbnailLabel: 'Archive',
+    displayOrder: 30,
     isPublished: true,
     publishedAt: '2026-04-07T00:00:00.000Z',
     body: [

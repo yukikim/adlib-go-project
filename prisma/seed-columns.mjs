@@ -18,6 +18,7 @@ async function main() {
         body: column.body.join('\n\n'),
         thumbnailLabel: column.thumbnailLabel,
         authorName: column.authorName,
+        displayOrder: column.displayOrder ?? 0,
         isPublished: column.isPublished,
         publishedAt: column.publishedAt ? new Date(column.publishedAt) : null,
         createdById: admin.id,

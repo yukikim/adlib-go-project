@@ -1,15 +1,20 @@
 import { prisma } from '@/lib/prisma';
 
 export default async function ColumnsPage() {
+  const now = new Date();
   const columns = await prisma.column.findMany({
-    where: { isPublished: true },
-    orderBy: [{ publishedAt: 'desc' }, { createdAt: 'desc' }],
+    where: {
+      isPublished: true,
+      OR: [{ publishedAt: null }, { publishedAt: { lte: now } }],
+    },
+    orderBy: [{ displayOrder: 'asc' }, { publishedAt: 'desc' }, { createdAt: 'desc' }],
     select: {
       id: true,
       slug: true,
       title: true,
       summary: true,
       authorName: true,
+      displayOrder: true,
       publishedAt: true,
     },
   });

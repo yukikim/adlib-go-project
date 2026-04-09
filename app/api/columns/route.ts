@@ -6,7 +6,11 @@ import { requireAdmin } from '@/lib/adminApi';
 
 export async function GET(request: NextRequest) {
   const includeDrafts = request.nextUrl.searchParams.get('includeDrafts') === '1';
-  let where = { isPublished: true } as { isPublished?: boolean };
+  const now = new Date();
+  let where = { isPublished: true, OR: [{ publishedAt: null }, { publishedAt: { lte: now } }] } as {
+    isPublished?: boolean;
+    OR?: Array<{ publishedAt: null } | { publishedAt: { lte: Date } }>;
+  };
 
   if (includeDrafts) {
     const user = await getAuthenticatedUser(request);
@@ -17,7 +21,7 @@ export async function GET(request: NextRequest) {
 
   const columns = await prisma.column.findMany({
     where,
-    orderBy: [{ publishedAt: 'desc' }, { createdAt: 'desc' }],
+    orderBy: [{ displayOrder: 'asc' }, { publishedAt: 'desc' }, { createdAt: 'desc' }],
     select: {
       id: true,
       slug: true,
@@ -26,6 +30,7 @@ export async function GET(request: NextRequest) {
       body: true,
       thumbnailLabel: true,
       authorName: true,
+      displayOrder: true,
       isPublished: true,
       publishedAt: true,
       createdAt: true,
@@ -49,7 +54,9 @@ export async function POST(request: NextRequest) {
     body?: string;
     thumbnailLabel?: string;
     authorName?: string;
+    displayOrder?: number;
     isPublished?: boolean;
+    publishedAt?: string | null;
   } | null;
 
   if (!body?.title || !body.summary || !body.body) {
@@ -66,6 +73,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'slug already exists' }, { status: 409 });
   }
 
+  const displayOrder = typeof body.displayOrder === 'number' ? body.displayOrder : 0;
+  const publishedAt = body.publishedAt ? new Date(body.publishedAt) : body.isPublished ? new Date() : null;
+
   const column = await prisma.column.create({
     data: {
       slug,
@@ -74,8 +84,9 @@ export async function POST(request: NextRequest) {
       body: body.body.trim(),
       thumbnailLabel: body.thumbnailLabel?.trim() || null,
       authorName: body.authorName?.trim() || 'Adolib-go 運営',
+      displayOrder,
       isPublished: body.isPublished ?? false,
-      publishedAt: body.isPublished ? new Date() : null,
+      publishedAt,
       createdById: admin!.userId,
     },
   });

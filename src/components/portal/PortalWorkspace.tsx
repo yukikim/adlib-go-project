@@ -202,6 +202,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           members={members}
           selectedManagedMemberId={admin.selectedManagedMemberId}
           selectedManagedMemberDetail={admin.selectedManagedMemberDetail}
+          memberSearchQuery={admin.memberSearchQuery}
           adminMemberRole={admin.adminMemberRole}
           adminMemberStatus={admin.adminMemberStatus}
           announcementTitle={admin.announcementTitle}
@@ -215,6 +216,8 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           columnBody={admin.columnBody}
           columnThumbnailLabel={admin.columnThumbnailLabel}
           columnAuthorName={admin.columnAuthorName}
+          columnDisplayOrder={admin.columnDisplayOrder}
+          columnPublishAt={admin.columnPublishAt}
           columnPublished={admin.columnPublished}
           setSelectedAdminEventId={admin.setSelectedAdminEventId}
           setEventTitle={admin.setEventTitle}
@@ -229,6 +232,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           setEditRound2StartAt={admin.setEditRound2StartAt}
           setEditRound2EndAt={admin.setEditRound2EndAt}
           setSelectedManagedMemberId={admin.setSelectedManagedMemberId}
+          setMemberSearchQuery={admin.setMemberSearchQuery}
           setAdminMemberRole={admin.setAdminMemberRole}
           setAdminMemberStatus={admin.setAdminMemberStatus}
           setAnnouncementTitle={admin.setAnnouncementTitle}
@@ -243,6 +247,8 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           setColumnBody={admin.setColumnBody}
           setColumnThumbnailLabel={admin.setColumnThumbnailLabel}
           setColumnAuthorName={admin.setColumnAuthorName}
+          setColumnDisplayOrder={admin.setColumnDisplayOrder}
+          setColumnPublishAt={admin.setColumnPublishAt}
           setColumnPublished={admin.setColumnPublished}
           onCreateEvent={admin.handleCreateEvent}
           onUpdateEvent={admin.handleUpdateEvent}
@@ -252,6 +258,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           onCreateArchive={admin.handleCreateArchive}
           onDeleteArchive={admin.handleDeleteArchive}
           onUpdateMember={admin.handleUpdateMember}
+          onDeleteMember={admin.handleDeleteMember}
           onCreateAnnouncement={admin.handleCreateAnnouncement}
           onCreateColumn={admin.handleCreateColumn}
           onUpdateColumn={admin.handleUpdateColumn}

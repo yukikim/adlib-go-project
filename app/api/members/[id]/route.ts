@@ -131,3 +131,42 @@ export async function PATCH(request: NextRequest) {
 
   return NextResponse.json({ member: updated });
 }
+
+export async function DELETE(request: NextRequest) {
+  const { admin, response } = await requireAdmin(request);
+  if (response) {
+    return response;
+  }
+
+  const memberId = request.nextUrl.pathname.split('/').pop();
+  if (!memberId) {
+    return NextResponse.json({ error: 'member id is required' }, { status: 400 });
+  }
+
+  const member = await prisma.memberProfile.findUnique({
+    where: { id: memberId },
+    include: {
+      userAccount: {
+        select: {
+          id: true,
+          role: true,
+          email: true,
+        },
+      },
+    },
+  });
+  if (!member) {
+    return NextResponse.json({ error: 'member not found' }, { status: 404 });
+  }
+
+  if (member.userAccount.id === admin?.userId) {
+    return NextResponse.json({ error: '自分自身は削除できません' }, { status: 400 });
+  }
+
+  if (member.userAccount.role === 'admin') {
+    return NextResponse.json({ error: '管理者アカウントは削除できません。role を member に戻してください。' }, { status: 400 });
+  }
+
+  await prisma.userAccount.delete({ where: { id: member.userAccount.id } });
+  return NextResponse.json({ ok: true });
+}

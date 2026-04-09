@@ -156,6 +156,7 @@ export type ColumnView = {
   body: string;
   thumbnailLabel?: string | null;
   authorName: string;
+  displayOrder: number;
   isPublished: boolean;
   publishedAt?: string | null;
 };

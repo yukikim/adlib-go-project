@@ -11,7 +11,16 @@ export async function GET(request: NextRequest) {
   }
 
   const includeDraft = request.nextUrl.searchParams.get('includeDraft') === '1';
-  let where = { slug, isPublished: true } as { slug: string; isPublished?: boolean };
+  const now = new Date();
+  let where = {
+    slug,
+    isPublished: true,
+    OR: [{ publishedAt: null }, { publishedAt: { lte: now } }],
+  } as {
+    slug: string;
+    isPublished?: boolean;
+    OR?: Array<{ publishedAt: null } | { publishedAt: { lte: Date } }>;
+  };
   if (includeDraft) {
     const user = await getAuthenticatedUser(request);
     if (user?.role === 'admin' && user.status === 'active') {
@@ -29,6 +38,7 @@ export async function GET(request: NextRequest) {
       body: true,
       thumbnailLabel: true,
       authorName: true,
+      displayOrder: true,
       isPublished: true,
       publishedAt: true,
       createdAt: true,
@@ -61,7 +71,9 @@ export async function PATCH(request: NextRequest) {
     body?: string;
     thumbnailLabel?: string;
     authorName?: string;
+    displayOrder?: number;
     isPublished?: boolean;
+    publishedAt?: string | null;
   } | null;
 
   if (!body?.title || !body.summary || !body.body) {
@@ -86,6 +98,12 @@ export async function PATCH(request: NextRequest) {
   }
 
   const isPublished = body.isPublished ?? current.isPublished;
+  const displayOrder = typeof body.displayOrder === 'number' ? body.displayOrder : current.displayOrder;
+  const publishedAt = isPublished
+    ? body.publishedAt
+      ? new Date(body.publishedAt)
+      : current.publishedAt ?? new Date()
+    : null;
   const column = await prisma.column.update({
     where: { slug },
     data: {
@@ -95,8 +113,9 @@ export async function PATCH(request: NextRequest) {
       body: body.body.trim(),
       thumbnailLabel: body.thumbnailLabel?.trim() || null,
       authorName: body.authorName?.trim() || 'Adolib-go 運営',
+      displayOrder,
       isPublished,
-      publishedAt: isPublished ? current.publishedAt ?? new Date() : null,
+      publishedAt,
     },
   });
 

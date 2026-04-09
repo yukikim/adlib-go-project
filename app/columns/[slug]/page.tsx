@@ -4,8 +4,13 @@ import { splitColumnBody } from '@/lib/columns';
 
 export default async function ColumnDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const now = new Date();
   const column = await prisma.column.findFirst({
-    where: { slug, isPublished: true },
+    where: {
+      slug,
+      isPublished: true,
+      OR: [{ publishedAt: null }, { publishedAt: { lte: now } }],
+    },
     select: {
       title: true,
       body: true,

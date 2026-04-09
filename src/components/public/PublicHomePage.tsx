@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma';
 
 export async function PublicHomePage() {
+  const now = new Date();
   const upcomingEvent = await prisma.sessionEvent.findFirst({
     where: {
       eventDate: {
@@ -10,14 +11,18 @@ export async function PublicHomePage() {
     orderBy: [{ eventDate: 'asc' }],
   });
   const columns = await prisma.column.findMany({
-    where: { isPublished: true },
-    orderBy: [{ publishedAt: 'desc' }, { createdAt: 'desc' }],
+    where: {
+      isPublished: true,
+      OR: [{ publishedAt: null }, { publishedAt: { lte: now } }],
+    },
+    orderBy: [{ displayOrder: 'asc' }, { publishedAt: 'desc' }, { createdAt: 'desc' }],
     take: 3,
     select: {
       slug: true,
       title: true,
       summary: true,
       thumbnailLabel: true,
+      displayOrder: true,
       publishedAt: true,
     },
   });
@@ -31,8 +36,9 @@ export async function PublicHomePage() {
           セッション告知、参加登録、sessionSet 公開、レイティング、アーカイブ管理までを一貫して扱うためのポータルです。
         </p>
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginTop: '1rem' }}>
-          <a href="/signin">サインイン</a>
-          <a href="/signup">サインアップ</a>
+          <a href="/signin">メンバーサインイン</a>
+          <a href="/signup">メンバーサインアップ</a>
+          <a href="/admin/signin">管理者サインイン</a>
           <a href="/columns">コラム一覧</a>
           <a href="/about">adolib-go について</a>
         </div>
