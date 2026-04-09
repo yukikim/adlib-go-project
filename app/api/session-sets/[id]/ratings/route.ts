@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireMemberUser } from '@/lib/auth';
+import { getZodErrorMessage } from '@/lib/authSchemas';
+import { sessionSetRatingRequestSchema } from '@/lib/apiSchemas';
 
 export async function POST(request: NextRequest) {
   const auth = await requireMemberUser(request);
@@ -13,14 +15,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'session set id is required' }, { status: 400 });
   }
 
-  const body = (await request.json().catch(() => null)) as { rating?: number; comment?: string | null } | null;
-  const rating = body?.rating;
-
-  if (!Number.isInteger(rating) || rating! < 1 || rating! > 5) {
-    return NextResponse.json({ error: 'rating must be an integer between 1 and 5' }, { status: 400 });
+  const parsed = sessionSetRatingRequestSchema.safeParse(await request.json().catch(() => null));
+  if (!parsed.success) {
+    return NextResponse.json({ error: getZodErrorMessage(parsed.error) || 'rating must be an integer between 1 and 5' }, { status: 400 });
   }
+  const body = parsed.data;
 
-  const normalizedRating = rating as number;
+  const normalizedRating = body.rating;
 
   const sessionSet = await prisma.sessionSet.findUnique({
     where: { id: sessionSetId },
@@ -44,7 +45,7 @@ export async function POST(request: NextRequest) {
     },
     update: {
       rating: normalizedRating,
-      comment: body?.comment?.trim() || null,
+      comment: body.comment ?? null,
       sessionEventId: sessionSet.sessionEventId,
     },
     create: {
@@ -52,7 +53,7 @@ export async function POST(request: NextRequest) {
       sessionSetId,
       userAccountId: auth.user.id,
       rating: normalizedRating,
-      comment: body?.comment?.trim() || null,
+      comment: body.comment ?? null,
     },
   });
 

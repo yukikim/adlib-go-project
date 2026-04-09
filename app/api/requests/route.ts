@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/adminApi';
+import { getZodErrorMessage } from '@/lib/authSchemas';
+import { participantRequestCreateSchema } from '@/lib/apiSchemas';
 
 // POST /api/requests
 // body: { participantId: string; songTitle: string; keyName?: string; round: 1 | 2 }
@@ -10,13 +12,11 @@ export async function POST(req: NextRequest) {
     return response;
   }
 
-  const body = await req.json().catch(() => null) as
-    | { participantId?: string; songTitle?: string; keyName?: string; round?: number }
-    | null;
-
-  if (!body || !body.participantId || !body.songTitle || (body.round !== 1 && body.round !== 2)) {
-    return NextResponse.json({ error: 'Invalid body' }, { status: 400 });
+  const parsed = participantRequestCreateSchema.safeParse(await req.json().catch(() => null));
+  if (!parsed.success) {
+    return NextResponse.json({ error: getZodErrorMessage(parsed.error) }, { status: 400 });
   }
+  const body = parsed.data;
 
   const participant = await prisma.participant.findUnique({
     where: { id: body.participantId },
@@ -31,8 +31,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Participant not found' }, { status: 404 });
   }
 
-  const round = body.round as 1 | 2;
-  const songTitle = body.songTitle.trim();
+  const round = body.round;
+  const songTitle = body.songTitle;
 
   // 既存リクエストの集計
   const totalRequests = participant.requestedSongs.length;
@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
 
   // instrument ごとのルールチェック
   if (participant.instrument === 'vocal') {
-    if (!body.keyName || !body.keyName.trim()) {
+    if (!body.keyName) {
       return NextResponse.json({ error: 'keyName is required for vocal' }, { status: 400 });
     }
     if (totalRequests >= 3) {
@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
     data: {
       participantId: participant.id,
       songId: song.id,
-      keyName: body.keyName?.trim() || null,
+      keyName: body.keyName ?? null,
       round,
     },
   });

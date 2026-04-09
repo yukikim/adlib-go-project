@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/adminApi';
+import { getZodErrorMessage } from '@/lib/authSchemas';
+import { sessionEventUpdateRequestSchema } from '@/lib/apiSchemas';
 
 export async function PATCH(request: NextRequest) {
   const { response } = await requireAdmin(request);
@@ -13,15 +15,16 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: 'event id is required' }, { status: 400 });
   }
 
-  const body = (await request.json().catch(() => null)) as Record<string, string | null> | null;
-  if (!body) {
-    return NextResponse.json({ error: 'Invalid body' }, { status: 400 });
+  const parsed = sessionEventUpdateRequestSchema.safeParse(await request.json().catch(() => null));
+  if (!parsed.success) {
+    return NextResponse.json({ error: getZodErrorMessage(parsed.error) }, { status: 400 });
   }
+  const body = parsed.data;
 
   const data: Record<string, string | Date | null> = {};
-  if (typeof body.title === 'string') data.title = body.title.trim();
-  if (typeof body.description === 'string' || body.description === null) data.description = body.description?.trim() || null;
-  if (typeof body.venue === 'string') data.venue = body.venue.trim();
+  if (typeof body.title === 'string') data.title = body.title;
+  if (typeof body.description === 'string' || body.description === null) data.description = body.description ?? null;
+  if (typeof body.venue === 'string') data.venue = body.venue;
   if (typeof body.eventDate === 'string') data.eventDate = new Date(body.eventDate);
   if (typeof body.startTime === 'string' || body.startTime === null) data.startTime = body.startTime ? new Date(body.startTime) : null;
   if (typeof body.endTime === 'string' || body.endTime === null) data.endTime = body.endTime ? new Date(body.endTime) : null;

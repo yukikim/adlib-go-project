@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAuthenticatedUser } from '@/lib/auth';
 import { requireAdmin } from '@/lib/adminApi';
+import { getZodErrorMessage } from '@/lib/authSchemas';
+import { announcementCreateRequestSchema } from '@/lib/apiSchemas';
 
 export async function GET(request: NextRequest) {
   const auth = await requireAuthenticatedUser(request);
@@ -32,20 +34,16 @@ export async function POST(request: NextRequest) {
     return response;
   }
 
-  const body = (await request.json().catch(() => null)) as {
-    title?: string;
-    body?: string;
-    isPublished?: boolean;
-  } | null;
-
-  if (!body?.title || !body.body) {
-    return NextResponse.json({ error: 'Invalid body' }, { status: 400 });
+  const parsed = announcementCreateRequestSchema.safeParse(await request.json().catch(() => null));
+  if (!parsed.success) {
+    return NextResponse.json({ error: getZodErrorMessage(parsed.error) }, { status: 400 });
   }
+  const body = parsed.data;
 
   const announcement = await prisma.announcement.create({
     data: {
-      title: body.title.trim(),
-      body: body.body.trim(),
+      title: body.title,
+      body: body.body,
       isPublished: body.isPublished ?? false,
       publishedAt: body.isPublished ? new Date() : null,
       createdById: admin!.userId,

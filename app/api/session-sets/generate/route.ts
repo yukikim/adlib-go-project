@@ -4,6 +4,8 @@ import { generateSessionSets } from '@/session-planner/generateSessionSets';
 import type { Participant as DomainParticipant } from '@/session-planner/domain';
 import { requireAdmin } from '@/lib/adminApi';
 import { getSessionEventEntryState } from '@/lib/sessionEventWindow';
+import { getZodErrorMessage } from '@/lib/authSchemas';
+import { sessionSetGenerateRequestSchema } from '@/lib/apiSchemas';
 
 export async function POST(req: NextRequest) {
   const { response } = await requireAdmin(req);
@@ -11,10 +13,11 @@ export async function POST(req: NextRequest) {
     return response;
   }
 
-  const body = (await req.json().catch(() => null)) as { sessionEventId?: string } | null;
-  if (!body?.sessionEventId) {
-    return NextResponse.json({ error: 'sessionEventId is required' }, { status: 400 });
+  const parsed = sessionSetGenerateRequestSchema.safeParse(await req.json().catch(() => null));
+  if (!parsed.success) {
+    return NextResponse.json({ error: getZodErrorMessage(parsed.error) }, { status: 400 });
   }
+  const body = parsed.data;
 
   const sessionEvent = await prisma.sessionEvent.findUnique({
     where: { id: body.sessionEventId },

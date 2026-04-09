@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export const MAIN_INSTRUMENT_OPTIONS = ['drum', 'bass', 'piano', 'front', 'vocal'] as const;
 
 export const GENDER_OPTIONS = ['男性', '女性', 'その他', '回答しない'] as const;
@@ -76,6 +78,62 @@ type ValidateMemberProfileOptions = {
   currentMainInstrument?: string | null;
 };
 
+const trimmedOptionalString = z.preprocess((value) => {
+  if (typeof value !== 'string') {
+    return value;
+  }
+  const trimmed = value.trim();
+  return trimmed === '' ? null : trimmed;
+}, z.union([z.string(), z.null()]).optional());
+
+const optionalEnumValue = <T extends readonly [string, ...string[]]>(values: T) =>
+  z.preprocess((value) => {
+    if (typeof value !== 'string') {
+      return value;
+    }
+    const trimmed = value.trim();
+    return trimmed === '' ? undefined : trimmed;
+  }, z.enum(values).optional());
+
+export const memberProfileInputSchema = z.object({
+  displayName: z.string().trim().min(1, 'displayName is required').optional(),
+  nickname: trimmedOptionalString,
+  mainInstrument: optionalEnumValue(MAIN_INSTRUMENT_OPTIONS),
+  subInstrument: trimmedOptionalString,
+  gender: optionalEnumValue(GENDER_OPTIONS),
+  ageRange: optionalEnumValue(AGE_RANGE_OPTIONS),
+  area: optionalEnumValue(PREFECTURE_OPTIONS),
+  bio: trimmedOptionalString,
+}).strict();
+
+export const memberSelfUpdateRequestSchema = memberProfileInputSchema.extend({
+  currentPassword: z.preprocess((value) => {
+    if (typeof value !== 'string') {
+      return value;
+    }
+    const trimmed = value.trim();
+    return trimmed === '' ? undefined : trimmed;
+  }, z.string().optional()),
+  newPassword: z.preprocess((value) => {
+    if (typeof value !== 'string') {
+      return value;
+    }
+    const trimmed = value.trim();
+    return trimmed === '' ? undefined : trimmed;
+  }, z.string().min(8, 'Password must be at least 8 characters').optional()),
+}).strict().superRefine((value, ctx) => {
+  const hasCurrentPassword = Boolean(value.currentPassword);
+  const hasNewPassword = Boolean(value.newPassword);
+  if (hasCurrentPassword !== hasNewPassword) {
+    ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'currentPassword and newPassword are required' });
+  }
+});
+
+export const adminMemberUpdateRequestSchema = memberProfileInputSchema.extend({
+  role: z.enum(['member', 'admin']).optional(),
+  status: z.enum(['active', 'suspended', 'invited']).optional(),
+}).strict();
+
 export function isValidMainInstrument(value: string): value is MainInstrumentOption {
   return MAIN_INSTRUMENT_OPTIONS.includes(value as MainInstrumentOption);
 }
@@ -101,69 +159,40 @@ export function normalizeOptionalText(value: string | null | undefined) {
 }
 
 export function validateMemberProfileInput(input: MemberProfileInput, options: ValidateMemberProfileOptions = {}) {
-  const data: {
-    displayName?: string;
-    nickname?: string | null;
-    mainInstrument?: MainInstrumentOption;
-    subInstrument?: string | null;
-    gender?: GenderOption;
-    ageRange?: AgeRangeOption;
-    area?: PrefectureOption;
-    bio?: string | null;
-  } = {};
-
-  if (options.requireDisplayName || typeof input.displayName === 'string') {
-    const displayName = input.displayName?.trim() ?? '';
-    if (!displayName) {
-      return { error: 'displayName is required' as const };
-    }
-    data.displayName = displayName;
+  const parsed = memberProfileInputSchema.safeParse(input);
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? 'Invalid body' as const };
   }
 
-  const effectiveInstrument = input.mainInstrument ?? options.currentMainInstrument ?? null;
-  if (options.requireRequiredSelections || typeof input.mainInstrument === 'string') {
-    if (!effectiveInstrument || !isValidMainInstrument(effectiveInstrument)) {
-      return { error: 'Invalid mainInstrument' as const };
-    }
-    data.mainInstrument = effectiveInstrument;
+  const data = { ...parsed.data };
+
+  if (options.requireDisplayName && !data.displayName) {
+    return { error: 'displayName is required' as const };
   }
 
-  if (options.requireRequiredSelections || input.gender !== undefined) {
-    if (!input.gender || !isValidGender(input.gender)) {
-      return { error: 'Invalid gender' as const };
-    }
-    data.gender = input.gender;
+  const effectiveInstrument = data.mainInstrument ?? options.currentMainInstrument ?? null;
+  if ((options.requireRequiredSelections || data.mainInstrument !== undefined) && !effectiveInstrument) {
+    return { error: 'Invalid mainInstrument' as const };
   }
 
-  if (options.requireRequiredSelections || input.ageRange !== undefined) {
-    if (!input.ageRange || !isValidAgeRange(input.ageRange)) {
-      return { error: 'Invalid ageRange' as const };
-    }
-    data.ageRange = input.ageRange;
+  if (options.requireRequiredSelections && !data.gender) {
+    return { error: 'Invalid gender' as const };
   }
 
-  if (options.requireRequiredSelections || input.area !== undefined) {
-    if (!input.area || !isValidPrefecture(input.area)) {
-      return { error: 'Invalid area' as const };
-    }
-    data.area = input.area;
+  if (options.requireRequiredSelections && !data.ageRange) {
+    return { error: 'Invalid ageRange' as const };
   }
 
-  if (input.nickname !== undefined) {
-    data.nickname = normalizeOptionalText(input.nickname);
+  if (options.requireRequiredSelections && !data.area) {
+    return { error: 'Invalid area' as const };
   }
 
-  if (input.bio !== undefined) {
-    data.bio = normalizeOptionalText(input.bio);
-  }
-
-  if (input.subInstrument !== undefined || options.requireRequiredSelections) {
+  if (data.subInstrument !== undefined || options.requireRequiredSelections) {
     if (effectiveInstrument === 'front') {
-      const subInstrument = normalizeOptionalText(input.subInstrument);
-      if (!subInstrument) {
+      if (!data.subInstrument) {
         return { error: 'playingInstrument is required for front' as const };
       }
-      data.subInstrument = subInstrument;
+      data.subInstrument = data.subInstrument;
     } else {
       data.subInstrument = null;
     }

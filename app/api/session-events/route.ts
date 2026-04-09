@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/adminApi';
+import { getZodErrorMessage } from '@/lib/authSchemas';
+import { sessionEventCreateRequestSchema } from '@/lib/apiSchemas';
 
 export async function GET() {
   const sessionEvents = await prisma.sessionEvent.findMany({
@@ -24,31 +26,17 @@ export async function POST(request: NextRequest) {
     return response;
   }
 
-  const body = (await request.json().catch(() => null)) as
-    | {
-        title?: string;
-        description?: string;
-        venue?: string;
-        eventDate?: string;
-        startTime?: string;
-        endTime?: string;
-        round1StartAt?: string;
-        round1EndAt?: string;
-        round2StartAt?: string;
-        round2EndAt?: string;
-        status?: string;
-      }
-    | null;
-
-  if (!body?.title || !body.venue || !body.eventDate) {
-    return NextResponse.json({ error: 'Invalid body' }, { status: 400 });
+  const parsed = sessionEventCreateRequestSchema.safeParse(await request.json().catch(() => null));
+  if (!parsed.success) {
+    return NextResponse.json({ error: getZodErrorMessage(parsed.error) }, { status: 400 });
   }
+  const body = parsed.data;
 
   const sessionEvent = await prisma.sessionEvent.create({
     data: {
-      title: body.title.trim(),
-      description: body.description?.trim() || null,
-      venue: body.venue.trim(),
+      title: body.title,
+      description: body.description ?? null,
+      venue: body.venue,
       eventDate: new Date(body.eventDate),
       startTime: body.startTime ? new Date(body.startTime) : null,
       endTime: body.endTime ? new Date(body.endTime) : null,

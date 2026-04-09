@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/adminApi';
+import { announcementUpdateRequestSchema } from '@/lib/apiSchemas';
+import { getZodErrorMessage } from '@/lib/authSchemas';
 
 export async function PATCH(request: NextRequest) {
   const { response } = await requireAdmin(request);
@@ -13,21 +15,17 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: 'announcement id is required' }, { status: 400 });
   }
 
-  const body = (await request.json().catch(() => null)) as {
-    title?: string;
-    body?: string;
-    isPublished?: boolean;
-  } | null;
-
-  if (!body) {
-    return NextResponse.json({ error: 'Invalid body' }, { status: 400 });
+  const parsed = announcementUpdateRequestSchema.safeParse(await request.json().catch(() => null));
+  if (!parsed.success) {
+    return NextResponse.json({ error: getZodErrorMessage(parsed.error) }, { status: 400 });
   }
+  const body = parsed.data;
 
   const announcement = await prisma.announcement.update({
     where: { id: announcementId },
     data: {
-      title: body.title === undefined ? undefined : body.title.trim(),
-      body: body.body === undefined ? undefined : body.body.trim(),
+      title: body.title,
+      body: body.body,
       isPublished: body.isPublished,
       publishedAt: body.isPublished === undefined ? undefined : body.isPublished ? new Date() : null,
     },

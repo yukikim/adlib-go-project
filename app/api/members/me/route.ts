@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { applySessionCookie, createSession, getAuthenticatedUser, revokeAllSessionsForUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { hashPassword, verifyPassword } from '@/lib/password';
-import { validateMemberProfileInput } from '@/lib/memberProfile';
+import { getZodErrorMessage } from '@/lib/authSchemas';
+import { memberSelfUpdateRequestSchema, validateMemberProfileInput } from '@/lib/memberProfile';
 
 export async function GET(request: NextRequest) {
   const user = await getAuthenticatedUser(request);
@@ -19,24 +20,11 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: 'member profile not found' }, { status: 404 });
   }
 
-  const body = (await request.json().catch(() => null)) as
-    | {
-        displayName?: string;
-        nickname?: string | null;
-        mainInstrument?: string;
-        subInstrument?: string | null;
-        gender?: string | null;
-        ageRange?: string | null;
-        area?: string | null;
-        bio?: string | null;
-        currentPassword?: string;
-        newPassword?: string;
-      }
-    | null;
-
-  if (!body) {
-    return NextResponse.json({ error: 'Invalid body' }, { status: 400 });
+  const parsed = memberSelfUpdateRequestSchema.safeParse(await request.json().catch(() => null));
+  if (!parsed.success) {
+    return NextResponse.json({ error: getZodErrorMessage(parsed.error) }, { status: 400 });
   }
+  const body = parsed.data;
 
   const profileValidation = validateMemberProfileInput(body, {
     requireDisplayName: true,
@@ -50,13 +38,9 @@ export async function PATCH(request: NextRequest) {
 
   const shouldChangePassword = body.currentPassword || body.newPassword;
   if (shouldChangePassword) {
-    if (!body.currentPassword || !body.newPassword) {
-      return NextResponse.json({ error: 'currentPassword and newPassword are required' }, { status: 400 });
-    }
-    if (body.newPassword.trim().length < 8) {
-      return NextResponse.json({ error: 'Password must be at least 8 characters' }, { status: 400 });
-    }
-    const validCurrentPassword = await verifyPassword(body.currentPassword, user.passwordHash);
+    const currentPassword = body.currentPassword!;
+    const newPassword = body.newPassword!;
+    const validCurrentPassword = await verifyPassword(currentPassword, user.passwordHash);
     if (!validCurrentPassword) {
       return NextResponse.json({ error: 'currentPassword is incorrect' }, { status: 400 });
     }
@@ -71,7 +55,7 @@ export async function PATCH(request: NextRequest) {
     if (shouldChangePassword && body.newPassword) {
       await tx.userAccount.update({
         where: { id: user.id },
-        data: { passwordHash: await hashPassword(body.newPassword.trim()) },
+        data: { passwordHash: await hashPassword(body.newPassword) },
       });
     }
 

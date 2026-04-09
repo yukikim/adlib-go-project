@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/adminApi';
+import { getZodErrorMessage } from '@/lib/authSchemas';
+import { participantCreateRequestSchema } from '@/lib/apiSchemas';
 
 // GET /api/participants
 export async function GET() {
@@ -24,16 +26,11 @@ export async function POST(req: NextRequest) {
     return response;
   }
 
-  const body = await req.json().catch(() => null);
-
-  if (!body || typeof body.name !== 'string' || typeof body.instrument !== 'string') {
-    return NextResponse.json({ error: 'Invalid body' }, { status: 400 });
+  const parsed = participantCreateRequestSchema.safeParse(await req.json().catch(() => null));
+  if (!parsed.success) {
+    return NextResponse.json({ error: getZodErrorMessage(parsed.error) }, { status: 400 });
   }
-
-  const allowed = ['drum', 'bass', 'piano', 'front', 'vocal'];
-  if (!allowed.includes(body.instrument)) {
-    return NextResponse.json({ error: 'Invalid instrument' }, { status: 400 });
-  }
+  const body = parsed.data;
 
   const participant = await prisma.participant.create({
     data: {

@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/adminApi';
 import { createSessionArchive } from '@/lib/sessionArchive';
+import { getZodErrorMessage } from '@/lib/authSchemas';
+import { sessionArchiveCreateRequestSchema } from '@/lib/apiSchemas';
 
 // GET /api/session-archives?includeDeleted=true
 export async function GET(request: NextRequest) {
@@ -73,21 +75,17 @@ export async function POST(request: NextRequest) {
     return response;
   }
 
-  const body = (await request.json().catch(() => null)) as {
-    sessionEventId?: string;
-    title?: string;
-    note?: string | null;
-  } | null;
-
-  if (!body?.sessionEventId) {
-    return NextResponse.json({ error: 'sessionEventId is required' }, { status: 400 });
+  const parsed = sessionArchiveCreateRequestSchema.safeParse(await request.json().catch(() => null));
+  if (!parsed.success) {
+    return NextResponse.json({ error: getZodErrorMessage(parsed.error) }, { status: 400 });
   }
+  const body = parsed.data;
 
   try {
     const archive = await createSessionArchive({
       sessionEventId: body.sessionEventId,
-      title: body.title,
-      note: body.note,
+      title: body.title ?? undefined,
+      note: body.note ?? undefined,
       createdById: admin!.userId,
     });
 

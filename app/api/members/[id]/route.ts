@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAuthenticatedUser } from '@/lib/auth';
 import { requireAdmin } from '@/lib/adminApi';
-import { validateMemberProfileInput } from '@/lib/memberProfile';
+import { getZodErrorMessage } from '@/lib/authSchemas';
+import { adminMemberUpdateRequestSchema, validateMemberProfileInput } from '@/lib/memberProfile';
 
 export async function GET(request: NextRequest) {
   const auth = await requireAuthenticatedUser(request);
@@ -78,22 +79,11 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: 'member id is required' }, { status: 400 });
   }
 
-  const body = (await request.json().catch(() => null)) as {
-    displayName?: string;
-    role?: 'member' | 'admin';
-    status?: 'active' | 'suspended' | 'invited';
-    nickname?: string | null;
-    mainInstrument?: string;
-    subInstrument?: string | null;
-    gender?: string | null;
-    ageRange?: string | null;
-    area?: string | null;
-    bio?: string | null;
-  } | null;
-
-  if (!body) {
-    return NextResponse.json({ error: 'Invalid body' }, { status: 400 });
+  const parsed = adminMemberUpdateRequestSchema.safeParse(await request.json().catch(() => null));
+  if (!parsed.success) {
+    return NextResponse.json({ error: getZodErrorMessage(parsed.error) }, { status: 400 });
   }
+  const body = parsed.data;
 
   const member = await prisma.memberProfile.findUnique({ where: { id: memberId } });
   if (!member) {

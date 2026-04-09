@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/adminApi';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { slugifyColumnTitle } from '@/lib/columns';
+import { columnMutationRequestSchema } from '@/lib/apiSchemas';
+import { getZodErrorMessage } from '@/lib/authSchemas';
 
 export async function GET(request: NextRequest) {
   const slug = request.nextUrl.pathname.split('/').pop();
@@ -64,28 +66,18 @@ export async function PATCH(request: NextRequest) {
     return response;
   }
 
-  const body = (await request.json().catch(() => null)) as {
-    title?: string;
-    slug?: string;
-    summary?: string;
-    body?: string;
-    thumbnailLabel?: string;
-    authorName?: string;
-    displayOrder?: number;
-    isPublished?: boolean;
-    publishedAt?: string | null;
-  } | null;
-
-  if (!body?.title || !body.summary || !body.body) {
-    return NextResponse.json({ error: 'Invalid body' }, { status: 400 });
+  const parsed = columnMutationRequestSchema.safeParse(await request.json().catch(() => null));
+  if (!parsed.success) {
+    return NextResponse.json({ error: getZodErrorMessage(parsed.error) }, { status: 400 });
   }
+  const body = parsed.data;
 
   const current = await prisma.column.findUnique({ where: { slug } });
   if (!current) {
     return NextResponse.json({ error: 'column not found' }, { status: 404 });
   }
 
-  const nextSlug = (body.slug?.trim() || slugifyColumnTitle(body.title)).slice(0, 80);
+  const nextSlug = (body.slug || slugifyColumnTitle(body.title)).slice(0, 80);
   if (!nextSlug) {
     return NextResponse.json({ error: 'slug is required' }, { status: 400 });
   }
@@ -108,11 +100,11 @@ export async function PATCH(request: NextRequest) {
     where: { slug },
     data: {
       slug: nextSlug,
-      title: body.title.trim(),
-      summary: body.summary.trim(),
-      body: body.body.trim(),
-      thumbnailLabel: body.thumbnailLabel?.trim() || null,
-      authorName: body.authorName?.trim() || 'Adolib-go 運営',
+      title: body.title,
+      summary: body.summary,
+      body: body.body,
+      thumbnailLabel: body.thumbnailLabel ?? null,
+      authorName: body.authorName || 'Adolib-go 運営',
       displayOrder,
       isPublished,
       publishedAt,

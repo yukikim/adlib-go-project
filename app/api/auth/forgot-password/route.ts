@@ -2,15 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { createPasswordResetToken } from '@/lib/auth';
 import { sendMail } from '@/lib/mailer';
+import { forgotPasswordRequestSchema, getZodErrorMessage } from '@/lib/authSchemas';
 
 export async function POST(request: NextRequest) {
-  const body = (await request.json().catch(() => null)) as { email?: string } | null;
-  if (!body?.email) {
-    return NextResponse.json({ error: 'Invalid body' }, { status: 400 });
+  const parsed = forgotPasswordRequestSchema.safeParse(await request.json().catch(() => null));
+  if (!parsed.success) {
+    return NextResponse.json({ error: getZodErrorMessage(parsed.error) }, { status: 400 });
   }
 
-  const email = body.email.trim().toLowerCase();
-  const user = await prisma.userAccount.findUnique({ where: { email } });
+  const user = await prisma.userAccount.findUnique({ where: { email: parsed.data.email } });
 
   if (!user || user.status !== 'active') {
     return NextResponse.json({ ok: true, message: 'If the email exists, a reset token was issued.' });

@@ -2,20 +2,18 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { applySessionCookie, createSession } from '@/lib/auth';
 import { verifyPassword } from '@/lib/password';
+import { getZodErrorMessage, signInRequestSchema } from '@/lib/authSchemas';
 
 export async function POST(request: NextRequest) {
-  const body = (await request.json().catch(() => null)) as
-    | { email?: string; password?: string; roleTarget?: 'member' | 'admin' }
-    | null;
-
-  if (!body?.email || !body.password) {
-    return NextResponse.json({ error: 'Invalid body' }, { status: 400 });
+  const parsed = signInRequestSchema.safeParse(await request.json().catch(() => null));
+  if (!parsed.success) {
+    return NextResponse.json({ error: getZodErrorMessage(parsed.error) }, { status: 400 });
   }
 
-  const email = body.email.trim().toLowerCase();
+  const body = parsed.data;
   const roleTarget = body.roleTarget === 'admin' ? 'admin' : 'member';
   const user = await prisma.userAccount.findUnique({
-    where: { email },
+    where: { email: body.email },
     include: { memberProfile: true },
   });
 
