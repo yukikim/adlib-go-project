@@ -1,5 +1,7 @@
-import { PortalWorkspace } from '../page';
+import PortalWorkspace from '@/components/portal/PortalWorkspace';
+import { requirePageUser } from '@/lib/pageAuth';
 
-export default function MemberPage() {
+export default async function MemberPage() {
+  await requirePageUser('member');
   return <PortalWorkspace view="member" />;
 }

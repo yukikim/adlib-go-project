@@ -102,3 +102,48 @@ export const announcements = [
     isPublished: true,
   },
 ];
+
+export const columnSeedEntries = [
+  {
+    slug: 'kickoff-guide',
+    title: 'KICK-OFF セッションの歩き方',
+    summary: '初参加メンバー向けに、当日までの流れと準備物を整理しました。',
+    authorName: 'Adolib-go 運営',
+    thumbnailLabel: 'Guide',
+    isPublished: true,
+    publishedAt: '2026-04-09T00:00:00.000Z',
+    body: [
+      'Adolib-go KICK-OFF では、Round 1 と Round 2 のエントリーを通じて sessionSet を編成します。まずは募集期間中に参加可否と希望曲を登録してください。',
+      'vocal パートは key 指定が重要です。エントリー時に必ず入力してください。front 楽器は vocal 参加時に人数制限があるため、公開された sessionSet を確認しながら当日の準備を進めます。',
+      '当日は譜面、必要機材、連絡可能な端末を持参し、公開済み sessionSet に対して演奏後のレイティングも入力してください。',
+    ],
+  },
+  {
+    slug: 'session-request-tips',
+    title: '希望曲登録のコツ',
+    summary: 'sessionSet に採用されやすい登録の考え方を運営視点でまとめています。',
+    authorName: 'Adolib-go 運営',
+    thumbnailLabel: 'Tips',
+    isPublished: true,
+    publishedAt: '2026-04-08T00:00:00.000Z',
+    body: [
+      'Round 1 では、drum、bass、piano の希望者が揃いやすい曲を選ぶと生成対象になりやすくなります。',
+      '既に人気が集中している曲でも、key や編成の相性が良ければ採用される可能性があります。vocal の場合は key 指定を忘れないでください。',
+      '未生成曲の理由は管理画面で可視化されているため、次回以降は不足しやすいパートを意識して選曲すると全体の成立率が上がります。',
+    ],
+  },
+  {
+    slug: 'rating-and-archive',
+    title: 'レイティングとアーカイブの見方',
+    summary: '演奏後のレイティング入力と、アーカイブ保存の目的を説明します。',
+    authorName: 'Adolib-go 運営',
+    thumbnailLabel: 'Archive',
+    isPublished: true,
+    publishedAt: '2026-04-07T00:00:00.000Z',
+    body: [
+      '公開済み sessionSet はメンバーが星 1 から 5 で評価できます。コメントも残せるため、次回編成の参考情報として活用されます。',
+      '管理者は集計結果を確認し、任意のタイミングでアーカイブを作成します。アーカイブにはセット情報とレイティング集計が保存されます。',
+      'アーカイブは削除可能ですが、運営上重要なスナップショットとして扱う前提です。削除時は監査ログとの整合に注意してください。',
+    ],
+  },
+];

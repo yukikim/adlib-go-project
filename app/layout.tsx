@@ -13,6 +13,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <header style={{ borderBottom: '1px solid #e5e5e5', background: '#fafafa' }}>
           <div style={{ maxWidth: 1000, margin: '0 auto', padding: '1rem 2rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
             <a href="/">トップ</a>
+            <a href="/columns">コラム</a>
             <a href="/signin">サインイン</a>
             <a href="/signup">サインアップ</a>
             <a href="/member">メンバー</a>

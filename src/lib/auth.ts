@@ -65,14 +65,7 @@ export async function invalidateSessionByToken(token: string | undefined) {
   });
 }
 
-export async function revokeAllSessionsForUser(userAccountId: string) {
-  await prisma.authSession.deleteMany({
-    where: { userAccountId },
-  });
-}
-
-export async function getAuthenticatedUser(request: NextRequest) {
-  const token = request.cookies.get(SESSION_COOKIE_NAME)?.value;
+export async function getAuthenticatedUserByToken(token: string | undefined) {
   if (!token) {
     return null;
   }
@@ -102,6 +95,17 @@ export async function getAuthenticatedUser(request: NextRequest) {
   });
 
   return session.userAccount;
+}
+
+export async function revokeAllSessionsForUser(userAccountId: string) {
+  await prisma.authSession.deleteMany({
+    where: { userAccountId },
+  });
+}
+
+export async function getAuthenticatedUser(request: NextRequest) {
+  const token = request.cookies.get(SESSION_COOKIE_NAME)?.value;
+  return getAuthenticatedUserByToken(token);
 }
 
 export async function requireAuthenticatedUser(request: NextRequest) {
