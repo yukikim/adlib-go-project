@@ -3,7 +3,6 @@ import { prisma } from '@/lib/prisma';
 import { applySessionCookie, createSession } from '@/lib/auth';
 import { verifyPassword } from '@/lib/password';
 import { getZodErrorMessage, signInRequestSchema } from '@/lib/authSchemas';
-import { sendEmailVerificationMail } from '@/lib/emailVerification';
 
 export async function POST(request: NextRequest) {
   const parsed = signInRequestSchema.safeParse(await request.json().catch(() => null));
@@ -25,11 +24,6 @@ export async function POST(request: NextRequest) {
   const valid = await verifyPassword(body.password, user.passwordHash);
   if (!valid) {
     return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 });
-  }
-
-  if (!user.emailVerifiedAt) {
-    await sendEmailVerificationMail(user.id, user.email);
-    return NextResponse.json({ error: 'メールアドレス認証が完了していません。確認メールを再送しました。リンクを開いてください。' }, { status: 403 });
   }
 
   if (roleTarget === 'member' && user.role !== 'member') {
