@@ -6,6 +6,7 @@ Adolib-go KICK-OFF 向けの public site、member site、admin site をまとめ
 
 - 公開トップ、コラム一覧、コラム詳細、about ページ
 - メンバー用サインアップ / サインイン、管理者用サインイン、パスワード再設定 API
+- メンバーサインアップ時の確認メール送信とメールアドレス認証
 - メンバーサインアップ時の楽器、居住地域、性別、年代登録
 - メンバーページでのプロフィール編集、パスワード変更、SessionEntry、レイティング
 - 管理ダッシュボードでの SessionEvent、sessionSet、アーカイブ、お知らせ、コラム管理
@@ -108,9 +109,23 @@ Adolib-go KICK-OFF 向けの public site、member site、admin site をまとめ
 - 管理者サインインは `/admin/signin`
 - `/member` は member のみ、`/admin` は admin のみサーバーサイドで保護
 - サインアップ時は表示名、メイン楽器、居住地域、性別、年代が必須
+- `/signup` では確認メールを送信し、リンクを開くまでサインインできない
 - vocal 以外はサブ楽器を任意登録できる
+- サインイン時に未認証アカウントだった場合は確認メールを再送する
 - コラムは `isPublished=true` かつ `publishedAt <= now` のときだけ public 側に表示
 - public 側のコラム一覧は `displayOrder asc`、同順位内は `publishedAt desc` で表示
+
+### 環境変数
+
+- `DATABASE_URL`
+- `APP_BASE_URL`
+- `MAIL_FROM`
+- `SMTP_HOST`
+- `SMTP_PORT`
+- `SMTP_SECURE`
+- `SMTP_USER`
+- `SMTP_PASS`
+
 
 ### データの流れ
 

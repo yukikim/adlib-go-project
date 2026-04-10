@@ -80,6 +80,7 @@ model UserAccount {
   id                String             @id @default(uuid())
   email             String             @unique
   passwordHash      String
+  emailVerifiedAt   DateTime?
   role              UserRole           @default(member)
   status            AccountStatus      @default(active)
   lastSignedInAt    DateTime?
@@ -89,6 +90,7 @@ model UserAccount {
   memberProfile     MemberProfile?
   authSessions      AuthSession[]
   passwordResetTokens PasswordResetToken[]
+  emailVerificationTokens EmailVerificationToken[]
   sessionRatings    SessionSetRating[]
   sessionArchives   SessionArchive[]   @relation("ArchiveCreator")
   adminAuditLogs    AdminAuditLog[]
@@ -264,6 +266,16 @@ model AuthSession {
 }
 
 model PasswordResetToken {
+  id               String       @id @default(uuid())
+  userAccount      UserAccount  @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
+  userAccountId    String
+  tokenHash        String       @unique
+  expiresAt        DateTime
+  usedAt           DateTime?
+  createdAt        DateTime     @default(now())
+}
+
+model EmailVerificationToken {
   id               String       @id @default(uuid())
   userAccount      UserAccount  @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
   userAccountId    String

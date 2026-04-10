@@ -32,6 +32,10 @@ export const signUpRequestSchema = z.object({
   area: z.union([z.string(), z.null()]).optional(),
 }).strict();
 
+export const verifyEmailRequestSchema = z.object({
+  token: nonEmptyTrimmedStringSchema,
+}).strict();
+
 export function getZodErrorMessage(error: z.ZodError) {
   return error.issues[0]?.message ?? 'Invalid body';
 }

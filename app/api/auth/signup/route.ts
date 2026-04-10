@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { applySessionCookie, createSession } from '@/lib/auth';
 import { hashPassword } from '@/lib/password';
 import { validateMemberProfileInput } from '@/lib/memberProfile';
 import { getZodErrorMessage, signUpRequestSchema } from '@/lib/authSchemas';
+import { sendEmailVerificationMail } from '@/lib/emailVerification';
 
 export async function POST(request: NextRequest) {
   const parsed = signUpRequestSchema.safeParse(await request.json().catch(() => null));
@@ -23,6 +23,15 @@ export async function POST(request: NextRequest) {
 
   const existing = await prisma.userAccount.findUnique({ where: { email: body.email } });
   if (existing) {
+    if (!existing.emailVerifiedAt) {
+      const verification = await sendEmailVerificationMail(existing.id, existing.email);
+      return NextResponse.json({
+        ok: true,
+        message: 'Verification mail re-sent.',
+        ...(process.env.NODE_ENV !== 'production' ? { verificationToken: verification.token, expiresAt: verification.expiresAt } : {}),
+      });
+    }
+
     return NextResponse.json({ error: 'Email already exists' }, { status: 409 });
   }
 
@@ -33,6 +42,7 @@ export async function POST(request: NextRequest) {
       passwordHash,
       role: 'member',
       status: 'active',
+      emailVerifiedAt: null,
       memberProfile: {
         create: {
           displayName: body.displayName,
@@ -49,18 +59,11 @@ export async function POST(request: NextRequest) {
     include: { memberProfile: true },
   });
 
-  const { token, expiresAt } = await createSession(user.id);
-  const response = NextResponse.json(
-    {
-      user: {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-        memberProfile: user.memberProfile,
-      },
-    },
-    { status: 201 },
-  );
-  applySessionCookie(response, token, expiresAt);
-  return response;
+  const verification = await sendEmailVerificationMail(user.id, user.email);
+
+  return NextResponse.json({
+    ok: true,
+    message: 'Verification mail sent.',
+    ...(process.env.NODE_ENV !== 'production' ? { verificationToken: verification.token, expiresAt: verification.expiresAt } : {}),
+  }, { status: 201 });
 }

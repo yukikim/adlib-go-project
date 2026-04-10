@@ -59,9 +59,7 @@ export function useAuthPortal({ runAction, setCurrentUser, reloadShared, onSignI
     });
     const json = await parseJson(res);
     if (!res.ok) throw new Error(json.error ?? 'サインアップに失敗しました');
-    setCurrentUser(json.user ?? null);
-    await reloadShared();
-  }, 'サインアップしました');
+  }, '確認メールを送信しました。メール内のリンクから認証してください。');
 
   const handleSignOut = async () => runAction(async () => {
     await fetch('/api/auth/signout', { method: 'POST' });

@@ -69,6 +69,7 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
     onResetPassword,
   } = props;
 
+
   return (
     <>
       <Section title={authTarget === 'admin' ? '管理者認証' : 'メンバー認証'}>

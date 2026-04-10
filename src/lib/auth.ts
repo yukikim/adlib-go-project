@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma';
 export const SESSION_COOKIE_NAME = 'adolib_session';
 const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
 const PASSWORD_RESET_TOKEN_MAX_AGE_MS = 1000 * 60 * 60;
+const EMAIL_VERIFICATION_TOKEN_MAX_AGE_MS = 1000 * 60 * 60 * 24;
 
 function hashToken(token: string) {
   return createHash('sha256').update(token).digest('hex');
@@ -156,6 +157,25 @@ export async function createPasswordResetToken(userAccountId: string) {
   return { token, expiresAt };
 }
 
+export async function createEmailVerificationToken(userAccountId: string) {
+  const token = randomBytes(32).toString('hex');
+  const expiresAt = new Date(Date.now() + EMAIL_VERIFICATION_TOKEN_MAX_AGE_MS);
+
+  await prisma.emailVerificationToken.deleteMany({
+    where: { userAccountId, usedAt: null },
+  });
+
+  await prisma.emailVerificationToken.create({
+    data: {
+      userAccountId,
+      tokenHash: hashToken(token),
+      expiresAt,
+    },
+  });
+
+  return { token, expiresAt };
+}
+
 export async function consumePasswordResetToken(token: string) {
   const now = new Date();
   const resetToken = await prisma.passwordResetToken.findUnique({
@@ -173,4 +193,29 @@ export async function consumePasswordResetToken(token: string) {
   });
 
   return resetToken.userAccount;
+}
+
+export async function verifyEmailByToken(token: string) {
+  const now = new Date();
+  const verificationToken = await prisma.emailVerificationToken.findUnique({
+    where: { tokenHash: hashToken(token) },
+    include: { userAccount: true },
+  });
+
+  if (!verificationToken || verificationToken.usedAt || verificationToken.expiresAt <= now) {
+    return null;
+  }
+
+  return prisma.$transaction(async (tx) => {
+    await tx.emailVerificationToken.update({
+      where: { id: verificationToken.id },
+      data: { usedAt: now },
+    });
+
+    return tx.userAccount.update({
+      where: { id: verificationToken.userAccountId },
+      data: { emailVerifiedAt: verificationToken.userAccount.emailVerifiedAt ?? now },
+      include: { memberProfile: true },
+    });
+  });
 }
