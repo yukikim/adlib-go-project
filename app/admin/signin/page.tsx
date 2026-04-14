@@ -1,5 +1,5 @@
-import PortalWorkspace from '@/components/portal/PortalWorkspace';
+import AuthWorkspace from '@/components/portal/AuthWorkspace';
 
 export default function AdminSignInPage() {
-  return <PortalWorkspace view="admin-signin" />;
+  return <AuthWorkspace view="admin-signin" />;
 }

@@ -1,5 +1,5 @@
-import PortalWorkspace from '@/components/portal/PortalWorkspace';
+import AuthWorkspace from '@/components/portal/AuthWorkspace';
 
 export default function SignUpPage() {
-  return <PortalWorkspace view="signup" />;
+  return <AuthWorkspace view="signup" />;
 }
