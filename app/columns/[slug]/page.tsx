@@ -6,6 +6,9 @@ import { Separator } from '@/components/ui/separator';
 import { prisma } from '@/lib/prisma';
 import { splitColumnBody } from '@/lib/columns';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 export default async function ColumnDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const now = new Date();
