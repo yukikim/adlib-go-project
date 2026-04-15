@@ -2,9 +2,9 @@ import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle }
 import { cn } from '@/lib/utils';
 import type { SectionProps } from './types';
 
-export function Section({ title, description, children, action, className, contentClassName }: SectionProps) {
+export function Section({ title, description, children, action, sectionId, className, contentClassName }: SectionProps) {
   return (
-    <section className="mt-6">
+    <section id={sectionId} className="mt-6 scroll-mt-24">
       <Card className={cn('border shadow-sm', className)}>
         <CardHeader className="border-b bg-muted/30">
           <CardTitle>{title}</CardTitle>

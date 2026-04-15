@@ -1,8 +1,17 @@
-import type { ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Bell,
+  BookOpenText,
+  CalendarDays,
+  ChevronDown,
+  FileArchive,
+  Music4,
+  Users,
+} from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -69,6 +78,79 @@ function Field({ htmlFor, label, children, description, className }: FieldProps)
     </div>
   );
 }
+
+type AdminNavGroup = {
+  id: string;
+  label: string;
+  icon: ReactNode;
+  children: { id: string; label: string }[];
+};
+
+const adminNavGroups: AdminNavGroup[] = [
+  {
+    id: 'admin-events',
+    label: 'イベント管理',
+    icon: <CalendarDays className="size-4" />,
+    children: [
+      { id: 'admin-events-create', label: 'イベント作成' },
+      { id: 'admin-events-edit', label: 'イベント編集' },
+    ],
+  },
+  {
+    id: 'admin-session-sets',
+    label: 'sessionSet 管理',
+    icon: <Music4 className="size-4" />,
+    children: [
+      { id: 'admin-session-sets-actions', label: '生成 / 公開' },
+      { id: 'admin-session-sets-list', label: 'sessionSet 一覧' },
+      { id: 'admin-session-sets-results', label: '生成結果' },
+    ],
+  },
+  {
+    id: 'admin-archives',
+    label: 'レイティング / アーカイブ',
+    icon: <FileArchive className="size-4" />,
+    children: [
+      { id: 'admin-archives-summary', label: '評価集計' },
+      { id: 'admin-archives-create', label: 'アーカイブ作成' },
+      { id: 'admin-archives-list', label: 'アーカイブ一覧' },
+    ],
+  },
+  {
+    id: 'admin-members',
+    label: 'メンバー / 管理者管理',
+    icon: <Users className="size-4" />,
+    children: [
+      { id: 'admin-members-search', label: 'メンバー検索' },
+      { id: 'admin-members-editor', label: 'プロフィール編集' },
+    ],
+  },
+  {
+    id: 'admin-columns',
+    label: 'コラム管理',
+    icon: <BookOpenText className="size-4" />,
+    children: [
+      { id: 'admin-columns-editor', label: 'コラム編集' },
+      { id: 'admin-columns-preview', label: 'プレビュー' },
+      { id: 'admin-columns-list', label: '登録済みコラム' },
+    ],
+  },
+  {
+    id: 'admin-activity',
+    label: 'アクティビティ / 通知',
+    icon: <Bell className="size-4" />,
+    children: [
+      { id: 'admin-activity-log', label: 'アクティビティ履歴' },
+      { id: 'admin-announcement-create', label: 'お知らせ作成' },
+      { id: 'admin-mail-log', label: 'MailLog' },
+    ],
+  },
+];
+
+const defaultAdminGroupId = 'admin-activity';
+const adminSelectionStorageKey = 'adolib-admin-dashboard-selection';
+const adminNavGroupIdSet = new Set(adminNavGroups.map((group) => group.id));
+const adminNavChildIdsByGroup = new Map(adminNavGroups.map((group) => [group.id, new Set(group.children.map((child) => child.id))]));
 
 type AdminPortalSectionProps = {
   loading: boolean;
@@ -290,6 +372,59 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     onDeleteColumn,
     onResetColumnForm,
   } = props;
+  const [activeGroupId, setActiveGroupId] = useState(defaultAdminGroupId);
+  const [activeChildId, setActiveChildId] = useState<string | null>(null);
+  const [openMobileGroupId, setOpenMobileGroupId] = useState(defaultAdminGroupId);
+  const [hasRestoredSelection, setHasRestoredSelection] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      setHasRestoredSelection(true);
+      return;
+    }
+
+    try {
+      const rawSelection = window.localStorage.getItem(adminSelectionStorageKey);
+
+      if (rawSelection) {
+        const parsedSelection = JSON.parse(rawSelection) as {
+          groupId?: string;
+          childId?: string | null;
+          openMobileGroupId?: string;
+        };
+
+        const nextGroupId = typeof parsedSelection.groupId === 'string' && adminNavGroupIdSet.has(parsedSelection.groupId)
+          ? parsedSelection.groupId
+          : defaultAdminGroupId;
+        const nextChildId = typeof parsedSelection.childId === 'string' && adminNavChildIdsByGroup.get(nextGroupId)?.has(parsedSelection.childId)
+          ? parsedSelection.childId
+          : null;
+        const nextOpenMobileGroupId = typeof parsedSelection.openMobileGroupId === 'string' && adminNavGroupIdSet.has(parsedSelection.openMobileGroupId)
+          ? parsedSelection.openMobileGroupId
+          : nextGroupId;
+
+        setActiveGroupId(nextGroupId);
+        setActiveChildId(nextChildId);
+        setOpenMobileGroupId(nextOpenMobileGroupId);
+      }
+    } catch {
+      window.localStorage.removeItem(adminSelectionStorageKey);
+    }
+
+    setHasRestoredSelection(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hasRestoredSelection || typeof window === 'undefined') {
+      return;
+    }
+
+    window.localStorage.setItem(adminSelectionStorageKey, JSON.stringify({
+      groupId: activeGroupId,
+      childId: activeChildId,
+      openMobileGroupId,
+    }));
+  }, [activeChildId, activeGroupId, hasRestoredSelection, openMobileGroupId]);
 
   const filteredMembers = members.filter((member) => {
     const query = memberSearchQuery.trim().toLowerCase();
@@ -308,12 +443,149 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
   });
 
   const previewParagraphs = splitPreviewBody(columnBody);
+  const activeContentKey = `${activeGroupId}:${activeChildId ?? 'all'}`;
+
+  const activeGroup = adminNavGroups.find((group) => group.id === activeGroupId) ?? adminNavGroups[0];
+  const activeChild = activeGroup?.children.find((child) => child.id === activeChildId) ?? null;
+
+  const handleGroupSelect = (groupId: string) => {
+    setActiveGroupId(groupId);
+    setActiveChildId(null);
+    setOpenMobileGroupId(groupId);
+  };
+
+  const handleChildSelect = (groupId: string, childId: string) => {
+    setActiveGroupId(groupId);
+    setActiveChildId(childId);
+    setOpenMobileGroupId(groupId);
+  };
+
+  const isGroupVisible = (groupId: string) => activeGroupId === groupId;
+  const isChildVisible = (groupId: string, childId: string) => activeGroupId === groupId && (!activeChildId || activeChildId === childId);
+
+  const getGroupLinkClassName = (groupId: string) => cn(
+    'flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition-colors',
+    activeGroupId === groupId
+      ? 'bg-brand-main text-primary-foreground shadow-sm'
+      : 'text-foreground hover:bg-muted',
+  );
+
+  const getChildLinkClassName = (childId: string) => cn(
+    'block rounded-lg px-3 py-1.5 text-sm transition-colors',
+    activeChildId === childId
+      ? 'bg-brand-base/50 text-brand-sub'
+      : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+  );
 
   return (
-    <>
-      <Section title="イベント管理" description="新規イベント作成と既存イベントの公開フローを管理します。">
-        <div className="grid gap-4 xl:grid-cols-2">
-          <div className="grid gap-4 rounded-xl border bg-background/60 p-4">
+    <div className="mt-6 grid gap-6 xl:grid-cols-[280px_minmax(0,1fr)]">
+      <aside className="xl:sticky xl:top-24 xl:self-start">
+        <div className="rounded-2xl border bg-card/95 p-4 shadow-sm backdrop-blur">
+          <div className="space-y-1">
+            <p className="text-sm font-medium text-muted-foreground">コンテンツメニュー</p>
+            <h2 className="text-lg font-semibold">管理ダッシュボード</h2>
+            <p className="text-sm text-muted-foreground">左のメニューから表示するセクションとサブメニューを切り替えます。</p>
+          </div>
+          <Separator className="my-4" />
+          <nav className="space-y-3 xl:hidden" aria-label="管理ダッシュボードメニュー（モバイル）">
+            {adminNavGroups.map((group) => {
+              const isOpen = openMobileGroupId === group.id;
+
+              return (
+                <div key={group.id} className="overflow-hidden rounded-xl border border-border/70 bg-background/80">
+                  <div className="flex items-center gap-2 p-2">
+                    <button
+                      type="button"
+                      aria-current={activeGroupId === group.id ? 'location' : undefined}
+                      className={cn(getGroupLinkClassName(group.id), 'min-w-0 flex-1 text-left')}
+                      onClick={() => handleGroupSelect(group.id)}
+                    >
+                      {group.icon}
+                      <span className="truncate">{group.label}</span>
+                    </button>
+                    <button
+                      type="button"
+                      aria-expanded={isOpen}
+                      aria-controls={`${group.id}-submenu`}
+                      className="inline-flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                      onClick={() => setOpenMobileGroupId(isOpen ? '' : group.id)}
+                    >
+                      <ChevronDown className={cn('size-4 transition-transform', isOpen ? 'rotate-180' : 'rotate-0')} />
+                    </button>
+                  </div>
+                  {isOpen ? (
+                    <div id={`${group.id}-submenu`} className="border-t border-border/70 px-2 pb-2 pt-1">
+                      {group.children.map((child) => (
+                        <button
+                          type="button"
+                          key={child.id}
+                          aria-current={activeChildId === child.id ? 'location' : undefined}
+                          className={cn(getChildLinkClassName(child.id), 'w-full text-left')}
+                          onClick={() => handleChildSelect(group.id, child.id)}
+                        >
+                          {child.label}
+                        </button>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              );
+            })}
+          </nav>
+          <nav className="hidden space-y-4 xl:block" aria-label="管理ダッシュボードメニュー">
+            {adminNavGroups.map((group) => (
+              <div key={group.id} className="space-y-1.5">
+                <button
+                  type="button"
+                  aria-current={activeGroupId === group.id ? 'location' : undefined}
+                  className={cn(getGroupLinkClassName(group.id), 'w-full text-left')}
+                  onClick={() => handleGroupSelect(group.id)}
+                >
+                  {group.icon}
+                  <span>{group.label}</span>
+                </button>
+                <div className="space-y-1 border-l border-border/80 pl-4">
+                  {group.children.map((child) => (
+                    <button
+                      type="button"
+                      key={child.id}
+                      aria-current={activeChildId === child.id ? 'location' : undefined}
+                      className={cn(getChildLinkClassName(child.id), 'w-full text-left')}
+                      onClick={() => handleChildSelect(group.id, child.id)}
+                    >
+                      {child.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </nav>
+        </div>
+      </aside>
+
+      <div className="min-w-0">
+        <div className="rounded-2xl border bg-card/95 p-4 shadow-sm">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="space-y-1">
+              <p className="text-sm font-medium text-muted-foreground">現在表示中</p>
+              <h3 className="text-xl font-semibold">{activeGroup?.label}</h3>
+              <p className="text-sm text-muted-foreground">
+                {activeChild ? `サブメニュー: ${activeChild.label}` : 'このセクションの全コンテンツを表示しています。'}
+              </p>
+            </div>
+            {activeChild ? (
+              <Button type="button" variant="outline" size="sm" onClick={() => setActiveChildId(null)}>
+                セクション全体を表示
+              </Button>
+            ) : null}
+          </div>
+        </div>
+
+        <div key={activeContentKey} className="admin-content-stage">
+
+      <Section sectionId="admin-events" title="イベント管理" description="新規イベント作成と既存イベントの公開フローを管理します。" className={cn(!isGroupVisible('admin-events') && 'hidden')}>
+        <div className={cn('grid gap-4 xl:grid-cols-2', activeGroupId === 'admin-events' && activeChildId && 'xl:grid-cols-1')}>
+          <div id="admin-events-create" className={cn('grid scroll-mt-24 gap-4 rounded-xl border bg-background/60 p-4', !isChildVisible('admin-events', 'admin-events-create') && 'hidden')}>
             <div className="space-y-1">
               <h3 className="font-medium">イベント作成</h3>
               <p className="text-sm text-muted-foreground">イベント名、会場、開催日を指定して新規イベントを作成します。</p>
@@ -332,7 +604,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
             </Button>
           </div>
 
-          <div className="grid gap-4 rounded-xl border bg-background/60 p-4">
+          <div id="admin-events-edit" className={cn('grid scroll-mt-24 gap-4 rounded-xl border bg-background/60 p-4', !isChildVisible('admin-events', 'admin-events-edit') && 'hidden')}>
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="space-y-1">
                 <h3 className="font-medium">イベント編集</h3>
@@ -410,8 +682,8 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
         </div>
       </Section>
 
-      <Section title="sessionSet 管理" description="生成、公開、結果確認をまとめて行います。">
-        <div className="flex flex-wrap gap-3">
+      <Section sectionId="admin-session-sets" title="sessionSet 管理" description="生成、公開、結果確認をまとめて行います。" className={cn(!isGroupVisible('admin-session-sets') && 'hidden')}>
+        <div id="admin-session-sets-actions" className={cn('flex scroll-mt-24 flex-wrap gap-3', !isChildVisible('admin-session-sets', 'admin-session-sets-actions') && 'hidden')}>
           <Button type="button" onClick={onGenerateSets} disabled={loading || !selectedAdminEventId}>
             sessionSet 生成
           </Button>
@@ -422,9 +694,9 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
             サインアウト
           </Button>
         </div>
-        <Separator className="my-4" />
-        {sessionSets.length === 0 ? <p className="text-sm text-muted-foreground">まだ sessionSet はありません。</p> : (
-          <ul className="grid gap-3 md:grid-cols-2">
+        <Separator className={cn('my-4', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden')} />
+        {sessionSets.length === 0 ? <p className={cn('text-sm text-muted-foreground', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>まだ sessionSet はありません。</p> : (
+          <ul id="admin-session-sets-list" className={cn('grid scroll-mt-24 gap-3 md:grid-cols-2', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>
             {sessionSets.map((sessionSet) => (
               <li key={sessionSet.id} className="rounded-xl border bg-background/60 p-4">
                 <div className="flex items-start justify-between gap-3">
@@ -444,7 +716,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
           </ul>
         )}
         {(generatedResult.forcedSessionSets.length > 0 || generatedResult.skippedSongs.length > 0) && (
-          <div className="mt-4 grid gap-4 lg:grid-cols-2">
+          <div id="admin-session-sets-results" className={cn('mt-4 grid scroll-mt-24 gap-4 lg:grid-cols-2', !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden')}>
             {generatedResult.forcedSessionSets.length > 0 && (
               <div className="rounded-xl border bg-background/60 p-4">
                 <h3 className="font-medium">強制追加</h3>
@@ -469,10 +741,10 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
         )}
       </Section>
 
-      <Section title="レイティング / アーカイブ" description="評価集計の確認とアーカイブ作成を行います。">
-        <div className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
-          <div className="space-y-4">
-            <div className="rounded-xl border bg-background/60 p-4">
+      <Section sectionId="admin-archives" title="レイティング / アーカイブ" description="評価集計の確認とアーカイブ作成を行います。" className={cn(!isGroupVisible('admin-archives') && 'hidden')}>
+        <div className={cn('grid gap-4 lg:grid-cols-[1.15fr_0.85fr]', activeGroupId === 'admin-archives' && activeChildId && 'lg:grid-cols-1')}>
+          <div className={cn('space-y-4', !isChildVisible('admin-archives', 'admin-archives-summary') && 'hidden')}>
+            <div id="admin-archives-summary" className="rounded-xl border bg-background/60 p-4 scroll-mt-24">
               <h3 className="font-medium">レイティング集計</h3>
               {ratingSummaries.length === 0 ? <p className="mt-3 text-sm text-muted-foreground">まだ評価集計はありません。</p> : (
                 <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
@@ -492,7 +764,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
             </Alert>
           </div>
 
-          <div className="grid gap-4 rounded-xl border bg-background/60 p-4">
+          <div id="admin-archives-create" className={cn('grid scroll-mt-24 gap-4 rounded-xl border bg-background/60 p-4', !isChildVisible('admin-archives', 'admin-archives-create') && 'hidden')}>
             <div className="space-y-1">
               <h3 className="font-medium">アーカイブ作成</h3>
               <p className="text-sm text-muted-foreground">選択中のイベント状態をスナップショット保存します。</p>
@@ -509,9 +781,9 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
           </div>
         </div>
 
-        <Separator className="my-4" />
-        {archives.length === 0 ? <p className="text-sm text-muted-foreground">アーカイブはありません。</p> : (
-          <ul className="grid gap-3">
+        <Separator className={cn('my-4', !isChildVisible('admin-archives', 'admin-archives-list') && 'hidden')} />
+        {archives.length === 0 ? <p className={cn('text-sm text-muted-foreground', !isChildVisible('admin-archives', 'admin-archives-list') && 'hidden')}>アーカイブはありません。</p> : (
+          <ul id="admin-archives-list" className={cn('grid scroll-mt-24 gap-3', !isChildVisible('admin-archives', 'admin-archives-list') && 'hidden')}>
             {archives.map((archive) => (
               <li key={archive.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-background/60 p-4">
                 <div className="space-y-1">
@@ -544,9 +816,9 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
         )}
       </Section>
 
-      <Section title="メンバー / 管理者管理" description="プロフィール、権限、状態をこの画面で更新できます。">
-        <div className="grid gap-4 xl:grid-cols-[320px_1fr]">
-          <div className="rounded-xl border bg-background/60 p-4">
+      <Section sectionId="admin-members" title="メンバー / 管理者管理" description="プロフィール、権限、状態をこの画面で更新できます。" className={cn(!isGroupVisible('admin-members') && 'hidden')}>
+        <div className={cn('grid gap-4 xl:grid-cols-[320px_1fr]', activeGroupId === 'admin-members' && activeChildId && 'xl:grid-cols-1')}>
+          <div id="admin-members-search" className={cn('rounded-xl border bg-background/60 p-4 scroll-mt-24', !isChildVisible('admin-members', 'admin-members-search') && 'hidden')}>
             <Field htmlFor="admin-member-search" label="メンバー検索">
               <Input
                 id="admin-member-search"
@@ -578,7 +850,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
             )}
           </div>
 
-          <div className="rounded-xl border bg-background/60 p-4">
+          <div id="admin-members-editor" className={cn('rounded-xl border bg-background/60 p-4 scroll-mt-24', !isChildVisible('admin-members', 'admin-members-editor') && 'hidden')}>
             <Alert>
               <AlertTitle>管理者権限について</AlertTitle>
               <AlertDescription>既存メンバーの role を admin に変更すると管理者として追加されます。管理者の編集もこの画面で行います。</AlertDescription>
@@ -713,9 +985,9 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
         </div>
       </Section>
 
-      <Section title="コラム管理" description="コラムの作成、更新、公開スケジュールの設定を行います。">
-        <div className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
-          <div className="grid gap-4 rounded-xl border bg-background/60 p-4">
+      <Section sectionId="admin-columns" title="コラム管理" description="コラムの作成、更新、公開スケジュールの設定を行います。" className={cn(!isGroupVisible('admin-columns') && 'hidden')}>
+        <div className={cn('grid gap-4 xl:grid-cols-[1.1fr_0.9fr]', activeGroupId === 'admin-columns' && activeChildId && 'xl:grid-cols-1')}>
+          <div id="admin-columns-editor" className={cn('grid scroll-mt-24 gap-4 rounded-xl border bg-background/60 p-4', !isChildVisible('admin-columns', 'admin-columns-editor') && 'hidden')}>
             <div className="flex flex-wrap items-end gap-3">
               <Field label="編集対象コラム" htmlFor="admin-column-select" className="min-w-55 flex-1">
                 <Select value={editingColumnSlug || NONE_VALUE} onValueChange={(value) => setEditingColumnSlug(value === NONE_VALUE ? '' : value)}>
@@ -784,8 +1056,8 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
             </div>
           </div>
 
-          <div className="grid gap-4">
-            <div className="rounded-xl border bg-background/60 p-4">
+          <div className={cn('grid gap-4', !isChildVisible('admin-columns', 'admin-columns-preview') && !isChildVisible('admin-columns', 'admin-columns-list') && 'hidden')}>
+            <div id="admin-columns-preview" className={cn('rounded-xl border bg-background/60 p-4 scroll-mt-24', !isChildVisible('admin-columns', 'admin-columns-preview') && 'hidden')}>
               <div className="flex flex-wrap items-center gap-2">
                 <Badge variant="outline">{columnThumbnailLabel || 'Column'}</Badge>
                 <Badge variant={columnPublished ? 'secondary' : 'outline'}>{columnPublished ? 'published' : 'draft'}</Badge>
@@ -799,7 +1071,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
               </div>
             </div>
 
-            <div className="rounded-xl border bg-background/60 p-4">
+            <div id="admin-columns-list" className={cn('rounded-xl border bg-background/60 p-4 scroll-mt-24', !isChildVisible('admin-columns', 'admin-columns-list') && 'hidden')}>
               <h3 className="font-medium">登録済みコラム</h3>
               {columns.length === 0 ? <p className="mt-3 text-sm text-muted-foreground">登録済みコラムはありません。</p> : (
                 <ul className="mt-3 space-y-3">
@@ -823,10 +1095,10 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
         </div>
       </Section>
 
-      <Section title="アクティビティ / 通知" description="運営の更新履歴、通知作成、送信ログを確認できます。">
-        <div className="grid gap-4 xl:grid-cols-[1fr_360px]">
-          <div className="space-y-4">
-            <div className="rounded-xl border bg-background/60 p-4">
+      <Section sectionId="admin-activity" title="アクティビティ / 通知" description="運営の更新履歴、通知作成、送信ログを確認できます。" className={cn(!isGroupVisible('admin-activity') && 'hidden')}>
+        <div className={cn('grid gap-4 xl:grid-cols-[1fr_360px]', activeGroupId === 'admin-activity' && activeChildId && 'xl:grid-cols-1')}>
+          <div className={cn('space-y-4', !isChildVisible('admin-activity', 'admin-activity-log') && !isChildVisible('admin-activity', 'admin-mail-log') && 'hidden')}>
+            <div id="admin-activity-log" className={cn('rounded-xl border bg-background/60 p-4 scroll-mt-24', !isChildVisible('admin-activity', 'admin-activity-log') && 'hidden')}>
               <h3 className="font-medium">アクティビティ履歴</h3>
               {activityLogs.length === 0 ? <p className="mt-3 text-sm text-muted-foreground">履歴はありません。</p> : (
                 <ul className="mt-3 space-y-3">
@@ -843,7 +1115,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
               )}
             </div>
 
-            <div className="rounded-xl border bg-background/60 p-4">
+            <div id="admin-mail-log" className={cn('rounded-xl border bg-background/60 p-4 scroll-mt-24', !isChildVisible('admin-activity', 'admin-mail-log') && 'hidden')}>
               <h3 className="font-medium">MailLog</h3>
               {mailLogs.length === 0 ? <p className="mt-3 text-sm text-muted-foreground">メール送信ログはありません。</p> : (
                 <ul className="mt-3 space-y-3">
@@ -861,7 +1133,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
             </div>
           </div>
 
-          <div className="grid gap-4 rounded-xl border bg-background/60 p-4">
+          <div id="admin-announcement-create" className={cn('grid scroll-mt-24 gap-4 rounded-xl border bg-background/60 p-4', !isChildVisible('admin-activity', 'admin-announcement-create') && 'hidden')}>
             <div className="space-y-1">
               <h3 className="font-medium">お知らせ作成</h3>
               <p className="text-sm text-muted-foreground">メンバー向け通知を新規作成します。</p>
@@ -880,6 +1152,8 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
           </div>
         </div>
       </Section>
-    </>
+        </div>
+      </div>
+    </div>
   );
 }

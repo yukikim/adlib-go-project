@@ -182,6 +182,7 @@ export type SectionProps = {
   description?: string;
   children: ReactNode;
   action?: ReactNode;
+  sectionId?: string;
   className?: string;
   contentClassName?: string;
 };
