@@ -10,8 +10,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ja">
       <body>
-        <header style={{ borderBottom: '1px solid #e5e5e5', background: '#fafafa' }}>
-          <div style={{ maxWidth: 1000, margin: '0 auto', padding: '1rem 2rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+        <header className="border-b bg-muted/40">
+          <div className="mx-auto flex max-w-250 flex-wrap gap-4 px-8 py-4">
             <a href="/">トップ</a>
             <a href="/columns">コラム</a>
             <a href="/signin">メンバーサインイン</a>

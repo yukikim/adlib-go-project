@@ -265,6 +265,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
 
   return (
     <>
+        <p className="text-red-500">AdminPortalSection</p>
       <Section title="イベント管理">
         <div style={{ display: 'grid', gap: '0.75rem', maxWidth: 560 }}>
           <label htmlFor="admin-event-title">
