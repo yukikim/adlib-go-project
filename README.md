@@ -126,6 +126,60 @@ Adolib-go KICK-OFF 向けの public site、member site、admin site をまとめ
 - `SMTP_USER`
 - `SMTP_PASS`
 
+---
+
+## CI / CD
+
+このリポジトリでは GitHub Actions で CI を実行し、main ブランチへの push 後に Vercel へ本番デプロイする構成を想定しています。
+
+### CI の内容
+
+Workflow は [.github/workflows/ci.yml](.github/workflows/ci.yml) にあります。
+
+- pull request と main への push で実行
+- PostgreSQL 16 の service container を起動
+- `npm ci`
+- `npx prisma generate`
+- `npx prisma migrate deploy`
+- `npm run build`
+
+CI ではローカル開発用と同じ値で一時的な PostgreSQL を起動するため、追加の GitHub Secrets は不要です。
+
+`npm run lint` は ESLint 9 + Next.js 16 向けに実行できるよう整えてありますが、既存コードベースに lint 指摘が残っているため、現時点では blocking CI には含めていません。lint を品質ゲートに昇格させる場合は、既存警告とエラーを解消してから workflow に戻してください。
+
+### Vercel デプロイの内容
+
+同じ workflow 内で、main ブランチへの push かつ CI 成功後に Vercel へ production deploy を実行します。
+
+GitHub Repository Secrets に以下を設定してください。
+
+- `VERCEL_TOKEN`
+- `VERCEL_ORG_ID`
+- `VERCEL_PROJECT_ID`
+
+### Vercel 側で設定する環境変数
+
+Vercel プロジェクトには少なくとも以下を設定してください。
+
+- `DATABASE_URL`
+- `APP_BASE_URL`
+- `MAIL_FROM`
+- `SMTP_HOST`
+- `SMTP_PORT`
+- `SMTP_SECURE`
+- `SMTP_USER`
+- `SMTP_PASS`
+
+`APP_BASE_URL` は本番 URL に合わせて設定してください。例: `https://your-project.vercel.app`
+
+### 初回セットアップ手順
+
+1. GitHub にこのリポジトリを push する
+2. Vercel で対象プロジェクトを作成する
+3. `VERCEL_TOKEN`、`VERCEL_ORG_ID`、`VERCEL_PROJECT_ID` を GitHub Secrets に登録する
+4. Vercel 側に production 用の環境変数を登録する
+5. main ブランチへ push して CI と production deploy を確認する
+
 
 ### データの流れ
 
