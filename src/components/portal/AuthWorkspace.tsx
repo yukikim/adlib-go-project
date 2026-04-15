@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
 import { AuthPortalSection } from '@/components/portal/AuthPortalSection';
 import { useAuthPortal } from '@/components/portal/hooks/useAuthPortal';
 import type { AuthUser, PortalView } from '@/components/portal/types';
@@ -74,16 +76,24 @@ export default function AuthWorkspace({ view }: AuthWorkspaceProps) {
   }, []);
 
   return (
-    <main style={{ padding: '2rem', maxWidth: 1000, margin: '0 auto' }}>
-      <h1>
+    <main className="mx-auto flex max-w-4xl flex-col px-6 py-8 md:px-8">
+      <Badge variant="outline" className="w-fit">
+        Auth
+      </Badge>
+      <h1 className="mt-3 text-3xl font-semibold tracking-tight">
         {view === 'signup'
           ? 'メンバーサインアップ'
           : view === 'admin-signin'
             ? '管理者サインイン'
             : 'メンバーサインイン'}
       </h1>
-      {message && <p style={{ color: 'darkgreen' }}>{message}</p>}
-      {loading && <p style={{ color: '#666' }}>処理中...</p>}
+      {message && (
+        <Alert className="brand-success-surface mt-4">
+          <AlertTitle>ステータス</AlertTitle>
+          <AlertDescription>{message}</AlertDescription>
+        </Alert>
+      )}
+      {loading && <p className="mt-4 text-sm text-muted-foreground">処理中...</p>}
 
       <AuthPortalSection
         view={view}

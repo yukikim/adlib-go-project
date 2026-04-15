@@ -1,3 +1,7 @@
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 import { prisma } from '@/lib/prisma';
 
 export async function PublicHomePage() {
@@ -28,49 +32,103 @@ export async function PublicHomePage() {
   });
 
   return (
-    <main style={{ padding: '2rem', maxWidth: 1000, margin: '0 auto' }}>
-      <section style={{ padding: '1.5rem', border: '1px solid #ddd', borderRadius: '0.75rem' }}>
-        <p style={{ color: '#666', marginBottom: '0.5rem' }}>Adolib-go KICK-OFF</p>
-        <h1 style={{ marginTop: 0 }}>公開ページ、メンバーサイト、管理サイトを分けた入口</h1>
-        <p>
-          セッション告知、参加登録、sessionSet 公開、レイティング、アーカイブ管理までを一貫して扱うためのポータルです。
-        </p>
-        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginTop: '1rem' }}>
-          <a href="/signin">メンバーサインイン</a>
-          <a href="/signup">メンバーサインアップ</a>
-          <a href="/admin/signin">管理者サインイン</a>
-          <a href="/columns">コラム一覧</a>
-          <a href="/about">adolib-go について</a>
-        </div>
-      </section>
-
-      <section style={{ marginTop: '1.5rem', padding: '1.5rem', border: '1px solid #ddd', borderRadius: '0.75rem' }}>
-        <h2>セッション告知</h2>
-        {upcomingEvent ? (
-          <div>
-            <p style={{ color: '#666' }}>{new Date(upcomingEvent.eventDate).toLocaleDateString('ja-JP')} / {upcomingEvent.venue}</p>
-            <h3 style={{ marginBottom: '0.5rem' }}>{upcomingEvent.title}</h3>
-            <p>{upcomingEvent.description || '次回セッションの募集情報はメンバー画面から確認できます。'}</p>
+    <main className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-8 md:px-8">
+      <section className="overflow-hidden rounded-[2rem] border border-brand-main/15 bg-linear-to-br from-brand-base/45 via-background to-brand-main/10 shadow-sm">
+        <div className="grid gap-6 px-6 py-8 md:grid-cols-[1.4fr_0.9fr] md:px-8 md:py-10">
+          <div className="space-y-5">
+            <Badge variant="outline" className="brand-kicker">
+              Adolib-go KICK-OFF
+            </Badge>
+            <div className="space-y-3">
+              <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">公開ページ、メンバーサイト、管理サイトを分けた入口</h1>
+              <p className="max-w-2xl text-sm leading-7 text-muted-foreground md:text-base">
+                セッション告知、参加登録、sessionSet 公開、レイティング、アーカイブ管理までを一貫して扱うためのポータルです。
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Button asChild>
+                <a href="/signin">メンバーサインイン</a>
+              </Button>
+              <Button asChild variant="secondary">
+                <a href="/signup">メンバーサインアップ</a>
+              </Button>
+              <Button asChild variant="outline">
+                <a href="/admin/signin">管理者サインイン</a>
+              </Button>
+            </div>
           </div>
-        ) : (
-          <p>現在、公開中の開催告知はありません。</p>
-        )}
+          <Card className="border-white/70 bg-white/80 backdrop-blur">
+            <CardHeader>
+              <CardTitle>クイックリンク</CardTitle>
+              <CardDescription>公開コンテンツと導線をここから確認できます。</CardDescription>
+            </CardHeader>
+            <CardContent className="grid gap-3">
+              <Button asChild variant="ghost" className="justify-start">
+                <a href="/columns">コラム一覧</a>
+              </Button>
+              <Button asChild variant="ghost" className="justify-start">
+                <a href="/about">adolib-go について</a>
+              </Button>
+              <Separator />
+              <div className="rounded-xl bg-muted/60 p-4 text-sm text-muted-foreground">
+                次回開催や新着コラムはこのページの下部にまとまっています。
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </section>
 
-      <section style={{ marginTop: '1.5rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-          <h2 style={{ margin: 0 }}>コラム</h2>
-          <a href="/columns">一覧を見る</a>
+      <section>
+        <Card className="border shadow-sm">
+          <CardHeader>
+            <CardTitle>セッション告知</CardTitle>
+            <CardDescription>次回開催中のイベントを表示します。</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {upcomingEvent ? (
+              <div className="space-y-3">
+                <Badge variant="secondary">{new Date(upcomingEvent.eventDate).toLocaleDateString('ja-JP')} / {upcomingEvent.venue}</Badge>
+                <div>
+                  <h3 className="text-xl font-semibold">{upcomingEvent.title}</h3>
+                  <p className="mt-2 text-sm leading-7 text-muted-foreground">
+                    {upcomingEvent.description || '次回セッションの募集情報はメンバー画面から確認できます。'}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">現在、公開中の開催告知はありません。</p>
+            )}
+          </CardContent>
+        </Card>
+      </section>
+
+      <section className="space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className="text-2xl font-semibold tracking-tight">コラム</h2>
+            <p className="text-sm text-muted-foreground">直近の公開コンテンツを表示しています。</p>
+          </div>
+          <Button asChild variant="outline">
+            <a href="/columns">一覧を見る</a>
+          </Button>
         </div>
-        <div style={{ marginTop: '1rem', display: 'grid', gap: '1rem', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}>
+        <div className="grid gap-4 md:grid-cols-3">
           {columns.map((column) => (
-            <article key={column.slug} style={{ padding: '1rem', border: '1px solid #ddd', borderRadius: '0.75rem' }}>
-              <div style={{ color: '#666', fontSize: '0.9rem' }}>{column.thumbnailLabel || 'Column'}</div>
-              <h3>{column.title}</h3>
-              <p style={{ color: '#666' }}>{column.publishedAt ? new Date(column.publishedAt).toLocaleDateString('ja-JP') : '-'}</p>
-              <p>{column.summary}</p>
-              <a href={`/columns/${column.slug}`}>続きを読む</a>
-            </article>
+            <Card key={column.slug} className="border shadow-sm transition-transform hover:-translate-y-0.5">
+              <CardHeader>
+                <Badge variant="outline" className="w-fit">{column.thumbnailLabel || 'Column'}</Badge>
+                <CardTitle>{column.title}</CardTitle>
+                <CardDescription>
+                  {column.publishedAt ? new Date(column.publishedAt).toLocaleDateString('ja-JP') : '-'}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm leading-7 text-muted-foreground">{column.summary}</p>
+                <Button asChild variant="ghost" className="px-0">
+                  <a href={`/columns/${column.slug}`}>続きを読む</a>
+                </Button>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </section>

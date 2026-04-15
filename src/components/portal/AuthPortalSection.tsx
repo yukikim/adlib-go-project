@@ -1,6 +1,38 @@
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import { Section } from './Section';
 import type { Instrument } from './types';
 import { AGE_RANGE_OPTIONS, GENDER_OPTIONS, PREFECTURE_OPTIONS } from '@/lib/memberProfile';
+
+const NONE_VALUE = '__none__';
+
+type FieldProps = {
+  htmlFor?: string;
+  label: string;
+  children: React.ReactNode;
+  description?: string;
+  className?: string;
+};
+
+function Field({ htmlFor, label, children, description, className }: FieldProps) {
+  return (
+    <div className={className ?? 'grid gap-2'}>
+      <Label htmlFor={htmlFor}>{label}</Label>
+      {children}
+      {description ? <p className="text-sm text-muted-foreground">{description}</p> : null}
+    </div>
+  );
+}
 
 type AuthPortalSectionProps = {
   view: 'signin' | 'signup' | 'admin-signin';
@@ -72,95 +104,109 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
 
   return (
     <>
-      <Section title={authTarget === 'admin' ? '管理者認証' : 'メンバー認証'}>
-        <p style={{ color: '#666' }}>
-          {authTarget === 'admin'
-            ? '管理者専用サインインです。デモ管理者: admin@adolib-go.local / demo-admin-password'
-            : 'メンバー専用サインインです。管理者は /admin/signin からサインインしてください。'}
-        </p>
-        <div style={{ display: 'grid', gap: '0.75rem', maxWidth: 560 }}>
-          <label style={{ display: 'grid', gap: '0.35rem' }}>
-            <span>メールアドレス</span>
-            <input type="email" value={authEmail} onChange={(event) => setAuthEmail(event.target.value)} />
-          </label>
-          <label style={{ display: 'grid', gap: '0.35rem' }}>
-            <span>パスワード</span>
-            <input type="password" value={authPassword} onChange={(event) => setAuthPassword(event.target.value)} />
-          </label>
+      <Section
+        title={authTarget === 'admin' ? '管理者認証' : 'メンバー認証'}
+        description={authTarget === 'admin'
+          ? '管理者専用サインインです。デモ管理者: admin@adolib-go.local / demo-admin-password'
+          : 'メンバー専用サインインです。管理者は /admin/signin からサインインしてください。'}
+      >
+        <div className="grid max-w-2xl gap-4 md:grid-cols-2">
+          <Field htmlFor="auth-email" label="メールアドレス" className="md:col-span-2">
+            <Input id="auth-email" type="email" value={authEmail} onChange={(event) => setAuthEmail(event.target.value)} />
+          </Field>
+          <Field htmlFor="auth-password" label="パスワード" className="md:col-span-2">
+            <Input id="auth-password" type="password" value={authPassword} onChange={(event) => setAuthPassword(event.target.value)} />
+          </Field>
           {view === 'signup' && (
             <>
-              <label style={{ display: 'grid', gap: '0.35rem' }}>
-                <span>表示名</span>
-                <input type="text" value={signupDisplayName} onChange={(event) => setSignupDisplayName(event.target.value)} />
-              </label>
-              <label style={{ display: 'grid', gap: '0.35rem' }}>
-                <span>メイン楽器</span>
-                <select value={signupInstrument} onChange={(event) => setSignupInstrument(event.target.value as Instrument)}>
-                  <option value="drum">drum</option>
-                  <option value="bass">bass</option>
-                  <option value="piano">piano</option>
-                  <option value="front">front</option>
-                  <option value="vocal">vocal</option>
-                </select>
-              </label>
+              <Field htmlFor="signup-display-name" label="表示名" className="md:col-span-2">
+                <Input id="signup-display-name" type="text" value={signupDisplayName} onChange={(event) => setSignupDisplayName(event.target.value)} />
+              </Field>
+              <Field label="メイン楽器" htmlFor="signup-instrument">
+                <Select value={signupInstrument} onValueChange={(value) => setSignupInstrument(value as Instrument)}>
+                  <SelectTrigger id="signup-instrument" className="w-full">
+                    <SelectValue placeholder="メイン楽器を選択" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="drum">drum</SelectItem>
+                    <SelectItem value="bass">bass</SelectItem>
+                    <SelectItem value="piano">piano</SelectItem>
+                    <SelectItem value="front">front</SelectItem>
+                    <SelectItem value="vocal">vocal</SelectItem>
+                  </SelectContent>
+                </Select>
+              </Field>
               {signupInstrument === 'front' && (
-                <label style={{ display: 'grid', gap: '0.35rem' }}>
-                  <span>演奏楽器</span>
-                  <input type="text" value={signupSubInstrument} onChange={(event) => setSignupSubInstrument(event.target.value)} />
-                </label>
+                <Field htmlFor="signup-sub-instrument" label="演奏楽器">
+                  <Input id="signup-sub-instrument" type="text" value={signupSubInstrument} onChange={(event) => setSignupSubInstrument(event.target.value)} />
+                </Field>
               )}
-              <label style={{ display: 'grid', gap: '0.35rem' }}>
-                <span>居住地域</span>
-                <select value={signupArea} onChange={(event) => setSignupArea(event.target.value)}>
-                  <option value="">居住地域を選択</option>
-                  {PREFECTURE_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
-                </select>
-              </label>
-              <label style={{ display: 'grid', gap: '0.35rem' }}>
-                <span>性別</span>
-                <select value={signupGender} onChange={(event) => setSignupGender(event.target.value)}>
-                  <option value="">性別を選択</option>
-                  {GENDER_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
-                </select>
-              </label>
-              <label style={{ display: 'grid', gap: '0.35rem' }}>
-                <span>年代</span>
-                <select value={signupAgeRange} onChange={(event) => setSignupAgeRange(event.target.value)}>
-                  <option value="">年代を選択</option>
-                  {AGE_RANGE_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
-                </select>
-              </label>
+              <Field label="居住地域" htmlFor="signup-area">
+                <Select value={signupArea || NONE_VALUE} onValueChange={(value) => setSignupArea(value === NONE_VALUE ? '' : value)}>
+                  <SelectTrigger id="signup-area" className="w-full">
+                    <SelectValue placeholder="居住地域を選択" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={NONE_VALUE}>居住地域を選択</SelectItem>
+                    {PREFECTURE_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </Field>
+              <Field label="性別" htmlFor="signup-gender">
+                <Select value={signupGender || NONE_VALUE} onValueChange={(value) => setSignupGender(value === NONE_VALUE ? '' : value)}>
+                  <SelectTrigger id="signup-gender" className="w-full">
+                    <SelectValue placeholder="性別を選択" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={NONE_VALUE}>性別を選択</SelectItem>
+                    {GENDER_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </Field>
+              <Field label="年代" htmlFor="signup-age-range">
+                <Select value={signupAgeRange || NONE_VALUE} onValueChange={(value) => setSignupAgeRange(value === NONE_VALUE ? '' : value)}>
+                  <SelectTrigger id="signup-age-range" className="w-full">
+                    <SelectValue placeholder="年代を選択" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={NONE_VALUE}>年代を選択</SelectItem>
+                    {AGE_RANGE_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </Field>
             </>
           )}
-          <div>
-            <button type="button" onClick={view === 'signup' ? onSignUp : onSignIn} disabled={loading}>
+          <div className="md:col-span-2">
+            <Button type="button" onClick={view === 'signup' ? onSignUp : onSignIn} disabled={loading}>
               {view === 'signup' ? 'サインアップ' : 'サインイン'}
-            </button>
+            </Button>
           </div>
         </div>
       </Section>
 
       {view !== 'signup' && (
-        <Section title="パスワード再設定">
-          <div style={{ display: 'grid', gap: '0.75rem', maxWidth: 560 }}>
-            <label style={{ display: 'grid', gap: '0.35rem' }}>
-              <span>メールアドレス</span>
-              <input type="email" value={resetEmail} onChange={(event) => setResetEmail(event.target.value)} />
-            </label>
+        <Section title="パスワード再設定" description="パスワード再設定トークンの発行と更新を行います。">
+          <div className="grid max-w-2xl gap-4">
+            <Field htmlFor="reset-email" label="メールアドレス">
+              <Input id="reset-email" type="email" value={resetEmail} onChange={(event) => setResetEmail(event.target.value)} />
+            </Field>
             <div>
-              <button type="button" onClick={onForgotPassword} disabled={loading}>再設定トークンを発行</button>
+              <Button type="button" variant="outline" onClick={onForgotPassword} disabled={loading}>再設定トークンを発行</Button>
             </div>
-            {issuedResetToken && <p style={{ wordBreak: 'break-all', color: '#666' }}>開発用トークン: {issuedResetToken}</p>}
-            <label style={{ display: 'grid', gap: '0.35rem' }}>
-              <span>再設定トークン</span>
-              <input type="text" value={resetToken} onChange={(event) => setResetToken(event.target.value)} />
-            </label>
-            <label style={{ display: 'grid', gap: '0.35rem' }}>
-              <span>新しいパスワード</span>
-              <input type="password" value={resetPassword} onChange={(event) => setResetPassword(event.target.value)} />
-            </label>
+            {issuedResetToken && (
+              <Alert>
+                <AlertTitle>開発用トークン</AlertTitle>
+                <AlertDescription className="break-all">{issuedResetToken}</AlertDescription>
+              </Alert>
+            )}
+            <Field htmlFor="reset-token" label="再設定トークン">
+              <Input id="reset-token" type="text" value={resetToken} onChange={(event) => setResetToken(event.target.value)} />
+            </Field>
+            <Field htmlFor="reset-password" label="新しいパスワード">
+              <Input id="reset-password" type="password" value={resetPassword} onChange={(event) => setResetPassword(event.target.value)} />
+            </Field>
             <div>
-              <button type="button" onClick={onResetPassword} disabled={loading}>パスワード更新</button>
+              <Button type="button" onClick={onResetPassword} disabled={loading}>パスワード更新</Button>
             </div>
           </div>
         </Section>

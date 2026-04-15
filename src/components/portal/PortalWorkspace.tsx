@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { AdminPortalSection } from "@/components/portal/AdminPortalSection";
 import { AuthPortalSection } from "@/components/portal/AuthPortalSection";
 import { MemberPortalSection } from "@/components/portal/MemberPortalSection";
@@ -104,10 +106,20 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
   }, []);
 
   return (
-    <main style={{ padding: "2rem", maxWidth: 1000, margin: "0 auto" }}>
-      <h1>{view === "admin" ? "管理ダッシュボード" : view === "member" ? "メンバーページ" : view === "signup" ? "メンバーサインアップ" : view === "admin-signin" ? "管理者サインイン" : "メンバーサインイン"}</h1>
-      {message && <p style={{ color: "darkgreen" }}>{message}</p>}
-      {loading && <p style={{ color: "#666" }}>処理中...</p>}
+    <main className="mx-auto flex max-w-6xl flex-col px-6 py-8 md:px-8">
+      <div className="space-y-3">
+        <Badge variant="outline" className="w-fit">
+          {view === "admin" ? "Admin" : view === "member" ? "Member" : "Auth"}
+        </Badge>
+        <h1 className="text-3xl font-semibold tracking-tight">{view === "admin" ? "管理ダッシュボード" : view === "member" ? "メンバーページ" : view === "signup" ? "メンバーサインアップ" : view === "admin-signin" ? "管理者サインイン" : "メンバーサインイン"}</h1>
+      </div>
+      {message && (
+        <Alert className="brand-success-surface mt-4">
+          <AlertTitle>ステータス</AlertTitle>
+          <AlertDescription>{message}</AlertDescription>
+        </Alert>
+      )}
+      {loading && <p className="mt-4 text-sm text-muted-foreground">処理中...</p>}
 
       {(view === "signin" || view === "signup" || view === "admin-signin") && (
         <AuthPortalSection

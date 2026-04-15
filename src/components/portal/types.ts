@@ -179,5 +179,9 @@ export type GeneratedResult = {
 
 export type SectionProps = {
   title: string;
+  description?: string;
   children: ReactNode;
+  action?: ReactNode;
+  className?: string;
+  contentClassName?: string;
 };

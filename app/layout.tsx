@@ -10,7 +10,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ja">
       <body>
-        <header className="border-b bg-muted/40">
+        <header className="border-b border-brand-main/15 bg-brand-base/15 backdrop-blur-sm">
           <div className="mx-auto flex max-w-250 flex-wrap gap-4 px-8 py-4">
             <a href="/">トップ</a>
             <a href="/columns">コラム</a>
