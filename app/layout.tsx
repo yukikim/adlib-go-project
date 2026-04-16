@@ -23,7 +23,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <a href="/about">adlib-go について</a>
           </div>
         </header>
+        <div className="bg-linear-to-r/longer from-indigo-500/50 to-teal-400/50">
         {children}
+        </div>
         <Analytics />
       </body>
     </html>
