@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { prisma } from '@/lib/prisma';
+import Image from 'next/image';
 
 export async function PublicHomePage() {
   const now = new Date();
@@ -33,14 +34,25 @@ export async function PublicHomePage() {
 
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-8 md:px-8">
+      <div>
+
+      </div>
+              <Image
+                src='/images/main_logo.svg'
+                alt="Hero Image"
+                width={1200}
+                height={400}
+                // className="w-auto lg:w-[800px] mx-[20%]"
+                // style={{ height: 'auto' }}
+              />
       <section className="overflow-hidden rounded-[2rem] border border-brand-main/15 bg-linear-to-br from-brand-base/45 via-background to-brand-main/10 shadow-sm">
         <div className="grid gap-6 px-6 py-8 md:grid-cols-[1.4fr_0.9fr] md:px-8 md:py-10">
           <div className="space-y-5">
             <Badge variant="outline" className="brand-kicker">
-              Adlib-go KICK-OFF
+              Adlib-go Session
             </Badge>
             <div className="space-y-3">
-              <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">公開ページ、メンバーサイト、管理サイトを分けた入口</h1>
+              <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">公開ページ、メンバーサイト、管理サイトを分けたポータル</h1>
               <p className="max-w-2xl text-sm leading-7 text-muted-foreground md:text-base">
                 セッション告知、参加登録、sessionSet 公開、レイティング、アーカイブ管理までを一貫して扱うためのポータルです。
               </p>
