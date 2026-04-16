@@ -1,5 +1,6 @@
 import './globals.css';
 import type { ReactNode } from 'react';
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata = {
   title: 'Adlib-go KICK-OFF',
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           </div>
         </header>
         {children}
+        <Analytics />
       </body>
     </html>
   );
