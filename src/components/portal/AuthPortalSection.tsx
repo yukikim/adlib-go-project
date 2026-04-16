@@ -101,21 +101,52 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
     onResetPassword,
   } = props;
 
+  const handleAuthSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (loading) {
+      return;
+    }
+
+    if (view === 'signup') {
+      onSignUp();
+      return;
+    }
+
+    onSignIn();
+  };
+
+  const handleForgotPasswordSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (loading) {
+      return;
+    }
+
+    onForgotPassword();
+  };
+
+  const handleResetPasswordSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (loading) {
+      return;
+    }
+
+    onResetPassword();
+  };
 
   return (
     <>
       <Section
         title={authTarget === 'admin' ? '管理者認証' : 'メンバー認証'}
         description={authTarget === 'admin'
-          ? '管理者専用サインインです。デモ管理者: admin@adolib-go.local / demo-admin-password'
-          : 'メンバー専用サインインです。管理者は /admin/signin からサインインしてください。'}
+          ? '管理者専用サインインです。デモ管理者: admin@adlib-go.local / demo-admin-password'
+          : 'メンバー専用サインインです。デモメンバー: member01@adlib-go.local / demo-member-password。管理者は /admin/signin を利用してください。'}
       >
-        <div className="grid max-w-2xl gap-4 md:grid-cols-2">
+        <form className="grid max-w-2xl gap-4 md:grid-cols-2" onSubmit={handleAuthSubmit}>
           <Field htmlFor="auth-email" label="メールアドレス" className="md:col-span-2">
-            <Input id="auth-email" type="email" value={authEmail} onChange={(event) => setAuthEmail(event.target.value)} />
+            <Input id="auth-email" type="email" autoComplete="username" value={authEmail} onChange={(event) => setAuthEmail(event.target.value)} />
           </Field>
           <Field htmlFor="auth-password" label="パスワード" className="md:col-span-2">
-            <Input id="auth-password" type="password" value={authPassword} onChange={(event) => setAuthPassword(event.target.value)} />
+            <Input id="auth-password" type="password" autoComplete="current-password" value={authPassword} onChange={(event) => setAuthPassword(event.target.value)} />
           </Field>
           {view === 'signup' && (
             <>
@@ -177,37 +208,50 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
             </>
           )}
           <div className="md:col-span-2">
-            <Button type="button" onClick={view === 'signup' ? onSignUp : onSignIn} disabled={loading}>
+            <Button type="submit" disabled={loading}>
               {view === 'signup' ? 'サインアップ' : 'サインイン'}
             </Button>
           </div>
-        </div>
+        </form>
       </Section>
 
       {view !== 'signup' && (
         <Section title="パスワード再設定" description="パスワード再設定トークンの発行と更新を行います。">
           <div className="grid max-w-2xl gap-4">
-            <Field htmlFor="reset-email" label="メールアドレス">
-              <Input id="reset-email" type="email" value={resetEmail} onChange={(event) => setResetEmail(event.target.value)} />
-            </Field>
-            <div>
-              <Button type="button" variant="outline" onClick={onForgotPassword} disabled={loading}>再設定トークンを発行</Button>
-            </div>
+            <form className="grid gap-4" onSubmit={handleForgotPasswordSubmit}>
+              <Field htmlFor="reset-email" label="メールアドレス">
+                <Input id="reset-email" type="email" autoComplete="email" value={resetEmail} onChange={(event) => setResetEmail(event.target.value)} />
+              </Field>
+              <div>
+                <Button type="submit" variant="outline" disabled={loading}>再設定トークンを発行</Button>
+              </div>
+            </form>
             {issuedResetToken && (
               <Alert>
                 <AlertTitle>開発用トークン</AlertTitle>
                 <AlertDescription className="break-all">{issuedResetToken}</AlertDescription>
               </Alert>
             )}
-            <Field htmlFor="reset-token" label="再設定トークン">
-              <Input id="reset-token" type="text" value={resetToken} onChange={(event) => setResetToken(event.target.value)} />
-            </Field>
-            <Field htmlFor="reset-password" label="新しいパスワード">
-              <Input id="reset-password" type="password" value={resetPassword} onChange={(event) => setResetPassword(event.target.value)} />
-            </Field>
-            <div>
-              <Button type="button" onClick={onResetPassword} disabled={loading}>パスワード更新</Button>
-            </div>
+            <form className="grid gap-4" onSubmit={handleResetPasswordSubmit}>
+              <Input
+                type="email"
+                value={resetEmail}
+                autoComplete="username"
+                readOnly
+                tabIndex={-1}
+                aria-hidden="true"
+                className="hidden"
+              />
+              <Field htmlFor="reset-token" label="再設定トークン">
+                <Input id="reset-token" type="text" autoComplete="one-time-code" value={resetToken} onChange={(event) => setResetToken(event.target.value)} />
+              </Field>
+              <Field htmlFor="reset-password" label="新しいパスワード">
+                <Input id="reset-password" type="password" autoComplete="new-password" value={resetPassword} onChange={(event) => setResetPassword(event.target.value)} />
+              </Field>
+              <div>
+                <Button type="submit" disabled={loading}>パスワード更新</Button>
+              </div>
+            </form>
           </div>
         </Section>
       )}

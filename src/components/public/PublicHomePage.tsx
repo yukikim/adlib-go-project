@@ -37,7 +37,7 @@ export async function PublicHomePage() {
         <div className="grid gap-6 px-6 py-8 md:grid-cols-[1.4fr_0.9fr] md:px-8 md:py-10">
           <div className="space-y-5">
             <Badge variant="outline" className="brand-kicker">
-              Adolib-go KICK-OFF
+              Adlib-go KICK-OFF
             </Badge>
             <div className="space-y-3">
               <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">公開ページ、メンバーサイト、管理サイトを分けた入口</h1>
@@ -67,7 +67,7 @@ export async function PublicHomePage() {
                 <a href="/columns">コラム一覧</a>
               </Button>
               <Button asChild variant="ghost" className="justify-start">
-                <a href="/about">adolib-go について</a>
+                <a href="/about">adlib-go について</a>
               </Button>
               <Separator />
               <div className="rounded-xl bg-muted/60 p-4 text-sm text-muted-foreground">

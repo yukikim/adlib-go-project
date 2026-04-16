@@ -2,7 +2,7 @@ import './globals.css';
 import type { ReactNode } from 'react';
 
 export const metadata = {
-  title: 'Adolib-go KICK-OFF',
+  title: 'Adlib-go KICK-OFF',
   description: '公開ページ、メンバーサイト、管理サイトを持つセッション運営アプリ',
 };
 
@@ -19,7 +19,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <a href="/admin/signin">管理者サインイン</a>
             <a href="/member">メンバー</a>
             <a href="/admin">管理</a>
-            <a href="/about">adolib-go について</a>
+            <a href="/about">adlib-go について</a>
           </div>
         </header>
         {children}

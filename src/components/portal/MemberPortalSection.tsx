@@ -182,6 +182,15 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     onSaveRating,
   } = props;
 
+  const handleProfileSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (loading) {
+      return;
+    }
+
+    onProfileUpdate();
+  };
+
   return (
     <>
       <Section title="プロフィール" description="プロフィール更新とパスワード変更をこの画面で行います。">
@@ -189,7 +198,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
           <Badge variant="outline">{currentUser?.role ?? 'member'}</Badge>
           <span className="text-sm text-muted-foreground">{currentUser?.email}</span>
         </div>
-        <div className="grid max-w-3xl gap-4 md:grid-cols-2">
+        <form className="grid max-w-3xl gap-4 md:grid-cols-2" onSubmit={handleProfileSubmit}>
           <Field htmlFor="member-profile-display-name" label="表示名" className="md:col-span-2">
             <Input id="member-profile-display-name" type="text" placeholder="表示名" value={profileDisplayName} onChange={(event) => onProfileDisplayNameChange(event.target.value)} />
           </Field>
@@ -254,19 +263,19 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             <Textarea id="member-profile-bio" rows={4} placeholder="自己紹介" value={profileBio} onChange={(event) => onProfileBioChange(event.target.value)} />
           </Field>
           <Field htmlFor="member-profile-current-password" label="現在のパスワード">
-            <Input id="member-profile-current-password" type="password" placeholder="現在のパスワード（変更時のみ）" value={profileCurrentPassword} onChange={(event) => onProfileCurrentPasswordChange(event.target.value)} />
+            <Input id="member-profile-current-password" type="password" autoComplete="current-password" placeholder="現在のパスワード（変更時のみ）" value={profileCurrentPassword} onChange={(event) => onProfileCurrentPasswordChange(event.target.value)} />
           </Field>
           <Field htmlFor="member-profile-new-password" label="新しいパスワード">
-            <Input id="member-profile-new-password" type="password" placeholder="新しいパスワード（変更時のみ）" value={profileNewPassword} onChange={(event) => onProfileNewPasswordChange(event.target.value)} />
+            <Input id="member-profile-new-password" type="password" autoComplete="new-password" placeholder="新しいパスワード（変更時のみ）" value={profileNewPassword} onChange={(event) => onProfileNewPasswordChange(event.target.value)} />
           </Field>
           <Field htmlFor="member-profile-new-password-confirm" label="新しいパスワード確認" className="md:col-span-2">
-            <Input id="member-profile-new-password-confirm" type="password" placeholder="新しいパスワード確認" value={profileNewPasswordConfirm} onChange={(event) => onProfileNewPasswordConfirmChange(event.target.value)} />
+            <Input id="member-profile-new-password-confirm" type="password" autoComplete="new-password" placeholder="新しいパスワード確認" value={profileNewPasswordConfirm} onChange={(event) => onProfileNewPasswordConfirmChange(event.target.value)} />
           </Field>
           <div className="flex flex-wrap gap-3 md:col-span-2">
-            <Button type="button" onClick={onProfileUpdate} disabled={loading}>プロフィール保存</Button>
+            <Button type="submit" disabled={loading}>プロフィール保存</Button>
             <Button type="button" variant="outline" onClick={onSignOut} disabled={loading}>サインアウト</Button>
           </div>
-        </div>
+        </form>
       </Section>
 
       <Section title="お知らせ" description="運営からの告知を確認できます。">

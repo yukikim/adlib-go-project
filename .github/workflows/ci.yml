@@ -34,7 +34,7 @@ jobs:
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/jazz_session_planner?schema=public
       APP_BASE_URL: http://127.0.0.1:3000
-      MAIL_FROM: no-reply@adolib-go.local
+      MAIL_FROM: no-reply@adlib-go.local
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -1,8 +1,8 @@
-# Adolib-go KICK-OFF DBテーブル案
+# Adlib-go KICK-OFF DBテーブル案
 
 ## 1. 文書概要
 
-本書は、Adolib-go KICK-OFF で想定する DB テーブル案を整理したものです。
+本書は、Adlib-go KICK-OFF で想定する DB テーブル案を整理したものです。
 
 既存 Prisma スキーマで実装済みのテーブルと、今後追加が必要なテーブルを分けて記載します。
 

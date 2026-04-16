@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
       summary: body.summary,
       body: body.body,
       thumbnailLabel: body.thumbnailLabel ?? null,
-      authorName: body.authorName || 'Adolib-go 運営',
+      authorName: body.authorName || 'Adlib-go 運営',
       displayOrder,
       isPublished: body.isPublished ?? false,
       publishedAt,

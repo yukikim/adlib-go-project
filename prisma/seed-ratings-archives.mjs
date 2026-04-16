@@ -1,3 +1,4 @@
+import './load-env.mjs';
 import { PrismaClient } from '@prisma/client';
 import { archiveSeed, demoSessionEvent, ratingComments } from './demo-data.mjs';
 
@@ -18,7 +19,7 @@ async function main() {
   });
 
   const admin = await prisma.userAccount.findUniqueOrThrow({
-    where: { email: 'admin@adolib-go.local' },
+    where: { email: 'admin@adlib-go.local' },
     select: { id: true },
   });
 

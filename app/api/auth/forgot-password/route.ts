@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
   await sendMail({
     mailType: 'password_reset',
     to: user.email,
-    subject: 'Adolib-go パスワード再設定',
+    subject: 'Adlib-go パスワード再設定',
     text: `以下の URL からパスワードを再設定してください。\n${resetUrl}\n有効期限: ${expiresAt.toISOString()}`,
   });
 

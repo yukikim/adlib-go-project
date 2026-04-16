@@ -7,21 +7,31 @@ type UseAuthPortalArgs = {
   setCurrentUser: (user: AuthUser | null) => void;
   reloadShared: () => Promise<void>;
   onSignInSuccess?: (roleTarget: 'member' | 'admin') => void;
+  defaultAuthTarget?: 'member' | 'admin';
 };
 
-export function useAuthPortal({ runAction, setCurrentUser, reloadShared, onSignInSuccess }: UseAuthPortalArgs) {
-  const [authEmail, setAuthEmail] = useState('admin@adolib-go.local');
-  const [authPassword, setAuthPassword] = useState('demo-admin-password');
+export function useAuthPortal({ runAction, setCurrentUser, reloadShared, onSignInSuccess, defaultAuthTarget = 'member' }: UseAuthPortalArgs) {
+  const defaultAuthEmail = defaultAuthTarget === 'admin' ? 'admin@adlib-go.local' : 'member01@adlib-go.local';
+  const defaultAuthPassword = defaultAuthTarget === 'admin' ? 'demo-admin-password' : 'demo-member-password';
+
+  const [authEmail, setAuthEmail] = useState(defaultAuthEmail);
+  const [authPassword, setAuthPassword] = useState(defaultAuthPassword);
   const [signupDisplayName, setSignupDisplayName] = useState('');
   const [signupInstrument, setSignupInstrument] = useState<Instrument>('front');
   const [signupSubInstrument, setSignupSubInstrument] = useState('');
   const [signupGender, setSignupGender] = useState('');
   const [signupAgeRange, setSignupAgeRange] = useState('');
   const [signupArea, setSignupArea] = useState('');
-  const [resetEmail, setResetEmail] = useState('admin@adolib-go.local');
+  const [resetEmail, setResetEmail] = useState(defaultAuthEmail);
   const [resetToken, setResetToken] = useState('');
   const [resetPassword, setResetPassword] = useState('');
   const [issuedResetToken, setIssuedResetToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    setAuthEmail(defaultAuthEmail);
+    setAuthPassword(defaultAuthPassword);
+    setResetEmail(defaultAuthEmail);
+  }, [defaultAuthEmail, defaultAuthPassword]);
 
   useEffect(() => {
     if (signupInstrument !== 'front') {

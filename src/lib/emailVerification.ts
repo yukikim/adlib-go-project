@@ -9,7 +9,7 @@ export async function sendEmailVerificationMail(userAccountId: string, email: st
   await sendMail({
     mailType: 'email_verification',
     to: email,
-    subject: 'Adolib-go メールアドレス認証',
+    subject: 'Adlib-go メールアドレス認証',
     text: `以下の URL からメールアドレス認証を完了してください。\n${verifyUrl}\n有効期限: ${expiresAt.toISOString()}`,
   });
 

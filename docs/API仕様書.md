@@ -1,4 +1,4 @@
-# Adolib-go KICK-OFF API仕様書
+# Adlib-go KICK-OFF API仕様書
 
 ## 1. 文書概要
 
@@ -22,7 +22,7 @@ request:
 
 ```json
 {
-  "email": "member31@adolib-go.local",
+  "email": "member31@adlib-go.local",
   "password": "password123",
   "displayName": "新規 参加者",
   "mainInstrument": "front"
@@ -35,7 +35,7 @@ response 201:
 {
   "user": {
     "id": "user-id",
-    "email": "member31@adolib-go.local",
+    "email": "member31@adlib-go.local",
     "role": "member",
     "memberProfile": {
       "displayName": "新規 参加者",
@@ -55,7 +55,7 @@ request:
 
 ```json
 {
-  "email": "admin@adolib-go.local",
+  "email": "admin@adlib-go.local",
   "password": "demo-admin-password"
 }
 ```
@@ -66,7 +66,7 @@ response 200:
 {
   "user": {
     "id": "user-id",
-    "email": "admin@adolib-go.local",
+    "email": "admin@adlib-go.local",
     "role": "admin",
     "memberProfile": null
   }
@@ -99,7 +99,7 @@ response 200:
 {
   "user": {
     "id": "user-id",
-    "email": "admin@adolib-go.local",
+    "email": "admin@adlib-go.local",
     "role": "admin",
     "status": "active",
     "memberProfile": null
@@ -377,7 +377,7 @@ response 200:
       "summary": "初参加メンバー向けに、当日までの流れと準備物を整理しました。",
       "body": "1段落目\n\n2段落目",
       "thumbnailLabel": "Guide",
-      "authorName": "Adolib-go 運営",
+      "authorName": "Adlib-go 運営",
       "isPublished": true,
       "publishedAt": "2026-04-09T00:00:00.000Z"
     }
@@ -404,7 +404,7 @@ request:
   "summary": "初参加メンバー向けに、当日までの流れと準備物を整理しました。",
   "body": "1段落目\n\n2段落目",
   "thumbnailLabel": "Guide",
-  "authorName": "Adolib-go 運営",
+  "authorName": "Adlib-go 運営",
   "isPublished": true
 }
 ```

@@ -1,6 +1,6 @@
 # Jazz Session Planner
 
-Adolib-go KICK-OFF 向けの public site、member site、admin site をまとめた Next.js + Prisma + PostgreSQL アプリです。
+Adlib-go KICK-OFF 向けの public site、member site、admin site をまとめた Next.js + Prisma + PostgreSQL アプリです。
 
 このリポジトリには以下が含まれます。
 
@@ -521,8 +521,8 @@ admin dashboard で以下を提供します。
 
 ### デモログイン情報
 
-- 管理者: `/admin/signin` から admin@adolib-go.local / demo-admin-password
-- メンバー例: `/signin` から member01@adolib-go.local / demo-member-password
+- 管理者: `/admin/signin` から admin@adlib-go.local / demo-admin-password
+- メンバー例: `/signin` から member01@adlib-go.local / demo-member-password
 
 サインアップ / member プロフィールで扱う主な項目:
 
@@ -558,7 +558,7 @@ POSTGRES_PASSWORD=postgres
 POSTGRES_DB=jazz_session_planner
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/jazz_session_planner?schema=public"
 APP_BASE_URL="http://localhost:3000"
-MAIL_FROM="no-reply@adolib-go.local"
+MAIL_FROM="no-reply@adlib-go.local"
 SMTP_HOST=""
 SMTP_PORT=""
 SMTP_SECURE="false"
@@ -757,7 +757,7 @@ npm run seed:ratings-archives
 認証系デモデータ補足:
 
 - デモアカウントの passwordHash は seed 時にハッシュ化済みです
-- 管理 API の暫定確認には admin@adolib-go.local を使う想定です
+- 管理 API の暫定確認には admin@adlib-go.local を使う想定です
 
 ### 画面導線
 

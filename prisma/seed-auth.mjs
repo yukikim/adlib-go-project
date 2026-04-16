@@ -1,3 +1,4 @@
+import './load-env.mjs';
 import { PrismaClient } from '@prisma/client';
 import { randomBytes, scrypt as scryptCallback } from 'crypto';
 import { promisify } from 'util';
@@ -13,7 +14,7 @@ async function hashPassword(password) {
 }
 
 function buildMemberEmail(index) {
-  return `member${String(index + 1).padStart(2, '0')}@adolib-go.local`;
+  return `member${String(index + 1).padStart(2, '0')}@adlib-go.local`;
 }
 
 const genderOptions = ['男性', '女性', 'その他'];

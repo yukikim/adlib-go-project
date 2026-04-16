@@ -71,7 +71,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
   const [columnSummary, setColumnSummary] = useState('');
   const [columnBody, setColumnBody] = useState('');
   const [columnThumbnailLabel, setColumnThumbnailLabel] = useState('Guide');
-  const [columnAuthorName, setColumnAuthorName] = useState('Adolib-go 運営');
+  const [columnAuthorName, setColumnAuthorName] = useState('Adlib-go 運営');
   const [columnDisplayOrder, setColumnDisplayOrder] = useState(0);
   const [columnPublishAt, setColumnPublishAt] = useState('');
   const [columnPublished, setColumnPublished] = useState(true);
@@ -108,7 +108,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     setColumnSummary('');
     setColumnBody('');
     setColumnThumbnailLabel('Guide');
-    setColumnAuthorName('Adolib-go 運営');
+    setColumnAuthorName('Adlib-go 運営');
     setColumnDisplayOrder(0);
     setColumnPublishAt('');
     setColumnPublished(true);

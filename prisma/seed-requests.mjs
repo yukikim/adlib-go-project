@@ -1,3 +1,4 @@
+import './load-env.mjs';
 import { PrismaClient } from '@prisma/client';
 import { songTitles, vocalKeys } from './demo-data.mjs';
 

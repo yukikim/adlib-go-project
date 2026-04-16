@@ -33,7 +33,7 @@ type SendMailInput = {
 
 export async function sendMail(input: SendMailInput) {
   const transporter = buildTransport();
-  const from = process.env.MAIL_FROM ?? 'no-reply@adolib-go.local';
+  const from = process.env.MAIL_FROM ?? 'no-reply@adlib-go.local';
 
   const mailLog = await prisma.mailLog.create({
     data: {

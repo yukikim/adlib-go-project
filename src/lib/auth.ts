@@ -2,7 +2,13 @@ import { createHash, randomBytes } from 'crypto';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-export const SESSION_COOKIE_NAME = 'adolib_session';
+type CookieValueReader = {
+  get: (name: string) => { value?: string } | undefined;
+};
+
+export const SESSION_COOKIE_NAME = 'adlib_session';
+export const LEGACY_SESSION_COOKIE_NAMES = ['adolib_session'] as const;
+const ALL_SESSION_COOKIE_NAMES = [SESSION_COOKIE_NAME, ...LEGACY_SESSION_COOKIE_NAMES];
 const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
 const PASSWORD_RESET_TOKEN_MAX_AGE_MS = 1000 * 60 * 60;
 const EMAIL_VERIFICATION_TOKEN_MAX_AGE_MS = 1000 * 60 * 60 * 24;
@@ -15,30 +21,46 @@ function buildSessionCookieValue() {
   return randomBytes(32).toString('hex');
 }
 
-export function applySessionCookie(response: NextResponse, token: string, expiresAt: Date) {
-  response.cookies.set({
-    name: SESSION_COOKIE_NAME,
-    value: token,
+function getSessionCookieConfig(name: string, value: string, expires: Date, maxAge: number) {
+  return {
+    name,
+    value,
     httpOnly: true,
-    sameSite: 'lax',
+    sameSite: 'lax' as const,
     secure: process.env.NODE_ENV === 'production',
     path: '/',
-    expires: expiresAt,
-    maxAge: SESSION_MAX_AGE_SECONDS,
-  });
+    expires,
+    maxAge,
+  };
+}
+
+export function getSessionTokenFromCookieStore(cookieStore: CookieValueReader) {
+  for (const cookieName of ALL_SESSION_COOKIE_NAMES) {
+    const token = cookieStore.get(cookieName)?.value;
+    if (token) {
+      return token;
+    }
+  }
+
+  return undefined;
+}
+
+export function getSessionTokenFromRequest(request: NextRequest) {
+  return getSessionTokenFromCookieStore(request.cookies);
+}
+
+export function applySessionCookie(response: NextResponse, token: string, expiresAt: Date) {
+  response.cookies.set(getSessionCookieConfig(SESSION_COOKIE_NAME, token, expiresAt, SESSION_MAX_AGE_SECONDS));
+
+  for (const legacyCookieName of LEGACY_SESSION_COOKIE_NAMES) {
+    response.cookies.set(getSessionCookieConfig(legacyCookieName, '', new Date(0), 0));
+  }
 }
 
 export function clearSessionCookie(response: NextResponse) {
-  response.cookies.set({
-    name: SESSION_COOKIE_NAME,
-    value: '',
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
-    path: '/',
-    expires: new Date(0),
-    maxAge: 0,
-  });
+  for (const cookieName of ALL_SESSION_COOKIE_NAMES) {
+    response.cookies.set(getSessionCookieConfig(cookieName, '', new Date(0), 0));
+  }
 }
 
 export async function createSession(userAccountId: string) {
@@ -105,7 +127,7 @@ export async function revokeAllSessionsForUser(userAccountId: string) {
 }
 
 export async function getAuthenticatedUser(request: NextRequest) {
-  const token = request.cookies.get(SESSION_COOKIE_NAME)?.value;
+  const token = getSessionTokenFromRequest(request);
   return getAuthenticatedUserByToken(token);
 }
 

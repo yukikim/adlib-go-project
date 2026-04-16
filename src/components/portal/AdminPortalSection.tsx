@@ -148,7 +148,8 @@ const adminNavGroups: AdminNavGroup[] = [
 ];
 
 const defaultAdminGroupId = 'admin-activity';
-const adminSelectionStorageKey = 'adolib-admin-dashboard-selection';
+const adminSelectionStorageKey = 'adlib-admin-dashboard-selection';
+const legacyAdminSelectionStorageKey = 'adolib-admin-dashboard-selection';
 const adminNavGroupIdSet = new Set(adminNavGroups.map((group) => group.id));
 const adminNavChildIdsByGroup = new Map(adminNavGroups.map((group) => [group.id, new Set(group.children.map((child) => child.id))]));
 
@@ -384,7 +385,8 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     }
 
     try {
-      const rawSelection = window.localStorage.getItem(adminSelectionStorageKey);
+      const rawSelection = window.localStorage.getItem(adminSelectionStorageKey)
+        ?? window.localStorage.getItem(legacyAdminSelectionStorageKey);
 
       if (rawSelection) {
         const parsedSelection = JSON.parse(rawSelection) as {
@@ -406,9 +408,11 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
         setActiveGroupId(nextGroupId);
         setActiveChildId(nextChildId);
         setOpenMobileGroupId(nextOpenMobileGroupId);
+        window.localStorage.removeItem(legacyAdminSelectionStorageKey);
       }
     } catch {
       window.localStorage.removeItem(adminSelectionStorageKey);
+      window.localStorage.removeItem(legacyAdminSelectionStorageKey);
     }
 
     setHasRestoredSelection(true);

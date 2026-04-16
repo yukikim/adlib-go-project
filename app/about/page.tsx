@@ -10,12 +10,12 @@ export default function AboutPage() {
         <div className="grid gap-6 px-6 py-8 md:grid-cols-[1.3fr_0.8fr] md:px-8 md:py-10">
           <div className="space-y-5">
             <Badge variant="outline" className="brand-kicker">
-              About Adolib-go
+              About Adlib-go
             </Badge>
             <div className="space-y-3">
-              <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">adolib-go について</h1>
+              <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">adlib-go について</h1>
               <p className="max-w-2xl text-sm leading-7 text-muted-foreground md:text-base">
-                Adolib-go KICK-OFF は、セッション主催者の運営業務とメンバー向け導線を 1 つの Web アプリに統合するためのプロジェクトです。
+                Adlib-go KICK-OFF は、セッション主催者の運営業務とメンバー向け導線を 1 つの Web アプリに統合するためのプロジェクトです。
               </p>
             </div>
             <div className="flex flex-wrap gap-3">

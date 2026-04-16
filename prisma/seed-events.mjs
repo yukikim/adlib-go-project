@@ -1,3 +1,4 @@
+import './load-env.mjs';
 import { PrismaClient } from '@prisma/client';
 import { demoSessionEvent } from './demo-data.mjs';
 
