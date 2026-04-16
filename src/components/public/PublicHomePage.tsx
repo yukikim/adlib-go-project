@@ -35,16 +35,19 @@ export async function PublicHomePage() {
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-8 md:px-8">
       <div>
-
+        <Image
+          src='/images/main_logo.svg'
+          alt="Hero Image"
+          width={1200}
+          height={400}
+          loading="eager"
+        // className="w-auto lg:w-[800px] mx-[20%]"
+        // style={{ height: 'auto' }}
+        />
+        <div className="w-full absolute top-[250px] left-0 text-center flex justify-center">
+          <p className="text-[2rem] font-bold border-8 p-4 w-[310px] text-red-500 border-red-500 rotate-12 bg-orange-300/50">ただいま工事中！</p>
+        </div>
       </div>
-              <Image
-                src='/images/main_logo.svg'
-                alt="Hero Image"
-                width={1200}
-                height={400}
-                // className="w-auto lg:w-[800px] mx-[20%]"
-                // style={{ height: 'auto' }}
-              />
       <section className="overflow-hidden rounded-[2rem] border border-brand-main/15 bg-linear-to-br from-brand-base/45 via-background to-brand-main/10 shadow-sm">
         <div className="grid gap-6 px-6 py-8 md:grid-cols-[1.4fr_0.9fr] md:px-8 md:py-10">
           <div className="space-y-5">
