@@ -174,6 +174,37 @@ Vercel プロジェクトには少なくとも以下を設定してください�
 
 `APP_BASE_URL` は本番 URL に合わせて設定してください。例: `https://your-project.vercel.app`
 
+### 本番 DB に migration を流す手順
+
+このリポジトリの CI は検証用 PostgreSQL に対して `prisma migrate deploy` を実行しますが、本番 DB への migration 適用は別途実施してください。
+
+ローカルの `.env` や `.env.local` を書き換えずに実行するため、コマンド実行時に本番 `DATABASE_URL` をその場で渡す運用を推奨します。
+
+1. まず本番接続先が正しいか確認する
+
+```bash
+DATABASE_URL='postgresql://...production...' npm run prisma:migrate:status
+```
+
+2. 問題なければ本番 DB に migration を適用する
+
+```bash
+DATABASE_URL='postgresql://...production...' npm run prisma:migrate:deploy
+```
+
+3. 適用後にもう一度状態を確認する
+
+```bash
+DATABASE_URL='postgresql://...production...' npm run prisma:migrate:status
+```
+
+補足:
+
+- `DATABASE_URL` には Vercel Production 環境変数に設定したものと同じ値を使ってください
+- `localhost:5432` のようなローカル DB 接続文字列を本番用として使わないでください
+- migration 適用後に Vercel 側で再デプロイすると、本番 runtime とスキーマ差分を避けられます
+- Prisma のエラーが出る場合は、まず `P1001` は接続不能、`P2021` はテーブル未作成を疑ってください
+
 ### 初回セットアップ手順
 
 1. GitHub にこのリポジトリを push する
