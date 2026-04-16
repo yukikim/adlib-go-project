@@ -151,6 +151,8 @@ CI ではローカル開発用と同じ値で一時的な PostgreSQL を起動�
 
 同じ workflow 内で、main ブランチへの push かつ CI 成功後に Vercel へ production deploy を実行します。
 
+このリポジトリは Prisma Client を使うため、Vercel の依存キャッシュ環境でも確実に Prisma Client を再生成できるように `postinstall` と `build` の両方で `prisma generate` を実行する構成にしています。
+
 GitHub Repository Secrets に以下を設定してください。
 
 - `VERCEL_TOKEN`
