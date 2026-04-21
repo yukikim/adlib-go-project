@@ -27,7 +27,7 @@ export default async function ColumnsPage() {
 
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-8 md:px-8">
-      <section className="overflow-hidden rounded-[2rem] border border-brand-main/15 bg-linear-to-br from-brand-base/45 via-background to-brand-main/10 shadow-sm">
+      <section className="glass_section">
         <div className="grid gap-6 px-6 py-8 md:grid-cols-[1.25fr_0.85fr] md:px-8 md:py-10">
           <div className="space-y-4">
             <Badge variant="outline" className="brand-kicker">
