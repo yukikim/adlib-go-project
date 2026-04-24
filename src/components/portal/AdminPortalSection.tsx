@@ -481,6 +481,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
       : 'text-muted-foreground hover:bg-muted hover:text-foreground',
   );
 
+  console.log(sessionEvents);
   return (
     <div className="mt-6 grid gap-6 xl:grid-cols-[280px_minmax(0,1fr)]">
       <aside className="xl:sticky xl:top-24 xl:self-start">
@@ -629,6 +630,14 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                   ))}
                 </SelectContent>
               </Select>
+              <div>
+                <ul>
+                  {sessionEvents.map((sessionEvent) => (
+                    <li key={sessionEvent.id} value={sessionEvent.id}>{sessionEvent.title}</li>
+                  ))}
+
+                </ul>
+              </div>
             </Field>
 
             {selectedAdminEvent ? (
