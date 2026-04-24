@@ -26,9 +26,9 @@ type UseAdminPortalArgs = {
 
 export function useAdminPortal({ currentUser, members, sessionEvents, runAction, reloadShared }: UseAdminPortalArgs) {
   const [selectedAdminEventId, setSelectedAdminEventId] = useState('');
-  const [eventTitle, setEventTitle] = useState('2026年6月 セッション');
-  const [eventVenue, setEventVenue] = useState('渋谷 Jazz Spot');
-  const [eventDate, setEventDate] = useState('2026-06-21');
+  const [eventTitle, setEventTitle] = useState('');
+  const [eventVenue, setEventVenue] = useState('');
+  const [eventDate, setEventDate] = useState('');
   const [editEventTitle, setEditEventTitle] = useState('');
   const [editEventVenue, setEditEventVenue] = useState('');
   const [editEventDate, setEditEventDate] = useState('');
