@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
       data: { title: body.title },
     });
     return NextResponse.json({ song }, { status: 201 });
-  } catch (e) {
+  } catch {
     return NextResponse.json({ error: 'Failed to create song (maybe duplicate?)' }, { status: 400 });
   }
 }

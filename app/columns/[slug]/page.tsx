@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -47,10 +48,10 @@ export default async function ColumnDetailPage({ params }: { params: Promise<{ s
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
             <Button asChild variant="outline">
-              <a href="/columns">一覧へ戻る</a>
+              <Link href="/columns">一覧へ戻る</Link>
             </Button>
             <Button asChild>
-              <a href="/signup">参加をはじめる</a>
+              <Link href="/signup">参加をはじめる</Link>
             </Button>
           </div>
         </div>

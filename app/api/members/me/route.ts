@@ -39,7 +39,6 @@ export async function PATCH(request: NextRequest) {
   const shouldChangePassword = body.currentPassword || body.newPassword;
   if (shouldChangePassword) {
     const currentPassword = body.currentPassword!;
-    const newPassword = body.newPassword!;
     const validCurrentPassword = await verifyPassword(currentPassword, user.passwordHash);
     if (!validCurrentPassword) {
       return NextResponse.json({ error: 'currentPassword is incorrect' }, { status: 400 });

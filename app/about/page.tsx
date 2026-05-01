@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,10 +21,10 @@ export default function AboutPage() {
             </div>
             <div className="flex flex-wrap gap-3">
               <Button asChild>
-                <a href="/signup">参加をはじめる</a>
+                <Link href="/signup">参加をはじめる</Link>
               </Button>
               <Button asChild variant="outline">
-                <a href="/columns">コラムを読む</a>
+                <Link href="/columns">コラムを読む</Link>
               </Button>
             </div>
           </div>
@@ -84,10 +85,10 @@ export default function AboutPage() {
           <CardContent className="space-y-4">
             <div className="flex flex-wrap gap-3">
               <Button asChild variant="secondary">
-                <a href="/signin">メンバーサインイン</a>
+                <Link href="/signin">メンバーサインイン</Link>
               </Button>
               <Button asChild variant="secondary">
-                <a href="/admin/signin">管理者サインイン</a>
+                <Link href="/admin/signin">管理者サインイン</Link>
               </Button>
             </div>
             <Separator />

@@ -38,8 +38,8 @@ export default function AuthWorkspace({ view }: AuthWorkspaceProps) {
         setMessage(successMessage);
       }
       options?.onSuccess?.(successMessage);
-    } catch (error: any) {
-      const nextMessage = error?.message ?? '処理に失敗しました';
+    } catch (error: unknown) {
+      const nextMessage = error instanceof Error ? error.message : '処理に失敗しました';
       if (!options?.skipGlobalMessage) {
         setMessage(nextMessage);
       }

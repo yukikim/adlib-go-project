@@ -1,23 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
-import { AdminPortalSection } from "@/components/portal/AdminPortalSection";
-import { AuthPortalSection } from "@/components/portal/AuthPortalSection";
-import { MemberPortalSection } from "@/components/portal/MemberPortalSection";
-import { useAdminPortal } from "@/components/portal/hooks/useAdminPortal";
-import { useAuthPortal } from "@/components/portal/hooks/useAuthPortal";
-import { useMemberPortal } from "@/components/portal/hooks/useMemberPortal";
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { AdminPortalSection } from '@/components/portal/AdminPortalSection';
+import { AuthPortalSection } from '@/components/portal/AuthPortalSection';
+import { MemberPortalSection } from '@/components/portal/MemberPortalSection';
+import { useAdminPortal } from '@/components/portal/hooks/useAdminPortal';
+import { useAuthPortal } from '@/components/portal/hooks/useAuthPortal';
+import { useMemberPortal } from '@/components/portal/hooks/useMemberPortal';
 import {
   type AnnouncementView,
   type AuthUser,
   type MemberListView,
   type PortalView,
   type SessionEventView,
-} from "@/components/portal/types";
-import { parseJson } from "@/components/portal/utils";
+} from '@/components/portal/types';
+import { parseJson } from '@/components/portal/utils';
 import MainHeader from '@/components/portal/MainHeader';
 
 export default function PortalWorkspace({ view }: { view: PortalView }) {
@@ -40,8 +40,8 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
         setMessage(successMessage);
       }
       options?.onSuccess?.(successMessage);
-    } catch (error: any) {
-      const nextMessage = error?.message ?? "処理に失敗しました";
+    } catch (error: unknown) {
+      const nextMessage = error instanceof Error ? error.message : '処理に失敗しました';
       if (!options?.skipGlobalMessage) {
         setMessage(nextMessage);
       }
@@ -54,7 +54,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
   const reloadShared = async () => {
     setLoading(true);
     try {
-      const meRes = await fetch("/api/auth/me");
+      const meRes = await fetch('/api/auth/me');
       const meJson = await parseJson(meRes);
       const user = meJson.user ?? null;
       setCurrentUser(user);
@@ -87,23 +87,23 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
     setCurrentUser,
     reloadShared,
     onSignInSuccess: (roleTarget) => {
-      if (view === "signin" && roleTarget === "member") {
-        router.push("/member");
+      if (view === 'signin' && roleTarget === 'member') {
+        router.push('/member');
       }
     },
   });
   const member = useMemberPortal({ currentUser, members, sessionEvents, runAction, reloadShared });
   const admin = useAdminPortal({ currentUser, members, sessionEvents, runAction, reloadShared });
-  // console.log("admin", admin);
-  // console.log("currentUser", currentUser);
+  // console.log('admin', admin);
+  // console.log('currentUser', currentUser);
 
-  const isMember = currentUser?.role === "member";
-  const isAdmin = currentUser?.role === "admin";
+  const isMember = currentUser?.role === 'member';
+  const isAdmin = currentUser?.role === 'admin';
 
   useEffect(() => {
     reloadShared().catch((error) => {
       console.error(error);
-      setMessage("データ取得に失敗しました");
+      setMessage('データ取得に失敗しました');
       setLoading(false);
     });
   }, []);
@@ -111,7 +111,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
   return (
     <main className="mx-auto flex max-w-6xl flex-col px-6 py-8 md:px-8">
       <MainHeader
-        view={ currentUser?.role === "admin" ? "管理者" : "メンバー" }
+        view={currentUser?.role === 'admin' ? '管理者' : 'メンバー'}
         currentUser={{ role: currentUser?.role, displayName: admin.adminMemberDisplayName }}
         auth={{ handleSignOut: auth.handleSignOut }}
         loading={loading}

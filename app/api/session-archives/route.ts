@@ -7,7 +7,7 @@ import { sessionArchiveCreateRequestSchema } from '@/lib/apiSchemas';
 
 // GET /api/session-archives?includeDeleted=true
 export async function GET(request: NextRequest) {
-  const { admin, response } = await requireAdmin(request);
+  const { response } = await requireAdmin(request);
   if (response) {
     return response;
   }

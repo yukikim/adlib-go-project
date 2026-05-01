@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -62,13 +63,13 @@ export async function PublicHomePage() {
             </div>
             <div className="flex flex-wrap gap-3">
               <Button asChild>
-                <a href="/signin">メンバーサインイン</a>
+                <Link href="/signin">メンバーサインイン</Link>
               </Button>
               <Button asChild variant="secondary">
-                <a href="/signup">メンバーサインアップ</a>
+                <Link href="/signup">メンバーサインアップ</Link>
               </Button>
               <Button asChild variant="outline">
-                <a href="/admin/signin">管理者サインイン</a>
+                <Link href="/admin/signin">管理者サインイン</Link>
               </Button>
             </div>
           </div>
@@ -79,10 +80,10 @@ export async function PublicHomePage() {
             </CardHeader>
             <CardContent className="grid gap-3">
               <Button asChild variant="ghost" className="justify-start">
-                <a href="/columns">コラム一覧</a>
+                <Link href="/columns">コラム一覧</Link>
               </Button>
               <Button asChild variant="ghost" className="justify-start">
-                <a href="/about">adlib-go について</a>
+                <Link href="/about">adlib-go について</Link>
               </Button>
               <Separator />
               <div className="rounded-xl bg-muted/60 p-4 text-sm text-muted-foreground">
@@ -127,7 +128,7 @@ export async function PublicHomePage() {
             <p className="text-sm text-muted-foreground">直近の公開コンテンツを表示しています。</p>
           </div>
           <Button asChild variant="outline">
-            <a href="/columns">一覧を見る</a>
+            <Link href="/columns">一覧を見る</Link>
           </Button>
         </div>
         <div className="grid gap-4 md:grid-cols-3">
@@ -144,7 +145,7 @@ export async function PublicHomePage() {
               <CardContent className="space-y-4">
                 <p className="text-sm leading-7 text-muted-foreground">{column.summary}</p>
                 <Button asChild variant="ghost" className="px-0">
-                  <a href={`/columns/${column.slug}`}>続きを読む</a>
+                  <Link href={`/columns/${column.slug}`}>続きを読む</Link>
                 </Button>
               </CardContent>
             </Card>

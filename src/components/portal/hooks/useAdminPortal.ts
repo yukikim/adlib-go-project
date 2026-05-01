@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type {
   ActivityLogView,
   ArchiveView,
@@ -114,7 +114,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     setColumnPublished(true);
   }
 
-  async function loadAdminData() {
+  const loadAdminData = useCallback(async () => {
     if (!isAdmin) {
       setSessionSets([]);
       setRatingSummaries([]);
@@ -162,7 +162,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     } else {
       setArchivePreview(null);
     }
-  }
+  }, [isAdmin, selectedAdminEventId]);
 
   useEffect(() => {
     if (!selectedAdminEventId && sessionEvents.length > 0) {
@@ -189,7 +189,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
 
   useEffect(() => {
     loadAdminData().catch((error) => console.error(error));
-  }, [isAdmin, selectedAdminEventId]);
+  }, [loadAdminData]);
 
   useEffect(() => {
     if (!selectedManagedMemberId || !isAdmin) {

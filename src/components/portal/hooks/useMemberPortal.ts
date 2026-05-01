@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { AGE_RANGE_OPTIONS, GENDER_OPTIONS, PREFECTURE_OPTIONS } from '@/lib/memberProfile';
 import type {
   AttendanceStatus,
@@ -54,7 +54,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
   const selectedMemberEvent = sessionEvents.find((event) => event.id === memberEventId) ?? null;
   const entryState = getEventEntryState(selectedMemberEvent);
 
-  async function loadMemberData() {
+  const loadMemberData = useCallback(async () => {
     if (currentUser?.role !== 'member') {
       setSessionEntries([]);
       setMemberSessionSets([]);
@@ -73,7 +73,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     } else {
       setMemberSessionSets([]);
     }
-  }
+  }, [currentUser?.role, memberEventId]);
 
   useEffect(() => {
     if (currentUser?.memberProfile) {
@@ -105,7 +105,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
 
   useEffect(() => {
     loadMemberData().catch((error) => console.error(error));
-  }, [currentUser, memberEventId]);
+  }, [loadMemberData]);
 
   useEffect(() => {
     if (!selectedMemberId || !currentUser) {

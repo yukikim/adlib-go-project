@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -68,7 +69,7 @@ export default async function ColumnsPage() {
             <CardContent className="space-y-4">
               <p className="text-sm leading-7 text-muted-foreground">{column.summary}</p>
               <Button asChild variant="outline">
-                <a href={`/columns/${column.slug}`}>詳細を見る</a>
+                <Link href={`/columns/${column.slug}`}>詳細を見る</Link>
               </Button>
             </CardContent>
           </Card>
