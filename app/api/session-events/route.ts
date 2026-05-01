@@ -3,8 +3,12 @@ import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/adminApi';
 import { getZodErrorMessage } from '@/lib/authSchemas';
 import { sessionEventCreateRequestSchema } from '@/lib/apiSchemas';
+import { getAuthenticatedUser } from '@/lib/auth';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const authenticatedUser = await getAuthenticatedUser(request);
+  const includeAdminSessionEntries = authenticatedUser?.role === 'admin' && authenticatedUser.status === 'active';
+
   const sessionEvents = await prisma.sessionEvent.findMany({
     include: {
       _count: {
@@ -13,6 +17,33 @@ export async function GET() {
           sessionSets: true,
         },
       },
+      ...(includeAdminSessionEntries
+        ? {
+          sessionEntries: {
+            include: {
+              memberProfile: {
+                select: {
+                  id: true,
+                  displayName: true,
+                  mainInstrument: true,
+                  nickname: true,
+                },
+              },
+              requests: {
+                orderBy: [{ round: 'asc' }, { priority: 'asc' }],
+                select: {
+                  id: true,
+                  songTitleSnapshot: true,
+                  round: true,
+                  priority: true,
+                  keyName: true,
+                },
+              },
+            },
+            orderBy: [{ createdAt: 'asc' }],
+          },
+        }
+        : {}),
     },
     orderBy: [{ eventDate: 'desc' }, { createdAt: 'desc' }],
   });
