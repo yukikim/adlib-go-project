@@ -68,9 +68,9 @@ export async function PublicHomePage() {
               <Button asChild variant="secondary">
                 <Link href="/signup">メンバーサインアップ</Link>
               </Button>
-              <Button asChild variant="outline">
+              {/* <Button asChild variant="outline">
                 <Link href="/admin/signin">管理者サインイン</Link>
-              </Button>
+              </Button> */}
             </div>
           </div>
           <Card className="border-white/70 bg-white/80 backdrop-blur">

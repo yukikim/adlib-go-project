@@ -21,7 +21,7 @@ export async function AppHeader() {
           <Link href="/columns">コラム</Link>
           {!isSignedIn ? <Link href="/signin">メンバーサインイン</Link> : null}
           {!isSignedIn ? <Link href="/signup">メンバーサインアップ</Link> : null}
-          {!isSignedIn ? <Link href="/admin/signin">管理者サインイン</Link> : null}
+          {/* {!isSignedIn ? <Link href="/admin/signin">管理者サインイン</Link> : null} */}
           {isMember ? <Link href="/member">メンバー</Link> : null}
           {isAdmin ? <Link href="/admin">管理</Link> : null}
           <Link href="/about">adlib-go について</Link>

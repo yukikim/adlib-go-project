@@ -137,15 +137,15 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
       <Section
         title={authTarget === 'admin' ? '管理者認証' : 'メンバー認証'}
         description={authTarget === 'admin'
-          ? '管理者専用サインインです。デモ管理者: admin@adlib-go.local / demo-admin-password'
-          : 'メンバー専用サインインです。デモメンバー: member01@adlib-go.local / demo-member-password。管理者は /admin/signin を利用してください。'}
+          ? '管理者専用サインインです。'
+          : 'メンバー専用サインインです。'}
       >
         <form className="grid max-w-2xl gap-4 md:grid-cols-2" onSubmit={handleAuthSubmit}>
           <Field htmlFor="auth-email" label="メールアドレス" className="md:col-span-2">
-            <Input id="auth-email" type="email" autoComplete="username" value={authEmail} onChange={(event) => setAuthEmail(event.target.value)} />
+            <Input id="auth-email" type="email" autoComplete="username" value={authEmail} onChange={(event) => setAuthEmail(event.target.value)} placeholder="メールアドレスを入力" />
           </Field>
           <Field htmlFor="auth-password" label="パスワード" className="md:col-span-2">
-            <Input id="auth-password" type="password" autoComplete="current-password" value={authPassword} onChange={(event) => setAuthPassword(event.target.value)} />
+            <Input id="auth-password" type="password" autoComplete="current-password" value={authPassword} onChange={(event) => setAuthPassword(event.target.value)} placeholder="パスワードを入力" />
           </Field>
           {view === 'signup' && (
             <>

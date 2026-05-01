@@ -13,8 +13,10 @@ type UseAuthPortalArgs = {
 
 export function useAuthPortal({ runAction, setCurrentUser, reloadShared, onSignInSuccess, defaultAuthTarget = 'member' }: UseAuthPortalArgs) {
   const router = useRouter();
-  const defaultAuthEmail = defaultAuthTarget === 'admin' ? 'admin@adlib-go.local' : 'member01@adlib-go.local';
-  const defaultAuthPassword = defaultAuthTarget === 'admin' ? 'demo-admin-password' : 'demo-member-password';
+  // const defaultAuthEmail = defaultAuthTarget === 'admin' ? 'admin@adlib-go.local' : 'member01@adlib-go.local';
+  // const defaultAuthPassword = defaultAuthTarget === 'admin' ? 'demo-admin-password' : 'demo-member-password';
+  const defaultAuthEmail = '';
+  const defaultAuthPassword = '';
 
   const [authEmail, setAuthEmail] = useState(defaultAuthEmail);
   const [authPassword, setAuthPassword] = useState(defaultAuthPassword);
