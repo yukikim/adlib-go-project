@@ -18,6 +18,7 @@ import {
   type SessionEventView,
 } from "@/components/portal/types";
 import { parseJson } from "@/components/portal/utils";
+import MainHeader from '@/components/portal/MainHeader';
 
 export default function PortalWorkspace({ view }: { view: PortalView }) {
   const router = useRouter();
@@ -93,6 +94,8 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
   });
   const member = useMemberPortal({ currentUser, members, sessionEvents, runAction, reloadShared });
   const admin = useAdminPortal({ currentUser, members, sessionEvents, runAction, reloadShared });
+  // console.log("admin", admin);
+  // console.log("currentUser", currentUser);
 
   const isMember = currentUser?.role === "member";
   const isAdmin = currentUser?.role === "admin";
@@ -107,6 +110,14 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
 
   return (
     <main className="mx-auto flex max-w-6xl flex-col px-6 py-8 md:px-8">
+      <MainHeader
+        view={ currentUser?.role === "admin" ? "管理者" : "メンバー" }
+        currentUser={{ role: currentUser?.role, displayName: admin.adminMemberDisplayName }}
+        auth={{ handleSignOut: auth.handleSignOut }}
+        loading={loading}
+        admin={{ adminMemberDisplayName: admin.adminMemberDisplayName }}
+        memberProfile={{ memberDisplayName: currentUser?.memberProfile?.displayName }}
+      />
       <div className="space-y-3">
         <Badge variant="outline" className="w-fit">
           {view === "admin" ? "Admin" : view === "member" ? "Member" : "Auth"}
