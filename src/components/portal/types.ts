@@ -62,6 +62,23 @@ export type SessionEventView = {
     sessionEntries: number;
     sessionSets: number;
   };
+  sessionEntries?: {
+    id: string;
+    attendanceStatus: AttendanceStatus;
+    memberProfile: {
+      id: string;
+      displayName: string;
+      mainInstrument: Instrument;
+      nickname?: string | null;
+    };
+    requests: {
+      id: string;
+      songTitleSnapshot: string;
+      round: number;
+      priority: number;
+      keyName?: string | null;
+    }[];
+  }[];
 };
 
 export type SessionEntryView = {
