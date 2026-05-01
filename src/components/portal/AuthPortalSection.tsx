@@ -215,7 +215,7 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
       </Section>
 
       {view !== 'signup' && (
-        <Section title="パスワード再設定" description="パスワード再設定トークンの発行と更新を行います。">
+        <Section className="hidden" title="パスワード再設定" description="パスワード再設定トークンの発行と更新を行います。">
           <div className="grid max-w-2xl gap-4">
             <form className="grid gap-4" onSubmit={handleForgotPasswordSubmit}>
               <Field htmlFor="reset-email" label="メールアドレス">
