@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import type { AuthUser, Instrument } from '../types';
 import { parseJson, type RunPortalAction } from '../utils';
 
@@ -11,6 +12,7 @@ type UseAuthPortalArgs = {
 };
 
 export function useAuthPortal({ runAction, setCurrentUser, reloadShared, onSignInSuccess, defaultAuthTarget = 'member' }: UseAuthPortalArgs) {
+  const router = useRouter();
   const defaultAuthEmail = defaultAuthTarget === 'admin' ? 'admin@adlib-go.local' : 'member01@adlib-go.local';
   const defaultAuthPassword = defaultAuthTarget === 'admin' ? 'demo-admin-password' : 'demo-member-password';
 
@@ -75,6 +77,7 @@ export function useAuthPortal({ runAction, setCurrentUser, reloadShared, onSignI
     await fetch('/api/auth/signout', { method: 'POST' });
     setCurrentUser(null);
     await reloadShared();
+    router.push('/');
   }, 'サインアウトしました');
 
   const handleForgotPassword = async () => runAction(async () => {
