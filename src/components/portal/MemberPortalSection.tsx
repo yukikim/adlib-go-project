@@ -450,6 +450,21 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                   <strong className="text-base">{sessionSet.songTitle}</strong>
                   {sessionSet.key ? <Badge variant="outline">key {sessionSet.key}</Badge> : null}
                 </div>
+                <div className="mt-3 grid gap-2 text-sm text-muted-foreground">
+                  <p>drum {sessionSet.drum?.name ?? '-'}</p>
+                  <p>bass {sessionSet.bass?.name ?? '-'}</p>
+                  <p>piano {sessionSet.piano?.name ?? '-'}</p>
+                  <p>
+                    front {sessionSet.front?.length
+                      ? sessionSet.front.map((member) => member.subInstrument ? `${member.name} (${member.subInstrument})` : member.name).join(', ')
+                      : '-'}
+                  </p>
+                  <p>
+                    vocal {sessionSet.vocal?.length
+                      ? sessionSet.vocal.map((member) => sessionSet.key ? `${member.name} (key ${sessionSet.key})` : member.name).join(', ')
+                      : '-'}
+                  </p>
+                </div>
                 <div className="mt-4 grid max-w-xl gap-3 md:grid-cols-[180px_1fr]">
                   <Field label="評価" htmlFor={`member-rating-${sessionSet.id}`}>
                     <Select value={String(memberRatings[sessionSet.id] ?? NONE_VALUE)} onValueChange={(value) => setMemberRatings((current) => ({ ...current, [sessionSet.id]: value === NONE_VALUE ? 0 : Number(value) }))}>

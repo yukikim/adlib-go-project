@@ -111,7 +111,7 @@ export type SessionSetView = {
   drum: { id: string; name: string } | null;
   bass: { id: string; name: string } | null;
   piano: { id: string; name: string } | null;
-  front?: { id: string; name: string }[];
+  front?: { id: string; name: string; subInstrument?: string | null }[];
   vocal?: { id: string; name: string }[];
 };
 

@@ -892,6 +892,16 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                       <p>drum {sessionSet.drum?.name ?? '-'}</p>
                       <p>bass {sessionSet.bass?.name ?? '-'}</p>
                       <p>piano {sessionSet.piano?.name ?? '-'}</p>
+                      <p>
+                        front {sessionSet.front?.length
+                          ? sessionSet.front.map((member) => member.subInstrument ? `${member.name} (${member.subInstrument})` : member.name).join(', ')
+                          : '-'}
+                      </p>
+                      <p>
+                        vocal {sessionSet.vocal?.length
+                          ? sessionSet.vocal.map((member) => sessionSet.key ? `${member.name} (key ${sessionSet.key})` : member.name).join(', ')
+                          : '-'}
+                      </p>
                     </div>
                   </li>
                 ))}
