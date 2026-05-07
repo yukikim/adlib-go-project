@@ -171,6 +171,30 @@ export function normalizeOptionalText(value: string | null | undefined) {
   return trimmed || null;
 }
 
+export function normalizeMemberIdentityText(value: string | null | undefined) {
+  if (typeof value !== 'string') {
+    return '';
+  }
+
+  return value.trim().replace(/\s+/g, ' ').toLocaleLowerCase('ja-JP');
+}
+
+export function buildMemberDuplicateFingerprint(input: {
+  displayName?: string | null;
+  mainInstrument?: string | null;
+  area?: string | null;
+  gender?: string | null;
+  ageRange?: string | null;
+}) {
+  return [
+    normalizeMemberIdentityText(input.displayName),
+    input.mainInstrument ?? '',
+    input.area ?? '',
+    input.gender ?? '',
+    input.ageRange ?? '',
+  ].join('|');
+}
+
 export function validateMemberProfileInput(input: MemberProfileInput, options: ValidateMemberProfileOptions = {}) {
   const parsed = memberProfileInputSchema.safeParse(pickMemberProfileInput(input));
   if (!parsed.success) {

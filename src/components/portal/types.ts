@@ -58,6 +58,9 @@ export type SessionEventView = {
   round2StartAt?: string | null;
   round2EndAt?: string | null;
   status: string;
+  round2CandidateSongs?: string[];
+  canGenerateSessionSets?: boolean;
+  canPrepareRound2Candidates?: boolean;
   _count?: {
     sessionEntries: number;
     sessionSets: number;

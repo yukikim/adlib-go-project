@@ -126,6 +126,13 @@ Adlib-go KICK-OFF 向けの public site、member site、admin site をまとめ�
 - `SMTP_USER`
 - `SMTP_PASS`
 
+### メンバー重複登録の扱い
+
+- サインアップ API はメールアドレス重複に加え、表示名、メイン楽器、居住地域、性別、年代が一致する既存プロフィールを 409 で拒否します
+- 既存データの重複候補を洗うには `npm run audit:member-duplicates` を実行します
+- この監査スクリプトは JSON を標準出力し、候補が 1 件でも見つかると終了コード 1 を返します
+- `exactProfileDuplicates` は今回の登録ガードと同じ条件、`displayNameDuplicates` は同名アカウントのレビュー用です
+
 ---
 
 ## CI / CD
@@ -603,6 +610,7 @@ npm run seed:demo
 
 - `npm run seed:columns` は upsert なので再実行しても既存 slug を更新できます
 - demo column には予約公開サンプルが 1 件含まれます
+- `npm run seed:auth` は demo member のメールを `@adlib-go.local` に正規化します。旧 `@adolib-go.local` や同一プロフィール重複が残っている場合は停止するため、先に重複解消を行ってください
 
 ### Phase 1 実装済み機能
 
@@ -735,6 +743,20 @@ npm run seed:events
 npm run seed:notices
 npm run seed:ratings-archives
 ```
+
+重複監査と解消:
+
+```bash
+npm run audit:member-duplicates
+npm run fix:member-duplicates
+npm run fix:member-duplicates -- --apply
+```
+
+補足:
+
+- `npm run fix:member-duplicates` は dry-run です。`--apply` を付けたときだけ DB を更新します
+- `npm run fix:member-duplicates -- --apply` は exactProfileDuplicates を基準に、関連する SessionEntry、SessionSetRating、作成者参照を可能な範囲で保持しつつ重複 UserAccount を統合します
+- demo の front メンバーは `アルトサックス`、`テナーサックス`、`トランペット`、`ギター`、`トロンボーン`、`フルート` のいずれかを固定ランダムで `subInstrument` に持ちます
 
 現在のダミーデータ内容:
 

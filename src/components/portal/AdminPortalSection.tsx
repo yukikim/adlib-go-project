@@ -254,7 +254,7 @@ type AdminPortalSectionProps = {
   setColumnPublished: (value: boolean) => void;
   onCreateEvent: () => void;
   onUpdateEvent: () => void;
-  onGenerateSets: () => void;
+  onGenerateSets: (eventId?: string) => void;
   onPublishSets: () => void;
   onSignOut: () => void;
   onCreateArchive: () => void;
@@ -451,6 +451,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
       member.userAccount.status,
     ].some((value) => value.toLowerCase().includes(query));
   });
+  const generatableSessionEvents = sessionEvents.filter((sessionEvent) => sessionEvent.canGenerateSessionSets);
 
   const previewParagraphs = splitPreviewBody(columnBody);
   const activeContentKey = `${activeGroupId}:${activeChildId ?? 'all'}`;
@@ -527,6 +528,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     }
   };
 
+  console.log(sessionSets)
   return (
     <div>
       {/* <MainHeader view="admin" currentUser={{ role: 'admin', displayName: adminMemberDisplayName }} auth={{ handleSignOut: onSignOut }} loading={loading} admin={{ adminMemberDisplayName }} /> */}
@@ -635,8 +637,10 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
         <div id="admin-session-list">
           <h3 className="text-lg font-medium">セッション一覧</h3>
           <ul className="mt-3 space-y-3">
+            {/* sessionEvents イベントリスト */}
             {sessionEvents.map((sessionEvent) => {
               const isOpen = openSessionEventIds.includes(sessionEvent.id);
+              // sessionEntries イベントごとの参加エントリーリスト
               const sessionEntries = sessionEvent.sessionEntries ?? [];
 
               return (
@@ -834,7 +838,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
 
           <Section sectionId="admin-session-sets" title="sessionSet 管理" description="生成、公開、結果確認をまとめて行います。" className={cn(!isGroupVisible('admin-session-sets') && 'hidden')}>
             <div id="admin-session-sets-actions" className={cn('flex scroll-mt-24 flex-wrap gap-3', !isChildVisible('admin-session-sets', 'admin-session-sets-actions') && 'hidden')}>
-              <Button type="button" onClick={onGenerateSets} disabled={loading || !selectedAdminEventId}>
+              <Button type="button" onClick={() => onGenerateSets()} disabled={loading || !selectedAdminEventId}>
                 sessionSet 生成
               </Button>
               <Button type="button" variant="secondary" onClick={onPublishSets} disabled={loading || !selectedAdminEventId || sessionSets.length === 0}>
@@ -843,6 +847,34 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
               <Button type="button" variant="outline" onClick={onSignOut} disabled={loading}>
                 サインアウト
               </Button>
+            </div>
+            <div className={cn('mt-4 rounded-xl border bg-background/60 p-4', !isChildVisible('admin-session-sets', 'admin-session-sets-actions') && 'hidden')}>
+              <div className="space-y-1">
+                <h3 className="font-medium">sessionSet 生成可能イベント</h3>
+                <p className="text-sm text-muted-foreground">round2 終了後のイベントだけ、ここから個別に生成できます。</p>
+              </div>
+              {generatableSessionEvents.length === 0 ? (
+                <p className="mt-3 text-sm text-muted-foreground">現在、sessionSet を生成できるイベントはありません。</p>
+              ) : (
+                <ul className="mt-3 space-y-3">
+                  {generatableSessionEvents.map((sessionEvent) => (
+                    <li key={sessionEvent.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-card/80 p-4">
+                      <div className="space-y-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <p className="font-medium">{sessionEvent.title}</p>
+                          <Badge variant="outline">{statusConversion(sessionEvent.status)}</Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          候補曲 {sessionEvent.round2CandidateSongs?.length ?? 0} 曲 / 参加エントリー {sessionEvent._count?.sessionEntries ?? 0} 件 / 既存 sessionSet {sessionEvent._count?.sessionSets ?? 0} 件
+                        </p>
+                      </div>
+                      <Button type="button" size="sm" disabled={loading} onClick={() => onGenerateSets(sessionEvent.id)}>
+                        生成
+                      </Button>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
             <Separator className={cn('my-4', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden')} />
             {sessionSets.length === 0 ? <p className={cn('text-sm text-muted-foreground', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>まだ sessionSet はありません。</p> : (
@@ -991,6 +1023,8 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                           <span className="text-left">
                             <span className="block font-medium">{member.displayName}</span>
                             <span className="block text-xs text-muted-foreground">{member.userAccount.email}</span>
+                            <span className="block text-xs text-muted-foreground">{member.mainInstrument}</span>
+                            <span className="block text-xs text-muted-foreground">{member.mainInstrument === 'front'? member.subInstrument : ''}</span>
                           </span>
                           <Badge variant={member.userAccount.status === 'active' ? 'secondary' : 'outline'}>{member.userAccount.status}</Badge>
                         </Button>

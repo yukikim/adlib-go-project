@@ -4,6 +4,7 @@ import { requireAdmin } from '@/lib/adminApi';
 import { getZodErrorMessage } from '@/lib/authSchemas';
 import { sessionEventCreateRequestSchema } from '@/lib/apiSchemas';
 import { getAuthenticatedUser } from '@/lib/auth';
+import { getRound1CandidateSongs, getSessionEventLifecycleState } from '@/lib/sessionEventWindow';
 
 export async function GET(request: NextRequest) {
   const authenticatedUser = await getAuthenticatedUser(request);
@@ -48,7 +49,49 @@ export async function GET(request: NextRequest) {
     orderBy: [{ eventDate: 'desc' }, { createdAt: 'desc' }],
   });
 
-  return NextResponse.json({ sessionEvents });
+  const sessionEventIds = sessionEvents.map((sessionEvent) => sessionEvent.id);
+  const candidateSourceEntries = sessionEventIds.length === 0
+    ? []
+    : await prisma.sessionEntry.findMany({
+        where: {
+          sessionEventId: { in: sessionEventIds },
+        },
+        select: {
+          sessionEventId: true,
+          attendanceStatus: true,
+          requests: {
+            where: { round: 1 },
+            orderBy: [{ priority: 'asc' }, { createdAt: 'asc' }],
+            select: {
+              round: true,
+              songTitleSnapshot: true,
+            },
+          },
+        },
+      });
+
+  const candidateSongMap = new Map<string, string[]>();
+  for (const sessionEventId of sessionEventIds) {
+    candidateSongMap.set(
+      sessionEventId,
+      getRound1CandidateSongs(candidateSourceEntries.filter((entry) => entry.sessionEventId === sessionEventId)),
+    );
+  }
+
+  return NextResponse.json({
+    sessionEvents: sessionEvents.map((sessionEvent) => ({
+      ...sessionEvent,
+      ...(() => {
+        const lifecycle = getSessionEventLifecycleState(sessionEvent);
+        return {
+          status: lifecycle.status,
+          canGenerateSessionSets: lifecycle.canGenerateSessionSets,
+          canPrepareRound2Candidates: lifecycle.canPrepareRound2Candidates,
+        };
+      })(),
+      round2CandidateSongs: candidateSongMap.get(sessionEvent.id) ?? [],
+    })),
+  });
 }
 
 export async function POST(request: NextRequest) {

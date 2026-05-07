@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { generateSessionSets } from '@/session-planner/generateSessionSets';
 import type { Participant as DomainParticipant } from '@/session-planner/domain';
 import { requireAdmin } from '@/lib/adminApi';
-import { getSessionEventEntryState } from '@/lib/sessionEventWindow';
+import { getSessionEventLifecycleState } from '@/lib/sessionEventWindow';
 import { getZodErrorMessage } from '@/lib/authSchemas';
 import { sessionSetGenerateRequestSchema } from '@/lib/apiSchemas';
 
@@ -38,9 +38,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'SessionEvent not found' }, { status: 404 });
   }
 
-  const entryState = getSessionEventEntryState(sessionEvent);
-  if (entryState.round !== null) {
-    return NextResponse.json({ error: 'SessionEvent is still accepting entries' }, { status: 400 });
+  const lifecycle = getSessionEventLifecycleState(sessionEvent);
+  if (!lifecycle.canGenerateSessionSets) {
+    return NextResponse.json({ error: lifecycle.reason ?? 'SessionEvent is not ready for sessionSet generation' }, { status: 400 });
   }
 
   const participants = await prisma.participant.findMany({

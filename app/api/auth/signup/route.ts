@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { hashPassword } from '@/lib/password';
-import { validateMemberProfileInput } from '@/lib/memberProfile';
+import { buildMemberDuplicateFingerprint, validateMemberProfileInput } from '@/lib/memberProfile';
 import { getZodErrorMessage, signUpRequestSchema } from '@/lib/authSchemas';
 import { sendEmailVerificationMail } from '@/lib/emailVerification';
 
@@ -33,6 +33,51 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ error: 'Email already exists' }, { status: 409 });
+  }
+
+  const duplicateFingerprint = buildMemberDuplicateFingerprint({
+    displayName: body.displayName,
+    mainInstrument: profileData.mainInstrument,
+    area: profileData.area,
+    gender: profileData.gender,
+    ageRange: profileData.ageRange,
+  });
+
+  const duplicateMembers = await prisma.memberProfile.findMany({
+    where: {
+      mainInstrument: profileData.mainInstrument,
+      area: profileData.area,
+      gender: profileData.gender,
+      ageRange: profileData.ageRange,
+    },
+    include: {
+      userAccount: {
+        select: {
+          id: true,
+          email: true,
+          emailVerifiedAt: true,
+          status: true,
+        },
+      },
+    },
+  });
+
+  const duplicateMember = duplicateMembers.find((member) =>
+    buildMemberDuplicateFingerprint({
+      displayName: member.displayName,
+      mainInstrument: member.mainInstrument,
+      area: member.area,
+      gender: member.gender,
+      ageRange: member.ageRange,
+    }) === duplicateFingerprint,
+  );
+
+  if (duplicateMember) {
+    return NextResponse.json({
+      error: duplicateMember.userAccount.emailVerifiedAt
+        ? '同じプロフィール情報のメンバーが既に登録されています。登録済みメールアドレスをご確認ください。'
+        : '同じプロフィール情報の仮登録が既にあります。登録済みメールアドレスをご確認ください。',
+    }, { status: 409 });
   }
 
   const passwordHash = await hashPassword(body.password);

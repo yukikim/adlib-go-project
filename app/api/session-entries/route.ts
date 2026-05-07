@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireMemberUser } from '@/lib/auth';
-import { getSessionEventEntryState } from '@/lib/sessionEventWindow';
+import { getRound1CandidateSongs, getSessionEventEntryState } from '@/lib/sessionEventWindow';
 import { getZodErrorMessage } from '@/lib/authSchemas';
 import { sessionEntryCreateRequestSchema } from '@/lib/apiSchemas';
 
@@ -68,6 +68,32 @@ export async function POST(request: NextRequest) {
   const memberProfile = auth.user.memberProfile!;
   if (memberProfile.mainInstrument === 'vocal' && requests.some((item) => !item.keyName)) {
     return NextResponse.json({ error: 'keyName is required for vocal' }, { status: 400 });
+  }
+
+  if (entryState.round === 2) {
+    const round1Entries = await prisma.sessionEntry.findMany({
+      where: { sessionEventId: body.sessionEventId },
+      select: {
+        attendanceStatus: true,
+        requests: {
+          where: { round: 1 },
+          orderBy: [{ priority: 'asc' }, { createdAt: 'asc' }],
+          select: {
+            round: true,
+            songTitleSnapshot: true,
+          },
+        },
+      },
+    });
+    const candidateTitles = getRound1CandidateSongs(round1Entries);
+    const candidateTitleSet = new Set(candidateTitles);
+
+    if (requests.some((item) => !candidateTitleSet.has(item.songTitle))) {
+      return NextResponse.json({
+        error: 'Round2 では round1 の集計候補曲から選択してください',
+        candidateSongs: candidateTitles,
+      }, { status: 400 });
+    }
   }
 
   const round1Count = requests.filter((item) => item.round === 1).length;

@@ -262,22 +262,24 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     await loadAdminData();
   }, 'イベントを更新しました');
 
-  const handleGenerateSets = async () => runAction(async () => {
-    if (!selectedAdminEventId) throw new Error('イベントを選択してください');
+  const handleGenerateSets = async (eventId?: string) => runAction(async () => {
+    const targetEventId = eventId ?? selectedAdminEventId;
+    if (!targetEventId) throw new Error('イベントを選択してください');
     const res = await fetch('/api/session-sets/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionEventId: selectedAdminEventId }),
+      body: JSON.stringify({ sessionEventId: targetEventId }),
     });
     const json = await parseJson(res);
     if (!res.ok) throw new Error(json.error ?? 'sessionSet 生成に失敗しました');
+    setSelectedAdminEventId(targetEventId);
     setGeneratedResult({
       sessionSets: json.sessionSets ?? [],
       skippedSongs: json.skippedSongs ?? [],
       forcedSessionSets: json.forcedSessionSets ?? [],
     });
     setSessionSets(json.sessionSets ?? []);
-    await loadAdminData();
+    await reloadShared();
   }, 'sessionSet を生成しました');
 
   const handlePublishSets = async () => runAction(async () => {

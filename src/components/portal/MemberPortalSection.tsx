@@ -191,6 +191,10 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     onProfileUpdate();
   };
 
+  const selectedMemberEvent = sessionEvents.find((event) => event.id === memberEventId) ?? null;
+  const round2CandidateSongs = selectedMemberEvent?.round2CandidateSongs ?? [];
+  const round2CandidateListId = 'member-round2-song-candidates';
+
   return (
     <>
       <Section title="プロフィール" description="プロフィール更新とパスワード変更をこの画面で行います。">
@@ -385,18 +389,34 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
           )}
           {entryState.round === 2 && (
             <>
-              <Field htmlFor="member-round2-song1" label="Round2 1曲目">
-                <Input id="member-round2-song1" type="text" placeholder="Round2 1曲目" value={memberRound2Song1} onChange={(event) => setMemberRound2Song1(event.target.value)} />
+              <Field htmlFor="member-round2-song1" label="Round2 1曲目" description={round2CandidateSongs.length > 0 ? '候補曲リストから選択してください。' : '候補曲はまだ生成されていません。'}>
+                <Input id="member-round2-song1" type="text" list={round2CandidateListId} placeholder="Round2 1曲目" value={memberRound2Song1} onChange={(event) => setMemberRound2Song1(event.target.value)} />
               </Field>
               <Field htmlFor="member-round2-key1" label="Round2 1曲目 key">
                 <Input id="member-round2-key1" type="text" placeholder="Round2 1曲目 key" value={memberRound2Key1} onChange={(event) => setMemberRound2Key1(event.target.value)} />
               </Field>
-              <Field htmlFor="member-round2-song2" label="Round2 2曲目">
-                <Input id="member-round2-song2" type="text" placeholder="Round2 2曲目" value={memberRound2Song2} onChange={(event) => setMemberRound2Song2(event.target.value)} />
+              <Field htmlFor="member-round2-song2" label="Round2 2曲目" description={round2CandidateSongs.length > 0 ? '候補曲リストから選択してください。' : '候補曲はまだ生成されていません。'}>
+                <Input id="member-round2-song2" type="text" list={round2CandidateListId} placeholder="Round2 2曲目" value={memberRound2Song2} onChange={(event) => setMemberRound2Song2(event.target.value)} />
               </Field>
               <Field htmlFor="member-round2-key2" label="Round2 2曲目 key">
                 <Input id="member-round2-key2" type="text" placeholder="Round2 2曲目 key" value={memberRound2Key2} onChange={(event) => setMemberRound2Key2(event.target.value)} />
               </Field>
+              <datalist id={round2CandidateListId}>
+                {round2CandidateSongs.map((songTitle) => (
+                  <option key={songTitle} value={songTitle} />
+                ))}
+              </datalist>
+              {round2CandidateSongs.length > 0 ? (
+                <div className="md:col-span-2 rounded-xl border bg-background/60 p-4">
+                  <p className="text-sm font-medium">Round2 候補曲</p>
+                  <p className="mt-1 text-sm text-muted-foreground">Round1 の希望曲を名寄せして重複を除いた候補です。</p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {round2CandidateSongs.map((songTitle) => (
+                      <Badge key={songTitle} variant="outline">{songTitle}</Badge>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
             </>
           )}
           <div className="md:col-span-2">

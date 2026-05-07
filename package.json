@@ -13,6 +13,8 @@
     "prisma:migrate:deploy": "prisma migrate deploy",
     "prisma:migrate:status": "prisma migrate status",
     "prisma:studio": "prisma studio",
+    "audit:member-duplicates": "node prisma/audit-member-duplicates.mjs",
+    "fix:member-duplicates": "node prisma/fix-member-duplicates.mjs",
     "seed:reset": "node prisma/reset-demo-data.mjs",
     "seed:participants": "node prisma/seed-participants.mjs",
     "seed:requests": "node prisma/seed-requests.mjs",
