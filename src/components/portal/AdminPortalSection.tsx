@@ -45,6 +45,7 @@ import type {
   MemberDetailView,
   MemberListView,
   RatingSummaryView,
+  SavedSessionSetDraftView,
   SessionEventView,
   SessionSetView,
 } from './types';
@@ -181,6 +182,7 @@ type AdminPortalSectionProps = {
   archiveNote: string;
   archivePreview: ArchivePreview | null;
   generatedResult: GeneratedResult;
+  savedSessionSetDrafts: SavedSessionSetDraftView[];
   activityLogs: ActivityLogView[];
   mailLogs: MailLogView[];
   members: MemberListView[];
@@ -256,6 +258,9 @@ type AdminPortalSectionProps = {
   onUpdateEvent: () => void;
   onGenerateSets: (eventId?: string) => void;
   onPublishSets: () => void;
+  onSaveGeneratedSessionSets: () => void;
+  onShowSavedSessionSetDraft: (draft: SavedSessionSetDraftView) => void;
+  onRegenerateSavedSessionSetDraft: (draft: SavedSessionSetDraftView) => void;
   onSignOut: () => void;
   onCreateArchive: () => void;
   onDeleteArchive: (archiveId: string) => void;
@@ -292,6 +297,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     archiveNote,
     archivePreview,
     generatedResult,
+    savedSessionSetDrafts,
     activityLogs,
     mailLogs,
     members,
@@ -367,6 +373,9 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     onUpdateEvent,
     onGenerateSets,
     onPublishSets,
+    onSaveGeneratedSessionSets,
+    onShowSavedSessionSetDraft,
+    onRegenerateSavedSessionSetDraft,
     onSignOut,
     onCreateArchive,
     onDeleteArchive,
@@ -452,6 +461,8 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     ].some((value) => value.toLowerCase().includes(query));
   });
   const generatableSessionEvents = sessionEvents.filter((sessionEvent) => sessionEvent.canGenerateSessionSets);
+  const savedDraftEventIdSet = new Set(savedSessionSetDrafts.map((draft) => draft.sessionEventId));
+  const hasSavedDraftForSelectedEvent = selectedAdminEventId ? savedDraftEventIdSet.has(selectedAdminEventId) : false;
 
   const previewParagraphs = splitPreviewBody(columnBody);
   const activeContentKey = `${activeGroupId}:${activeChildId ?? 'all'}`;
@@ -868,7 +879,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                           候補曲 {sessionEvent.round2CandidateSongs?.length ?? 0} 曲 / 参加エントリー {sessionEvent._count?.sessionEntries ?? 0} 件 / 既存 sessionSet {sessionEvent._count?.sessionSets ?? 0} 件
                         </p>
                       </div>
-                      <Button type="button" size="sm" disabled={loading} onClick={() => onGenerateSets(sessionEvent.id)}>
+                      <Button type="button" size="sm" disabled={loading || savedDraftEventIdSet.has(sessionEvent.id)} onClick={() => onGenerateSets(sessionEvent.id)}>
                         生成
                       </Button>
                     </li>
@@ -907,7 +918,12 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                 ))}
               </ul>
             )}
-            {(generatedResult.forcedSessionSets.length > 0 || generatedResult.skippedSongs.length > 0) && (
+            <div className={cn('mt-4', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>
+              <Button type="button" onClick={onSaveGeneratedSessionSets} disabled={loading || !selectedAdminEventId || sessionSets.length === 0 || hasSavedDraftForSelectedEvent}>
+                {selectedAdminEvent ? `「${selectedAdminEvent.title} sessionSet」として保存` : 'sessionSet を保存'}
+              </Button>
+            </div>
+            {(generatedResult.forcedSessionSets.length > 0 || generatedResult.skippedSongs.length > 0 || savedSessionSetDrafts.length > 0) && (
               <div id="admin-session-sets-results" className={cn('mt-4 grid scroll-mt-24 gap-4 lg:grid-cols-2', !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden')}>
                 {generatedResult.forcedSessionSets.length > 0 && (
                   <div className="rounded-xl border bg-background/60 p-4">
@@ -929,6 +945,33 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                     </ul>
                   </div>
                 )}
+                <div className="rounded-xl border bg-background/60 p-4 lg:col-span-2">
+                  <h3 className="font-medium">保存済み sessionSet</h3>
+                  {savedSessionSetDrafts.length === 0 ? (
+                    <p className="mt-3 text-sm text-muted-foreground">保存済み sessionSet はありません。</p>
+                  ) : (
+                    <ul className="mt-3 space-y-3">
+                      {savedSessionSetDrafts.map((draft) => (
+                        <li key={draft.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-card/80 p-4">
+                          <div className="space-y-1">
+                            <p className="font-medium">{draft.title}</p>
+                            <p className="text-sm text-muted-foreground">
+                              {draft.sessionSetCount} 件 / 更新 {new Date(draft.updatedAt).toLocaleString('ja-JP')}
+                            </p>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            <Button type="button" variant="outline" size="sm" disabled={loading} onClick={() => onShowSavedSessionSetDraft(draft)}>
+                              表示
+                            </Button>
+                            <Button type="button" size="sm" disabled={loading} onClick={() => onRegenerateSavedSessionSetDraft(draft)}>
+                              再生成
+                            </Button>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
               </div>
             )}
           </Section>

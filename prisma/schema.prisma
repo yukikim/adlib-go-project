@@ -136,8 +136,23 @@ model SessionEvent {
 
   sessionEntries    SessionEntry[]
   sessionSets       SessionSet[]
+  sessionSetDrafts  SessionSetDraft[]
   sessionRatings    SessionSetRating[]
   sessionArchives   SessionArchive[]
+}
+
+model SessionSetDraft {
+  id                  String        @id @default(uuid())
+  sessionEvent        SessionEvent  @relation(fields: [sessionEventId], references: [id], onDelete: Cascade)
+  sessionEventId      String
+  title               String
+  sessionSetsJson     Json
+  skippedSongsJson    Json?
+  forcedSessionSetsJson Json?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  @@unique([sessionEventId, title])
 }
 
 model SessionEntry {

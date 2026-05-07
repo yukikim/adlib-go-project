@@ -197,6 +197,18 @@ export type GeneratedResult = {
   forcedSessionSets: { songTitle: string; forcedInstruments: Instrument[]; requesterCount: number }[];
 };
 
+export type SavedSessionSetDraftView = {
+  id: string;
+  sessionEventId: string;
+  title: string;
+  sessionSetCount: number;
+  createdAt: string;
+  updatedAt: string;
+  sessionSets: SessionSetView[];
+  skippedSongs: { songTitle: string; reasons: string[] }[];
+  forcedSessionSets: { songTitle: string; forcedInstruments: Instrument[]; requesterCount: number }[];
+};
+
 export type SectionProps = {
   title: string;
   description?: string;

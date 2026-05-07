@@ -15,6 +15,10 @@ type SessionSetWithRelations = Prisma.SessionSetGetPayload<{
   };
 }>;
 
+export function buildSessionSetDraftTitle(sessionEventTitle: string) {
+  return `${sessionEventTitle} sessionSet`;
+}
+
 export async function serializeSessionSets(sessionSets: SessionSetWithRelations[]) {
   const frontNames = [...new Set(
     sessionSets.flatMap((sessionSet) =>

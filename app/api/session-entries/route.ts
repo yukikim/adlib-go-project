@@ -51,11 +51,12 @@ export async function POST(request: NextRequest) {
   if (!entryState.canSubmit || !entryState.round) {
     return NextResponse.json({ error: entryState.reason ?? 'Entry is not allowed' }, { status: 400 });
   }
+  const activeRound = entryState.round;
 
   const requests = body.requests;
-  if (requests.some((item) => item.round !== entryState.round)) {
+  if (requests.some((item) => item.round !== activeRound)) {
     return NextResponse.json(
-      { error: `Only round=${entryState.round} requests are accepted right now` },
+      { error: `Only round=${activeRound} requests are accepted right now` },
       { status: 400 },
     );
   }
@@ -70,7 +71,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'keyName is required for vocal' }, { status: 400 });
   }
 
-  if (entryState.round === 2) {
+  if (activeRound === 2) {
     const round1Entries = await prisma.sessionEntry.findMany({
       where: { sessionEventId: body.sessionEventId },
       select: {
@@ -134,7 +135,7 @@ export async function POST(request: NextRequest) {
     await tx.sessionEntryRequest.deleteMany({
       where: {
         sessionEntryId: upsertedEntry.id,
-        round: entryState.round,
+        round: activeRound,
       },
     });
 

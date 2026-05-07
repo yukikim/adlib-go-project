@@ -9,6 +9,7 @@ import type {
   MemberDetailView,
   MemberListView,
   RatingSummaryView,
+  SavedSessionSetDraftView,
   SessionEventView,
   SessionSetView,
 } from '../types';
@@ -44,6 +45,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
   const [archiveNote, setArchiveNote] = useState('');
   const [archivePreview, setArchivePreview] = useState<ArchivePreview>(null);
   const [generatedResult, setGeneratedResult] = useState<GeneratedResult>({ sessionSets: [], skippedSongs: [], forcedSessionSets: [] });
+  const [savedSessionSetDrafts, setSavedSessionSetDrafts] = useState<SavedSessionSetDraftView[]>([]);
   const [activityLogs, setActivityLogs] = useState<ActivityLogView[]>([]);
   const [mailLogs, setMailLogs] = useState([] as { id: string; mailType: string; toAddress: string; status: string; createdAt: string; errorMessage?: string | null }[]);
   const [columns, setColumns] = useState<ColumnView[]>([]);
@@ -120,13 +122,14 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
       setRatingSummaries([]);
       setArchives([]);
       setArchivePreview(null);
+      setSavedSessionSetDrafts([]);
       setActivityLogs([]);
       setMailLogs([]);
       setColumns([]);
       return;
     }
 
-    const [archiveRes, activityRes, mailLogRes, columnRes, setRes, summaryRes, previewRes] = await Promise.all([
+    const [archiveRes, activityRes, mailLogRes, columnRes, setRes, summaryRes, previewRes, draftRes] = await Promise.all([
       fetch('/api/session-archives'),
       fetch('/api/admin/activity'),
       fetch('/api/admin/mail-logs'),
@@ -134,12 +137,14 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
       selectedAdminEventId ? fetch(`/api/session-sets?sessionEventId=${selectedAdminEventId}`) : Promise.resolve(null),
       selectedAdminEventId ? fetch(`/api/session-events/${selectedAdminEventId}/ratings-summary`) : Promise.resolve(null),
       selectedAdminEventId ? fetch(`/api/session-events/${selectedAdminEventId}/archive-preview`) : Promise.resolve(null),
+      fetch('/api/session-set-drafts'),
     ]);
 
     const archiveJson = await parseJson(archiveRes);
     const activityJson = await parseJson(activityRes);
     const mailLogJson = await parseJson(mailLogRes);
     const columnJson = await parseJson(columnRes);
+    const draftJson = await parseJson(draftRes);
     setArchives(archiveJson.archives ?? []);
     setActivityLogs(activityJson.activity ?? []);
     setMailLogs(mailLogJson.mailLogs ?? []);
@@ -162,6 +167,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     } else {
       setArchivePreview(null);
     }
+    setSavedSessionSetDrafts(draftJson.drafts ?? []);
   }, [isAdmin, selectedAdminEventId]);
 
   useEffect(() => {
@@ -290,6 +296,39 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     await reloadShared();
     await loadAdminData();
   }, 'sessionSet を公開しました');
+
+  const handleSaveGeneratedSessionSets = async () => runAction(async () => {
+    if (!selectedAdminEventId) throw new Error('イベントを選択してください');
+    if (sessionSets.length === 0) throw new Error('保存する sessionSet がありません');
+
+    const res = await fetch('/api/session-set-drafts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sessionEventId: selectedAdminEventId,
+        sessionSets,
+        skippedSongs: generatedResult.skippedSongs,
+        forcedSessionSets: generatedResult.forcedSessionSets,
+      }),
+    });
+    const json = await parseJson(res);
+    if (!res.ok) throw new Error(json.error ?? '保存に失敗しました');
+    await loadAdminData();
+  }, 'generated sessionSet を保存しました');
+
+  const handleShowSavedSessionSetDraft = (draft: SavedSessionSetDraftView) => {
+    setSelectedAdminEventId(draft.sessionEventId);
+    setSessionSets(draft.sessionSets ?? []);
+    setGeneratedResult({
+      sessionSets: draft.sessionSets ?? [],
+      skippedSongs: draft.skippedSongs ?? [],
+      forcedSessionSets: draft.forcedSessionSets ?? [],
+    });
+  };
+
+  const handleRegenerateSavedSessionSetDraft = async (draft: SavedSessionSetDraftView) => {
+    await handleGenerateSets(draft.sessionEventId);
+  };
 
   const handleCreateArchive = async () => runAction(async () => {
     if (!selectedAdminEventId) throw new Error('イベントを選択してください');
@@ -462,6 +501,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     setArchiveNote,
     archivePreview,
     generatedResult,
+    savedSessionSetDrafts,
     activityLogs,
     mailLogs,
     columns,
@@ -522,6 +562,9 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     handleUpdateEvent,
     handleGenerateSets,
     handlePublishSets,
+    handleSaveGeneratedSessionSets,
+    handleShowSavedSessionSetDraft,
+    handleRegenerateSavedSessionSetDraft,
     handleCreateArchive,
     handleDeleteArchive,
     handleUpdateMember,

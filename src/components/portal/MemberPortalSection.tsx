@@ -38,14 +38,16 @@ const NONE_VALUE = '__none__';
 type FieldProps = {
   htmlFor?: string;
   label: string;
+  description?: string;
   children: React.ReactNode;
   className?: string;
 };
 
-function Field({ htmlFor, label, children, className }: FieldProps) {
+function Field({ htmlFor, label, description, children, className }: FieldProps) {
   return (
     <div className={className ?? 'grid gap-2'}>
       <Label htmlFor={htmlFor}>{label}</Label>
+      {description ? <p className="text-xs text-muted-foreground">{description}</p> : null}
       {children}
     </div>
   );

@@ -259,6 +259,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           archiveNote={admin.archiveNote}
           archivePreview={admin.archivePreview}
           generatedResult={admin.generatedResult}
+          savedSessionSetDrafts={admin.savedSessionSetDrafts}
           activityLogs={admin.activityLogs}
           mailLogs={admin.mailLogs}
           members={members}
@@ -334,6 +335,9 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           onUpdateEvent={admin.handleUpdateEvent}
           onGenerateSets={admin.handleGenerateSets}
           onPublishSets={admin.handlePublishSets}
+          onSaveGeneratedSessionSets={admin.handleSaveGeneratedSessionSets}
+          onShowSavedSessionSetDraft={admin.handleShowSavedSessionSetDraft}
+          onRegenerateSavedSessionSetDraft={admin.handleRegenerateSavedSessionSetDraft}
           onSignOut={auth.handleSignOut}
           onCreateArchive={admin.handleCreateArchive}
           onDeleteArchive={admin.handleDeleteArchive}
