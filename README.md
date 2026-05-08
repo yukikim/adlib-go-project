@@ -528,8 +528,8 @@ admin dashboard で以下を提供します。
 
 ### デモログイン情報
 
-- 管理者: `/admin/signin` から admin@adlib-go.local / demo-admin-password
-- メンバー例: `/signin` から member01@adlib-go.local / demo-member-password
+- 管理者: `/admin/signin`
+- メンバー例: `/signin`
 
 サインアップ / member プロフィールで扱う主な項目:
 

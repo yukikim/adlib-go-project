@@ -725,8 +725,8 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     }
   };
 
-  console.log(generatedResult.forcedSessionSets)
-  console.log(sessionSets)
+  // console.log(generatedResult.forcedSessionSets)
+  // console.log(sessionSets)
   return (
     <div>
       {/* <MainHeader view="admin" currentUser={{ role: 'admin', displayName: adminMemberDisplayName }} auth={{ handleSignOut: onSignOut }} loading={loading} admin={{ adminMemberDisplayName }} /> */}
@@ -796,7 +796,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                   {group.icon}
                   <span>{group.label}</span>
                 </button>
-                <div className="space-y-1 border-l border-border/80 pl-4">
+                {/* <div className="space-y-1 border-l border-border/80 pl-4">
                   {group.children.map((child) => (
                     <button
                       type="button"
@@ -808,7 +808,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                       {child.label}
                     </button>
                   ))}
-                </div>
+                </div> */}
               </div>
             ))}
           </nav>
