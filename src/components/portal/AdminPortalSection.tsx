@@ -1070,18 +1070,51 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                             候補曲 {sessionEvent.round2CandidateSongs?.length ?? 0} 曲 / 参加エントリー {sessionEvent._count?.sessionEntries ?? 0} 件 / 既存 sessionSet {sessionEvent._count?.sessionSets ?? 0} 件
                           </p>
                         </div>
+                        <p>{savedDraftEventIdSet.has(sessionEvent.id) ? '保存済み' : '未保存'}</p>
                         <Button type="button" size="sm" disabled={loading || savedDraftEventIdSet.has(sessionEvent.id)} onClick={() => onGenerateSets(sessionEvent.id)}>
-                          生成
+                          sessionSet 生成
                         </Button>
                       </li>
                     ))}
                   </ul>
                 )}
               </div>
-              <h3 className={cn('font-medium', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>
+              <Separator className={cn('my-4', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden')} />
+              <div className="rounded-xl border bg-background/60 p-4 lg:col-span-2">
+                <h3 className="font-medium">保存済み sessionSet</h3>
+                {savedSessionSetDrafts.length === 0 ? (
+                  <p className="mt-3 text-sm text-muted-foreground">保存済み sessionSet はありません。</p>
+                ) : (
+                  <ul className="mt-3 space-y-3">
+                    {savedSessionSetDrafts.map((draft) => (
+                      <li key={draft.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-card/80 p-4">
+                        <div className="space-y-1">
+                          <p className="font-medium">{draft.title}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {draft.sessionSetCount} 件 / 更新 {new Date(draft.updatedAt).toLocaleString('ja-JP')}
+                          </p>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          <Button type="button" variant="outline" size="sm" disabled={loading} onClick={() => onShowSavedSessionSetDraft(draft)}>
+                            表示
+                          </Button>
+                          <Button type="button" size="sm" disabled={loading} onClick={() => onRegenerateSavedSessionSetDraft(draft)}>
+                            再生成
+                          </Button>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+
+
+
+              <Separator className={cn('my-4', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden')} />
+              <h3 className={cn('font-medium my-2', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>
                 {selectedAdminEvent ? `${selectedAdminEvent.title} の sessionSet` : 'この sessionSetを書き出したイベント名'}
               </h3>
-              <Separator className={cn('my-4', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden')} />
               {sessionSets.length === 0 ? <p className={cn('text-sm text-muted-foreground', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>まだ sessionSet はありません。</p> : (
                 <ul id="admin-session-sets-list" className={cn('grid scroll-mt-24 gap-3 md:grid-cols-2', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>
                   {sessionSets.map((sessionSet) => (
@@ -1245,7 +1278,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                 <div id="admin-session-sets-results" className={cn('mt-4 grid scroll-mt-24 gap-4 lg:grid-cols-2', !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden')}>
                   {generatedResult.forcedSessionSets.length > 0 && (
                     <div className="rounded-xl border bg-background/60 p-4">
-                      <h3 className="font-medium">強制追加</h3>
+                      <h3 className="font-medium border-b">強制追加</h3>
                       <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
                         {generatedResult.forcedSessionSets.map((item) => (
                           <li key={item.songTitle}>{item.songTitle} / {item.forcedInstruments.join(', ')}</li>
@@ -1255,7 +1288,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                   )}
                   {generatedResult.skippedSongs.length > 0 && (
                     <div className="rounded-xl border bg-background/60 p-4">
-                      <h3 className="font-medium">未生成理由</h3>
+                      <h3 className="font-medium border-b">未生成理由</h3>
                       <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
                         {generatedResult.skippedSongs.map((item) => (
                           <li key={item.songTitle}>{item.songTitle} / {item.reasons.join(' / ')}</li>
@@ -1263,33 +1296,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                       </ul>
                     </div>
                   )}
-                  <div className="rounded-xl border bg-background/60 p-4 lg:col-span-2">
-                    <h3 className="font-medium">保存済み sessionSet</h3>
-                    {savedSessionSetDrafts.length === 0 ? (
-                      <p className="mt-3 text-sm text-muted-foreground">保存済み sessionSet はありません。</p>
-                    ) : (
-                      <ul className="mt-3 space-y-3">
-                        {savedSessionSetDrafts.map((draft) => (
-                          <li key={draft.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-card/80 p-4">
-                            <div className="space-y-1">
-                              <p className="font-medium">{draft.title}</p>
-                              <p className="text-sm text-muted-foreground">
-                                {draft.sessionSetCount} 件 / 更新 {new Date(draft.updatedAt).toLocaleString('ja-JP')}
-                              </p>
-                            </div>
-                            <div className="flex flex-wrap gap-2">
-                              <Button type="button" variant="outline" size="sm" disabled={loading} onClick={() => onShowSavedSessionSetDraft(draft)}>
-                                表示
-                              </Button>
-                              <Button type="button" size="sm" disabled={loading} onClick={() => onRegenerateSavedSessionSetDraft(draft)}>
-                                再生成
-                              </Button>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
+
                 </div>
               )}
             </Section>
