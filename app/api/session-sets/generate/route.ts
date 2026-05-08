@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Prisma } from '@prisma/client';
+import { randomUUID } from 'crypto';
+import { Prisma, type MemberRole } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { generateSessionSets } from '@/session-planner/generateSessionSets';
 import type { Participant as DomainParticipant } from '@/session-planner/domain';
@@ -134,48 +135,56 @@ export async function POST(req: NextRequest) {
     }, { status: 400 });
   }
 
-  try {
-    await prisma.$transaction(async (tx) => {
-      await tx.sessionSetMember.deleteMany({ where: { sessionSet: { sessionEventId: body.sessionEventId } } });
-      await tx.sessionSet.deleteMany({ where: { sessionEventId: body.sessionEventId } });
+  const sessionSetRows = sessionSets.map((sessionSet, index) => {
+    const song = songByTitle.get(sessionSet.songTitle);
+    if (!song) {
+      throw new Error(`Missing Song row for ${sessionSet.songTitle}`);
+    }
 
-      for (const [index, s] of sessionSets.entries()) {
-        const song = songByTitle.get(s.songTitle);
-        if (!song) {
-          throw new Error(`Missing Song row for ${s.songTitle}`);
-        }
+    return {
+      id: randomUUID(),
+      sessionEventId: body.sessionEventId,
+      title: sessionSet.songTitle,
+      songId: song.id,
+      setOrder: index + 1,
+      isPublished: false,
+      drumId: sessionSet.drum ?? null,
+      bassId: sessionSet.bass ?? null,
+      pianoId: sessionSet.piano ?? null,
+      keyName: sessionSet.key ?? null,
+    };
+  });
 
-        const created = await tx.sessionSet.create({
-          data: {
-            sessionEventId: body.sessionEventId,
-            title: s.songTitle,
-            songId: song.id,
-            setOrder: index + 1,
-            isPublished: false,
-            drumId: s.drum ?? null,
-            bassId: s.bass ?? null,
-            pianoId: s.piano ?? null,
-            keyName: s.key ?? null,
-          },
-        });
-
-        for (const pid of s.front) {
-          const participant = participantById.get(pid);
-          if (!participant) {
-            throw new Error(`Missing Participant row for ${pid}`);
-          }
-          const role = participant.instrument === 'vocal' ? 'vocal' : 'front';
-
-          await tx.sessionSetMember.create({
-            data: {
-              sessionSetId: created.id,
-              participantId: pid,
-              role,
-            },
-          });
-        }
+  const sessionSetMemberRows = sessionSets.flatMap((sessionSet, index) =>
+    sessionSet.front.map((participantId) => {
+      const participant = participantById.get(participantId);
+      if (!participant) {
+        throw new Error(`Missing Participant row for ${participantId}`);
       }
-    });
+
+      return {
+        sessionSetId: sessionSetRows[index].id,
+        participantId,
+        role: (participant.instrument === 'vocal' ? 'vocal' : 'front') as MemberRole,
+      };
+    }),
+  );
+
+  try {
+    const operations: Prisma.PrismaPromise<unknown>[] = [
+      prisma.sessionSetMember.deleteMany({ where: { sessionSet: { sessionEventId: body.sessionEventId } } }),
+      prisma.sessionSet.deleteMany({ where: { sessionEventId: body.sessionEventId } }),
+    ];
+
+    if (sessionSetRows.length > 0) {
+      operations.push(prisma.sessionSet.createMany({ data: sessionSetRows }));
+    }
+
+    if (sessionSetMemberRows.length > 0) {
+      operations.push(prisma.sessionSetMember.createMany({ data: sessionSetMemberRows }));
+    }
+
+    await prisma.$transaction(operations);
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       return NextResponse.json({
