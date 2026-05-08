@@ -19,7 +19,16 @@ export function buildSessionSetDraftTitle(sessionEventTitle: string) {
   return `${sessionEventTitle} sessionSet`;
 }
 
+function normalizeSongTitle(value: string) {
+  return value.trim().replace(/\s+/g, ' ').toLocaleLowerCase('ja-JP');
+}
+
+function buildRequestLookupKey(sessionEventId: string, displayName: string, instrument: string) {
+  return `${sessionEventId}::${displayName}::${instrument}`;
+}
+
 export async function serializeSessionSets(sessionSets: SessionSetWithRelations[]) {
+  const sessionEventIds = [...new Set(sessionSets.map((sessionSet) => sessionSet.sessionEventId).filter((value): value is string => Boolean(value)))];
   const frontNames = [...new Set(
     sessionSets.flatMap((sessionSet) =>
       sessionSet.members
@@ -41,6 +50,60 @@ export async function serializeSessionSets(sessionSets: SessionSetWithRelations[
         },
       });
 
+  const sessionEntries = sessionEventIds.length === 0
+    ? []
+    : await prisma.sessionEntry.findMany({
+        where: {
+          sessionEventId: { in: sessionEventIds },
+          attendanceStatus: 'attending',
+        },
+        select: {
+          sessionEventId: true,
+          memberProfile: {
+            select: {
+              displayName: true,
+              mainInstrument: true,
+            },
+          },
+          requests: {
+            select: {
+              songTitleSnapshot: true,
+            },
+          },
+        },
+      });
+
+  const requestedSongKeysByMember = new Map<string, Set<string>>();
+  for (const entry of sessionEntries) {
+    const lookupKey = buildRequestLookupKey(
+      entry.sessionEventId,
+      entry.memberProfile.displayName,
+      entry.memberProfile.mainInstrument,
+    );
+    const requestedSongKeys = requestedSongKeysByMember.get(lookupKey) ?? new Set<string>();
+
+    for (const request of entry.requests) {
+      const normalizedTitle = normalizeSongTitle(request.songTitleSnapshot);
+      if (normalizedTitle) {
+        requestedSongKeys.add(normalizedTitle);
+      }
+    }
+
+    requestedSongKeysByMember.set(lookupKey, requestedSongKeys);
+  }
+
+  const isForcedAssignment = (sessionEventId: string | null, participantName: string, instrument: string, songTitle: string) => {
+    if (!sessionEventId) {
+      return false;
+    }
+
+    const requestedSongs = requestedSongKeysByMember.get(
+      buildRequestLookupKey(sessionEventId, participantName, instrument),
+    );
+
+    return !requestedSongs?.has(normalizeSongTitle(songTitle));
+  };
+
   const subInstrumentByFrontName = new Map(
     frontProfiles.map((profile) => [profile.displayName, profile.subInstrument ?? null]),
   );
@@ -52,21 +115,35 @@ export async function serializeSessionSets(sessionSets: SessionSetWithRelations[
     setOrder: sessionSet.setOrder,
     isPublished: sessionSet.isPublished,
     key: sessionSet.keyName,
-    drum: sessionSet.drum ? { id: sessionSet.drum.id, name: sessionSet.drum.name } : null,
-    bass: sessionSet.bass ? { id: sessionSet.bass.id, name: sessionSet.bass.name } : null,
-    piano: sessionSet.piano ? { id: sessionSet.piano.id, name: sessionSet.piano.name } : null,
+    drum: sessionSet.drum ? {
+      id: sessionSet.drum.id,
+      name: sessionSet.drum.name,
+      isForced: isForcedAssignment(sessionSet.sessionEventId, sessionSet.drum.name, 'drum', sessionSet.song.title),
+    } : null,
+    bass: sessionSet.bass ? {
+      id: sessionSet.bass.id,
+      name: sessionSet.bass.name,
+      isForced: isForcedAssignment(sessionSet.sessionEventId, sessionSet.bass.name, 'bass', sessionSet.song.title),
+    } : null,
+    piano: sessionSet.piano ? {
+      id: sessionSet.piano.id,
+      name: sessionSet.piano.name,
+      isForced: isForcedAssignment(sessionSet.sessionEventId, sessionSet.piano.name, 'piano', sessionSet.song.title),
+    } : null,
     front: sessionSet.members
       .filter((member) => member.role === 'front')
       .map((member) => ({
         id: member.participant.id,
         name: member.participant.name,
         subInstrument: subInstrumentByFrontName.get(member.participant.name) ?? null,
+        isForced: isForcedAssignment(sessionSet.sessionEventId, member.participant.name, 'front', sessionSet.song.title),
       })),
     vocal: sessionSet.members
       .filter((member) => member.role === 'vocal')
       .map((member) => ({
         id: member.participant.id,
         name: member.participant.name,
+        isForced: isForcedAssignment(sessionSet.sessionEventId, member.participant.name, 'vocal', sessionSet.song.title),
       })),
   }));
 }

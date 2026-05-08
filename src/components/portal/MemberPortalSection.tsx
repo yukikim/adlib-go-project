@@ -35,6 +35,10 @@ type EntryState = {
 
 const NONE_VALUE = '__none__';
 
+function formatSessionMemberName(name: string, isForced?: boolean) {
+  return isForced ? `${name} (強制追加)` : name;
+}
+
 type FieldProps = {
   htmlFor?: string;
   label: string;
@@ -453,17 +457,23 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                   {sessionSet.key ? <Badge variant="outline">key {sessionSet.key}</Badge> : null}
                 </div>
                 <div className="mt-3 grid gap-2 text-sm text-muted-foreground">
-                  <p>drum {sessionSet.drum?.name ?? '-'}</p>
-                  <p>bass {sessionSet.bass?.name ?? '-'}</p>
-                  <p>piano {sessionSet.piano?.name ?? '-'}</p>
+                  <p>drum {sessionSet.drum ? formatSessionMemberName(sessionSet.drum.name, sessionSet.drum.isForced) : '-'}</p>
+                  <p>bass {sessionSet.bass ? formatSessionMemberName(sessionSet.bass.name, sessionSet.bass.isForced) : '-'}</p>
+                  <p>piano {sessionSet.piano ? formatSessionMemberName(sessionSet.piano.name, sessionSet.piano.isForced) : '-'}</p>
                   <p>
                     front {sessionSet.front?.length
-                      ? sessionSet.front.map((member) => member.subInstrument ? `${member.name} (${member.subInstrument})` : member.name).join(', ')
+                      ? sessionSet.front.map((member) => {
+                        const baseName = formatSessionMemberName(member.name, member.isForced);
+                        return member.subInstrument ? `${baseName} (${member.subInstrument})` : baseName;
+                      }).join(', ')
                       : '-'}
                   </p>
                   <p>
                     vocal {sessionSet.vocal?.length
-                      ? sessionSet.vocal.map((member) => sessionSet.key ? `${member.name} (key ${sessionSet.key})` : member.name).join(', ')
+                      ? sessionSet.vocal.map((member) => {
+                        const baseName = formatSessionMemberName(member.name, member.isForced);
+                        return sessionSet.key ? `${baseName} (key ${sessionSet.key})` : baseName;
+                      }).join(', ')
                       : '-'}
                   </p>
                 </div>

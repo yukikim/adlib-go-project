@@ -108,11 +108,11 @@ export type SessionSetView = {
   songTitle: string;
   key?: string | null;
   isPublished?: boolean;
-  drum: { id: string; name: string } | null;
-  bass: { id: string; name: string } | null;
-  piano: { id: string; name: string } | null;
-  front?: { id: string; name: string; subInstrument?: string | null }[];
-  vocal?: { id: string; name: string }[];
+  drum: { id: string; name: string; isForced?: boolean } | null;
+  bass: { id: string; name: string; isForced?: boolean } | null;
+  piano: { id: string; name: string; isForced?: boolean } | null;
+  front?: { id: string; name: string; subInstrument?: string | null; isForced?: boolean }[];
+  vocal?: { id: string; name: string; isForced?: boolean }[];
 };
 
 export type MemberDetailView = {

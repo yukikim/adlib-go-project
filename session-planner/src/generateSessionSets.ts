@@ -107,8 +107,14 @@ type SkippedCandidate = {
   reasons: string[];
 };
 
+function normalizeFrontSubInstrument(value: string | undefined) {
+  const normalized = value?.trim().toLocaleLowerCase('ja-JP');
+  return normalized ? normalized : null;
+}
+
 /**
- * front パート用: round=1 を優先しつつ必要人数を選ぶ
+ * front パート用: round=1 を優先しつつ必要人数を選ぶ。
+ * 可能な限り subInstrument が重複しない組み合わせを優先する。
  */
 const chooseFrontWithPriority = (
   candidates: Participant[],
@@ -117,25 +123,43 @@ const chooseFrontWithPriority = (
   min = 0,
   max = 2,
 ): Participant[] => {
-  const pick = (round: 1 | 2, alreadyPickedIds = new Set<string>()) => {
-    const filtered = candidates.filter(c =>
-      !alreadyPickedIds.has(c.id) &&
-      participationCount[c.id] < 4 &&
-      c.requestedSongs.some(r => r.title === songTitle && r.round === round),
-    );
-    filtered.sort((a, b) => participationCount[a.id] - participationCount[b.id]);
-    return filtered;
-  };
-
   const picked: Participant[] = [];
 
-  // 1. round=1 から取る
-  picked.push(...pick(1));
-  if (picked.length >= max) return picked.slice(0, max);
+  const pickFromRound = (round: 1 | 2) => {
+    while (picked.length < max) {
+      const alreadyPickedIds = new Set(picked.map((participant) => participant.id));
+      const usedSubInstruments = new Set(
+        picked
+          .map((participant) => normalizeFrontSubInstrument(participant.subInstrument))
+          .filter((value): value is string => Boolean(value)),
+      );
 
-  // 2. 足りなければ round=2 から補う
-  const already = new Set(picked.map(p => p.id));
-  picked.push(...pick(2, already));
+      const available = candidates.filter((candidate) =>
+        !alreadyPickedIds.has(candidate.id)
+        && participationCount[candidate.id] < 4
+        && candidate.requestedSongs.some((request) => request.title === songTitle && request.round === round),
+      );
+
+      if (available.length === 0) {
+        return;
+      }
+
+      const distinctSubInstrumentCandidates = available.filter((candidate) => {
+        const subInstrument = normalizeFrontSubInstrument(candidate.subInstrument);
+        return subInstrument && !usedSubInstruments.has(subInstrument);
+      });
+
+      const pool = (distinctSubInstrumentCandidates.length > 0 ? distinctSubInstrumentCandidates : available)
+        .sort((left, right) => (participationCount[left.id] ?? 0) - (participationCount[right.id] ?? 0));
+
+      picked.push(pool[0]);
+    }
+  };
+
+  pickFromRound(1);
+  if (picked.length < max) {
+    pickFromRound(2);
+  }
 
   if (picked.length === 0) return [];
 

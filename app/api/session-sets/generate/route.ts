@@ -89,6 +89,7 @@ export async function POST(req: NextRequest) {
       id: participant.id,
       name: participant.name,
       instrument: participant.instrument as DomainParticipant['instrument'],
+      subInstrument: entry.memberProfile.mainInstrument === 'front' ? (entry.memberProfile.subInstrument ?? undefined) : undefined,
       requestedSongs: entry.requests.map((request) => ({
         title: request.songTitleSnapshot,
         key: request.keyName ?? undefined,

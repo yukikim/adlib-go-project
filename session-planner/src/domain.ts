@@ -15,6 +15,8 @@ export interface Participant {
   id: string;
   name: string;
   instrument: Instrument;
+  /** front のときのみ任意で使用 */
+  subInstrument?: string;
   /**
    * non-vocal: round=1 が2件 + round=2 が2件 → 合計4
    * vocal:     round=1 が2件 + round=2 が1件 → 合計3

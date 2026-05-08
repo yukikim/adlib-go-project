@@ -335,6 +335,8 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           onUpdateEvent={admin.handleUpdateEvent}
           onGenerateSets={admin.handleGenerateSets}
           onPublishSets={admin.handlePublishSets}
+          onUpdateSessionSet={admin.handleUpdateSessionSet}
+          onSaveEditedSessionSets={admin.handleSaveEditedSessionSets}
           onSaveGeneratedSessionSets={admin.handleSaveGeneratedSessionSets}
           onShowSavedSessionSetDraft={admin.handleShowSavedSessionSetDraft}
           onRegenerateSavedSessionSetDraft={admin.handleRegenerateSavedSessionSetDraft}

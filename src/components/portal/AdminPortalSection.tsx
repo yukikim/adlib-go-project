@@ -65,6 +65,22 @@ function formatEventDate(value: string) {
   return new Date(value).toLocaleDateString('ja-JP');
 }
 
+function formatSessionMemberName(name: string, isForced?: boolean) {
+  return isForced ? `${name} (強制追加)` : name;
+}
+
+function buildSessionMemberOptionValue(instrument: Instrument, name: string) {
+  return `${instrument}::${name}`;
+}
+
+type SessionMemberOption = {
+  value: string;
+  name: string;
+  instrument: Instrument;
+  label: string;
+  subInstrument?: string | null;
+};
+
 const NONE_VALUE = '__none__';
 
 type FieldProps = {
@@ -258,6 +274,8 @@ type AdminPortalSectionProps = {
   onUpdateEvent: () => void;
   onGenerateSets: (eventId?: string) => void;
   onPublishSets: () => void;
+  onUpdateSessionSet: (sessionSet: SessionSetView) => void;
+  onSaveEditedSessionSets: () => void;
   onSaveGeneratedSessionSets: () => void;
   onShowSavedSessionSetDraft: (draft: SavedSessionSetDraftView) => void;
   onRegenerateSavedSessionSetDraft: (draft: SavedSessionSetDraftView) => void;
@@ -373,6 +391,8 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     onUpdateEvent,
     onGenerateSets,
     onPublishSets,
+    onUpdateSessionSet,
+    onSaveEditedSessionSets,
     onSaveGeneratedSessionSets,
     onShowSavedSessionSetDraft,
     onRegenerateSavedSessionSetDraft,
@@ -392,6 +412,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
   const [openMobileGroupId, setOpenMobileGroupId] = useState(defaultAdminGroupId);
   const [openSessionEventIds, setOpenSessionEventIds] = useState<string[]>([]);
   const [hasRestoredSelection, setHasRestoredSelection] = useState(false);
+  const [editingSessionSet, setEditingSessionSet] = useState<SessionSetView | null>(null);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -463,6 +484,48 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
   const generatableSessionEvents = sessionEvents.filter((sessionEvent) => sessionEvent.canGenerateSessionSets);
   const savedDraftEventIdSet = new Set(savedSessionSetDrafts.map((draft) => draft.sessionEventId));
   const hasSavedDraftForSelectedEvent = selectedAdminEventId ? savedDraftEventIdSet.has(selectedAdminEventId) : false;
+  const frontMemberByName = new Map(
+    members
+      .filter((member) => member.mainInstrument === 'front')
+      .map((member) => [member.displayName, member]),
+  );
+  const attendingEntries = selectedAdminEvent?.sessionEntries?.filter((entry) => entry.attendanceStatus === 'attending') ?? [];
+
+  const buildInstrumentOptions = (instrument: Instrument) => {
+    const seen = new Set<string>();
+    return attendingEntries.flatMap((entry) => {
+      if (entry.memberProfile.mainInstrument !== instrument) {
+        return [] as SessionMemberOption[];
+      }
+
+      const name = entry.memberProfile.displayName;
+      const value = buildSessionMemberOptionValue(instrument, name);
+      if (seen.has(value)) {
+        return [] as SessionMemberOption[];
+      }
+      seen.add(value);
+
+      const subInstrument = instrument === 'front'
+        ? frontMemberByName.get(name)?.subInstrument ?? null
+        : null;
+
+      return [{
+        value,
+        name,
+        instrument,
+        label: instrument === 'front' && subInstrument ? `${name} (${subInstrument})` : name,
+        subInstrument,
+      }];
+    });
+  };
+
+  const instrumentOptions = {
+    drum: buildInstrumentOptions('drum'),
+    bass: buildInstrumentOptions('bass'),
+    piano: buildInstrumentOptions('piano'),
+    front: buildInstrumentOptions('front'),
+    vocal: buildInstrumentOptions('vocal'),
+  } as const;
 
   const previewParagraphs = splitPreviewBody(columnBody);
   const activeContentKey = `${activeGroupId}:${activeChildId ?? 'all'}`;
@@ -492,6 +555,129 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
 
   const isGroupVisible = (groupId: string) => activeGroupId === groupId;
   const isChildVisible = (groupId: string, childId: string) => activeGroupId === groupId && (!activeChildId || activeChildId === childId);
+
+  const buildFrontMemberFromOption = (option: SessionMemberOption) => ({
+    id: option.value,
+    name: option.name,
+    subInstrument: option.subInstrument ?? null,
+    isForced: false,
+  });
+
+  const buildBasicMemberFromOption = (option: SessionMemberOption) => ({
+    id: option.value,
+    name: option.name,
+    isForced: false,
+  });
+
+  const getOptionListWithCurrentMember = (
+    options: SessionMemberOption[],
+    member: { name: string; subInstrument?: string | null } | null | undefined,
+    instrument: Instrument,
+  ) => {
+    if (!member) {
+      return options;
+    }
+
+    const value = buildSessionMemberOptionValue(instrument, member.name);
+    if (options.some((option) => option.value === value)) {
+      return options;
+    }
+
+    const subInstrument = instrument === 'front'
+      ? member.subInstrument ?? frontMemberByName.get(member.name)?.subInstrument ?? null
+      : null;
+
+    return [{
+      value,
+      name: member.name,
+      instrument,
+      label: instrument === 'front' && subInstrument ? `${member.name} (${subInstrument})` : member.name,
+      subInstrument,
+    }, ...options];
+  };
+
+  const openSessionSetEditor = (sessionSet: SessionSetView) => {
+    setEditingSessionSet({
+      ...sessionSet,
+      drum: sessionSet.drum ? { ...sessionSet.drum } : null,
+      bass: sessionSet.bass ? { ...sessionSet.bass } : null,
+      piano: sessionSet.piano ? { ...sessionSet.piano } : null,
+      front: sessionSet.front?.map((member) => ({ ...member })) ?? [],
+      vocal: sessionSet.vocal?.map((member) => ({ ...member })) ?? [],
+    });
+  };
+
+  const updateEditingSessionSetMember = (
+    field: 'drum' | 'bass' | 'piano',
+    instrument: 'drum' | 'bass' | 'piano',
+    value: string,
+  ) => {
+    setEditingSessionSet((current) => {
+      if (!current) {
+        return current;
+      }
+
+      if (value === NONE_VALUE) {
+        return { ...current, [field]: null };
+      }
+
+      const option = instrumentOptions[instrument].find((candidate) => candidate.value === value);
+      if (!option) {
+        return current;
+      }
+
+      return {
+        ...current,
+        [field]: buildBasicMemberFromOption(option),
+      };
+    });
+  };
+
+  const updateEditingSessionSetArrayMember = (
+    field: 'front' | 'vocal',
+    index: number,
+    instrument: 'front' | 'vocal',
+    value: string,
+  ) => {
+    setEditingSessionSet((current) => {
+      if (!current) {
+        return current;
+      }
+
+      const nextMembers = [...(current[field] ?? [])];
+      if (value === NONE_VALUE) {
+        if (index < nextMembers.length) {
+          nextMembers.splice(index, 1);
+        }
+      } else {
+        const option = instrumentOptions[instrument].find((candidate) => candidate.value === value);
+        if (!option) {
+          return current;
+        }
+        nextMembers[index] = instrument === 'front'
+          ? buildFrontMemberFromOption(option)
+          : buildBasicMemberFromOption(option);
+      }
+
+      const dedupedMembers = nextMembers.filter((member, memberIndex, membersList) =>
+        membersList.findIndex((candidate) => candidate.name === member.name) === memberIndex,
+      );
+
+      return {
+        ...current,
+        [field]: dedupedMembers,
+      };
+    });
+  };
+
+  const applyEditingSessionSet = () => {
+    if (!editingSessionSet) {
+      return;
+    }
+
+    onUpdateSessionSet(editingSessionSet);
+    setEditingSessionSet(null);
+  };
 
   const getGroupLinkClassName = (groupId: string) => cn(
     'flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition-colors',
@@ -539,7 +725,8 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     }
   };
 
-  // console.log(sessionSets)
+  console.log(generatedResult.forcedSessionSets)
+  console.log(sessionSets)
   return (
     <div>
       {/* <MainHeader view="admin" currentUser={{ role: 'admin', displayName: adminMemberDisplayName }} auth={{ handleSignOut: onSignOut }} loading={loading} admin={{ adminMemberDisplayName }} /> */}
@@ -887,6 +1074,9 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                 </ul>
               )}
             </div>
+            <h3 className={cn('font-medium', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>
+              {selectedAdminEvent ? `${selectedAdminEvent.title} の sessionSet` : 'この sessionSetを書き出したイベント名'}
+            </h3>
             <Separator className={cn('my-4', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden')} />
             {sessionSets.length === 0 ? <p className={cn('text-sm text-muted-foreground', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>まだ sessionSet はありません。</p> : (
               <ul id="admin-session-sets-list" className={cn('grid scroll-mt-24 gap-3 md:grid-cols-2', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>
@@ -897,20 +1087,31 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                         <p className="font-medium">{sessionSet.songTitle}</p>
                         <p className="text-sm text-muted-foreground">key {sessionSet.key ?? '-'}</p>
                       </div>
-                      {sessionSet.isPublished ? <Badge>公開中</Badge> : <Badge variant="outline">下書き</Badge>}
+                      <div className="flex items-center gap-2">
+                        {sessionSet.isPublished ? <Badge>公開中</Badge> : <Badge variant="outline">下書き</Badge>}
+                        <Button type="button" variant="outline" size="sm" disabled={loading} onClick={() => openSessionSetEditor(sessionSet)}>
+                          編集
+                        </Button>
+                      </div>
                     </div>
                     <div className="mt-3 grid gap-2 text-sm text-muted-foreground">
-                      <p>drum {sessionSet.drum?.name ?? '-'}</p>
-                      <p>bass {sessionSet.bass?.name ?? '-'}</p>
-                      <p>piano {sessionSet.piano?.name ?? '-'}</p>
+                      <p>drum {sessionSet.drum ? formatSessionMemberName(sessionSet.drum.name, sessionSet.drum.isForced) : '-'}</p>
+                      <p>bass {sessionSet.bass ? formatSessionMemberName(sessionSet.bass.name, sessionSet.bass.isForced) : '-'}</p>
+                      <p>piano {sessionSet.piano ? formatSessionMemberName(sessionSet.piano.name, sessionSet.piano.isForced) : '-'}</p>
                       <p>
                         front {sessionSet.front?.length
-                          ? sessionSet.front.map((member) => member.subInstrument ? `${member.name} (${member.subInstrument})` : member.name).join(', ')
+                          ? sessionSet.front.map((member) => {
+                            const baseName = formatSessionMemberName(member.name, member.isForced);
+                            return member.subInstrument ? `${baseName} (${member.subInstrument})` : baseName;
+                          }).join(', ')
                           : '-'}
                       </p>
                       <p>
                         vocal {sessionSet.vocal?.length
-                          ? sessionSet.vocal.map((member) => sessionSet.key ? `${member.name} (key ${sessionSet.key})` : member.name).join(', ')
+                          ? sessionSet.vocal.map((member) => {
+                            const baseName = formatSessionMemberName(member.name, member.isForced);
+                            return sessionSet.key ? `${baseName} (key ${sessionSet.key})` : baseName;
+                          }).join(', ')
                           : '-'}
                       </p>
                     </div>
@@ -918,11 +1119,124 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                 ))}
               </ul>
             )}
-            <div className={cn('mt-4', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>
+            <div className={cn('mt-4 flex flex-wrap gap-2', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>
+              <Button type="button" onClick={onSaveEditedSessionSets} disabled={loading || !selectedAdminEventId || sessionSets.length === 0}>
+                編集内容を sessionSet に保存
+              </Button>
               <Button type="button" onClick={onSaveGeneratedSessionSets} disabled={loading || !selectedAdminEventId || sessionSets.length === 0 || hasSavedDraftForSelectedEvent}>
                 {selectedAdminEvent ? `「${selectedAdminEvent.title} sessionSet」として保存` : 'sessionSet を保存'}
               </Button>
             </div>
+            <Dialog open={Boolean(editingSessionSet)} onOpenChange={(open) => { if (!open) setEditingSessionSet(null); }}>
+              <DialogContent className="sm:max-w-2xl">
+                <DialogHeader>
+                  <DialogTitle>sessionSet を編集</DialogTitle>
+                  <DialogDescription>各セッションの曲名、key、担当メンバーを個別に調整できます。</DialogDescription>
+                </DialogHeader>
+                {editingSessionSet ? (
+                  <div className="grid gap-4 py-2 sm:grid-cols-2">
+                    <Field htmlFor="admin-edit-session-set-song-title" label="曲名" className="sm:col-span-2">
+                      <Input
+                        id="admin-edit-session-set-song-title"
+                        type="text"
+                        value={editingSessionSet.songTitle}
+                        onChange={(event) => setEditingSessionSet((current) => current ? ({ ...current, songTitle: event.target.value }) : current)}
+                      />
+                    </Field>
+                    <Field htmlFor="admin-edit-session-set-key" label="key">
+                      <Input
+                        id="admin-edit-session-set-key"
+                        type="text"
+                        value={editingSessionSet.key ?? ''}
+                        onChange={(event) => setEditingSessionSet((current) => current ? ({ ...current, key: event.target.value || null }) : current)}
+                      />
+                    </Field>
+                    <Field label="drum">
+                      <Select value={editingSessionSet.drum ? buildSessionMemberOptionValue('drum', editingSessionSet.drum.name) : NONE_VALUE} onValueChange={(value) => updateEditingSessionSetMember('drum', 'drum', value)}>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="drum を選択" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value={NONE_VALUE}>未設定</SelectItem>
+                          {getOptionListWithCurrentMember(instrumentOptions.drum, editingSessionSet.drum, 'drum').map((option) => (
+                            <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </Field>
+                    <Field label="bass">
+                      <Select value={editingSessionSet.bass ? buildSessionMemberOptionValue('bass', editingSessionSet.bass.name) : NONE_VALUE} onValueChange={(value) => updateEditingSessionSetMember('bass', 'bass', value)}>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="bass を選択" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value={NONE_VALUE}>未設定</SelectItem>
+                          {getOptionListWithCurrentMember(instrumentOptions.bass, editingSessionSet.bass, 'bass').map((option) => (
+                            <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </Field>
+                    <Field label="piano">
+                      <Select value={editingSessionSet.piano ? buildSessionMemberOptionValue('piano', editingSessionSet.piano.name) : NONE_VALUE} onValueChange={(value) => updateEditingSessionSetMember('piano', 'piano', value)}>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="piano を選択" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value={NONE_VALUE}>未設定</SelectItem>
+                          {getOptionListWithCurrentMember(instrumentOptions.piano, editingSessionSet.piano, 'piano').map((option) => (
+                            <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </Field>
+                    <Field label="front 1">
+                      <Select value={editingSessionSet.front?.[0] ? buildSessionMemberOptionValue('front', editingSessionSet.front[0].name) : NONE_VALUE} onValueChange={(value) => updateEditingSessionSetArrayMember('front', 0, 'front', value)}>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="front 1 を選択" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value={NONE_VALUE}>未設定</SelectItem>
+                          {getOptionListWithCurrentMember(instrumentOptions.front, editingSessionSet.front?.[0], 'front').map((option) => (
+                            <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </Field>
+                    <Field label="front 2">
+                      <Select value={editingSessionSet.front?.[1] ? buildSessionMemberOptionValue('front', editingSessionSet.front[1].name) : NONE_VALUE} onValueChange={(value) => updateEditingSessionSetArrayMember('front', 1, 'front', value)}>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="front 2 を選択" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value={NONE_VALUE}>未設定</SelectItem>
+                          {getOptionListWithCurrentMember(instrumentOptions.front, editingSessionSet.front?.[1], 'front').map((option) => (
+                            <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </Field>
+                    <Field label="vocal">
+                      <Select value={editingSessionSet.vocal?.[0] ? buildSessionMemberOptionValue('vocal', editingSessionSet.vocal[0].name) : NONE_VALUE} onValueChange={(value) => updateEditingSessionSetArrayMember('vocal', 0, 'vocal', value)}>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="vocal を選択" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value={NONE_VALUE}>未設定</SelectItem>
+                          {getOptionListWithCurrentMember(instrumentOptions.vocal, editingSessionSet.vocal?.[0], 'vocal').map((option) => (
+                            <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </Field>
+                  </div>
+                ) : null}
+                <DialogFooter>
+                  <Button type="button" variant="outline" onClick={() => setEditingSessionSet(null)}>キャンセル</Button>
+                  <Button type="button" onClick={applyEditingSessionSet} disabled={loading || !editingSessionSet}>一覧に反映</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
             {(generatedResult.forcedSessionSets.length > 0 || generatedResult.skippedSongs.length > 0 || savedSessionSetDrafts.length > 0) && (
               <div id="admin-session-sets-results" className={cn('mt-4 grid scroll-mt-24 gap-4 lg:grid-cols-2', !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden')}>
                 {generatedResult.forcedSessionSets.length > 0 && (

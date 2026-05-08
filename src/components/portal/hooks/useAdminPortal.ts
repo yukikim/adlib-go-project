@@ -316,6 +316,38 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     await loadAdminData();
   }, 'generated sessionSet を保存しました');
 
+  const handleUpdateSessionSet = (updatedSessionSet: SessionSetView) => {
+    setSessionSets((current) => current.map((sessionSet) => sessionSet.id === updatedSessionSet.id ? updatedSessionSet : sessionSet));
+    setGeneratedResult((current) => ({
+      ...current,
+      sessionSets: current.sessionSets.map((sessionSet) => sessionSet.id === updatedSessionSet.id ? updatedSessionSet : sessionSet),
+    }));
+  };
+
+  const handleSaveEditedSessionSets = async () => runAction(async () => {
+    if (!selectedAdminEventId) throw new Error('イベントを選択してください');
+    if (sessionSets.length === 0) throw new Error('保存する sessionSet がありません');
+
+    const res = await fetch('/api/session-sets', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sessionEventId: selectedAdminEventId,
+        sessionSets,
+      }),
+    });
+    const json = await parseJson(res);
+    if (!res.ok) throw new Error(json.error ?? 'sessionSet の保存に失敗しました');
+
+    setSessionSets(json.sessionSets ?? []);
+    setGeneratedResult((current) => ({
+      ...current,
+      sessionSets: json.sessionSets ?? current.sessionSets,
+    }));
+    await reloadShared();
+    await loadAdminData();
+  }, 'sessionSet を保存しました');
+
   const handleShowSavedSessionSetDraft = (draft: SavedSessionSetDraftView) => {
     setSelectedAdminEventId(draft.sessionEventId);
     setSessionSets(draft.sessionSets ?? []);
@@ -562,6 +594,8 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     handleUpdateEvent,
     handleGenerateSets,
     handlePublishSets,
+    handleUpdateSessionSet,
+    handleSaveEditedSessionSets,
     handleSaveGeneratedSessionSets,
     handleShowSavedSessionSetDraft,
     handleRegenerateSavedSessionSetDraft,
