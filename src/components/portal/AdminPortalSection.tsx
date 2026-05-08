@@ -539,7 +539,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     }
   };
 
-  console.log(sessionSets)
+  // console.log(sessionSets)
   return (
     <div>
       {/* <MainHeader view="admin" currentUser={{ role: 'admin', displayName: adminMemberDisplayName }} auth={{ handleSignOut: onSignOut }} loading={loading} admin={{ adminMemberDisplayName }} /> */}
