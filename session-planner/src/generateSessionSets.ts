@@ -147,7 +147,7 @@ const chooseFrontWithPriority = (
  * 参加者一覧から sessionSet の配列を生成するメイン関数
  * - 曲リストは「round=1 の希望曲のユニークリスト」
  * - 各曲・各パートで round=1 を優先、足りなければ round=2 から補充
- * - vocal: 希望曲のみ参加・最大3曲、round=1 を優先
+ * - vocal: round=2 で希望した曲のみ参加・最大3曲
  */
 export function generateSessionSets(participants: Participant[]): SessionGenerationResult {
   const participationCount: ParticipationCount = {};
@@ -185,7 +185,9 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
       bass: songParticipants.filter(p => p.instrument === 'bass'),
       piano: songParticipants.filter(p => p.instrument === 'piano'),
       front: songParticipants.filter(p => p.instrument === 'front'),
-      vocal: songParticipants.filter(p => p.instrument === 'vocal'),
+      vocal: songParticipants.filter(
+        p => p.instrument === 'vocal' && p.requestedSongs.some(r => r.title === songTitle && r.round === 2),
+      ),
     } as const;
 
     const drum = chooseOneWithPriority(byInstrument.drum, songTitle, 4, participationCount);
@@ -202,16 +204,12 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
       continue;
     }
 
-    // vocal: 希望曲のみ参加 (最大3曲) + round=1 を優先
+    // vocal: round=2 の希望曲のみ参加 (最大3曲)
     const vocalCandidates = byInstrument.vocal.filter(v => participationCount[v.id] < 3);
     let vocal: Participant | undefined;
 
     if (vocalCandidates.length > 0) {
-      const primary = vocalCandidates.filter(v =>
-        v.requestedSongs.some(r => r.title === songTitle && r.round === 1),
-      );
-      const pool = primary.length > 0 ? primary : vocalCandidates;
-      pool.sort((a, b) => participationCount[a.id] - participationCount[b.id]);
+      const pool = [...vocalCandidates].sort((a, b) => participationCount[a.id] - participationCount[b.id]);
       vocal = pool[0];
     }
 
@@ -228,10 +226,10 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
       ...(vocal ? [vocal.id] : []),
     ];
 
-    // key は「この曲を vocal が希望したレコード」から取得（round は問わない）
+    // key は round=2 の vocal 希望から取得する
     let key: string | undefined;
     if (vocal) {
-      const req = vocal.requestedSongs.find(r => r.title === songTitle);
+      const req = vocal.requestedSongs.find(r => r.title === songTitle && r.round === 2);
       key = req?.key;
     }
 
@@ -272,7 +270,10 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
       bass: songParticipants.filter((participant) => participant.instrument === 'bass'),
       piano: songParticipants.filter((participant) => participant.instrument === 'piano'),
       front: songParticipants.filter((participant) => participant.instrument === 'front'),
-      vocal: songParticipants.filter((participant) => participant.instrument === 'vocal'),
+      vocal: songParticipants.filter(
+        (participant) => participant.instrument === 'vocal'
+          && participant.requestedSongs.some((request) => request.title === songTitle && request.round === 2),
+      ),
     } as const;
 
     const forcedInstruments: Instrument[] = [];
@@ -312,11 +313,7 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
     let vocal: Participant | undefined;
 
     if (vocalCandidates.length > 0) {
-      const primary = vocalCandidates.filter((participant) =>
-        participant.requestedSongs.some((request) => request.title === songTitle && request.round === 1),
-      );
-      const pool = primary.length > 0 ? primary : vocalCandidates;
-      pool.sort((a, b) => participationCount[a.id] - participationCount[b.id]);
+      const pool = [...vocalCandidates].sort((a, b) => participationCount[a.id] - participationCount[b.id]);
       vocal = pool[0];
     }
 
@@ -335,7 +332,7 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
 
     let key: string | undefined;
     if (vocal) {
-      const request = vocal.requestedSongs.find((song) => song.title === songTitle);
+      const request = vocal.requestedSongs.find((song) => song.title === songTitle && song.round === 2);
       key = request?.key;
     }
 
