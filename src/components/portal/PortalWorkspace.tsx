@@ -260,6 +260,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           archivePreview={admin.archivePreview}
           generatedResult={admin.generatedResult}
           savedSessionSetDrafts={admin.savedSessionSetDrafts}
+          canOverwriteSavedSessionSetDraft={admin.canOverwriteSavedSessionSetDraft}
           activityLogs={admin.activityLogs}
           mailLogs={admin.mailLogs}
           members={members}

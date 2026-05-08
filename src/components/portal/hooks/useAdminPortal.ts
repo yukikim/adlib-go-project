@@ -46,6 +46,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
   const [archivePreview, setArchivePreview] = useState<ArchivePreview>(null);
   const [generatedResult, setGeneratedResult] = useState<GeneratedResult>({ sessionSets: [], skippedSongs: [], forcedSessionSets: [] });
   const [savedSessionSetDrafts, setSavedSessionSetDrafts] = useState<SavedSessionSetDraftView[]>([]);
+  const [draftOverwriteReadyEventIds, setDraftOverwriteReadyEventIds] = useState<string[]>([]);
   const [activityLogs, setActivityLogs] = useState<ActivityLogView[]>([]);
   const [mailLogs, setMailLogs] = useState([] as { id: string; mailType: string; toAddress: string; status: string; createdAt: string; errorMessage?: string | null }[]);
   const [columns, setColumns] = useState<ColumnView[]>([]);
@@ -80,6 +81,9 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
 
   const isAdmin = currentUser?.role === 'admin';
   const selectedAdminEvent = sessionEvents.find((event) => event.id === selectedAdminEventId) ?? null;
+  const canOverwriteSavedSessionSetDraft = selectedAdminEventId
+    ? draftOverwriteReadyEventIds.includes(selectedAdminEventId)
+    : false;
 
   async function loadManagedMemberDetail(memberId: string) {
     const response = await fetch(`/api/members/${memberId}`);
@@ -123,6 +127,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
       setArchives([]);
       setArchivePreview(null);
       setSavedSessionSetDrafts([]);
+      setDraftOverwriteReadyEventIds([]);
       setActivityLogs([]);
       setMailLogs([]);
       setColumns([]);
@@ -314,6 +319,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     const json = await parseJson(res);
     if (!res.ok) throw new Error(json.error ?? '保存に失敗しました');
     await loadAdminData();
+    setDraftOverwriteReadyEventIds((current) => current.filter((eventId) => eventId !== selectedAdminEventId));
   }, 'generated sessionSet を保存しました');
 
   const handleUpdateSessionSet = (updatedSessionSet: SessionSetView) => {
@@ -346,11 +352,15 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     }));
     await reloadShared();
     await loadAdminData();
+    setDraftOverwriteReadyEventIds((current) => current.includes(selectedAdminEventId)
+      ? current
+      : [...current, selectedAdminEventId]);
   }, 'sessionSet を保存しました');
 
   const handleShowSavedSessionSetDraft = (draft: SavedSessionSetDraftView) => {
     setSelectedAdminEventId(draft.sessionEventId);
     setSessionSets(draft.sessionSets ?? []);
+    setDraftOverwriteReadyEventIds((current) => current.filter((eventId) => eventId !== draft.sessionEventId));
     setGeneratedResult({
       sessionSets: draft.sessionSets ?? [],
       skippedSongs: draft.skippedSongs ?? [],
@@ -534,6 +544,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     archivePreview,
     generatedResult,
     savedSessionSetDrafts,
+    canOverwriteSavedSessionSetDraft,
     activityLogs,
     mailLogs,
     columns,

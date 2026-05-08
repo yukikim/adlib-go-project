@@ -199,6 +199,7 @@ type AdminPortalSectionProps = {
   archivePreview: ArchivePreview | null;
   generatedResult: GeneratedResult;
   savedSessionSetDrafts: SavedSessionSetDraftView[];
+  canOverwriteSavedSessionSetDraft: boolean;
   activityLogs: ActivityLogView[];
   mailLogs: MailLogView[];
   members: MemberListView[];
@@ -316,6 +317,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     archivePreview,
     generatedResult,
     savedSessionSetDrafts,
+    canOverwriteSavedSessionSetDraft,
     activityLogs,
     mailLogs,
     members,
@@ -484,6 +486,10 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
   const generatableSessionEvents = sessionEvents.filter((sessionEvent) => sessionEvent.canGenerateSessionSets);
   const savedDraftEventIdSet = new Set(savedSessionSetDrafts.map((draft) => draft.sessionEventId));
   const hasSavedDraftForSelectedEvent = selectedAdminEventId ? savedDraftEventIdSet.has(selectedAdminEventId) : false;
+  const isGeneratedSessionSetSaveDisabled = loading
+    || !selectedAdminEventId
+    || sessionSets.length === 0
+    || (hasSavedDraftForSelectedEvent && !canOverwriteSavedSessionSetDraft);
   const frontMemberByName = new Map(
     members
       .filter((member) => member.mainInstrument === 'front')
@@ -1070,7 +1076,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                             候補曲 {sessionEvent.round2CandidateSongs?.length ?? 0} 曲 / 参加エントリー {sessionEvent._count?.sessionEntries ?? 0} 件 / 既存 sessionSet {sessionEvent._count?.sessionSets ?? 0} 件
                           </p>
                         </div>
-                        <p>{savedDraftEventIdSet.has(sessionEvent.id) ? '保存済み' : '未保存'}</p>
+                        <Badge>{savedDraftEventIdSet.has(sessionEvent.id) ? '保存済み' : '未保存'}</Badge>
                         <Button type="button" size="sm" disabled={loading || savedDraftEventIdSet.has(sessionEvent.id)} onClick={() => onGenerateSets(sessionEvent.id)}>
                           sessionSet 生成
                         </Button>
@@ -1160,8 +1166,14 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                 <Button type="button" onClick={onSaveEditedSessionSets} disabled={loading || !selectedAdminEventId || sessionSets.length === 0}>
                   編集内容を sessionSet に保存
                 </Button>
-                <Button type="button" onClick={onSaveGeneratedSessionSets} disabled={loading || !selectedAdminEventId || sessionSets.length === 0 || hasSavedDraftForSelectedEvent}>
-                  {selectedAdminEvent ? `「${selectedAdminEvent.title} sessionSet」として保存` : 'sessionSet を保存'}
+                <Button type="button" onClick={onSaveGeneratedSessionSets} disabled={isGeneratedSessionSetSaveDisabled}>
+                  {selectedAdminEvent
+                    ? hasSavedDraftForSelectedEvent && canOverwriteSavedSessionSetDraft
+                      ? `「${selectedAdminEvent.title} sessionSet」を上書き保存`
+                      : `「${selectedAdminEvent.title} sessionSet」として保存`
+                    : hasSavedDraftForSelectedEvent && canOverwriteSavedSessionSetDraft
+                      ? 'sessionSet を上書き保存'
+                      : 'sessionSet を保存'}
                 </Button>
               </div>
               <Dialog open={Boolean(editingSessionSet)} onOpenChange={(open) => { if (!open) setEditingSessionSet(null); }}>
