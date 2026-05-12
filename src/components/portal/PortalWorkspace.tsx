@@ -110,7 +110,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
   }, []);
 
   return (
-    <main className="mx-auto flex max-w-6xl flex-col px-6 py-8 md:px-8">
+    <main className={view === "admin" ? "mx-0 min-w-lvw flex w-full flex-col" : "mx-auto flex max-w-6xl flex-col px-6 py-8 md:px-8"}>
       <MainHeader
         view={currentUser?.role === 'admin' ? '管理者' : 'メンバー'}
         currentUser={{ role: currentUser?.role, displayName: admin.adminMemberDisplayName }}
