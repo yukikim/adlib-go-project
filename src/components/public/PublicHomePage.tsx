@@ -49,7 +49,7 @@ export async function PublicHomePage() {
           <p className="text-[2rem] font-bold border-8 p-4 w-[310px] text-red-500 border-red-500 rotate-12 bg-orange-300/50">ただいま工事中！</p>
         </div>
       </div>
-      <section className="glass_like">
+      <section className="bg-white">
         <div className="grid gap-6 px-6 py-8 md:grid-cols-[1.4fr_0.9fr] md:px-8 md:py-10">
           <div className="space-y-5">
             <Badge variant="outline" className="brand-kicker">
@@ -94,10 +94,10 @@ export async function PublicHomePage() {
         </div>
       </section>
 
-            <div className="glass_section p-4 h-[200px]">
+            <div className="p-4 bg-white h-[200px]">
               <h1>テスト</h1>
             </div>
-      <section className='glass_section'>
+      <section className=''>
         <Card className="border shadow-sm">
           <CardHeader>
             <CardTitle>セッション告知</CardTitle>
@@ -134,7 +134,7 @@ export async function PublicHomePage() {
         <div className="grid gap-4 md:grid-cols-3">
           {columns.map((column) => (
             // <Card key={column.slug} className="border shadow-sm transition-transform hover:-translate-y-0.5">
-            <Card key={column.slug} className="glass_section hover:-translate-y-0.5">
+            <Card key={column.slug} className="hover:-translate-y-0.5">
               <CardHeader>
                 <Badge variant="outline" className="w-fit">{column.thumbnailLabel || 'Column'}</Badge>
                 <CardTitle>{column.title}</CardTitle>
