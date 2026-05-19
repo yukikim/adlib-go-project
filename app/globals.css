@@ -16,9 +16,9 @@
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
+  /* --color-primary: var(--primary); */
   --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
+  /* --color-secondary: var(--secondary); */
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
@@ -49,6 +49,21 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+    --color-primary: #87bcde;
+    --color-secondary: #4b697d;
+    --color-tertiary: #1f303c;
+    --color-background: #b9b8c4;
+    --color-accent: #bd2727;
+
+    --color-on-primary: #344753;
+    --color-on-secondary: #cdccda;
+    --color-on-tertiary: #8c92af;
+    --color-on-background: #1f303c;
+    --color-on-accent: #1f303c;
+
+    --color-error: #f85d03;
+    --color-on-error: #e8e8e8;
 }
 
 :root {

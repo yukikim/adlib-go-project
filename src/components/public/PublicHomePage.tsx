@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import { prisma } from '@/lib/prisma';
 import Image from 'next/image';
+import { HeroSection } from "./HeroSection";
 
 export async function PublicHomePage() {
   const now = new Date();
@@ -34,20 +35,23 @@ export async function PublicHomePage() {
   });
 
   return (
-    <main className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-8 md:px-8">
+    <main className="mx-auto flex max-w-6xl flex-col gap-6 px-0 lg:px-6 py-8 md:px-8">
+      <HeroSection />
       <div>
-        <Image
+        {/* <Image
           src='/images/main_logo.svg'
           alt="Hero Image"
-          width={1200}
-          height={400}
+          width={600}
+          height={200}
           loading="eager"
-        // className="w-auto lg:w-[800px] mx-[20%]"
-        // style={{ height: 'auto' }}
-        />
-        <div className="w-full absolute top-[250px] left-0 text-center flex justify-center">
+        className="w-auto lg:w-[800px] mx-[20%]"
+        style={{ height: 'auto' }}
+        /> */}
+        <h2>Website for groups that enjoy jazz sessions</h2>
+        <h3>Jazz Session Planner</h3>
+        {/* <div className="w-full absolute top-[250px] left-0 text-center flex justify-center">
           <p className="text-[2rem] font-bold border-8 p-4 w-[310px] text-red-500 border-red-500 rotate-12 bg-orange-300/50">ただいま工事中！</p>
-        </div>
+        </div> */}
       </div>
       <section className="bg-white">
         <div className="grid gap-6 px-6 py-8 md:grid-cols-[1.4fr_0.9fr] md:px-8 md:py-10">
@@ -94,9 +98,6 @@ export async function PublicHomePage() {
         </div>
       </section>
 
-            <div className="p-4 bg-white h-[200px]">
-              <h1>テスト</h1>
-            </div>
       <section className=''>
         <Card className="border shadow-sm">
           <CardHeader>
