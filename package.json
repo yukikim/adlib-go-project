@@ -29,6 +29,7 @@
     "@prisma/client": "^5.18.0",
     "@tailwindcss/postcss": "^4.2.2",
     "@vercel/analytics": "^2.0.1",
+    "animate.css": "^4.1.1",
     "animejs": "^4.4.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
