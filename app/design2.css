@@ -1,0 +1,41 @@
+@import 'tailwindcss';
+@import './globals.css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --color-primary: #667570;
+    --color-secondary: #465051;
+    --color-tertiary: #96a395;
+    --color-background: #cfd2cb;
+    --color-accent: #9f2b2b;
+
+    --color-on-primary: #C9DDD6;
+    --color-on-secondary: #8CC5B1;
+    --color-on-tertiary: #efebe0;
+    --color-on-background: #313a25;
+    --color-on-accent: #B4CAB4;
+
+    --color-error: #f85d03;
+    --color-on-error: #8c8c8c;
+
+
+    --animate-orb: orb 20s infinite linear;
+
+    @keyframes orb {
+
+        0%,
+        100% {
+            transform: translate(0, 0) scale(1);
+        }
+
+        33% {
+            transform: translate(630px, -250px) scale(1.5);
+        }
+
+        66% {
+            transform: translate(-520px, 120px) scale(0.7);
+        }
+    }
+
+}

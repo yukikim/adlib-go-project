@@ -25,7 +25,7 @@ export function AppHeaderNav({ isSignedIn, isMember, isAdmin }: AppHeaderNavProp
     <nav
       id="nav"
       data-state={isMenuOpen ? 'active' : undefined}
-      className="absolute group z-10 w-full bg-background"
+      className="absolute group z-10 w-full"
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 md:gap-0 md:py-3">
@@ -47,12 +47,12 @@ export function AppHeaderNav({ isSignedIn, isMember, isAdmin }: AppHeaderNavProp
                 <div
                   aria-hidden="true"
                   id="line"
-                  className="m-auto h-0.5 w-5 rounded bg-gray-950 transition duration-300 dark:bg-white origin-top group-data-[state=active]:rotate-45 group-data-[state=active]:translate-y-1.5"
+                  className="m-auto h-0.5 w-5 rounded bg-gray-950 transition duration-300 origin-top group-data-[state=active]:rotate-45 group-data-[state=active]:translate-y-1.5"
                 ></div>
                 <div
                   aria-hidden="true"
                   id="line2"
-                  className="m-auto mt-2 h-0.5 w-5 rounded bg-gray-950 transition duration-300 dark:bg-white origin-bottom group-data-[state=active]:-rotate-45 group-data-[state=active]:-translate-y-1"
+                  className="m-auto mt-2 h-0.5 w-5 rounded bg-gray-950 transition duration-300 origin-bottom group-data-[state=active]:-rotate-45 group-data-[state=active]:-translate-y-1"
                 ></div>
               </button>
             </div>

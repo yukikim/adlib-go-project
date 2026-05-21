@@ -2,7 +2,8 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
+/* @custom-variant dark (&:is(.dark *)); */
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
   --color-background: var(--background);
@@ -50,20 +51,38 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-    --color-primary: #87bcde;
-    --color-secondary: #4b697d;
-    --color-tertiary: #1f303c;
-    --color-background: #b9b8c4;
-    --color-accent: #bd2727;
+    --color-primary: #667570;
+    --color-secondary: #465051;
+    --color-tertiary: #96a395;
+    --color-background: #cfd2cb;
+    --color-accent: #9f2b2b;
 
-    --color-on-primary: #344753;
-    --color-on-secondary: #cdccda;
-    --color-on-tertiary: #8c92af;
-    --color-on-background: #1f303c;
-    --color-on-accent: #1f303c;
+    --color-on-primary: #C9DDD6;
+    --color-on-secondary: #8CC5B1;
+    --color-on-tertiary: #efebe0;
+    --color-on-background: #313a25;
+    --color-on-accent: #B4CAB4;
 
     --color-error: #f85d03;
-    --color-on-error: #e8e8e8;
+    --color-on-error: #8c8c8c;
+
+    --animate-orb: orb 20s infinite linear;
+
+    @keyframes orb {
+
+        0%,
+        100% {
+            transform: translate(0, 0) scale(1);
+        }
+
+        33% {
+            transform: translate(630px, -250px) scale(1.5);
+        }
+
+        66% {
+            transform: translate(-520px, 120px) scale(0.7);
+        }
+    }
 }
 
 :root {
@@ -142,9 +161,9 @@
 }
 
 @layer base {
-  * {
+  /* * {
     @apply border-border outline-ring/50;
-  }
+  } */
 
   html,
   body {
@@ -152,18 +171,18 @@
     padding: 0;
   }
 
-  body {
-    @apply bg-background text-foreground;
-    /* background-image:
-      radial-gradient(circle at top, rgb(163 186 217 / 0.22), transparent 34%),
-      linear-gradient(180deg, rgb(255 255 255 / 0.55), transparent 22rem); */
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  }
+body {
+  font-family: var(--font-m-plus), sans-serif;
+}
 
-  main {
+.font-racing-sans-one {
+  font-family: var(--font-racing-sans-one), sans-serif;
+}
+
+  /* main {
     max-width: 960px;
     margin: 0 auto;
-  }
+  } */
 }
 
 @layer components {
