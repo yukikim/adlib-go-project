@@ -69,6 +69,7 @@ export async function PublicHomePage() {
                 <Link href="/admin/signin">管理者サインイン</Link>
               </Button> */}
               </div>
+              <div className="my-8 text-2xl text-red-400 font-bold">ただいま開発中です</div>
             </div>
             <Card className="border-white/70 bg-white/80 backdrop-blur">
               <CardHeader>
