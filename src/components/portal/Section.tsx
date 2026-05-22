@@ -5,7 +5,7 @@ import type { SectionProps } from './types';
 export function Section({ title, description, children, action, sectionId, className, contentClassName }: SectionProps) {
   return (
     <section id={sectionId} className="mt-6 scroll-mt-24">
-      <Card className={cn('border shadow-sm bg-gray-100', className)}>
+      <Card className={cn('border shadow-sm bg-gray-100 text-on-background', className)}>
         <CardHeader className="border-b bg-muted/30">
           <CardTitle>{title}</CardTitle>
           {description ? <CardDescription>{description}</CardDescription> : null}

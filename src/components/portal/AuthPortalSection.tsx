@@ -138,7 +138,7 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
         title={authTarget === 'admin' ? '管理者認証' : 'メンバー認証'}
         description={authTarget === 'admin'
           ? '管理者専用サインインです。'
-          : 'メンバー専用サインインです。'}
+          : 'メンバー専用です。'}
       >
         <form className="grid max-w-2xl gap-4 md:grid-cols-2" onSubmit={handleAuthSubmit}>
           <Field htmlFor="auth-email" label="メールアドレス" className="md:col-span-2">
@@ -157,7 +157,7 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
                   <SelectTrigger id="signup-instrument" className="w-full">
                     <SelectValue placeholder="メイン楽器を選択" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-background">
                     <SelectItem value="drum">drum</SelectItem>
                     <SelectItem value="bass">bass</SelectItem>
                     <SelectItem value="piano">piano</SelectItem>
@@ -176,7 +176,7 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
                   <SelectTrigger id="signup-area" className="w-full">
                     <SelectValue placeholder="居住地域を選択" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-background">
                     <SelectItem value={NONE_VALUE}>居住地域を選択</SelectItem>
                     {PREFECTURE_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
                   </SelectContent>
@@ -187,7 +187,7 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
                   <SelectTrigger id="signup-gender" className="w-full">
                     <SelectValue placeholder="性別を選択" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-background">
                     <SelectItem value={NONE_VALUE}>性別を選択</SelectItem>
                     {GENDER_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
                   </SelectContent>
@@ -198,7 +198,7 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
                   <SelectTrigger id="signup-age-range" className="w-full">
                     <SelectValue placeholder="年代を選択" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-background">
                     <SelectItem value={NONE_VALUE}>年代を選択</SelectItem>
                     {AGE_RANGE_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
                   </SelectContent>

@@ -30,11 +30,11 @@ export default function AboutPage() {
           </div>
 
           <Card className="bg-background backdrop-blur">
-            <CardHeader>
-              <CardTitle>このサイトでできること</CardTitle>
-              <CardDescription>運営と参加者の導線を分離しつつ、必要な情報を一箇所に集約します。</CardDescription>
+            <CardHeader className="border-on-background/70">
+              <CardTitle className="text-on-background">このサイトでできること</CardTitle>
+              <CardDescription className="text-on-background">運営と参加者の導線を分離しつつ、必要な情報を一箇所に集約します。</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-3 text-sm text-muted-foreground">
+            <CardContent className="text-on-background space-y-3 text-sm">
               <p>公開ページで告知やコラムを確認</p>
               <p>メンバーサイトでプロフィール管理とエントリー登録</p>
               <p>管理サイトでイベント公開、評価、通知、アーカイブ管理</p>

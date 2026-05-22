@@ -43,8 +43,8 @@ export default async function ColumnsPage() {
           </div>
           <Card className="border-on-background/70 bg-background backdrop-blur">
             <CardHeader>
-              <CardTitle>読み進め方</CardTitle>
-              <CardDescription>運営の方針や参加のコツを段階的に把握できます。</CardDescription>
+              <CardTitle className="text-on-background">読み進め方</CardTitle>
+              <CardDescription className="text-on-background">運営の方針や参加のコツを段階的に把握できます。</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3 text-sm text-on-background">
               <p>まず概要を読み、参加導線を把握</p>
