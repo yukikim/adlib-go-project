@@ -2,6 +2,7 @@ import './globals.css';
 import type { ReactNode } from 'react';
 import { Analytics } from '@vercel/analytics/next';
 import { AppHeader } from '@/components/public/AppHeader';
+import AppFooter from '@/components/public/AppFooter';
 
 import { M_PLUS_1p, Urbanist, Racing_Sans_One } from "next/font/google";
 
@@ -37,6 +38,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {/* <div id="top-container" className="min-h-screen overflow-hidden"> */}
           {children}
         {/* </div> */}
+        <AppFooter />
         <Analytics />
       </body>
     </html>

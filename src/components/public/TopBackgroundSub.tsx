@@ -52,9 +52,9 @@ export default function TopBackground({ imageUrl, startScrollY = 0, zIndex = -10
             </div>
             {/* <div className="absolute min-h-screen w-full bg-rose-300/80 backdrop-blur-xs bg-blend-darken"></div> */}
             {/* <div className="absolute min-h-screen w-full bg-[url('/images/main_logo.svg')] bg-bottom bg-no-repeat bg-size-auto opacity-30"></div> */}
-            <div className="absolute top-[-10%] left-[-10%] h-[500px] w-[500px] rounded-full bg-teal-700/80 blur-[120px] animate-orb [animation-delay:800ms]"></div>
-            <div className="absolute bottom-[10%] right-[25%] h-[400px] w-[400px] rounded-full bg-indigo-300/50 blur-[100px] animate-orb [animation-delay:500ms]"></div>
-            <div className="absolute top-[24%] right-[10%] h-[300px] w-[300px] rounded-full bg-pink-800/60 blur-[140px] animate-orb [animation-delay:1200ms]"></div>
+            <div className="absolute top-[-5%] left-[5%] h-[700px] w-[500px] rounded-full bg-teal-700/80 blur-[120px] animate-orb [animation-delay:800ms]"></div>
+            <div className="absolute bottom-[10%] right-[25%] h-[400px] w-[400px] rounded-full bg-indigo-900/90 blur-[100px] animate-orb [animation-delay:1000ms]"></div>
+            <div className="absolute top-[24%] right-[5%] h-[500px] w-[300px] rounded-full bg-sky-800/95 blur-[140px] animate-orb [animation-delay:300ms]"></div>
         </div>
     )
 }

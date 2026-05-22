@@ -6,7 +6,7 @@ import { Separator } from '@/components/ui/separator';
 
 export default function AboutPage() {
   return (
-    <main className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-8 md:px-8">
+    <main className="mx-auto flex max-w-6xl min-h-[calc(100svh-96px)] flex-col gap-6 px-6 py-8 mt-24 md:px-8">
       <section className="glass_section">
         <div className="grid gap-6 px-6 py-8 md:grid-cols-[1.3fr_0.8fr] md:px-8 md:py-10">
           <div className="space-y-5">

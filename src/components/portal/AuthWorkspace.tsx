@@ -77,7 +77,7 @@ export default function AuthWorkspace({ view }: AuthWorkspaceProps) {
   }, []);
 
   return (
-    <main className="mx-auto flex max-w-4xl flex-col px-6 py-8 md:px-8">
+    <main className="mx-auto flex max-w-4xl min-h-[calc(100svh-96px)] flex-col px-6 py-8 md:px-8 mt-24">
       <Badge variant="outline" className="w-fit">
         Auth
       </Badge>

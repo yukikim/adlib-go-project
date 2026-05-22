@@ -6,7 +6,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
-  --color-background: var(--background);
+  /* --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-brand-base: var(--brand-base);
   --color-brand-main: var(--brand-main);
@@ -17,9 +17,9 @@
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
-  /* --color-primary: var(--primary); */
+  --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  /* --color-secondary: var(--secondary); */
+  --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
@@ -49,7 +49,7 @@
   --color-sidebar-accent: var(--sidebar-accent);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-ring: var(--sidebar-ring); */
 
     --color-primary: #667570;
     --color-secondary: #465051;
@@ -86,7 +86,7 @@
 }
 
 :root {
-  --radius: 0.625rem;
+  /* --radius: 0.625rem;
   --brand-base: #a3bad9;
   --brand-main: #4a608c;
   --brand-sub: #2a3a59;
@@ -122,11 +122,15 @@
   --sidebar-accent: #d8e2ef;
   --sidebar-accent-foreground: #2a3a59;
   --sidebar-border: #d2dceb;
-  --sidebar-ring: #4a608c;
+  --sidebar-ring: #4a608c; */
+
+  --brand-main: #4a608c;
+  --brand-base: #a3bad9;
+  --background: #0b0f13;
 }
 
 .dark {
-  --background: #202c43;
+  /* --background: #202c43;
   --foreground: #edf3fb;
   --card: #25324d;
   --card-foreground: #edf3fb;
@@ -157,7 +161,7 @@
   --sidebar-accent: #3b4e71;
   --sidebar-accent-foreground: #edf3fb;
   --sidebar-border: rgba(163, 186, 217, 0.18);
-  --sidebar-ring: #a3bad9;
+  --sidebar-ring: #a3bad9; */
 }
 
 @layer base {
