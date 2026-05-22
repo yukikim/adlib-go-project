@@ -1,20 +1,9 @@
 'use client';
 
 import Image from 'next/image';
-import { animate } from 'animejs';
-import { useEffect, useRef } from 'react';
+// import { useEffect, useRef } from 'react';
 
 export function HeroSection() {
-    // const demoRef = useRef<HTMLDivElement | null>(null);
-
-    // useEffect(() => {
-    //     if (!demoRef.current) {
-    //         return;
-    //     }
-
-    //     // const squares = demoRef.current.querySelectorAll('.square');
-    //     animate(demoRef.current, { x: '180%', y: '20rem' });
-    // }, []);
 
     return (
         <div className="relative p-0 lg:p-10" id="hero-section">

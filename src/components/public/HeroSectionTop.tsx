@@ -10,7 +10,7 @@ export default function HeroSectionTop({ pageName }: PageNameProps) {
   return (
     <div className="relative h-full min-h-lvh overflow-hidden" id="home">
       {/* <TopBackground imageUrl="top_back3.jpg" startScrollY={600} /> */}
-      <TopBackgroundSub imageUrl="top_back5.jpg" />
+      <TopBackgroundSub imageUrl="top_back6.jpg" />
       <Container>
         <div className="relative pt-60 ml-auto">
           <div className="lg:w-2/3 text-center mx-auto">
