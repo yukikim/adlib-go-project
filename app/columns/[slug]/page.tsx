@@ -35,7 +35,7 @@ export default async function ColumnDetailPage({ params }: { params: Promise<{ s
 
   return (
     <main className="mx-auto flex max-w-5xl min-h-[calc(100svh-96px)] flex-col gap-6 px-6 py-8 md:px-8 mt-24">
-      <section className="glass_section">
+      <section className="">
         <div className="px-6 py-8 md:px-8 md:py-10">
           <div className="flex flex-wrap items-center gap-2">
             <Badge variant="outline">Column Detail</Badge>
@@ -58,7 +58,7 @@ export default async function ColumnDetailPage({ params }: { params: Promise<{ s
       </section>
 
       <article>
-        <Card className="border shadow-sm">
+        <Card className="shadow-sm">
           <CardHeader>
             <CardTitle>{column.title}</CardTitle>
             <CardDescription>{column.authorName} / {column.publishedAt ? new Date(column.publishedAt).toLocaleDateString('ja-JP') : '-'}</CardDescription>

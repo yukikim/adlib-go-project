@@ -60,7 +60,7 @@ export function AppHeaderNav({ isSignedIn, isMember, isAdmin }: AppHeaderNavProp
           <div
             id="navLayer"
             aria-hidden="true"
-            className="fixed inset-0 z-10 h-screen w-screen origin-bottom scale-y-0 bg-white/70 backdrop-blur-2xl transition duration-500 group-data-[state=active]:origin-top group-data-[state=active]:scale-y-100 dark:bg-gray-950/70 lg:hidden"
+            className="fixed inset-0 z-10 h-screen w-screen origin-bottom scale-y-0 bg-white/5 backdrop-blur-2xl transition duration-500 group-data-[state=active]:origin-top group-data-[state=active]:scale-y-100 dark:bg-gray-950/70 lg:hidden"
           ></div>
           <div
             id="navlinks"

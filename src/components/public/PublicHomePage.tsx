@@ -46,6 +46,7 @@ export async function PublicHomePage() {
           <section className="p-4 bg-background rounded-lg">
             <div className="grid gap-6 px-6 py-8 md:grid-cols-[1.4fr_0.9fr] md:px-8 md:py-10">
               <div className="space-y-5">
+                <div className="my-8 text-4xl text-red-600 font-bold">ただいま作成中です</div>
                 <Badge variant="outline" className="brand-kicker">
                   Adlib-go Session
                 </Badge>
@@ -66,7 +67,6 @@ export async function PublicHomePage() {
                 <Link href="/admin/signin">管理者サインイン</Link>
               </Button> */}
                 </div>
-                <div className="my-8 text-2xl text-red-400 font-bold">ただいま開発中です</div>
               </div>
               <Card className="">
                 <CardHeader>

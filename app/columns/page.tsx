@@ -28,7 +28,7 @@ export default async function ColumnsPage() {
 
   return (
     <main className="mx-auto flex max-w-6xl min-h-[calc(100svh-96px)] flex-col gap-6 px-6 py-8 md:px-8 mt-24">
-      <section className="glass_section">
+      <section className="">
         <div className="grid gap-6 px-6 py-8 md:grid-cols-[1.25fr_0.85fr] md:px-8 md:py-10">
           <div className="space-y-4">
             <Badge variant="outline" className="brand-kicker">
@@ -41,12 +41,12 @@ export default async function ColumnsPage() {
               </p>
             </div>
           </div>
-          <Card className="border-white/70 bg-white/80 backdrop-blur">
+          <Card className="border-on-background/70 bg-background backdrop-blur">
             <CardHeader>
               <CardTitle>読み進め方</CardTitle>
               <CardDescription>運営の方針や参加のコツを段階的に把握できます。</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-3 text-sm text-muted-foreground">
+            <CardContent className="space-y-3 text-sm text-on-background">
               <p>まず概要を読み、参加導線を把握</p>
               <p>気になるイベントや募集ルールを確認</p>
               <p>サインアップ後にメンバーページでエントリー</p>
@@ -57,7 +57,7 @@ export default async function ColumnsPage() {
 
       <section className="grid gap-4">
         {columns.map((column) => (
-          <Card key={column.slug} className="border shadow-sm transition-transform hover:-translate-y-0.5">
+          <Card key={column.slug} className="shadow-sm transition-transform">
             <CardHeader>
               <div className="flex flex-wrap items-center gap-2">
                 <Badge variant="outline">{column.publishedAt ? new Date(column.publishedAt).toLocaleDateString('ja-JP') : '-'}</Badge>

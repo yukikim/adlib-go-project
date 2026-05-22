@@ -7,7 +7,7 @@ import { Separator } from '@/components/ui/separator';
 export default function AboutPage() {
   return (
     <main className="mx-auto flex max-w-6xl min-h-[calc(100svh-96px)] flex-col gap-6 px-6 py-8 mt-24 md:px-8">
-      <section className="glass_section">
+      <section className="">
         <div className="grid gap-6 px-6 py-8 md:grid-cols-[1.3fr_0.8fr] md:px-8 md:py-10">
           <div className="space-y-5">
             <Badge variant="outline" className="brand-kicker">
@@ -29,7 +29,7 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <Card className="border-white/70 bg-white/80 backdrop-blur">
+          <Card className="bg-background backdrop-blur">
             <CardHeader>
               <CardTitle>このサイトでできること</CardTitle>
               <CardDescription>運営と参加者の導線を分離しつつ、必要な情報を一箇所に集約します。</CardDescription>
@@ -44,7 +44,7 @@ export default function AboutPage() {
       </section>
 
       <section className="grid gap-4 md:grid-cols-3">
-        <Card className="border shadow-sm">
+        <Card className="shadow-sm">
           <CardHeader>
             <CardTitle>活動概要</CardTitle>
           </CardHeader>
@@ -54,7 +54,7 @@ export default function AboutPage() {
             </p>
           </CardContent>
         </Card>
-        <Card className="border shadow-sm">
+        <Card className="shadow-sm">
           <CardHeader>
             <CardTitle>参加案内</CardTitle>
           </CardHeader>
@@ -64,7 +64,7 @@ export default function AboutPage() {
             </p>
           </CardContent>
         </Card>
-        <Card className="border shadow-sm">
+        <Card className="shadow-sm">
           <CardHeader>
             <CardTitle>運営ポリシー</CardTitle>
           </CardHeader>
@@ -77,7 +77,7 @@ export default function AboutPage() {
       </section>
 
       <section>
-        <Card className="border shadow-sm">
+        <Card className="shadow-sm">
           <CardHeader>
             <CardTitle>導線</CardTitle>
             <CardDescription>公開ページから各導線へ移動できます。</CardDescription>
