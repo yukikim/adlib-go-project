@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@prisma/client": "^5.18.0",
+    "@radix-ui/react-tooltip": "^1.2.8",
     "@tailwindcss/postcss": "^4.2.2",
     "@vercel/analytics": "^2.0.1",
     "animate.css": "^4.1.1",
