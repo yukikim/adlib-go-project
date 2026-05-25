@@ -18,12 +18,12 @@ export async function POST(request: NextRequest) {
   });
 
   if (!user || user.status !== 'active') {
-    return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 });
+    return NextResponse.json({ error: 'メールアドレスまたはパスワードが無効です。' }, { status: 401 });
   }
 
   const valid = await verifyPassword(body.password, user.passwordHash);
   if (!valid) {
-    return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 });
+    return NextResponse.json({ error: 'メールアドレスまたはパスワードが無効です。' }, { status: 401 });
   }
 
   if (roleTarget === 'member' && user.role !== 'member') {

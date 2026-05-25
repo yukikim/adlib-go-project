@@ -50,6 +50,7 @@ export function useAuthPortal({ runAction, setCurrentUser, reloadShared, onSignI
       body: JSON.stringify({ email: authEmail, password: authPassword, roleTarget }),
     });
     const json = await parseJson(res);
+    console.log('signin response:', json);
     if (!res.ok) throw new Error(json.error ?? 'サインインに失敗しました');
     setCurrentUser(json.user ?? null);
     await reloadShared();

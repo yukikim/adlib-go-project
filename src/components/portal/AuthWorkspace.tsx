@@ -91,7 +91,7 @@ export default function AuthWorkspace({ view }: AuthWorkspaceProps) {
       {message && (
         <Alert className="brand-success-surface mt-4">
           <AlertTitle>ステータス</AlertTitle>
-          <AlertDescription>{message}</AlertDescription>
+          <AlertDescription className="text-red-500">{message}</AlertDescription>
         </Alert>
       )}
       {loading && <p className="mt-4 text-sm text-muted-foreground">処理中...</p>}
