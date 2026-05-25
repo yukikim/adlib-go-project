@@ -11,6 +11,7 @@ import {
   FileArchive,
   Music4,
   Users,
+  MessageCircleQuestionMark,
 } from 'lucide-react';
 import {
   Dialog,
@@ -49,6 +50,7 @@ import type {
   SessionEventView,
   SessionSetView,
 } from './types';
+import { Tooltip } from "radix-ui";
 // import MainHeader from '@/components/portal/MainHeader';
 
 type ArchivePreview = {
@@ -106,6 +108,7 @@ type AdminNavGroup = {
   label: string;
   icon: ReactNode;
   children: { id: string; label: string }[];
+  tooltip?: string;
 };
 
 const adminNavGroups: AdminNavGroup[] = [
@@ -113,6 +116,7 @@ const adminNavGroups: AdminNavGroup[] = [
     id: 'admin-events',
     label: 'イベント管理',
     icon: <CalendarDays className="size-4" />,
+    tooltip: 'イベントのリスト表示や、参加状況の確認、イベントの編集と新規作成、ステータス変更などを行います。',
     children: [
       { id: 'admin-events-create', label: 'イベント作成' },
       { id: 'admin-events-edit', label: 'イベント編集' },
@@ -122,6 +126,7 @@ const adminNavGroups: AdminNavGroup[] = [
     id: 'admin-session-sets',
     label: 'sessionSet 管理',
     icon: <Music4 className="size-4" />,
+    tooltip: 'セッションで使用するセットの生成・公開を行います。',
     children: [
       { id: 'admin-session-sets-actions', label: '生成 / 公開' },
       { id: 'admin-session-sets-list', label: 'sessionSet 一覧' },
@@ -132,6 +137,7 @@ const adminNavGroups: AdminNavGroup[] = [
     id: 'admin-archives',
     label: 'レイティング / アーカイブ',
     icon: <FileArchive className="size-4" />,
+    tooltip: 'レイティングの集計やアーカイブの作成・管理を行います。',
     children: [
       { id: 'admin-archives-summary', label: '評価集計' },
       { id: 'admin-archives-create', label: 'アーカイブ作成' },
@@ -142,6 +148,7 @@ const adminNavGroups: AdminNavGroup[] = [
     id: 'admin-members',
     label: 'メンバー / 管理者管理',
     icon: <Users className="size-4" />,
+    tooltip: 'メンバーや管理者の検索・編集を行います。',
     children: [
       { id: 'admin-members-search', label: 'メンバー検索' },
       { id: 'admin-members-editor', label: 'プロフィール編集' },
@@ -151,6 +158,7 @@ const adminNavGroups: AdminNavGroup[] = [
     id: 'admin-columns',
     label: 'コラム管理',
     icon: <BookOpenText className="size-4" />,
+    tooltip: 'コラムの編集やプレビュー、一覧管理を行います。',
     children: [
       { id: 'admin-columns-editor', label: 'コラム編集' },
       { id: 'admin-columns-preview', label: 'プレビュー' },
@@ -745,7 +753,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
               <p className="text-sm text-muted-foreground">左のメニューから表示するセクションとサブメニューを切り替えます。</p>
             </div>
             <Separator className="my-4" />
-            <nav className="space-y-3 xl:hidden" aria-label="管理ダッシュボードメニュー（モバイル）">
+            <nav id="mobil-dashboard" className="space-y-3 xl:hidden" aria-label="管理ダッシュボードメニュー（モバイル）">
               {adminNavGroups.map((group) => {
                 const isOpen = openMobileGroupId === group.id;
 
@@ -761,6 +769,21 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                         {group.icon}
                         <span className="truncate">{group.label}</span>
                       </button>
+                      {/* <Tooltip.Provider>
+                        <Tooltip.Root>
+                          <Tooltip.Trigger asChild>
+                            <button className="IconButton">
+                              <MessageCircleQuestionMark size={14} />
+                            </button>
+                          </Tooltip.Trigger>
+                          <Tooltip.Portal>
+                            <Tooltip.Content className="TooltipContent" sideOffset={5}>
+                              {group.tooltip ?? 'このセクションの内容を表示します。'}
+                              <Tooltip.Arrow className="TooltipArrow" />
+                            </Tooltip.Content>
+                          </Tooltip.Portal>
+                        </Tooltip.Root>
+                      </Tooltip.Provider> */}
                       <button
                         type="button"
                         aria-expanded={isOpen}
@@ -790,9 +813,24 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                 );
               })}
             </nav>
-            <nav className="hidden space-y-4 xl:block" aria-label="管理ダッシュボードメニュー">
+            <nav id="desktop-dashboard" className="hidden space-y-4 xl:block" aria-label="管理ダッシュボードメニュー">
               {adminNavGroups.map((group) => (
                 <div key={group.id} className="space-y-1.5">
+                  <Tooltip.Provider>
+                    <Tooltip.Root>
+                      <Tooltip.Trigger asChild>
+                        <button className="IconButton absolute right-10">
+                          <MessageCircleQuestionMark size={16} />
+                        </button>
+                      </Tooltip.Trigger>
+                      <Tooltip.Portal>
+                        <Tooltip.Content className="TooltipContent text-sm bg-gray-700 text-white p-2 rounded-md w-64" sideOffset={5}>
+                          {group.tooltip ?? 'このセクションの内容を表示します。'}
+                          <Tooltip.Arrow className="TooltipArrow" />
+                        </Tooltip.Content>
+                      </Tooltip.Portal>
+                    </Tooltip.Root>
+                  </Tooltip.Provider>
                   <button
                     type="button"
                     aria-current={activeGroupId === group.id ? 'location' : undefined}
