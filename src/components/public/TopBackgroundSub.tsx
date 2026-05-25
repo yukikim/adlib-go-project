@@ -39,7 +39,7 @@ export default function TopBackground({ imageUrl, startScrollY = 0, zIndex = -10
 
     return (
         <div className={`fixed top-0 ${zIndex} min-h-screen w-full overflow-hidden`}>
-            <div className="absolute min-h-screen w-full bg-auto bg-center bg-no-repeat bg-mist-500 bg-blend-color-burn"
+            <div className="absolute min-h-screen w-full bg-cover bg-center bg-no-repeat bg-mist-500 bg-blend-color-burn"
                 style={{ backgroundImage: `url('/images/${imageUrl}')` }}
             >
                 <div
