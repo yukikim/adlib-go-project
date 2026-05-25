@@ -8,9 +8,10 @@ type AppHeaderNavProps = {
   isSignedIn: boolean;
   isMember: boolean;
   isAdmin: boolean;
+  children?: React.ReactNode;
 };
 
-export function AppHeaderNav({ isSignedIn, isMember, isAdmin }: AppHeaderNavProps) {
+export function AppHeaderNav({ isSignedIn, isMember, isAdmin, children }: AppHeaderNavProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -74,6 +75,9 @@ export function AppHeaderNav({ isSignedIn, isMember, isAdmin }: AppHeaderNavProp
                 <Link href="/columns" onClick={closeMenu}>
                   コラム
                 </Link>
+                <Link href="/about" onClick={closeMenu}>
+                  adlib-go について
+                </Link>
                 {!isSignedIn ? (
                   <Link href="/signin" onClick={closeMenu}>
                     メンバーサインイン
@@ -91,12 +95,10 @@ export function AppHeaderNav({ isSignedIn, isMember, isAdmin }: AppHeaderNavProp
                 ) : null}
                 {isAdmin ? (
                   <Link href="/admin" onClick={closeMenu}>
-                    管理
+                    ダッシュボード
                   </Link>
                 ) : null}
-                <Link href="/about" onClick={closeMenu}>
-                  adlib-go について
-                </Link>
+      {children}
               </div>
             </div>
           </div>

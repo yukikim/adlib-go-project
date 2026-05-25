@@ -24,7 +24,7 @@ export function HeaderSignOutButton() {
   };
 
   return (
-    <Button type="button" variant="outline" size="sm" onClick={handleSignOut} disabled={isSubmitting}>
+    <Button type="button" variant="outline" size="xs" onClick={handleSignOut} disabled={isSubmitting}>
       {isSubmitting ? 'ログアウト中...' : 'ログアウト'}
     </Button>
   );

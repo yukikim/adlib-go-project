@@ -742,7 +742,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
   // console.log(generatedResult.forcedSessionSets)
   // console.log(sessionSets)
   return (
-    <div>
+    <div id="admin-portal-section">
       {/* <MainHeader view="admin" currentUser={{ role: 'admin', displayName: adminMemberDisplayName }} auth={{ handleSignOut: onSignOut }} loading={loading} admin={{ adminMemberDisplayName }} /> */}
       <div className="mt-6 grid gap-0 xl:grid-cols-[280px_minmax(0,1fr)]">
         <aside className="xl:sticky xl:top-24 xl:self-start">
