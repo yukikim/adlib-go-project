@@ -59,7 +59,7 @@ export default function AuthWorkspace({ view }: AuthWorkspaceProps) {
     runAction,
     setCurrentUser,
     reloadShared: reloadCurrentUser,
-    defaultAuthTarget: view === 'admin-signin' ? 'admin' : 'member',
+    // defaultAuthTarget: view === 'admin-signin' ? 'admin' : 'member',
     onSignInSuccess: (roleTarget) => {
       if (roleTarget === 'admin') {
         router.push('/admin');
