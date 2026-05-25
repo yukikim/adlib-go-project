@@ -1,6 +1,6 @@
-import Image from "next/image";
+// import Image from "next/image";
 import Container from "./Container";
-import TopBackground from "./TopBackground";
+// import TopBackground from "./TopBackground";
 import TopBackgroundSub from "./TopBackgroundSub";
 
 interface PageNameProps {

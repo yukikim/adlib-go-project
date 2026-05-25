@@ -18,7 +18,7 @@ import {
   type SessionEventView,
 } from '@/components/portal/types';
 import { parseJson } from '@/components/portal/utils';
-import MainHeader from '@/components/portal/MainHeader';
+// import MainHeader from '@/components/portal/MainHeader';
 
 export default function PortalWorkspace({ view }: { view: PortalView }) {
   const router = useRouter();

@@ -8,10 +8,10 @@ type UseAuthPortalArgs = {
   setCurrentUser: (user: AuthUser | null) => void;
   reloadShared: () => Promise<void>;
   onSignInSuccess?: (roleTarget: 'member' | 'admin') => void;
-  defaultAuthTarget?: 'member' | 'admin';
+  // defaultAuthTarget?: 'member' | 'admin';
 };
 
-export function useAuthPortal({ runAction, setCurrentUser, reloadShared, onSignInSuccess, defaultAuthTarget = 'member' }: UseAuthPortalArgs) {
+export function useAuthPortal({ runAction, setCurrentUser, reloadShared, onSignInSuccess }: UseAuthPortalArgs) {
   const router = useRouter();
   // const defaultAuthEmail = defaultAuthTarget === 'admin' ? 'admin@adlib-go.local' : 'member01@adlib-go.local';
   // const defaultAuthPassword = defaultAuthTarget === 'admin' ? 'demo-admin-password' : 'demo-member-password';

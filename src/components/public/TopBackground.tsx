@@ -42,10 +42,10 @@ export default function TopBackground({ imageUrl, startScrollY = 300, zIndex = -
             >
                 <div
                     className="absolute min-h-screen w-full"
-                    // style={{
-                    //     backdropFilter: `blur(${scrollY}px)`,
-                    //     WebkitBackdropFilter: `blur(${scrollY}px)`, // Safari対応
-                    // }}
+                    style={{
+                        backdropFilter: `blur(${scrollY}px)`,
+                        WebkitBackdropFilter: `blur(${scrollY}px)`, // Safari対応
+                    }}
                 ></div>
             </div>
             {/* <div className="absolute min-h-screen w-full bg-rose-300/80 backdrop-blur-xs bg-blend-darken"></div> */}

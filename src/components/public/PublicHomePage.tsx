@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { prisma } from '@/lib/prisma';
-import Image from 'next/image';
-import { HeroSection } from "./HeroSection";
+// import Image from 'next/image';
+// import { HeroSection } from "./HeroSection";
 import HeroSectionTop from "./HeroSectionTop";
 // import 'animate.css'
 import Container from './Container';
