@@ -119,7 +119,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
         admin={{ adminMemberDisplayName: admin.adminMemberDisplayName }}
         memberProfile={{ memberDisplayName: currentUser?.memberProfile?.displayName }}
       /> */}
-      <div className="space-y-3">
+      <div className="space-y-3 p-4">
         <Badge variant="outline" className="w-fit">
           {view === "admin" ? "Admin" : view === "member" ? "Member" : "Auth"}
         </Badge>

@@ -696,7 +696,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
   const getGroupLinkClassName = (groupId: string) => cn(
     'flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition-colors',
     activeGroupId === groupId
-      ? 'bg-gray-300 text-primary-foreground shadow-sm'
+      ? 'bg-muted-teal-200 text-primary-foreground shadow-sm'
       : 'text-foreground hover:bg-muted',
   );
 
@@ -746,7 +746,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
       {/* <MainHeader view="admin" currentUser={{ role: 'admin', displayName: adminMemberDisplayName }} auth={{ handleSignOut: onSignOut }} loading={loading} admin={{ adminMemberDisplayName }} /> */}
       <div className="mt-6 grid gap-0 xl:grid-cols-[280px_minmax(0,1fr)]">
         <aside className="xl:sticky xl:top-24 xl:self-start">
-          <div className="text-gray-700 border bg-card/95 p-4 shadow-sm backdrop-blur">
+          <div className="text-gray-700 px-4">
             <div className="space-y-1">
               <p className="text-sm font-medium text-muted-foreground">コンテンツメニュー</p>
               <h2 className="text-lg font-semibold">管理ダッシュボード</h2>
@@ -834,7 +834,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                   <button
                     type="button"
                     aria-current={activeGroupId === group.id ? 'location' : undefined}
-                    className={cn(getGroupLinkClassName(group.id), 'text-gray-700 w-full text-left')}
+                    className={cn(getGroupLinkClassName(group.id), 'text-gray-700 w-full text-left cursor-pointer')}
                     onClick={() => handleGroupSelect(group.id)}
                   >
                     {group.icon}
@@ -859,8 +859,8 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
           </div>
         </aside>
 
-        <div className="min-w-0">
-          <div className="rounded-2xl border bg-card/95 p-4 shadow-sm">
+        <div className="min-w-0 pr-4">
+          <div className="rounded-2xl bg-muted-teal-200 p-4 shadow-sm">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="space-y-1">
                 <p className="text-sm font-medium text-muted-foreground">現在表示中</p>
@@ -880,10 +880,10 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
 
           <div key={activeContentKey} className="admin-content-stage">
 
-            <Section sectionId="admin-events" title="イベント管理" description="新規イベント作成と既存イベントの公開フローを管理します。" className={cn(!isGroupVisible('admin-events') && 'hidden')}>
+            <Section sectionId="admin-events" title="イベント管理" description="新規イベント作成と既存イベントの公開フローを管理します。" className={cn(!isGroupVisible('admin-events') && 'hidden', 'border-gray-300')}>
 
-              <div id="admin-session-list" className="mb-4">
-                <h3 className="text-lg font-medium">イベント一覧</h3>
+              <div id="admin-session-list" className="mb-4 bg-sky-400 p-2 rounded-lg">
+                <h3 className="text-gray-100 text-lg font-semibold">イベント一覧</h3>
                 <ul className="mt-3 space-y-3">
                   {/* sessionEvents イベントリスト */}
                   {sessionEvents.map((sessionEvent) => {
@@ -892,7 +892,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                     const sessionEntries = sessionEvent.sessionEntries ?? [];
 
                     return (
-                      <li key={sessionEvent.id} className="overflow-hidden rounded-xl border">
+                      <li key={sessionEvent.id} className="overflow-hidden rounded-lg bg-taupe-100">
                         <button
                           type="button"
                           aria-expanded={isOpen}

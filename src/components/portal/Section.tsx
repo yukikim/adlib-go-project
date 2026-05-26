@@ -6,7 +6,7 @@ export function Section({ title, description, children, action, sectionId, class
   return (
     <section id={sectionId} className="mt-6 scroll-mt-24">
       <Card className={cn('border shadow-sm bg-gray-100 text-on-background', className)}>
-        <CardHeader className="border-b bg-muted/30">
+        <CardHeader className="bg-muted/30">
           <CardTitle>{title}</CardTitle>
           {description ? <CardDescription>{description}</CardDescription> : null}
           {action ? <CardAction>{action}</CardAction> : null}
