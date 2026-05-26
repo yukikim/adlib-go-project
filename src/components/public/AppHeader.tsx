@@ -24,15 +24,6 @@ export async function AppHeader() {
             <p className="text-xs">{currentUser.email}</p>
             <HeaderSignOutButton />
           </div>
-        // <div id="admin-user-info" className="flex flex-col gap-3 rounded-xl border border-brand-main/15 px-4 py-3 text-sm shadow-sm md:items-end">
-        //   <div className="space-y-1 md:text-right">
-        //     {roleLabel ? <p className="text-xs font-medium tracking-wide text-muted-foreground">{roleLabel}</p> : null}
-        //     {/* {roleLabel === '管理者' ? <p className="text-xs font-medium tracking-wide text-red-600">※ 管理者は内容を編集できます</p> : null} */}
-        //     <p className="font-medium text-on-background">{displayName}</p>
-        //     <p className="text-muted-foreground">{currentUser.email}</p>
-        //   </div>
-        //   <HeaderSignOutButton />
-        // </div>
       ) : null}
       </AppHeaderNav>
     </header>

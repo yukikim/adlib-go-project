@@ -63,9 +63,11 @@ export default function AuthWorkspace({ view }: AuthWorkspaceProps) {
     onSignInSuccess: (roleTarget) => {
       if (roleTarget === 'admin') {
         router.push('/admin');
+        router.refresh();
         return;
       }
       router.push('/member');
+      router.refresh();
     },
   });
 
