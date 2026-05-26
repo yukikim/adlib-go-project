@@ -21,6 +21,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -51,6 +52,8 @@ import type {
   SessionSetView,
 } from './types';
 import { Tooltip } from "radix-ui";
+
+// import { Field, FieldGroup } from "@/components/ui/field"
 // import MainHeader from '@/components/portal/MainHeader';
 
 type ArchivePreview = {
@@ -892,24 +895,56 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                     const sessionEntries = sessionEvent.sessionEntries ?? [];
 
                     return (
-                      <li key={sessionEvent.id} className="overflow-hidden rounded-lg bg-taupe-100">
+                      <li key={sessionEvent.id} className="overflow-hidden rounded-lg bg-taupe-100 p-2 space-y-2">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className="text-lg text-sky-700 font-semibold">{sessionEvent.title}</span>
+                              <Badge variant="outline">ステータス: {statusConversion(sessionEvent.status)}</Badge>
+                            </div>
+    <Dialog>
+      <form>
+        <DialogTrigger asChild>
+          <Button variant="outline">Open Dialog</Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Edit profile</DialogTitle>
+            <DialogDescription>
+              Make changes to your profile here. Click save when you&apos;re
+              done.
+            </DialogDescription>
+          </DialogHeader>
+          <div>
+            <div className="grid w-full items-center gap-4">
+              <Label htmlFor="name-1">Name</Label>
+              <Input id="name-1" name="name" defaultValue="Pedro Duarte" />
+            </div>
+            <div className="grid w-full items-center gap-4">
+              <Label htmlFor="username-1">Username</Label>
+              <Input id="username-1" name="username" defaultValue="@peduarte" />
+            </div>
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button type="submit">Save changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </form>
+    </Dialog>
                         <button
                           type="button"
                           aria-expanded={isOpen}
                           aria-controls={`session-event-${sessionEvent.id}`}
-                          className="flex w-full items-start justify-between gap-3 px-4 py-4 text-left transition-colors hover:bg-muted/50"
+                          className="flex w-full items-start justify-between gap-3 px-4 py-2 text-left transition-colors hover:bg-muted/50 bg-teal-700 rounded-lg"
                           onClick={() => toggleSessionEventOpen(sessionEvent.id)}
                         >
                           <div className="space-y-1">
-                            <div className="flex flex-wrap items-center gap-2">
-                              <span className="font-medium">{sessionEvent.title}</span>
-                              <Badge variant="outline">{statusConversion(sessionEvent.status)}</Badge>
-                            </div>
-                            <p className="text-sm text-muted-foreground">
-                              {formatEventDate(sessionEvent.eventDate)} / {sessionEvent.venue} / 参加エントリー {sessionEntries.length} 件
+                            <p className="text-sm text-gray-50">
+                              【参加状況】{formatEventDate(sessionEvent.eventDate)} / {sessionEvent.venue} / 参加エントリー {sessionEntries.length} 件
                             </p>
                           </div>
-                          <ChevronDown className={cn('mt-0.5 size-4 shrink-0 transition-transform', isOpen ? 'rotate-180' : 'rotate-0')} />
+                          <ChevronDown className={cn('mt-0.5 size-4 shrink-0 transition-transform', isOpen ? 'rotate-180' : 'rotate-0', 'text-gray-50')} />
                         </button>
                         {isOpen ? (
                           <div id={`session-event-${sessionEvent.id}`} className="border-t border-border/70 px-4 py-4">
