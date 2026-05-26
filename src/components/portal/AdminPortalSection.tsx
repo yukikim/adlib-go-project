@@ -885,6 +885,58 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
           <div key={activeContentKey} className="admin-content-stage">
 
             <Section sectionId="admin-events" title="イベント管理" description="新規イベント作成と既存イベントの公開フローを管理します。" className={cn(!isGroupVisible('admin-events') && 'hidden', 'border-gray-300')}>
+              <div className="flex gap-2 items-start">
+              <Dialog>
+                <form className="mb-4">
+                  <DialogTrigger asChild>
+                    <Button variant="secondary">新規イベント作成</Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-sm bg-neutral-200">
+                    <DialogHeader>
+                      <DialogTitle>イベント作成</DialogTitle>
+                      <DialogDescription>
+                        新しいイベントを作成します。
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div id="admin-event-edit" className="grid gap-4 py-4">
+                      <Field htmlFor="admin-event-title" label="イベント名">
+                        <Input id="admin-event-title" type="text" placeholder="イベント名" value={eventTitle} onChange={(event) => setEventTitle(event.target.value)} />
+                      </Field>
+                      <Field htmlFor="admin-event-venue" label="会場">
+                        <Input id="admin-event-venue" type="text" placeholder="会場" value={eventVenue} onChange={(event) => setEventVenue(event.target.value)} />
+                      </Field>
+                      <Field htmlFor="admin-event-date" label="開催日">
+                        <Input id="admin-event-date" type="date" value={eventDate} onChange={(event) => setEventDate(event.target.value)} />
+                      </Field>
+                    </div>
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <div className="flex w-full justify-end gap-2">
+                          <Button variant="outline">Cancel</Button>
+                          <Button className="w-fit" variant="secondary" type="submit" onClick={onCreateEvent} disabled={loading}>イベント作成</Button>
+                        </div>
+                      </DialogClose>
+                      {/* <Button type="submit" onClick={onUpdateEvent} disabled={loading}>イベント更新</Button> */}
+                    </DialogFooter>
+                  </DialogContent>
+                </form>
+              </Dialog>
+              <Tooltip.Provider>
+                <Tooltip.Root>
+                  <Tooltip.Trigger asChild>
+                    <button className="IconButton">
+                      <MessageCircleQuestionMark size={16} />
+                    </button>
+                  </Tooltip.Trigger>
+                  <Tooltip.Portal>
+                    <Tooltip.Content className="TooltipContent text-sm bg-gray-700 text-white p-2 rounded-md w-64" sideOffset={5}>
+                      ここから新しいイベントを作成できます。イベントの開催日や会場などの基本情報を入力して、イベントを作成してください。作成後は、「イベント編集」で募集期間の設定やステータスの変更が出来ます。
+                      <Tooltip.Arrow className="TooltipArrow" />
+                    </Tooltip.Content>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
+              </Tooltip.Provider>
+              </div>
 
               <div id="admin-session-list" className="mb-4 bg-sky-400 p-2 rounded-lg">
                 <h3 className="text-gray-100 text-lg font-semibold">イベント一覧</h3>
@@ -912,98 +964,98 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                         </div>
                         <div className="flex flex-wrap items-center gap-4">
 
-                        <button
-                          type="button"
-                          aria-expanded={isOpen}
-                          aria-controls={`session-event-${sessionEvent.id}`}
-                          className="flex items-start justify-between gap-3 px-2 py-[0.4rem] text-left transition-colors hover:bg-muted/50 bg-teal-700 rounded-lg"
-                          onClick={() => toggleSessionEventOpen(sessionEvent.id)}
-                        >
-                          <div className="space-y-1">
-                            <p className="text-sm text-gray-50">
-                              【参加状況】{formatEventDate(sessionEvent.eventDate)} / {sessionEvent.venue} / 参加エントリー {sessionEntries.length} 件
-                            </p>
-                          </div>
-                          <ChevronDown className={cn('mt-0.5 size-4 shrink-0 transition-transform', isOpen ? 'rotate-180' : 'rotate-0', 'text-gray-50')} />
-                        </button>
-                        <Dialog>
-                          <form className="text-right">
-                            <DialogTrigger asChild>
-                              <Button variant="default" onClick={() => setSelectedAdminEventId(sessionEvent.id)}>イベント編集</Button>
-                            </DialogTrigger>
-                            <DialogContent className="sm:max-w-sm bg-neutral-200">
-                              <DialogHeader>
-                                <DialogTitle>イベント編集</DialogTitle>
-                                <DialogDescription>
-                                  募集ラウンドや公開状態、受付期間を更新できます。
-                                </DialogDescription>
-                              </DialogHeader>
-                              <div id="admin-event-edit" className="grid gap-4 py-4">
-                                {selectedAdminEvent ? (
-                                  <div className="grid gap-4 sm:grid-cols-2">
-                                    <Field htmlFor="admin-edit-event-title" label="イベント名" className="sm:col-span-2">
-                                      <Input id="admin-edit-event-title" type="text" placeholder="イベント名" value={editEventTitle} onChange={(event) => setEditEventTitle(event.target.value)} />
-                                    </Field>
-                                    <Field htmlFor="admin-edit-event-venue" label="会場">
-                                      <Input id="admin-edit-event-venue" type="text" placeholder="会場" value={editEventVenue} onChange={(event) => setEditEventVenue(event.target.value)} />
-                                    </Field>
-                                    <Field htmlFor="admin-edit-event-date" label="開催日">
-                                      <Input id="admin-edit-event-date" type="date" value={editEventDate} onChange={(event) => setEditEventDate(event.target.value)} />
-                                    </Field>
-                                    <Field label="ステータス" htmlFor="admin-edit-event-status">
-                                      <Select value={editEventStatus} onValueChange={setEditEventStatus}>
-                                        <SelectTrigger id="admin-edit-event-status" className="w-full">
-                                          <SelectValue placeholder="ステータスを選択" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                          <SelectItem value="draft">下書き</SelectItem>
-                                          <SelectItem value="recruiting_round1">募集（ラウンド1）</SelectItem>
-                                          <SelectItem value="recruiting_round2">募集（ラウンド2）</SelectItem>
-                                          <SelectItem value="generating">生成中</SelectItem>
-                                          <SelectItem value="published">公開中</SelectItem>
-                                          <SelectItem value="closed">終了</SelectItem>
-                                        </SelectContent>
-                                      </Select>
-                                    </Field>
-                                    <div className="hidden sm:block" />
-                                    <Field htmlFor="admin-edit-round1-start" label="Round1 開始">
-                                      <Input id="admin-edit-round1-start" type="datetime-local" value={editRound1StartAt} onChange={(event) => setEditRound1StartAt(event.target.value)} />
-                                    </Field>
-                                    <Field htmlFor="admin-edit-round1-end" label="Round1 終了">
-                                      <Input id="admin-edit-round1-end" type="datetime-local" value={editRound1EndAt} onChange={(event) => setEditRound1EndAt(event.target.value)} />
-                                    </Field>
-                                    <Field htmlFor="admin-edit-round2-start" label="Round2 開始">
-                                      <Input id="admin-edit-round2-start" type="datetime-local" value={editRound2StartAt} onChange={(event) => setEditRound2StartAt(event.target.value)} />
-                                    </Field>
-                                    <Field htmlFor="admin-edit-round2-end" label="Round2 終了">
-                                      <Input id="admin-edit-round2-end" type="datetime-local" value={editRound2EndAt} onChange={(event) => setEditRound2EndAt(event.target.value)} />
-                                    </Field>
-                                    {/* <div className="sm:col-span-2">
+                          <button
+                            type="button"
+                            aria-expanded={isOpen}
+                            aria-controls={`session-event-${sessionEvent.id}`}
+                            className="flex items-start justify-between gap-3 px-2 py-[0.4rem] text-left transition-colors hover:bg-muted/50 bg-teal-700 rounded-lg"
+                            onClick={() => toggleSessionEventOpen(sessionEvent.id)}
+                          >
+                            <div className="space-y-1">
+                              <p className="text-sm text-gray-50">
+                                【参加状況】{formatEventDate(sessionEvent.eventDate)} / {sessionEvent.venue} / 参加エントリー {sessionEntries.length} 件
+                              </p>
+                            </div>
+                            <ChevronDown className={cn('mt-0.5 size-4 shrink-0 transition-transform', isOpen ? 'rotate-180' : 'rotate-0', 'text-gray-50')} />
+                          </button>
+                          <Dialog>
+                            <form className="text-right">
+                              <DialogTrigger asChild>
+                                <Button variant="default" onClick={() => setSelectedAdminEventId(sessionEvent.id)}>イベント編集</Button>
+                              </DialogTrigger>
+                              <DialogContent className="sm:max-w-sm bg-neutral-200">
+                                <DialogHeader>
+                                  <DialogTitle>イベント編集</DialogTitle>
+                                  <DialogDescription>
+                                    募集ラウンドや公開状態、受付期間を更新できます。
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <div id="admin-event-edit" className="grid gap-4 py-4">
+                                  {selectedAdminEvent ? (
+                                    <div className="grid gap-4 sm:grid-cols-2">
+                                      <Field htmlFor="admin-edit-event-title" label="イベント名" className="sm:col-span-2">
+                                        <Input id="admin-edit-event-title" type="text" placeholder="イベント名" value={editEventTitle} onChange={(event) => setEditEventTitle(event.target.value)} />
+                                      </Field>
+                                      <Field htmlFor="admin-edit-event-venue" label="会場">
+                                        <Input id="admin-edit-event-venue" type="text" placeholder="会場" value={editEventVenue} onChange={(event) => setEditEventVenue(event.target.value)} />
+                                      </Field>
+                                      <Field htmlFor="admin-edit-event-date" label="開催日">
+                                        <Input id="admin-edit-event-date" type="date" value={editEventDate} onChange={(event) => setEditEventDate(event.target.value)} />
+                                      </Field>
+                                      <Field label="ステータス" htmlFor="admin-edit-event-status">
+                                        <Select value={editEventStatus} onValueChange={setEditEventStatus}>
+                                          <SelectTrigger id="admin-edit-event-status" className="w-full">
+                                            <SelectValue placeholder="ステータスを選択" />
+                                          </SelectTrigger>
+                                          <SelectContent>
+                                            <SelectItem value="draft">下書き</SelectItem>
+                                            <SelectItem value="recruiting_round1">募集（ラウンド1）</SelectItem>
+                                            <SelectItem value="recruiting_round2">募集（ラウンド2）</SelectItem>
+                                            <SelectItem value="generating">生成中</SelectItem>
+                                            <SelectItem value="published">公開中</SelectItem>
+                                            <SelectItem value="closed">終了</SelectItem>
+                                          </SelectContent>
+                                        </Select>
+                                      </Field>
+                                      <div className="hidden sm:block" />
+                                      <Field htmlFor="admin-edit-round1-start" label="Round1 開始">
+                                        <Input id="admin-edit-round1-start" type="datetime-local" value={editRound1StartAt} onChange={(event) => setEditRound1StartAt(event.target.value)} />
+                                      </Field>
+                                      <Field htmlFor="admin-edit-round1-end" label="Round1 終了">
+                                        <Input id="admin-edit-round1-end" type="datetime-local" value={editRound1EndAt} onChange={(event) => setEditRound1EndAt(event.target.value)} />
+                                      </Field>
+                                      <Field htmlFor="admin-edit-round2-start" label="Round2 開始">
+                                        <Input id="admin-edit-round2-start" type="datetime-local" value={editRound2StartAt} onChange={(event) => setEditRound2StartAt(event.target.value)} />
+                                      </Field>
+                                      <Field htmlFor="admin-edit-round2-end" label="Round2 終了">
+                                        <Input id="admin-edit-round2-end" type="datetime-local" value={editRound2EndAt} onChange={(event) => setEditRound2EndAt(event.target.value)} />
+                                      </Field>
+                                      {/* <div className="sm:col-span-2">
                                       <Button type="button" onClick={onUpdateEvent} disabled={loading}>
                                         イベント更新
                                       </Button>
                                     </div> */}
-                                  </div>
-                                ) : (
-                                  <Alert>
-                                    <AlertTitle>編集対象を選択してください</AlertTitle>
-                                    <AlertDescription>登録済みイベントを選ぶと、公開ステータスと募集期間を編集できます。</AlertDescription>
-                                  </Alert>
-                                )}
-                              </div>
-                              <DialogFooter>
-                                <DialogClose asChild>
-                                  <div className="flex w-full justify-end gap-2">
-                                  <Button variant="outline">Cancel</Button>
-                                  <Button variant="default" type="submit" onClick={onUpdateEvent} disabled={loading}>イベント更新</Button>
-                                  </div>
-                                </DialogClose>
-                                {/* <Button type="submit" onClick={onUpdateEvent} disabled={loading}>イベント更新</Button> */}
-                              </DialogFooter>
-                            </DialogContent>
-                          </form>
-                        </Dialog>
-                      </div>
+                                    </div>
+                                  ) : (
+                                    <Alert>
+                                      <AlertTitle>編集対象を選択してください</AlertTitle>
+                                      <AlertDescription>登録済みイベントを選ぶと、公開ステータスと募集期間を編集できます。</AlertDescription>
+                                    </Alert>
+                                  )}
+                                </div>
+                                <DialogFooter>
+                                  <DialogClose asChild>
+                                    <div className="flex w-full justify-end gap-2">
+                                      <Button variant="outline">Cancel</Button>
+                                      <Button variant="default" type="submit" onClick={onUpdateEvent} disabled={loading}>イベント更新</Button>
+                                    </div>
+                                  </DialogClose>
+                                  {/* <Button type="submit" onClick={onUpdateEvent} disabled={loading}>イベント更新</Button> */}
+                                </DialogFooter>
+                              </DialogContent>
+                            </form>
+                          </Dialog>
+                        </div>
                         {isOpen ? (
                           <div id={`session-event-${sessionEvent.id}`} className="border-t border-border/70 px-4 py-4">
                             {sessionEntries.length === 0 ? (
@@ -1066,112 +1118,6 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                     );
                   })}
                 </ul>
-              </div>
-
-
-              <div className={cn('grid gap-4 xl:grid-cols-2', activeGroupId === 'admin-events' && activeChildId && 'xl:grid-cols-1')}>
-                <div id="admin-events-create" className={cn('grid scroll-mt-24 gap-4 rounded-xl border p-4', !isChildVisible('admin-events', 'admin-events-create') && 'hidden')}>
-                  <div className="space-y-1">
-                    <h3 className="font-medium">イベント作成</h3>
-                    <p className="text-sm text-muted-foreground">イベント名、会場、開催日を指定して新規イベントを作成します。</p>
-                  </div>
-                  <Field htmlFor="admin-event-title" label="イベント名">
-                    <Input id="admin-event-title" type="text" placeholder="イベント名" value={eventTitle} onChange={(event) => setEventTitle(event.target.value)} />
-                  </Field>
-                  <Field htmlFor="admin-event-venue" label="会場">
-                    <Input id="admin-event-venue" type="text" placeholder="会場" value={eventVenue} onChange={(event) => setEventVenue(event.target.value)} />
-                  </Field>
-                  <Field htmlFor="admin-event-date" label="開催日">
-                    <Input id="admin-event-date" type="date" value={eventDate} onChange={(event) => setEventDate(event.target.value)} />
-                  </Field>
-                  <Button type="button" onClick={onCreateEvent} disabled={loading} className="w-fit">
-                    イベント作成
-                  </Button>
-                </div>
-
-                <div id="admin-events-edit" className={cn('grid scroll-mt-24 gap-4 rounded-xl border p-4', !isChildVisible('admin-events', 'admin-events-edit') && 'hidden')}>
-                  <div className="flex flex-wrap items-start justify-between gap-3">
-                    <div className="space-y-1">
-                      <h3 className="font-medium">イベント編集</h3>
-                      <p className="text-sm text-muted-foreground">募集ラウンドや公開状態、受付期間を更新できます。</p>
-                    </div>
-                    {selectedAdminEvent ? <Badge>{selectedAdminEvent.status}</Badge> : null}
-                  </div>
-
-                  <Field label="編集対象イベント" htmlFor="admin-event-select">
-                    <Select value={selectedAdminEventId || NONE_VALUE} onValueChange={(value) => setSelectedAdminEventId(value === NONE_VALUE ? '' : value)}>
-                      <SelectTrigger id="admin-event-select" className="w-full">
-                        <SelectValue placeholder="編集対象イベントを選択" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value={NONE_VALUE}>編集対象イベントを選択</SelectItem>
-                        {sessionEvents.map((sessionEvent) => (
-                          <SelectItem key={sessionEvent.id} value={sessionEvent.id}>{sessionEvent.title}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <div>
-                      <ul>
-                        {sessionEvents.map((sessionEvent) => (
-                          <li key={sessionEvent.id} value={sessionEvent.id}>{sessionEvent.title}</li>
-                        ))}
-
-                      </ul>
-                    </div>
-                  </Field>
-
-                  {selectedAdminEvent ? (
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <Field htmlFor="admin-edit-event-title" label="イベント名" className="sm:col-span-2">
-                        <Input id="admin-edit-event-title" type="text" placeholder="イベント名" value={editEventTitle} onChange={(event) => setEditEventTitle(event.target.value)} />
-                      </Field>
-                      <Field htmlFor="admin-edit-event-venue" label="会場">
-                        <Input id="admin-edit-event-venue" type="text" placeholder="会場" value={editEventVenue} onChange={(event) => setEditEventVenue(event.target.value)} />
-                      </Field>
-                      <Field htmlFor="admin-edit-event-date" label="開催日">
-                        <Input id="admin-edit-event-date" type="date" value={editEventDate} onChange={(event) => setEditEventDate(event.target.value)} />
-                      </Field>
-                      <Field label="ステータス" htmlFor="admin-edit-event-status">
-                        <Select value={editEventStatus} onValueChange={setEditEventStatus}>
-                          <SelectTrigger id="admin-edit-event-status" className="w-full">
-                            <SelectValue placeholder="ステータスを選択" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="draft">下書き</SelectItem>
-                            <SelectItem value="recruiting_round1">募集（ラウンド1）</SelectItem>
-                            <SelectItem value="recruiting_round2">募集（ラウンド2）</SelectItem>
-                            <SelectItem value="generating">生成中</SelectItem>
-                            <SelectItem value="published">公開中</SelectItem>
-                            <SelectItem value="closed">終了</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </Field>
-                      <div className="hidden sm:block" />
-                      <Field htmlFor="admin-edit-round1-start" label="Round1 開始">
-                        <Input id="admin-edit-round1-start" type="datetime-local" value={editRound1StartAt} onChange={(event) => setEditRound1StartAt(event.target.value)} />
-                      </Field>
-                      <Field htmlFor="admin-edit-round1-end" label="Round1 終了">
-                        <Input id="admin-edit-round1-end" type="datetime-local" value={editRound1EndAt} onChange={(event) => setEditRound1EndAt(event.target.value)} />
-                      </Field>
-                      <Field htmlFor="admin-edit-round2-start" label="Round2 開始">
-                        <Input id="admin-edit-round2-start" type="datetime-local" value={editRound2StartAt} onChange={(event) => setEditRound2StartAt(event.target.value)} />
-                      </Field>
-                      <Field htmlFor="admin-edit-round2-end" label="Round2 終了">
-                        <Input id="admin-edit-round2-end" type="datetime-local" value={editRound2EndAt} onChange={(event) => setEditRound2EndAt(event.target.value)} />
-                      </Field>
-                      <div className="sm:col-span-2">
-                        <Button type="button" onClick={onUpdateEvent} disabled={loading}>
-                          イベント更新
-                        </Button>
-                      </div>
-                    </div>
-                  ) : (
-                    <Alert>
-                      <AlertTitle>編集対象を選択してください</AlertTitle>
-                      <AlertDescription>登録済みイベントを選ぶと、公開ステータスと募集期間を編集できます。</AlertDescription>
-                    </Alert>
-                  )}
-                </div>
               </div>
             </Section>
 
