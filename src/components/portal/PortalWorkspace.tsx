@@ -75,6 +75,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
       const memberJson = await parseJson(memberRes);
       // eventJson イベントリスト
       const eventJson = await parseJson(eventRes);
+      // console.log('eventJson', eventJson);
       setAnnouncements(announcementJson.announcements ?? []);
       setMembers(memberJson.members ?? []);
       setSessionEvents(eventJson.sessionEvents ?? []);
