@@ -5,10 +5,12 @@ import { getZodErrorMessage } from '@/lib/authSchemas';
 import { sessionEventCreateRequestSchema } from '@/lib/apiSchemas';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { getRound1CandidateSongs, getSessionEventLifecycleState } from '@/lib/sessionEventWindow';
+import { isSessionEventVisibleToMembers } from '@/lib/sessionEventStatus';
 
 export async function GET(request: NextRequest) {
   const authenticatedUser = await getAuthenticatedUser(request);
   const includeAdminSessionEntries = authenticatedUser?.role === 'admin' && authenticatedUser.status === 'active';
+  const includeComments = Boolean(authenticatedUser?.status === 'active');
 
   const sessionEvents = await prisma.sessionEvent.findMany({
     include: {
@@ -78,6 +80,84 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  const commentRows = !includeComments || sessionEventIds.length === 0
+    ? []
+    : await prisma.sessionEventComment.findMany({
+        where: {
+          sessionEventId: { in: sessionEventIds },
+        },
+        include: {
+          userAccount: {
+            select: {
+              id: true,
+              memberProfile: {
+                select: {
+                  displayName: true,
+                },
+              },
+            },
+          },
+        },
+        orderBy: [{ createdAt: 'desc' }],
+      });
+
+  const commentsByEventId = new Map<string, Array<{
+    id: string;
+    body: string;
+    createdAt: Date;
+    memberDisplayName: string;
+    userAccountId: string;
+  }>>();
+
+  for (const comment of commentRows) {
+    const comments = commentsByEventId.get(comment.sessionEventId) ?? [];
+    comments.push({
+      id: comment.id,
+      body: comment.body,
+      createdAt: comment.createdAt,
+      memberDisplayName: comment.userAccount.memberProfile?.displayName ?? comment.userAccount.id,
+      userAccountId: comment.userAccount.id,
+    });
+    commentsByEventId.set(comment.sessionEventId, comments);
+  }
+
+  const ratingSummarySourceSets = sessionEventIds.length === 0
+    ? []
+    : await prisma.sessionSet.findMany({
+        where: {
+          sessionEventId: { in: sessionEventIds },
+          isPublished: true,
+        },
+        select: {
+          id: true,
+          sessionEventId: true,
+          title: true,
+          ratings: {
+            select: {
+              rating: true,
+            },
+          },
+        },
+        orderBy: [{ setOrder: 'asc' }, { title: 'asc' }],
+      });
+
+  const ratingSummaryMap = new Map<string, Array<{ sessionSetId: string; songTitle: string; ratingCount: number; averageRating: number | null }>>();
+  for (const sessionEventId of sessionEventIds) {
+    ratingSummaryMap.set(
+      sessionEventId,
+      ratingSummarySourceSets
+        .filter((sessionSet) => sessionSet.sessionEventId === sessionEventId)
+        .map((sessionSet) => ({
+          sessionSetId: sessionSet.id,
+          songTitle: sessionSet.title,
+          ratingCount: sessionSet.ratings.length,
+          averageRating: sessionSet.ratings.length === 0
+            ? null
+            : sessionSet.ratings.reduce((sum, rating) => sum + rating.rating, 0) / sessionSet.ratings.length,
+        })),
+    );
+  }
+
   return NextResponse.json({
     sessionEvents: sessionEvents.map((sessionEvent) => ({
       ...sessionEvent,
@@ -85,11 +165,17 @@ export async function GET(request: NextRequest) {
         const lifecycle = getSessionEventLifecycleState(sessionEvent);
         return {
           status: lifecycle.status,
+          canSubmit: lifecycle.canSubmit,
+          entryRound: lifecycle.round,
+          entryReason: lifecycle.reason,
           canGenerateSessionSets: lifecycle.canGenerateSessionSets,
           canPrepareRound2Candidates: lifecycle.canPrepareRound2Candidates,
+          isVisibleToMembers: isSessionEventVisibleToMembers(lifecycle.status),
         };
       })(),
       round2CandidateSongs: candidateSongMap.get(sessionEvent.id) ?? [],
+      ratingSummaries: ratingSummaryMap.get(sessionEvent.id) ?? [],
+      comments: commentsByEventId.get(sessionEvent.id) ?? [],
     })),
   });
 }
@@ -118,7 +204,7 @@ export async function POST(request: NextRequest) {
       round1EndAt: body.round1EndAt ? new Date(body.round1EndAt) : null,
       round2StartAt: body.round2StartAt ? new Date(body.round2StartAt) : null,
       round2EndAt: body.round2EndAt ? new Date(body.round2EndAt) : null,
-      status: body.status === 'published' ? 'published' : 'draft',
+      status: body.status ?? 'draft',
     },
   });
 

@@ -1,5 +1,7 @@
+import { normalizeSessionEventStatus, type SessionEventStatus } from './sessionEventStatus';
+
 type SessionEventLike = {
-  status: string;
+  status: SessionEventStatus | string;
   round1StartAt: Date | string | null;
   round1EndAt: Date | string | null;
   round2StartAt: Date | string | null;
@@ -15,7 +17,7 @@ type SessionEventEntryLike = {
 };
 
 export type SessionEventLifecycleState = {
-  status: string;
+  status: SessionEventStatus;
   canSubmit: boolean;
   round: 1 | 2 | null;
   canGenerateSessionSets: boolean;
@@ -47,110 +49,103 @@ function normalizeSongTitle(value: string) {
   return value.trim().replace(/\s+/g, ' ').toLocaleLowerCase('ja-JP');
 }
 
-export function getSessionEventLifecycleState(sessionEvent: SessionEventLike, now = new Date()): SessionEventLifecycleState {
-  if (sessionEvent.status === 'published' || sessionEvent.status === 'closed') {
-    return {
-      status: sessionEvent.status,
-      canSubmit: false,
-      round: null,
-      canGenerateSessionSets: false,
-      canPrepareRound2Candidates: false,
-      reason: '現在は募集受付中ではありません',
-    };
+function getWindowReason(label: 'round1' | 'round2', start: Date | null, end: Date | null, now: Date) {
+  if (start && now < start) {
+    return `${label} の募集開始前です`;
   }
 
+  if (end && now > end) {
+    return `${label} の募集は終了しました`;
+  }
+
+  return `現在は ${label} の募集受付中です`;
+}
+
+export function getSessionEventLifecycleState(sessionEvent: SessionEventLike, now = new Date()): SessionEventLifecycleState {
+  const status = normalizeSessionEventStatus(sessionEvent.status);
   const round1StartAt = toDate(sessionEvent.round1StartAt);
   const round1EndAt = toDate(sessionEvent.round1EndAt);
   const round2StartAt = toDate(sessionEvent.round2StartAt);
   const round2EndAt = toDate(sessionEvent.round2EndAt);
-  const hasRound1Window = Boolean(round1StartAt || round1EndAt);
-  const hasRound2Window = Boolean(round2StartAt || round2EndAt);
 
-  if (hasRound2Window && isWithinWindow(now, round2StartAt, round2EndAt)) {
-    return {
-      status: 'recruiting_round2',
-      canSubmit: true,
-      round: 2,
-      canGenerateSessionSets: false,
-      canPrepareRound2Candidates: true,
-      reason: null,
-    };
+  switch (status) {
+    case 'draft':
+      return {
+        status,
+        canSubmit: false,
+        round: null,
+        canGenerateSessionSets: false,
+        canPrepareRound2Candidates: false,
+        reason: '管理者のイベント準備中です',
+      };
+    case 'announced':
+      return {
+        status,
+        canSubmit: false,
+        round: null,
+        canGenerateSessionSets: false,
+        canPrepareRound2Candidates: false,
+        reason: '開催予定イベントとして告知中です',
+      };
+    case 'recruiting_round1': {
+      const canSubmit = isWithinWindow(now, round1StartAt, round1EndAt);
+      return {
+        status,
+        canSubmit,
+        round: canSubmit ? 1 : null,
+        canGenerateSessionSets: false,
+        canPrepareRound2Candidates: Boolean(round1EndAt && now > round1EndAt),
+        reason: canSubmit ? null : getWindowReason('round1', round1StartAt, round1EndAt, now),
+      };
+    }
+    case 'recruiting_round2': {
+      const canSubmit = isWithinWindow(now, round2StartAt, round2EndAt);
+      return {
+        status,
+        canSubmit,
+        round: canSubmit ? 2 : null,
+        canGenerateSessionSets: false,
+        canPrepareRound2Candidates: true,
+        reason: canSubmit ? null : getWindowReason('round2', round2StartAt, round2EndAt, now),
+      };
+    }
+    case 'generating':
+      return {
+        status,
+        canSubmit: false,
+        round: null,
+        canGenerateSessionSets: true,
+        canPrepareRound2Candidates: true,
+        reason: 'sessionSet を作成・編集できます',
+      };
+    case 'published':
+      return {
+        status,
+        canSubmit: false,
+        round: null,
+        canGenerateSessionSets: false,
+        canPrepareRound2Candidates: true,
+        reason: 'sessionSet を公開中です',
+      };
+    case 'rating':
+      return {
+        status,
+        canSubmit: false,
+        round: null,
+        canGenerateSessionSets: false,
+        canPrepareRound2Candidates: true,
+        reason: 'レイティング受付中です',
+      };
+    case 'closed':
+      return {
+        status,
+        canSubmit: false,
+        round: null,
+        canGenerateSessionSets: false,
+        canPrepareRound2Candidates: true,
+        reason: 'イベントは終了しました',
+      };
   }
-
-  if (hasRound1Window && isWithinWindow(now, round1StartAt, round1EndAt)) {
-    return {
-      status: 'recruiting_round1',
-      canSubmit: true,
-      round: 1,
-      canGenerateSessionSets: false,
-      canPrepareRound2Candidates: false,
-      reason: null,
-    };
-  }
-
-  if (round2EndAt && now > round2EndAt) {
-    return {
-      status: 'generating',
-      canSubmit: false,
-      round: null,
-      canGenerateSessionSets: true,
-      canPrepareRound2Candidates: true,
-      reason: 'round2 は終了しています',
-    };
-  }
-
-  if (hasRound2Window && round2StartAt && now < round2StartAt && round1EndAt && now > round1EndAt) {
-    return {
-      status: 'generating',
-      canSubmit: false,
-      round: null,
-      canGenerateSessionSets: false,
-      canPrepareRound2Candidates: true,
-      reason: 'round2 の募集開始前です',
-    };
-  }
-
-  if (!hasRound2Window && round1EndAt && now > round1EndAt) {
-    return {
-      status: 'generating',
-      canSubmit: false,
-      round: null,
-      canGenerateSessionSets: true,
-      canPrepareRound2Candidates: true,
-      reason: 'round1 は終了しています',
-    };
-  }
-
-  if (!round1StartAt && !round1EndAt && sessionEvent.status === 'generating') {
-    return {
-      status: 'generating',
-      canSubmit: false,
-      round: null,
-      canGenerateSessionSets: true,
-      canPrepareRound2Candidates: true,
-      reason: '生成可能です',
-    };
-  }
-
-  if (round1StartAt && now < round1StartAt) {
-    return {
-      status: 'draft',
-      canSubmit: false,
-      round: null,
-      canGenerateSessionSets: false,
-      canPrepareRound2Candidates: false,
-      reason: 'round1 の募集開始前です',
-    };
-  }
-
-  return {
-    status: sessionEvent.status,
-    canSubmit: false,
-    round: null,
-    canGenerateSessionSets: sessionEvent.status === 'generating',
-    canPrepareRound2Candidates: Boolean(round1EndAt && now > round1EndAt),
-    reason: '現在は募集受付中ではありません',
-  };
 }
 
 export function getEffectiveSessionEventStatus(sessionEvent: SessionEventLike, now = new Date()) {

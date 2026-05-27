@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/adminApi';
+import { sendPublishedSessionSetNotification } from '@/lib/sessionEventNotifications';
 
 export async function POST(request: NextRequest) {
-  const { response } = await requireAdmin(request);
+  const { admin, response } = await requireAdmin(request);
   if (response) {
     return response;
   }
@@ -41,10 +42,16 @@ export async function POST(request: NextRequest) {
     return { publishedSets, updatedEvent };
   });
 
+  const mailSummary = await sendPublishedSessionSetNotification({
+    sessionEventId,
+    createdById: admin?.userId,
+  });
+
   return NextResponse.json({
     published: true,
     sessionEventId,
     publishedSetCount: result.publishedSets.count,
     status: result.updatedEvent.status,
+    mailSummary,
   });
 }

@@ -37,6 +37,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { Section } from './Section';
 import { AGE_RANGE_OPTIONS, GENDER_OPTIONS, PREFECTURE_OPTIONS } from '@/lib/memberProfile';
+import { getSessionEventStatusLabel } from '@/lib/sessionEventStatus';
 import type {
   ActivityLogView,
   ArchiveView,
@@ -711,22 +712,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
   );
 
   const statusConversion = (status: string) => {
-    switch (status) {
-      case 'draft':
-        return '下書き';
-      case 'recruiting_round1':
-        return '募集（ラウンド1）';
-      case 'recruiting_round2':
-        return '募集（ラウンド2）';
-      case 'generating':
-        return '生成中';
-      case 'published':
-        return '公開中';
-      case 'closed':
-        return '終了';
-      default:
-        return status;
-    }
+    return getSessionEventStatusLabel(status);
   };
 
   const attendanceStatusConversion = (status: string) => {
@@ -1003,10 +989,12 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                                           </SelectTrigger>
                                           <SelectContent>
                                             <SelectItem value="draft">下書き</SelectItem>
+                                            <SelectItem value="announced">告知</SelectItem>
                                             <SelectItem value="recruiting_round1">募集（ラウンド1）</SelectItem>
                                             <SelectItem value="recruiting_round2">募集（ラウンド2）</SelectItem>
                                             <SelectItem value="generating">生成中</SelectItem>
-                                            <SelectItem value="published">公開中</SelectItem>
+                                            <SelectItem value="published">公開</SelectItem>
+                                            <SelectItem value="rating">レイティング</SelectItem>
                                             <SelectItem value="closed">終了</SelectItem>
                                           </SelectContent>
                                         </Select>
@@ -1106,6 +1094,24 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                                 })}
                               </ul>
                             )}
+                            <div className="mt-4">
+                              <h4 className="font-medium">イベントコメント</h4>
+                              {!sessionEvent.comments?.length ? (
+                                <p className="mt-2 text-sm text-muted-foreground">投稿されたコメントはまだありません。</p>
+                              ) : (
+                                <ul className="mt-3 space-y-2">
+                                  {sessionEvent.comments.map((comment) => (
+                                    <li key={comment.id} className="rounded-lg border bg-card/80 p-3 text-sm">
+                                      <div className="flex flex-wrap items-center gap-2">
+                                        <Badge variant="secondary">{comment.memberDisplayName}</Badge>
+                                        <span className="text-muted-foreground">{new Date(comment.createdAt).toLocaleString('ja-JP')}</span>
+                                      </div>
+                                      <p className="mt-2 leading-7 text-muted-foreground">{comment.body}</p>
+                                    </li>
+                                  ))}
+                                </ul>
+                              )}
+                            </div>
                           </div>
                         ) : null}
                         <div className="flex gap-2 text-secondary">

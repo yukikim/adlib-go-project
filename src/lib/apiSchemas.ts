@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { MAIN_INSTRUMENT_OPTIONS } from './memberProfile';
 import { nonEmptyTrimmedStringSchema } from './authSchemas';
+import { SESSION_EVENT_STATUS_VALUES } from './sessionEventStatus';
 
 const normalizedNullableStringSchema = z.preprocess((value) => {
   if (typeof value !== 'string') {
@@ -60,7 +61,7 @@ export const sessionEventCreateRequestSchema = z.object({
   round1EndAt: optionalValidDateStringSchema,
   round2StartAt: optionalValidDateStringSchema,
   round2EndAt: optionalValidDateStringSchema,
-  status: z.enum(['draft', 'published']).optional(),
+  status: z.enum(SESSION_EVENT_STATUS_VALUES).optional(),
 }).strict();
 
 export const sessionEventUpdateRequestSchema = z.object({
@@ -74,7 +75,11 @@ export const sessionEventUpdateRequestSchema = z.object({
   round1EndAt: optionalValidDateStringSchema,
   round2StartAt: optionalValidDateStringSchema,
   round2EndAt: optionalValidDateStringSchema,
-  status: z.enum(['draft', 'recruiting_round1', 'recruiting_round2', 'generating', 'published', 'closed']).optional(),
+  status: z.enum(SESSION_EVENT_STATUS_VALUES).optional(),
+}).strict();
+
+export const sessionEventCommentCreateRequestSchema = z.object({
+  body: z.string().trim().min(1, 'コメントを入力してください'),
 }).strict();
 
 export const announcementCreateRequestSchema = z.object({

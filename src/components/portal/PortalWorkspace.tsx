@@ -193,6 +193,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           memberRound2Key2={member.memberRound2Key2}
           memberRatings={member.memberRatings}
           memberRatingComments={member.memberRatingComments}
+          memberEventComment={member.memberEventComment}
           entryState={member.entryState}
           setSelectedMemberId={member.setSelectedMemberId}
           setMemberEventId={member.setMemberEventId}
@@ -207,6 +208,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           setMemberRound2Key2={member.setMemberRound2Key2}
           setMemberRatings={member.setMemberRatings}
           setMemberRatingComments={member.setMemberRatingComments}
+          setMemberEventComment={member.setMemberEventComment}
           onProfileDisplayNameChange={member.setProfileDisplayName}
           onProfileMainInstrumentChange={member.setProfileMainInstrument}
           onProfileNicknameChange={member.setProfileNickname}
@@ -233,6 +235,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           onSignOut={auth.handleSignOut}
           onSubmitEntry={member.handleSubmitEntry}
           onSaveRating={member.handleSaveRating}
+          onSaveEventComment={member.handleSaveEventComment}
         />
       )}
 

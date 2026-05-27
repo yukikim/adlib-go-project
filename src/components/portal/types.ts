@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { SessionEventStatus } from '@/lib/sessionEventStatus';
 
 export type PortalView = 'signin' | 'signup' | 'admin-signin' | 'member' | 'admin';
 export type Instrument = 'drum' | 'bass' | 'piano' | 'front' | 'vocal';
@@ -57,8 +58,14 @@ export type SessionEventView = {
   round1EndAt?: string | null;
   round2StartAt?: string | null;
   round2EndAt?: string | null;
-  status: string;
+  status: SessionEventStatus;
+  canSubmit?: boolean;
+  entryRound?: 1 | 2 | null;
+  entryReason?: string | null;
+  isVisibleToMembers?: boolean;
   round2CandidateSongs?: string[];
+  ratingSummaries?: RatingSummaryView[];
+  comments?: SessionEventCommentView[];
   canGenerateSessionSets?: boolean;
   canPrepareRound2Candidates?: boolean;
   _count?: {
@@ -82,6 +89,14 @@ export type SessionEventView = {
       keyName?: string | null;
     }[];
   }[];
+};
+
+export type SessionEventCommentView = {
+  id: string;
+  body: string;
+  createdAt: string;
+  memberDisplayName: string;
+  userAccountId: string;
 };
 
 export type SessionEntryView = {

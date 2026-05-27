@@ -3,9 +3,10 @@ import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/adminApi';
 import { getZodErrorMessage } from '@/lib/authSchemas';
 import { sessionEventUpdateRequestSchema } from '@/lib/apiSchemas';
+import { sendSessionEventStatusNotification } from '@/lib/sessionEventNotifications';
 
 export async function PATCH(request: NextRequest) {
-  const { response } = await requireAdmin(request);
+  const { admin, response } = await requireAdmin(request);
   if (response) {
     return response;
   }
@@ -20,6 +21,21 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: getZodErrorMessage(parsed.error) }, { status: 400 });
   }
   const body = parsed.data;
+
+  const currentSessionEvent = await prisma.sessionEvent.findUnique({
+    where: { id: eventId },
+    select: {
+      id: true,
+      title: true,
+      venue: true,
+      eventDate: true,
+      status: true,
+    },
+  });
+
+  if (!currentSessionEvent) {
+    return NextResponse.json({ error: 'SessionEvent not found' }, { status: 404 });
+  }
 
   const data: Record<string, string | Date | null> = {};
   if (typeof body.title === 'string') data.title = body.title;
@@ -39,5 +55,15 @@ export async function PATCH(request: NextRequest) {
     data,
   });
 
-  return NextResponse.json({ sessionEvent });
+  let mailSummary = undefined;
+  if (body.status && body.status !== currentSessionEvent.status) {
+    mailSummary = await sendSessionEventStatusNotification({
+      sessionEventId: sessionEvent.id,
+      previousStatus: currentSessionEvent.status,
+      nextStatus: body.status,
+      createdById: admin?.userId,
+    });
+  }
+
+  return NextResponse.json({ sessionEvent, mailSummary });
 }

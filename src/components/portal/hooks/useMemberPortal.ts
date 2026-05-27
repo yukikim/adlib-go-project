@@ -12,6 +12,7 @@ import type {
   SessionSetView,
 } from '../types';
 import { getEventEntryState, parseJson, type RunPortalAction } from '../utils';
+import { isSessionEventFinished } from '@/lib/sessionEventStatus';
 
 type UseMemberPortalArgs = {
   currentUser: AuthUser | null;
@@ -50,8 +51,11 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
   const [memberRound2Key2, setMemberRound2Key2] = useState('');
   const [memberRatings, setMemberRatings] = useState<Record<string, number>>({});
   const [memberRatingComments, setMemberRatingComments] = useState<Record<string, string>>({});
+  const [memberEventComment, setMemberEventComment] = useState('');
 
   const selectedMemberEvent = sessionEvents.find((event) => event.id === memberEventId) ?? null;
+  const visibleSessionEvents = sessionEvents.filter((event) => event.isVisibleToMembers);
+  const selectableSessionEvents = visibleSessionEvents.filter((event) => !isSessionEventFinished(event.status));
   const entryState = getEventEntryState(selectedMemberEvent);
 
   const loadMemberData = useCallback(async () => {
@@ -95,13 +99,15 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
   }, [profileMainInstrument]);
 
   useEffect(() => {
-    if (!memberEventId && sessionEvents.length > 0) {
-      setMemberEventId(sessionEvents[0].id);
+    if (!memberEventId && selectableSessionEvents.length > 0) {
+      setMemberEventId(selectableSessionEvents[0].id);
+    } else if (memberEventId && !selectableSessionEvents.some((event) => event.id === memberEventId)) {
+      setMemberEventId(selectableSessionEvents[0]?.id ?? '');
     }
     if (!selectedMemberId && members.length > 0) {
       setSelectedMemberId(members[0].id);
     }
-  }, [memberEventId, members, selectedMemberId, sessionEvents]);
+  }, [memberEventId, members, selectableSessionEvents, selectedMemberId]);
 
   useEffect(() => {
     loadMemberData().catch((error) => console.error(error));
@@ -129,6 +135,10 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     }
     setMemberAttendanceStatus(currentEntry.attendanceStatus);
   }, [memberEventId, sessionEntries]);
+
+  useEffect(() => {
+    setMemberEventComment('');
+  }, [memberEventId]);
 
   const handleProfileUpdate = async () => runAction(async () => {
     if (!profileDisplayName.trim()) {
@@ -218,6 +228,25 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     await loadMemberData();
   }, '評価を保存しました');
 
+  const handleSaveEventComment = async () => runAction(async () => {
+    if (!memberEventId) {
+      throw new Error('イベントを選択してください');
+    }
+    if (!memberEventComment.trim()) {
+      throw new Error('コメントを入力してください');
+    }
+
+    const res = await fetch(`/api/session-events/${memberEventId}/comments`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ body: memberEventComment }),
+    });
+    const json = await parseJson(res);
+    if (!res.ok) throw new Error(json.error ?? 'コメント保存に失敗しました');
+    setMemberEventComment('');
+    await reloadShared();
+  }, 'イベントコメントを保存しました');
+
   return {
     profileDisplayName,
     setProfileDisplayName,
@@ -271,9 +300,12 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     setMemberRatings,
     memberRatingComments,
     setMemberRatingComments,
+    memberEventComment,
+    setMemberEventComment,
     entryState,
     handleProfileUpdate,
     handleSubmitEntry,
     handleSaveRating,
+    handleSaveEventComment,
   };
 }

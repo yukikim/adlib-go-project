@@ -93,6 +93,7 @@ model UserAccount {
   passwordResetTokens PasswordResetToken[]
   emailVerificationTokens EmailVerificationToken[]
   sessionRatings    SessionSetRating[]
+  sessionEventComments SessionEventComment[]
   sessionArchives   SessionArchive[]   @relation("ArchiveCreator")
   adminAuditLogs    AdminAuditLog[]
   announcements     Announcement[]     @relation("AnnouncementCreator")
@@ -138,6 +139,7 @@ model SessionEvent {
   sessionSets       SessionSet[]
   sessionSetDrafts  SessionSetDraft[]
   sessionRatings    SessionSetRating[]
+  comments          SessionEventComment[]
   sessionArchives   SessionArchive[]
 }
 
@@ -198,6 +200,17 @@ model SessionSetRating {
   updatedAt         DateTime       @updatedAt
 
   @@unique([sessionSetId, userAccountId])
+}
+
+model SessionEventComment {
+  id                String         @id @default(uuid())
+  sessionEvent      SessionEvent   @relation(fields: [sessionEventId], references: [id], onDelete: Cascade)
+  sessionEventId    String
+  userAccount       UserAccount    @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
+  userAccountId     String
+  body              String
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
 }
 
 model SessionArchive {
@@ -376,10 +389,12 @@ enum AttendanceStatus {
 
 enum SessionEventStatus {
   draft
+  announced
   recruiting_round1
   recruiting_round2
   generating
   published
+  rating
   closed
 }
 

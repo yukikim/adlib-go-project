@@ -25,6 +25,14 @@ export function getEventEntryState(event?: SessionEventView | null) {
     return { canSubmit: false, round: null as 1 | 2 | null, reason: 'イベントを選択してください' };
   }
 
+  if (typeof event.canSubmit === 'boolean') {
+    return {
+      canSubmit: event.canSubmit,
+      round: event.entryRound ?? null,
+      reason: event.entryReason ?? null,
+    };
+  }
+
   const now = new Date();
   const active = (start?: string | null, end?: string | null) => {
     const startDate = start ? new Date(start) : null;

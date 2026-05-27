@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { requireMemberUser } from '@/lib/auth';
 import { getZodErrorMessage } from '@/lib/authSchemas';
 import { sessionSetRatingRequestSchema } from '@/lib/apiSchemas';
+import { canRateSessionEvent } from '@/lib/sessionEventStatus';
 
 export async function POST(request: NextRequest) {
   const auth = await requireMemberUser(request);
@@ -32,7 +33,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'session set not found' }, { status: 404 });
   }
 
-  if (!sessionSet.isPublished || !sessionSet.sessionEvent || !['published', 'closed'].includes(sessionSet.sessionEvent.status)) {
+  if (!sessionSet.isPublished || !sessionSet.sessionEvent || !canRateSessionEvent(sessionSet.sessionEvent.status)) {
     return NextResponse.json({ error: 'session set is not open for rating' }, { status: 400 });
   }
 
