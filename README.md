@@ -514,6 +514,7 @@ app/page.tsx で以下を提供します。
 admin dashboard で以下を提供します。
 
 - SessionEvent と sessionSet の生成 / 公開
+- SessionEvent ステータス遷移に応じた自動メール送信
 - アーカイブ preview / 作成 / 削除
 - お知らせ作成
 - コラムの作成 / 更新 / 削除
@@ -521,6 +522,7 @@ admin dashboard で以下を提供します。
 - メンバー検索
 - メンバーのプロフィール、role / status 更新
 - メンバー削除
+- 公開イベントへのコメント確認
 
 ---
 
@@ -617,17 +619,37 @@ npm run seed:demo
 - Cookie セッションによるサインイン / サインアップ / サインアウト
 - nodemailer ベースのパスワード再設定メール送信基盤
 - メンバーのプロフィール自己編集とパスワード変更
-- 管理者向け SessionEvent 作成 / 更新 / 募集状態切替 API / 画面
+- 管理者向け SessionEvent 作成 / 更新 / ステータス切替 API / 画面
 - メンバー向け SessionEntry 登録 API / 画面
 - Round 1 / Round 2 の募集期間に応じた入力制御
 - SessionEntry ベースの sessionSet 生成
 - sessionSet 公開確定フロー
 - メンバーによる星 1-5 の sessionSet 評価
+- 公開イベントへのコメント投稿と管理画面確認
 - 管理者による評価集計確認
 - SessionArchive preview / 作成 / 削除
 - 管理者サインイン導線の分離
 - コラムの表示順 / 予約公開 / 管理画面プレビュー
 - メンバー検索、プロフィール編集、削除
+
+### SessionEvent ステータス運用
+
+現在の SessionEvent ステータス:
+
+- `draft`: 管理者のイベント準備期間。メンバー画面には表示しません
+- `announced`: 開催予定イベントとしてメンバー画面に表示します。切替時にアクティブなメンバー全員へ告知メールを送信します
+- `recruiting_round1`: 参加可否と Round 1 希望曲を受け付けます。切替時にアクティブなメンバー全員へ募集開始メールを送信します
+- `recruiting_round2`: Round 1 の候補曲から Round 2 希望曲を受け付けます。切替時に参加表明済みメンバーへ募集開始メールを送信します
+- `generating`: 管理画面で sessionSet を作成、編集、保存する期間です
+- `published`: sessionSet をメンバー画面で公開します。公開中はイベントコメントを投稿できます
+- `rating`: 各曲に対するレイティングとコメントを受け付けます
+- `closed`: レイティング入力を停止し、メンバー画面では終了イベント一覧から結果だけ参照できます
+
+補足:
+
+- `published` への切替は `POST /api/session-events/:id/publish` で行い、公開対象の参加メンバーへメール送信します
+- `published` 中のみ `POST /api/session-events/:id/comments` でイベントコメントを受け付け、投稿時に管理者へ通知します
+- `rating` 中のみ `POST /api/session-sets/:id/ratings` を受け付けます
 
 ### Phase 1 API 確認例
 
@@ -655,6 +677,15 @@ curl -sS -X PATCH http://localhost:3000/api/session-events/event-id \
 	-d '{"status":"recruiting_round1","round1StartAt":"2026-04-10T10:00:00.000Z","round1EndAt":"2026-04-17T14:59:59.000Z"}'
 ```
 
+SessionEvent を告知ステータスへ変更:
+
+```bash
+curl -sS -X PATCH http://localhost:3000/api/session-events/event-id \
+	-H "Content-Type: application/json" \
+	-b cookies.txt -c cookies.txt \
+	-d '{"status":"announced"}'
+```
+
 SessionEntry 登録:
 
 ```bash
@@ -668,6 +699,7 @@ curl -sS -X POST http://localhost:3000/api/session-entries \
 
 - `recruiting_round1` の間は Round 1 のみ登録できます
 - `recruiting_round2` の間は Round 2 のみ登録できます
+- `announced` / `generating` / `published` / `rating` / `closed` では SessionEntry を保存できません
 - 募集期間外は SessionEntry を保存できません
 
 sessionSet 生成:
@@ -691,6 +723,20 @@ curl -sS -X POST http://localhost:3000/api/session-events/event-id/publish \
 	-b cookies.txt -c cookies.txt
 ```
 
+補足:
+
+- sessionSet を `isPublished=true` にし、SessionEvent の status を `published` に更新します
+- 参加表明済みメンバーへ公開通知メールを送信します
+
+イベントコメント投稿:
+
+```bash
+curl -sS -X POST http://localhost:3000/api/session-events/event-id/comments \
+	-H "Content-Type: application/json" \
+	-b cookies.txt -c cookies.txt \
+	-d '{"body":"sessionSet の公開ありがとうございます。当日の持ち物も確認したいです。"}'
+```
+
 rating 保存:
 
 ```bash
@@ -699,6 +745,11 @@ curl -sS -X POST http://localhost:3000/api/session-sets/set-id/ratings \
 	-b cookies.txt -c cookies.txt \
 	-d '{"rating":5,"comment":"とても良かったです"}'
 ```
+
+補足:
+
+- rating API は SessionEvent の status が `rating` のときだけ受け付けます
+- `closed` では新規レイティング登録はできず、結果参照のみ行います
 
 archive preview と作成:
 
