@@ -699,7 +699,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
   const getGroupLinkClassName = (groupId: string) => cn(
     'flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition-colors',
     activeGroupId === groupId
-      ? 'bg-muted-teal-200 text-primary-foreground shadow-sm'
+      ? 'bg-tertiary text-primary-foreground shadow-sm'
       : 'text-foreground hover:bg-muted',
   );
 
@@ -853,7 +853,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
         </aside>
 
         <div className="min-w-0 pr-4">
-          <div className="rounded-2xl bg-muted-teal-200 p-4 shadow-sm">
+          <div className="rounded-2xl bg-tertiary p-4 shadow-sm">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="space-y-1">
                 <p className="text-sm font-medium text-muted-foreground">現在表示中</p>
