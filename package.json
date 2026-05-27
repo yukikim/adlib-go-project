@@ -23,6 +23,8 @@
     "seed:events": "node prisma/seed-events.mjs",
     "seed:notices": "node prisma/seed-notices.mjs",
     "seed:ratings-archives": "node prisma/seed-ratings-archives.mjs",
+    "seed:snapshot:save": "node prisma/save-current-seed.mjs",
+    "seed:snapshot:restore": "node prisma/restore-current-seed.mjs",
     "seed:demo": "npm run seed:reset && npm run seed:participants && npm run seed:requests && npm run seed:auth && npm run seed:columns && npm run seed:events && npm run seed:notices && npm run seed:ratings-archives"
   },
   "dependencies": {

@@ -1,30 +1,11 @@
 import './load-env.mjs';
 import { PrismaClient } from '@prisma/client';
+import { clearSeedTables } from './seed-snapshot-lib.mjs';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.$transaction(async (tx) => {
-    await tx.column.deleteMany();
-    await tx.mailLog.deleteMany();
-    await tx.announcement.deleteMany();
-    await tx.adminAuditLog.deleteMany();
-    await tx.sessionArchiveRatingSummary.deleteMany();
-    await tx.sessionArchiveSet.deleteMany();
-    await tx.sessionArchiveParticipant.deleteMany();
-    await tx.sessionArchive.deleteMany();
-    await tx.sessionSetRating.deleteMany();
-    await tx.sessionSetMember.deleteMany();
-    await tx.sessionSet.deleteMany();
-    await tx.sessionEntryRequest.deleteMany();
-    await tx.sessionEntry.deleteMany();
-    await tx.memberProfile.deleteMany();
-    await tx.userAccount.deleteMany();
-    await tx.sessionEvent.deleteMany();
-    await tx.participantSongRequest.deleteMany();
-    await tx.participant.deleteMany();
-    await tx.song.deleteMany();
-  });
+  await clearSeedTables(prisma);
 
   console.log(JSON.stringify({ reset: true }, null, 2));
 }

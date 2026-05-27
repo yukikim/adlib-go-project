@@ -795,6 +795,23 @@ npm run seed:notices
 npm run seed:ratings-archives
 ```
 
+現在の DB 内容を seed スナップショットとして保存 / 復元:
+
+```bash
+npm run seed:snapshot:save
+npm run seed:snapshot:restore -- --dry-run
+npm run seed:snapshot:restore
+```
+
+補足:
+
+- `npm run seed:snapshot:save` は現在の DB 内容を [prisma/current-db-seed.snapshot.json](prisma/current-db-seed.snapshot.json) に保存します
+- `npm run seed:snapshot:save -- prisma/custom.snapshot.json` のように保存先を変更できます
+- `npm run seed:snapshot:restore -- --dry-run` は復元せず、スナップショットの件数確認だけを行います
+- `npm run seed:snapshot:restore` は一度テーブルをクリアしてからスナップショット内容を再投入します
+- `npm run seed:snapshot:restore -- prisma/custom.snapshot.json` のように復元元ファイルを変更できます
+- `authSessions` や `mailLogs` も含めて保存 / 復元するため、実運用データで使う場合は対象 DB を十分確認してください
+
 重複監査と解消:
 
 ```bash
