@@ -573,9 +573,18 @@ SMTP_PORT=""
 SMTP_SECURE="false"
 SMTP_USER=""
 SMTP_PASS=""
+MAIL_TEST_REDIRECT_TO=""
 ```
 
 `/api/auth/forgot-password` は nodemailer を使います。`SMTP_HOST` などが未設定の開発環境では `jsonTransport` で動作し、レスポンスに `resetToken` を返します。SMTP を設定すると実メール送信に切り替わります。
+
+全メンバー向け通知を 1 つのメールアドレスでテストしたい場合は、`MAIL_TEST_REDIRECT_TO` に受信用アドレスを設定してください。すると実際の送信先はすべてその 1 アドレスに置き換わり、件名・本文・mailLog には元の宛先も残ります。
+
+```env
+MAIL_TEST_REDIRECT_TO="your-address@example.com"
+```
+
+この設定時は bulk 通知でもメンバー人数分のメールが同じ inbox に届くため、「全員に送ったときの通数」「件名」「本文差し込み」を本番に近い形で確認できます。通常運用前には必ず空文字へ戻してください。
 
 3. PostgreSQL を起動
 
