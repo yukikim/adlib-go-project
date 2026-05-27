@@ -744,7 +744,11 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
 
   // console.log(generatedResult.forcedSessionSets)
   // console.log(sessionSets)
-  console.log('selectedAdminEventId', selectedAdminEventId)
+  // console.log('selectedAdminEventId', selectedAdminEventId)
+  // console.log('isChildVisible', isChildVisible)
+  // console.log('savedSessionSetDrafts', savedSessionSetDrafts)
+
+
   return (
     <div id="admin-portal-section">
       {/* <MainHeader view="admin" currentUser={{ role: 'admin', displayName: adminMemberDisplayName }} auth={{ handleSignOut: onSignOut }} loading={loading} admin={{ adminMemberDisplayName }} /> */}
@@ -756,7 +760,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
               <h2 className="text-lg font-semibold">管理ダッシュボード</h2>
               <p className="text-sm text-muted-foreground">左のメニューから表示するセクションとサブメニューを切り替えます。</p>
             </div>
-            <Separator className="my-4" />
+            <Separator className="my-4 bg-secondary" />
             <nav id="mobil-dashboard" className="space-y-3 xl:hidden" aria-label="管理ダッシュボードメニュー（モバイル）">
               {adminNavGroups.map((group) => {
                 const isOpen = openMobileGroupId === group.id;
@@ -869,9 +873,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
               <div className="space-y-1">
                 <p className="text-sm font-medium text-muted-foreground">現在表示中</p>
                 <h3 className="text-xl font-semibold">{activeGroup?.label}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {activeChild ? `サブメニュー: ${activeChild.label}` : 'このセクションの全コンテンツを表示しています。'}
-                </p>
+                <p className="text-sm text-muted-foreground">このセクションの全コンテンツを表示しています。</p>
               </div>
               {activeChild ? (
                 <Button type="button" variant="outline" size="sm" onClick={() => setActiveChildId(null)}>
@@ -886,59 +888,59 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
 
             <Section sectionId="admin-events" title="イベント管理" description="新規イベント作成と既存イベントの公開フローを管理します。" className={cn(!isGroupVisible('admin-events') && 'hidden', 'border-gray-300')}>
               <div className="flex gap-2 items-start">
-              <Dialog>
-                <form className="mb-4">
-                  <DialogTrigger asChild>
-                    <Button variant="secondary">新規イベント作成</Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-sm bg-neutral-200">
-                    <DialogHeader>
-                      <DialogTitle>イベント作成</DialogTitle>
-                      <DialogDescription>
-                        新しいイベントを作成します。
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div id="admin-event-edit" className="grid gap-4 py-4">
-                      <Field htmlFor="admin-event-title" label="イベント名">
-                        <Input id="admin-event-title" type="text" placeholder="イベント名" value={eventTitle} onChange={(event) => setEventTitle(event.target.value)} />
-                      </Field>
-                      <Field htmlFor="admin-event-venue" label="会場">
-                        <Input id="admin-event-venue" type="text" placeholder="会場" value={eventVenue} onChange={(event) => setEventVenue(event.target.value)} />
-                      </Field>
-                      <Field htmlFor="admin-event-date" label="開催日">
-                        <Input id="admin-event-date" type="date" value={eventDate} onChange={(event) => setEventDate(event.target.value)} />
-                      </Field>
-                    </div>
-                    <DialogFooter>
-                      <DialogClose asChild>
-                        <div className="flex w-full justify-end gap-2">
-                          <Button variant="outline">Cancel</Button>
-                          <Button className="w-fit" variant="secondary" type="submit" onClick={onCreateEvent} disabled={loading}>イベント作成</Button>
-                        </div>
-                      </DialogClose>
-                      {/* <Button type="submit" onClick={onUpdateEvent} disabled={loading}>イベント更新</Button> */}
-                    </DialogFooter>
-                  </DialogContent>
-                </form>
-              </Dialog>
-              <Tooltip.Provider>
-                <Tooltip.Root>
-                  <Tooltip.Trigger asChild>
-                    <button className="IconButton">
-                      <MessageCircleQuestionMark size={16} />
-                    </button>
-                  </Tooltip.Trigger>
-                  <Tooltip.Portal>
-                    <Tooltip.Content className="TooltipContent text-sm bg-gray-700 text-white p-2 rounded-md w-64" sideOffset={5}>
-                      ここから新しいイベントを作成できます。イベントの開催日や会場などの基本情報を入力して、イベントを作成してください。作成後は、「イベント編集」で募集期間の設定やステータスの変更が出来ます。
-                      <Tooltip.Arrow className="TooltipArrow" />
-                    </Tooltip.Content>
-                  </Tooltip.Portal>
-                </Tooltip.Root>
-              </Tooltip.Provider>
+                <Dialog>
+                  <form className="mb-4">
+                    <DialogTrigger asChild>
+                      <Button variant="secondary">新規イベント作成</Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-sm bg-neutral-200">
+                      <DialogHeader>
+                        <DialogTitle>イベント作成</DialogTitle>
+                        <DialogDescription>
+                          新しいイベントを作成します。
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div id="admin-event-edit" className="grid gap-4 py-4">
+                        <Field htmlFor="admin-event-title" label="イベント名">
+                          <Input id="admin-event-title" type="text" placeholder="イベント名" value={eventTitle} onChange={(event) => setEventTitle(event.target.value)} />
+                        </Field>
+                        <Field htmlFor="admin-event-venue" label="会場">
+                          <Input id="admin-event-venue" type="text" placeholder="会場" value={eventVenue} onChange={(event) => setEventVenue(event.target.value)} />
+                        </Field>
+                        <Field htmlFor="admin-event-date" label="開催日">
+                          <Input id="admin-event-date" type="date" value={eventDate} onChange={(event) => setEventDate(event.target.value)} />
+                        </Field>
+                      </div>
+                      <DialogFooter>
+                        <DialogClose asChild>
+                          <div className="flex w-full justify-end gap-2">
+                            <Button variant="outline">Cancel</Button>
+                            <Button className="w-fit" variant="secondary" type="submit" onClick={onCreateEvent} disabled={loading}>イベント作成</Button>
+                          </div>
+                        </DialogClose>
+                        {/* <Button type="submit" onClick={onUpdateEvent} disabled={loading}>イベント更新</Button> */}
+                      </DialogFooter>
+                    </DialogContent>
+                  </form>
+                </Dialog>
+                <Tooltip.Provider>
+                  <Tooltip.Root>
+                    <Tooltip.Trigger asChild>
+                      <button className="IconButton">
+                        <MessageCircleQuestionMark size={16} />
+                      </button>
+                    </Tooltip.Trigger>
+                    <Tooltip.Portal>
+                      <Tooltip.Content className="TooltipContent text-sm bg-gray-700 text-white p-2 rounded-md w-64" sideOffset={5}>
+                        ここから新しいイベントを作成できます。イベントの開催日や会場などの基本情報を入力して、イベントを作成してください。作成後は、「イベント編集」で募集期間の設定やステータスの変更が出来ます。
+                        <Tooltip.Arrow className="TooltipArrow" />
+                      </Tooltip.Content>
+                    </Tooltip.Portal>
+                  </Tooltip.Root>
+                </Tooltip.Provider>
               </div>
 
-              <div id="admin-session-list" className="mb-4 bg-sky-400 p-2 rounded-lg">
+              <div id="admin-session-list" className="mb-4 bg-secondary p-2 rounded-lg">
                 <h3 className="text-gray-100 text-lg font-semibold">イベント一覧</h3>
                 <ul className="mt-3 space-y-3">
                   {/* sessionEvents イベントリスト */}
@@ -952,10 +954,17 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                       return new Date(dateTimeString).toLocaleDateString('ja-JP');
                     }
 
+                    // function savedSessionSet(sessionEventId: string) {
+                    //   const result = savedSessionSetDrafts.find((draft) => draft.id === sessionEventId);
+                    //   return result;
+                    // }
+                    const savedSessionSet = savedSessionSetDrafts.find((draft) => draft.sessionEventId === sessionEvent.id);
+                    // console.log('savedSessionSet', savedSessionSet?.title ?? 'なし');
+
                     return (
                       <li key={sessionEvent.id} className="overflow-hidden rounded-lg bg-taupe-100 p-2 space-y-2">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="text-lg text-sky-700 font-semibold">{sessionEvent.title}</span>
+                          <span className="text-lg text-on-primary font-semibold">{sessionEvent.title}</span>
                           <Badge variant="outline">ステータス: {statusConversion(sessionEvent.status)}</Badge>
                         </div>
                         <div className="pl-4">
@@ -968,11 +977,11 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                             type="button"
                             aria-expanded={isOpen}
                             aria-controls={`session-event-${sessionEvent.id}`}
-                            className="flex items-start justify-between gap-3 px-2 py-[0.4rem] text-left transition-colors hover:bg-muted/50 bg-teal-700 rounded-lg"
+                            className="flex items-start justify-between gap-3 px-2 py-[0.4rem] text-left transition-colors hover:bg-muted/50 bg-tertiary rounded-lg"
                             onClick={() => toggleSessionEventOpen(sessionEvent.id)}
                           >
                             <div className="space-y-1">
-                              <p className="text-sm text-gray-50">
+                              <p className="text-sm text-on-tertiary">
                                 【参加状況】{formatEventDate(sessionEvent.eventDate)} / {sessionEvent.venue} / 参加エントリー {sessionEntries.length} 件
                               </p>
                             </div>
@@ -1114,6 +1123,24 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                             )}
                           </div>
                         ) : null}
+                        <div className="flex gap-2 text-secondary">
+                          <p className="text-xs">保存済みセッションセット: <span className="font-semibold">{savedSessionSet ? savedSessionSet.title : 'なし'}</span></p>
+                          <Tooltip.Provider>
+                            <Tooltip.Root>
+                              <Tooltip.Trigger asChild>
+                                <button className="IconButton">
+                                  <MessageCircleQuestionMark size={16} />
+                                </button>
+                              </Tooltip.Trigger>
+                              <Tooltip.Portal>
+                                <Tooltip.Content className="TooltipContent text-sm bg-gray-700 text-white p-2 rounded-md w-64" sideOffset={5}>
+                                  保存済セッションセットがある場合はsessionSet管理で確認出来ます。
+                                  <Tooltip.Arrow className="TooltipArrow" />
+                                </Tooltip.Content>
+                              </Tooltip.Portal>
+                            </Tooltip.Root>
+                          </Tooltip.Provider>
+                        </div>
                       </li>
                     );
                   })}
@@ -1162,7 +1189,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                   </ul>
                 )}
               </div>
-              <Separator className={cn('my-4', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden')} />
+              <Separator className={cn('my-4', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden', 'bg-secondary')} />
               <div className="rounded-xl border p-4 lg:col-span-2">
                 <h3 className="font-medium">保存済み sessionSet</h3>
                 {savedSessionSetDrafts.length === 0 ? (
@@ -1194,7 +1221,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
 
 
 
-              <Separator className={cn('my-4', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden')} />
+              <Separator className={cn('my-4', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden', 'bg-secondary')} />
               <h3 className={cn('font-medium my-2', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>
                 {selectedAdminEvent ? `${selectedAdminEvent.title} の sessionSet` : 'この sessionSetを書き出したイベント名'}
               </h3>
@@ -1431,7 +1458,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                 </div>
               </div>
 
-              <Separator className={cn('my-4', !isChildVisible('admin-archives', 'admin-archives-list') && 'hidden')} />
+              <Separator className={cn('my-4', !isChildVisible('admin-archives', 'admin-archives-list') && 'hidden', 'bg-secondary')} />
               {archives.length === 0 ? <p className={cn('text-sm text-muted-foreground', !isChildVisible('admin-archives', 'admin-archives-list') && 'hidden')}>アーカイブはありません。</p> : (
                 <ul id="admin-archives-list" className={cn('grid scroll-mt-24 gap-3', !isChildVisible('admin-archives', 'admin-archives-list') && 'hidden')}>
                   {archives.map((archive) => (
@@ -1717,7 +1744,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                     <h3 className="mt-4 text-lg font-semibold">{columnTitle || 'タイトル未入力'}</h3>
                     <p className="mt-2 text-sm text-muted-foreground">表示順 {columnDisplayOrder} / {columnPublishAt || '即時公開または未設定'} / {columnAuthorName || '著者未設定'}</p>
                     <p className="mt-4 text-sm leading-7 text-muted-foreground">{columnSummary || '要約未入力'}</p>
-                    <Separator className="my-4" />
+                    <Separator className="my-4 bg-secondary" />
                     <div className="space-y-3 text-sm leading-7">
                       {previewParagraphs.length === 0 ? <p className="text-muted-foreground">本文未入力</p> : previewParagraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
                     </div>

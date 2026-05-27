@@ -12,7 +12,7 @@ export async function AppHeader() {
   const isMember = currentUser?.role === 'member';
   const isAdmin = currentUser?.role === 'admin';
   const roleLabel = isAdmin ? '管理者' : isMember ? 'メンバー' : null;
-  console.log('currentUser in AppHeader:', currentUser);
+  // console.log('currentUser in AppHeader:', currentUser);
 
   return (
     <header className="h-15 fixed group z-10 w-full bg-background/90">
