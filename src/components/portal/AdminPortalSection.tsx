@@ -777,21 +777,6 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                         {group.icon}
                         <span className="truncate">{group.label}</span>
                       </button>
-                      {/* <Tooltip.Provider>
-                        <Tooltip.Root>
-                          <Tooltip.Trigger asChild>
-                            <button className="IconButton">
-                              <MessageCircleQuestionMark size={14} />
-                            </button>
-                          </Tooltip.Trigger>
-                          <Tooltip.Portal>
-                            <Tooltip.Content className="TooltipContent" sideOffset={5}>
-                              {group.tooltip ?? 'このセクションの内容を表示します。'}
-                              <Tooltip.Arrow className="TooltipArrow" />
-                            </Tooltip.Content>
-                          </Tooltip.Portal>
-                        </Tooltip.Root>
-                      </Tooltip.Provider> */}
                       <button
                         type="button"
                         aria-expanded={isOpen}
@@ -1124,7 +1109,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                           </div>
                         ) : null}
                         <div className="flex gap-2 text-secondary">
-                          <p className="text-xs">保存済みセッションセット: <span className="font-semibold">{savedSessionSet ? savedSessionSet.title : 'なし'}</span></p>
+                          <p className="text-xs">保存済みセッションセット: <span className={`${savedSessionSet ? 'text-accent' : ''} font-semibold`}>{savedSessionSet ? savedSessionSet.title : 'なし'}</span></p>
                           <Tooltip.Provider>
                             <Tooltip.Root>
                               <Tooltip.Trigger asChild>
