@@ -3,6 +3,46 @@ import nodemailer from 'nodemailer';
 import { prisma } from '@/lib/prisma';
 
 let cachedTransport: nodemailer.Transporter | null = null;
+let mailSendQueue: Promise<void> = Promise.resolve();
+
+function isSmtpConfigured() {
+  return Boolean(process.env.SMTP_HOST && process.env.SMTP_PORT);
+}
+
+function getMailSendIntervalMs() {
+  const rawValue = process.env.MAIL_SEND_INTERVAL_MS?.trim();
+  if (!rawValue) {
+    return isSmtpConfigured() ? 1000 : 0;
+  }
+
+  const parsedValue = Number(rawValue);
+  if (!Number.isFinite(parsedValue) || parsedValue < 0) {
+    return isSmtpConfigured() ? 1000 : 0;
+  }
+
+  return parsedValue;
+}
+
+function wait(ms: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+async function enqueueMailSend<T>(task: () => Promise<T>) {
+  const run = mailSendQueue.catch(() => undefined).then(task);
+
+  mailSendQueue = run
+    .then(async () => {
+      const intervalMs = getMailSendIntervalMs();
+      if (intervalMs > 0) {
+        await wait(intervalMs);
+      }
+    })
+    .catch(() => undefined);
+
+  return run;
+}
 
 function getMailTestRedirectTo() {
   const value = process.env.MAIL_TEST_REDIRECT_TO?.trim();
@@ -40,7 +80,7 @@ function buildTransport() {
     return cachedTransport;
   }
 
-  if (process.env.SMTP_HOST && process.env.SMTP_PORT) {
+  if (isSmtpConfigured()) {
     cachedTransport = nodemailer.createTransport({
       pool: true,
       host: process.env.SMTP_HOST,
@@ -91,13 +131,15 @@ export async function sendMail(input: SendMailInput) {
   });
 
   try {
-    const info = await transporter.sendMail({
-      from,
-      to: delivery.actualTo,
-      subject: delivery.subject,
-      text: delivery.text,
-      headers: delivery.headers,
-    });
+    const info = await enqueueMailSend(() =>
+      transporter.sendMail({
+        from,
+        to: delivery.actualTo,
+        subject: delivery.subject,
+        text: delivery.text,
+        headers: delivery.headers,
+      }),
+    );
 
     await prisma.mailLog.update({
       where: { id: mailLog.id },

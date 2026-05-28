@@ -574,6 +574,7 @@ SMTP_SECURE="false"
 SMTP_USER=""
 SMTP_PASS=""
 MAIL_TEST_REDIRECT_TO=""
+MAIL_SEND_INTERVAL_MS="1000"
 ```
 
 `/api/auth/forgot-password` は nodemailer を使います。`SMTP_HOST` などが未設定の開発環境では `jsonTransport` で動作し、レスポンスに `resetToken` を返します。SMTP を設定すると実メール送信に切り替わります。
@@ -585,6 +586,12 @@ MAIL_TEST_REDIRECT_TO="your-address@example.com"
 ```
 
 この設定時は bulk 通知でもメンバー人数分のメールが同じ inbox に届くため、「全員に送ったときの通数」「件名」「本文差し込み」を本番に近い形で確認できます。通常運用前には必ず空文字へ戻してください。
+
+SMTP サーバの同時接続数やレート制限を避けるため、送信は共通キューで直列化し、既定では 1 通ごとに 1000ms 待機します。待機時間は `MAIL_SEND_INTERVAL_MS` で調整できます。
+
+```env
+MAIL_SEND_INTERVAL_MS="1000"
+```
 
 3. PostgreSQL を起動
 
