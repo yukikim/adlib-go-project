@@ -987,7 +987,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                                           <SelectTrigger id="admin-edit-event-status" className="w-full">
                                             <SelectValue placeholder="ステータスを選択" />
                                           </SelectTrigger>
-                                          <SelectContent>
+                                          <SelectContent className="bg-gray-200">
                                             <SelectItem value="draft">下書き</SelectItem>
                                             <SelectItem value="announced">告知</SelectItem>
                                             <SelectItem value="recruiting_round1">募集（ラウンド1）</SelectItem>
