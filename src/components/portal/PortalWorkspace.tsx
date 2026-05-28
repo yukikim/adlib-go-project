@@ -111,7 +111,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
   }, []);
 
   return (
-    <main className={view === "admin" ? "mx-0 min-w-lvw flex w-full flex-col mt-15" : "mx-auto flex max-w-6xl flex-col px-6 py-8 md:px-8"}>
+    <main className={view === "admin" ? "mx-0 min-w-lvw flex w-full flex-col mt-15" : "mx-auto flex max-w-6xl flex-col px-2 xl:px-6 py-8 md:px-8 mt-15"}>
       {/* <MainHeader
         view={currentUser?.role === 'admin' ? '管理者' : 'メンバー'}
         currentUser={{ role: currentUser?.role, displayName: admin.adminMemberDisplayName }}
@@ -124,7 +124,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
         <Badge variant="outline" className="w-fit">
           {view === "admin" ? "Admin" : view === "member" ? "Member" : "Auth"}
         </Badge>
-        <h1 className="text-3xl font-semibold tracking-tight">{view === "admin" ? "管理ダッシュボード" : view === "member" ? "メンバーページ" : view === "signup" ? "メンバーサインアップ" : view === "admin-signin" ? "管理者サインイン" : "メンバーサインイン"}</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">{view === "admin" ? "管理ダッシュボード" : view === "member" ? "メンバーマイページ" : view === "signup" ? "メンバーサインアップ" : view === "admin-signin" ? "管理者サインイン" : "メンバーサインイン"}</h1>
       </div>
       {message && (
         <Alert className="brand-success-surface mt-4">

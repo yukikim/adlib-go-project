@@ -90,7 +90,7 @@ export function AppHeaderNav({ isSignedIn, isMember, isAdmin, children }: AppHea
                 ) : null}
                 {isMember ? (
                   <Link href="/member" onClick={closeMenu}>
-                    メンバー
+                    マイページ
                   </Link>
                 ) : null}
                 {isAdmin ? (
