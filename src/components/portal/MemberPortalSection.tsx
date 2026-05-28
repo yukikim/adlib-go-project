@@ -214,6 +214,20 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
   const canPostEventComment = selectedMemberEvent?.status === 'published';
   const canRateSelectedEvent = selectedMemberEvent?.status === 'rating';
 
+  const announcedEvents = sessionEvents.filter((event) => event.status === 'announced');
+  const round1RecruitingEvents = sessionEvents.filter((event) => event.status === 'recruiting_round1');
+  const round2RecruitingEvents = sessionEvents.filter((event) => event.status === 'recruiting_round2');
+  const publishedEvents = sessionEvents.filter((event) => event.status === 'published');
+  const ratingEvents = sessionEvents.filter((event) => event.status === 'rating');
+  const completedEvents = sessionEvents.filter((event) => event.status === 'closed');
+
+  console.log('announcedEvents:', announcedEvents);
+  console.log('round1RecruitingEvents:', round1RecruitingEvents);
+  console.log('round2RecruitingEvents:', round2RecruitingEvents);
+  console.log('publishedEvents:', publishedEvents);
+  console.log('ratingEvents:', ratingEvents);
+  console.log('completedEvents:', completedEvents);
+
   return (
     <>
 
@@ -243,11 +257,11 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
 
         <Card>
           <CardTitle className="text-sm font-semibold text-on-primary bg-neutral-50 px-4 py-1">開催予定イベント</CardTitle>
-          <CardDescription>開催を予定しているベントです。<br />※日時は変更される場合があります。</CardDescription>
+          <CardDescription className={announcedEvents.length === 0 ? 'hidden' : ''}>開催を予定しているベントです。<br />※日時は変更される場合があります。</CardDescription>
 
-          {scheduledEvents.length === 0 ? <p className="text-sm text-muted-foreground">表示できる開催予定イベントはありません。</p> : (
+          {announcedEvents.length === 0 ? <p className="text-sm text-gray-50 bg-gray-400 p-2">表示できる開催予定イベントはありません。</p> : (
             <ul className="space-y-3">
-              {scheduledEvents.map((event) => (
+              {announcedEvents.map((event) => (
                 <li key={event.id} className="rounded-xl border bg-background/60 p-4">
                   <div className="flex flex-wrap items-center gap-2">
                     <strong className="text-sm text-slate-600">{event.title}</strong>
@@ -263,10 +277,10 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
 
         <Card>
           <CardTitle className="text-sm font-semibold text-orange-600 bg-neutral-50 px-4 py-1">参加募集中イベント(ラウンド1)</CardTitle>
-          <CardDescription>参加可否とリクエスト曲を募っています。</CardDescription>
-          {scheduledEvents.length === 0 ? <p className="text-sm text-muted-foreground">表示できる参加募集中イベントはありません。</p> : (
+          <CardDescription className={round1RecruitingEvents.length === 0 ? 'hidden' : ''}>参加可否とリクエスト曲を募っています。</CardDescription>
+          {round1RecruitingEvents.length === 0 ? <p className="text-sm text-gray-50 bg-gray-400 p-2">表示できる参加募集中イベントはありません。</p> : (
             <ul className="space-y-3">
-              {scheduledEvents.map((event) => (
+              {round1RecruitingEvents.map((event) => (
                 <li key={event.id} className="rounded-xl border bg-background/60 p-4">
                   <div className="flex flex-wrap items-center gap-2">
                     <strong className="text-sm text-orange-600">{event.title}</strong>
@@ -282,10 +296,10 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
 
         <Card>
           <CardTitle className="text-sm font-semibold text-pink-600 bg-neutral-50 px-4 py-1">追加リクエスト曲募集中イベント(ラウンド2)</CardTitle>
-          <CardDescription>ラウンド1のリクエスト曲に加えて追加のリクエスト曲を募っています。</CardDescription>
-          {scheduledEvents.length === 0 ? <p className="text-sm text-muted-foreground">表示できる追加リクエスト曲募集中イベントはありません。</p> : (
+          <CardDescription className={round2RecruitingEvents.length === 0 ? 'hidden' : ''}>ラウンド1のリクエスト曲に加えて追加のリクエスト曲を募っています。</CardDescription>
+          {round2RecruitingEvents.length === 0 ? <p className="text-sm text-gray-50 bg-gray-400 p-2">表示できる追加リクエスト曲募集中イベントはありません。</p> : (
             <ul className="space-y-3">
-              {scheduledEvents.map((event) => (
+              {round2RecruitingEvents.map((event) => (
                 <li key={event.id} className="rounded-xl border bg-background/60 p-4">
                   <div className="flex flex-wrap items-center gap-2">
                     <strong className="text-sm text-pink-600">{event.title}</strong>
@@ -301,10 +315,10 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
 
         <Card>
           <CardTitle className="text-sm font-semibold text-sky-600 bg-neutral-50 px-4 py-1">セッションセット確定イベント(公開)</CardTitle>
-          <CardDescription>演奏曲とメンバーが確定したイベントです。</CardDescription>
-          {scheduledEvents.length === 0 ? <p className="text-sm text-muted-foreground">表示できる確定イベントはありません。</p> : (
+          <CardDescription className={publishedEvents.length === 0 ? 'hidden' : ''}>演奏曲とメンバーが確定したイベントです。</CardDescription>
+          {publishedEvents.length === 0 ? <p className="text-sm text-gray-50 bg-gray-400 p-2">表示できる確定イベントはありません。</p> : (
             <ul className="space-y-3">
-              {scheduledEvents.map((event) => (
+              {publishedEvents.map((event) => (
                 <li key={event.id} className="rounded-xl border bg-background/60 p-4">
                   <div className="flex flex-wrap items-center gap-2">
                     <strong className="text-sm text-sky-600">{event.title}</strong>
@@ -320,10 +334,10 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
 
         <Card>
           <CardTitle className="text-sm font-semibold text-emerald-600 bg-neutral-50 px-4 py-1">レイティング受付中イベント</CardTitle>
-          <CardDescription>レイティングや感想をコメント出来るイベントです。</CardDescription>
-          {scheduledEvents.length === 0 ? <p className="text-sm text-muted-foreground">表示できるレイティング受付中イベントはありません。</p> : (
+          <CardDescription className={ratingEvents.length === 0 ? 'hidden' : ''}>レイティングや感想をコメント出来るイベントです。</CardDescription>
+          {ratingEvents.length === 0 ? <p className="text-sm text-gray-50 bg-gray-400 p-2">表示できるレイティング受付中イベントはありません。</p> : (
             <ul className="space-y-3">
-              {scheduledEvents.map((event) => (
+              {ratingEvents.map((event) => (
                 <li key={event.id} className="rounded-xl border bg-background/60 p-4">
                   <div className="flex flex-wrap items-center gap-2">
                     <strong className="text-sm text-emerald-600">{event.title}</strong>
@@ -339,10 +353,10 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
 
         <Card>
           <CardTitle className="text-sm font-semibold text-neutral-600 bg-neutral-50 px-4 py-1">終了イベント</CardTitle>
-          <CardDescription>既に終了したイベントです。</CardDescription>
-          {scheduledEvents.length === 0 ? <p className="text-sm text-muted-foreground">表示できる終了イベントはありません。</p> : (
+          <CardDescription className={completedEvents.length === 0 ? 'hidden' : ''}>既に終了したイベントです。</CardDescription>
+          {completedEvents.length === 0 ? <p className="text-sm text-gray-50 bg-gray-400 p-2">表示できる終了イベントはありません。</p> : (
             <ul className="space-y-3">
-              {scheduledEvents.map((event) => (
+              {completedEvents.map((event) => (
                 <li key={event.id} className="rounded-xl border bg-background/60 p-4">
                   <div className="flex flex-wrap items-center gap-2">
                     <strong className="text-sm text-neutral-600">{event.title}</strong>
