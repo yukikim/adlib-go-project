@@ -18,7 +18,7 @@ export async function AppHeader() {
     <header className="h-15 fixed group z-10 w-full bg-background/90">
       <AppHeaderNav isSignedIn={isSignedIn} isMember={isMember} isAdmin={isAdmin}>
       {currentUser ? (
-          <div className="flex gap-2 items-center text-gray-600">
+          <div className="flex gap-2 flex-wrap items-center text-gray-600">
             {roleLabel ? <p className="text-xs font-medium tracking-wide">{roleLabel}</p> : null}
             <p className="text-xs">{displayName}</p>
             <p className="text-xs">{currentUser.email}</p>
