@@ -1547,7 +1547,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                             <SelectTrigger id="admin-member-main-instrument" className="w-full">
                               <SelectValue placeholder="メイン楽器を選択" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="bg-gray-200">
                               <SelectItem value="drum">drum</SelectItem>
                               <SelectItem value="bass">bass</SelectItem>
                               <SelectItem value="piano">piano</SelectItem>
@@ -1568,7 +1568,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                             <SelectTrigger id="admin-member-area" className="w-full">
                               <SelectValue placeholder="居住地域を選択" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="bg-gray-200">
                               <SelectItem value={NONE_VALUE}>居住地域を選択</SelectItem>
                               {PREFECTURE_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
                             </SelectContent>
@@ -1579,7 +1579,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                             <SelectTrigger id="admin-member-gender" className="w-full">
                               <SelectValue placeholder="性別を選択" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="bg-gray-200">
                               <SelectItem value={NONE_VALUE}>性別を選択</SelectItem>
                               {GENDER_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
                             </SelectContent>
@@ -1590,7 +1590,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                             <SelectTrigger id="admin-member-age-range" className="w-full">
                               <SelectValue placeholder="年代を選択" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="bg-gray-200">
                               <SelectItem value={NONE_VALUE}>年代を選択</SelectItem>
                               {AGE_RANGE_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
                             </SelectContent>
@@ -1604,7 +1604,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                             <SelectTrigger id="admin-member-role" className="w-full">
                               <SelectValue placeholder="ロールを選択" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="bg-gray-200">
                               <SelectItem value="member">member</SelectItem>
                               <SelectItem value="admin">admin</SelectItem>
                             </SelectContent>
@@ -1615,7 +1615,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                             <SelectTrigger id="admin-member-status" className="w-full">
                               <SelectValue placeholder="ステータスを選択" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="bg-gray-200">
                               <SelectItem value="active">active</SelectItem>
                               <SelectItem value="suspended">suspended</SelectItem>
                               <SelectItem value="invited">invited</SelectItem>
@@ -1664,7 +1664,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                         <SelectTrigger id="admin-column-select" className="w-full">
                           <SelectValue placeholder="新規コラム" />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="bg-gray-200">
                           <SelectItem value={NONE_VALUE}>新規コラム</SelectItem>
                           {columns.map((column) => (
                             <SelectItem key={column.id} value={column.slug}>{column.title}</SelectItem>
@@ -1765,8 +1765,25 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
               </div>
             </Section>
 
-            <Section sectionId="admin-activity" title="アクティビティ / 通知" description="運営の更新履歴、通知作成、送信ログを確認できます。" className={cn(!isGroupVisible('admin-activity') && 'hidden')}>
-              <div className={cn('grid gap-4 xl:grid-cols-[1fr_360px]', activeGroupId === 'admin-activity' && activeChildId && 'xl:grid-cols-1')}>
+            <Section sectionId="admin-activity" title="アクティビティ / 通知" description="運営の更新履歴、通知作成、送信ログを確認できます。" className={cn('mb-4', !isGroupVisible('admin-activity') && 'hidden')}>
+              <div className={cn('flex gap-4 flex-col xl:flex-row items-start', activeGroupId === 'admin-activity' && activeChildId && 'xl:grid-cols-1')}>
+                <div id="admin-announcement-create" className={cn('grid scroll-mt-24 gap-4 rounded-xl border p-4 xl:w-6/12', !isChildVisible('admin-activity', 'admin-announcement-create') && 'hidden')}>
+                  <div className="space-y-1">
+                    <h3 className="font-medium">お知らせ作成</h3>
+                    <p className="text-sm text-muted-foreground">メンバー向け通知を新規作成します。</p>
+                  </div>
+                  <Field htmlFor="admin-announcement-title" label="タイトル">
+                    <Input id="admin-announcement-title" type="text" placeholder="タイトル" value={announcementTitle} onChange={(event) => setAnnouncementTitle(event.target.value)} />
+                  </Field>
+                  <Field htmlFor="admin-announcement-body" label="本文">
+                    <Textarea id="admin-announcement-body" rows={5} placeholder="本文" value={announcementBody} onChange={(event) => setAnnouncementBody(event.target.value)} />
+                  </Field>
+                  <div className="flex items-center gap-3 rounded-xl border px-3 py-2">
+                    <Checkbox id="admin-announcement-published" checked={announcementPublished} onCheckedChange={(checked) => setAnnouncementPublished(checked === true)} />
+                    <Label htmlFor="admin-announcement-published">公開する</Label>
+                  </div>
+                  <Button type="button" onClick={onCreateAnnouncement} disabled={loading} className="w-fit">お知らせ作成</Button>
+                </div>
                 <div className={cn('space-y-4', !isChildVisible('admin-activity', 'admin-activity-log') && !isChildVisible('admin-activity', 'admin-mail-log') && 'hidden')}>
                   <div id="admin-activity-log" className={cn('rounded-xl border p-4 scroll-mt-24', !isChildVisible('admin-activity', 'admin-activity-log') && 'hidden')}>
                     <h3 className="font-medium">アクティビティ履歴</h3>
@@ -1803,23 +1820,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                   </div>
                 </div>
 
-                <div id="admin-announcement-create" className={cn('grid scroll-mt-24 gap-4 rounded-xl border p-4', !isChildVisible('admin-activity', 'admin-announcement-create') && 'hidden')}>
-                  <div className="space-y-1">
-                    <h3 className="font-medium">お知らせ作成</h3>
-                    <p className="text-sm text-muted-foreground">メンバー向け通知を新規作成します。</p>
-                  </div>
-                  <Field htmlFor="admin-announcement-title" label="タイトル">
-                    <Input id="admin-announcement-title" type="text" placeholder="タイトル" value={announcementTitle} onChange={(event) => setAnnouncementTitle(event.target.value)} />
-                  </Field>
-                  <Field htmlFor="admin-announcement-body" label="本文">
-                    <Textarea id="admin-announcement-body" rows={5} placeholder="本文" value={announcementBody} onChange={(event) => setAnnouncementBody(event.target.value)} />
-                  </Field>
-                  <div className="flex items-center gap-3 rounded-xl border px-3 py-2">
-                    <Checkbox id="admin-announcement-published" checked={announcementPublished} onCheckedChange={(checked) => setAnnouncementPublished(checked === true)} />
-                    <Label htmlFor="admin-announcement-published">公開する</Label>
-                  </div>
-                  <Button type="button" onClick={onCreateAnnouncement} disabled={loading} className="w-fit">お知らせ作成</Button>
-                </div>
+
               </div>
             </Section>
           </div>

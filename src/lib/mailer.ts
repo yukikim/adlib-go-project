@@ -2,6 +2,8 @@ import nodemailer from 'nodemailer';
 
 import { prisma } from '@/lib/prisma';
 
+let cachedTransport: nodemailer.Transporter | null = null;
+
 function getMailTestRedirectTo() {
   const value = process.env.MAIL_TEST_REDIRECT_TO?.trim();
   return value ? value : null;
@@ -34,10 +36,16 @@ function buildMailDelivery(input: SendMailInput) {
 }
 
 function buildTransport() {
+  if (cachedTransport) {
+    return cachedTransport;
+  }
+
   if (process.env.SMTP_HOST && process.env.SMTP_PORT) {
-    return nodemailer.createTransport({
+    cachedTransport = nodemailer.createTransport({
+      pool: true,
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT),
+      maxConnections: 1,
       secure: process.env.SMTP_SECURE === 'true',
       auth:
         process.env.SMTP_USER && process.env.SMTP_PASS
@@ -47,11 +55,15 @@ function buildTransport() {
             }
           : undefined,
     });
+
+    return cachedTransport;
   }
 
-  return nodemailer.createTransport({
+  cachedTransport = nodemailer.createTransport({
     jsonTransport: true,
   });
+
+  return cachedTransport;
 }
 
 type SendMailInput = {
