@@ -3,6 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Card, CardTitle, CardDescription } from '@/components/ui/card';
 import {
   Select,
   SelectContent,
@@ -215,96 +216,16 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
 
   return (
     <>
-      <Section title="プロフィール" description="プロフィール更新とパスワード変更をこの画面で行います。">
-        <div className="mb-4 flex flex-wrap items-center gap-2">
-          <Badge variant="outline">{currentUser?.role ?? 'member'}</Badge>
-          <span className="text-sm text-muted-foreground">{currentUser?.email}</span>
-        </div>
-        <form className="grid max-w-3xl gap-4 md:grid-cols-2" onSubmit={handleProfileSubmit}>
-          <Field htmlFor="member-profile-display-name" label="表示名" className="md:col-span-2">
-            <Input id="member-profile-display-name" type="text" placeholder="表示名" value={profileDisplayName} onChange={(event) => onProfileDisplayNameChange(event.target.value)} />
-          </Field>
-          <Field label="メイン楽器" htmlFor="member-profile-main-instrument">
-            <Select value={profileMainInstrument} onValueChange={(value) => onProfileMainInstrumentChange(value as Instrument)}>
-              <SelectTrigger id="member-profile-main-instrument" className="w-full">
-                <SelectValue placeholder="メイン楽器を選択" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="drum">drum</SelectItem>
-                <SelectItem value="bass">bass</SelectItem>
-                <SelectItem value="piano">piano</SelectItem>
-                <SelectItem value="front">front</SelectItem>
-                <SelectItem value="vocal">vocal</SelectItem>
-              </SelectContent>
-            </Select>
-          </Field>
-          <Field htmlFor="member-profile-nickname" label="ニックネーム">
-            <Input id="member-profile-nickname" type="text" placeholder="ニックネーム" value={profileNickname} onChange={(event) => onProfileNicknameChange(event.target.value)} />
-          </Field>
-          {profileMainInstrument === 'front' ? (
-            <Field htmlFor="member-profile-sub-instrument" label="演奏楽器">
-              <Input id="member-profile-sub-instrument" type="text" placeholder="演奏楽器" value={profileSubInstrument} onChange={(event) => onProfileSubInstrumentChange(event.target.value)} />
-            </Field>
-          ) : (
-            <div className="hidden md:block" />
-          )}
-          <Field label="居住地域" htmlFor="member-profile-area">
-            <Select value={profileArea || NONE_VALUE} onValueChange={(value) => onProfileAreaChange(value === NONE_VALUE ? '' : value)}>
-              <SelectTrigger id="member-profile-area" className="w-full">
-                <SelectValue placeholder="居住地域を選択" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={NONE_VALUE}>居住地域を選択</SelectItem>
-                {PREFECTURE_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
-              </SelectContent>
-            </Select>
-          </Field>
-          <Field label="性別" htmlFor="member-profile-gender">
-            <Select value={profileGender || NONE_VALUE} onValueChange={(value) => onProfileGenderChange(value === NONE_VALUE ? '' : value)}>
-              <SelectTrigger id="member-profile-gender" className="w-full">
-                <SelectValue placeholder="性別を選択" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={NONE_VALUE}>性別を選択</SelectItem>
-                {GENDER_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
-              </SelectContent>
-            </Select>
-          </Field>
-          <Field label="年代" htmlFor="member-profile-age-range">
-            <Select value={profileAgeRange || NONE_VALUE} onValueChange={(value) => onProfileAgeRangeChange(value === NONE_VALUE ? '' : value)}>
-              <SelectTrigger id="member-profile-age-range" className="w-full">
-                <SelectValue placeholder="年代を選択" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={NONE_VALUE}>年代を選択</SelectItem>
-                {AGE_RANGE_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
-              </SelectContent>
-            </Select>
-          </Field>
-          <Field htmlFor="member-profile-bio" label="自己紹介" className="md:col-span-2">
-            <Textarea id="member-profile-bio" rows={4} placeholder="自己紹介" value={profileBio} onChange={(event) => onProfileBioChange(event.target.value)} />
-          </Field>
-          <Field htmlFor="member-profile-current-password" label="現在のパスワード">
-            <Input id="member-profile-current-password" type="password" autoComplete="current-password" placeholder="現在のパスワード（変更時のみ）" value={profileCurrentPassword} onChange={(event) => onProfileCurrentPasswordChange(event.target.value)} />
-          </Field>
-          <Field htmlFor="member-profile-new-password" label="新しいパスワード">
-            <Input id="member-profile-new-password" type="password" autoComplete="new-password" placeholder="新しいパスワード（変更時のみ）" value={profileNewPassword} onChange={(event) => onProfileNewPasswordChange(event.target.value)} />
-          </Field>
-          <Field htmlFor="member-profile-new-password-confirm" label="新しいパスワード確認" className="md:col-span-2">
-            <Input id="member-profile-new-password-confirm" type="password" autoComplete="new-password" placeholder="新しいパスワード確認" value={profileNewPasswordConfirm} onChange={(event) => onProfileNewPasswordConfirmChange(event.target.value)} />
-          </Field>
-          <div className="flex flex-wrap gap-3 md:col-span-2">
-            <Button type="submit" disabled={loading}>プロフィール保存</Button>
-            <Button type="button" variant="outline" onClick={onSignOut} disabled={loading}>サインアウト</Button>
-          </div>
-        </form>
-      </Section>
 
-      <Section title="お知らせ" description="運営からの告知を確認できます。">
-        {announcements.length === 0 ? <p className="text-sm text-muted-foreground">公開中のお知らせはありません。</p> : (
+
+      <Card className="rounded-xl border bg-secondary/80 p-4 border-none">
+        <CardTitle className="text-2xl font-semibold text-on-secondary">お知らせ</CardTitle>
+          <CardDescription className="text-on-secondary">運営からのお知らせです。</CardDescription>
+
+        {announcements.length === 0 ? <p className="text-sm text-on-secondary">公開中のお知らせはありません。</p> : (
           <ul className="space-y-3">
             {announcements.map((announcement) => (
-              <li key={announcement.id} className="rounded-xl border bg-background/60 p-4">
+              <li key={announcement.id} className="rounded-xl border bg-neutral-100 p-4">
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge variant="secondary">お知らせ</Badge>
                   {announcement.publishedAt ? <span className="text-sm text-muted-foreground">{new Date(announcement.publishedAt).toLocaleDateString('ja-JP')}</span> : null}
@@ -315,8 +236,129 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             ))}
           </ul>
         )}
-      </Section>
+      </Card>
 
+      <Card id="event-info" className="rounded-xl border bg-primary p-4 my-4">
+        <CardTitle className="text-2xl font-semibold text-on-primary">イベント情報</CardTitle>
+
+        <Card>
+          <CardTitle className="text-sm font-semibold text-on-primary bg-neutral-50 px-4 py-1">開催予定イベント</CardTitle>
+          <CardDescription>開催を予定しているベントです。<br />※日時は変更される場合があります。</CardDescription>
+
+          {scheduledEvents.length === 0 ? <p className="text-sm text-muted-foreground">表示できる開催予定イベントはありません。</p> : (
+            <ul className="space-y-3">
+              {scheduledEvents.map((event) => (
+                <li key={event.id} className="rounded-xl border bg-background/60 p-4">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <strong className="text-sm text-slate-600">{event.title}</strong>
+                    <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
+                  </div>
+                  <p className="mt-2 text-sm text-muted-foreground">{new Date(event.eventDate).toLocaleDateString('ja-JP')} / {event.venue}</p>
+                  {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
+                </li>
+              ))}
+            </ul>
+          )}
+        </Card>
+
+        <Card>
+          <CardTitle className="text-sm font-semibold text-orange-600 bg-neutral-50 px-4 py-1">参加募集中イベント(ラウンド1)</CardTitle>
+          <CardDescription>参加可否とリクエスト曲を募っています。</CardDescription>
+          {scheduledEvents.length === 0 ? <p className="text-sm text-muted-foreground">表示できる参加募集中イベントはありません。</p> : (
+            <ul className="space-y-3">
+              {scheduledEvents.map((event) => (
+                <li key={event.id} className="rounded-xl border bg-background/60 p-4">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <strong className="text-sm text-orange-600">{event.title}</strong>
+                    <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
+                  </div>
+                  <p className="mt-2 text-sm text-muted-foreground">{new Date(event.eventDate).toLocaleDateString('ja-JP')} / {event.venue}</p>
+                  {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
+                </li>
+              ))}
+            </ul>
+          )}
+        </Card>
+
+        <Card>
+          <CardTitle className="text-sm font-semibold text-pink-600 bg-neutral-50 px-4 py-1">追加リクエスト曲募集中イベント(ラウンド2)</CardTitle>
+          <CardDescription>ラウンド1のリクエスト曲に加えて追加のリクエスト曲を募っています。</CardDescription>
+          {scheduledEvents.length === 0 ? <p className="text-sm text-muted-foreground">表示できる追加リクエスト曲募集中イベントはありません。</p> : (
+            <ul className="space-y-3">
+              {scheduledEvents.map((event) => (
+                <li key={event.id} className="rounded-xl border bg-background/60 p-4">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <strong className="text-sm text-pink-600">{event.title}</strong>
+                    <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
+                  </div>
+                  <p className="mt-2 text-sm text-muted-foreground">{new Date(event.eventDate).toLocaleDateString('ja-JP')} / {event.venue}</p>
+                  {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
+                </li>
+              ))}
+            </ul>
+          )}
+        </Card>
+
+        <Card>
+          <CardTitle className="text-sm font-semibold text-sky-600 bg-neutral-50 px-4 py-1">セッションセット確定イベント(公開)</CardTitle>
+          <CardDescription>演奏曲とメンバーが確定したイベントです。</CardDescription>
+          {scheduledEvents.length === 0 ? <p className="text-sm text-muted-foreground">表示できる確定イベントはありません。</p> : (
+            <ul className="space-y-3">
+              {scheduledEvents.map((event) => (
+                <li key={event.id} className="rounded-xl border bg-background/60 p-4">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <strong className="text-sm text-sky-600">{event.title}</strong>
+                    <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
+                  </div>
+                  <p className="mt-2 text-sm text-muted-foreground">{new Date(event.eventDate).toLocaleDateString('ja-JP')} / {event.venue}</p>
+                  {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
+                </li>
+              ))}
+            </ul>
+          )}
+        </Card>
+
+        <Card>
+          <CardTitle className="text-sm font-semibold text-emerald-600 bg-neutral-50 px-4 py-1">レイティング受付中イベント</CardTitle>
+          <CardDescription>レイティングや感想をコメント出来るイベントです。</CardDescription>
+          {scheduledEvents.length === 0 ? <p className="text-sm text-muted-foreground">表示できるレイティング受付中イベントはありません。</p> : (
+            <ul className="space-y-3">
+              {scheduledEvents.map((event) => (
+                <li key={event.id} className="rounded-xl border bg-background/60 p-4">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <strong className="text-sm text-emerald-600">{event.title}</strong>
+                    <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
+                  </div>
+                  <p className="mt-2 text-sm text-muted-foreground">{new Date(event.eventDate).toLocaleDateString('ja-JP')} / {event.venue}</p>
+                  {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
+                </li>
+              ))}
+            </ul>
+          )}
+        </Card>
+
+        <Card>
+          <CardTitle className="text-sm font-semibold text-neutral-600 bg-neutral-50 px-4 py-1">終了イベント</CardTitle>
+          <CardDescription>既に終了したイベントです。</CardDescription>
+          {scheduledEvents.length === 0 ? <p className="text-sm text-muted-foreground">表示できる終了イベントはありません。</p> : (
+            <ul className="space-y-3">
+              {scheduledEvents.map((event) => (
+                <li key={event.id} className="rounded-xl border bg-background/60 p-4">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <strong className="text-sm text-neutral-600">{event.title}</strong>
+                    <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
+                  </div>
+                  <p className="mt-2 text-sm text-muted-foreground">{new Date(event.eventDate).toLocaleDateString('ja-JP')} / {event.venue}</p>
+                  {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
+                </li>
+              ))}
+            </ul>
+          )}
+        </Card>
+
+      </Card>
+
+<div className="hidden">
       <Section title="メンバー一覧 / 詳細" description="参加メンバーのプロフィールと最近の評価履歴を確認できます。">
         <div className="grid gap-4 xl:grid-cols-[320px_1fr]">
           <ul className="space-y-2">
@@ -357,23 +399,9 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
           </div>
         </div>
       </Section>
+      </div>
 
-      <Section title="開催予定イベント" description="告知中から公開中までのイベントを確認できます。">
-        {scheduledEvents.length === 0 ? <p className="text-sm text-muted-foreground">表示できる開催予定イベントはありません。</p> : (
-          <ul className="space-y-3">
-            {scheduledEvents.map((event) => (
-              <li key={event.id} className="rounded-xl border bg-background/60 p-4">
-                <div className="flex flex-wrap items-center gap-2">
-                  <strong className="text-base">{event.title}</strong>
-                  <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
-                </div>
-                <p className="mt-2 text-sm text-muted-foreground">{new Date(event.eventDate).toLocaleDateString('ja-JP')} / {event.venue}</p>
-                {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
-              </li>
-            ))}
-          </ul>
-        )}
-      </Section>
+
 
       <Section title="セッションエントリー" description="受付中のラウンドにあわせて希望曲を登録します。">
         <Alert variant={entryState.canSubmit ? 'default' : 'destructive'}>
@@ -606,6 +634,90 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             ))}
           </div>
         )}
+      </Section>
+      <Section title="プロフィール" description="プロフィール更新とパスワード変更をこの画面で行います。">
+        <div className="mb-4 flex flex-wrap items-center gap-2">
+          <Badge variant="outline">{currentUser?.role ?? 'member'}</Badge>
+          <span className="text-sm text-muted-foreground">{currentUser?.email}</span>
+        </div>
+        <form className="grid max-w-3xl gap-4 md:grid-cols-2" onSubmit={handleProfileSubmit}>
+          <Field htmlFor="member-profile-display-name" label="表示名" className="md:col-span-2">
+            <Input id="member-profile-display-name" type="text" placeholder="表示名" value={profileDisplayName} onChange={(event) => onProfileDisplayNameChange(event.target.value)} />
+          </Field>
+          <Field label="メイン楽器" htmlFor="member-profile-main-instrument">
+            <Select value={profileMainInstrument} onValueChange={(value) => onProfileMainInstrumentChange(value as Instrument)}>
+              <SelectTrigger id="member-profile-main-instrument" className="w-full">
+                <SelectValue placeholder="メイン楽器を選択" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="drum">drum</SelectItem>
+                <SelectItem value="bass">bass</SelectItem>
+                <SelectItem value="piano">piano</SelectItem>
+                <SelectItem value="front">front</SelectItem>
+                <SelectItem value="vocal">vocal</SelectItem>
+              </SelectContent>
+            </Select>
+          </Field>
+          <Field htmlFor="member-profile-nickname" label="ニックネーム">
+            <Input id="member-profile-nickname" type="text" placeholder="ニックネーム" value={profileNickname} onChange={(event) => onProfileNicknameChange(event.target.value)} />
+          </Field>
+          {profileMainInstrument === 'front' ? (
+            <Field htmlFor="member-profile-sub-instrument" label="演奏楽器">
+              <Input id="member-profile-sub-instrument" type="text" placeholder="演奏楽器" value={profileSubInstrument} onChange={(event) => onProfileSubInstrumentChange(event.target.value)} />
+            </Field>
+          ) : (
+            <div className="hidden md:block" />
+          )}
+          <Field label="居住地域" htmlFor="member-profile-area">
+            <Select value={profileArea || NONE_VALUE} onValueChange={(value) => onProfileAreaChange(value === NONE_VALUE ? '' : value)}>
+              <SelectTrigger id="member-profile-area" className="w-full">
+                <SelectValue placeholder="居住地域を選択" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={NONE_VALUE}>居住地域を選択</SelectItem>
+                {PREFECTURE_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
+              </SelectContent>
+            </Select>
+          </Field>
+          <Field label="性別" htmlFor="member-profile-gender">
+            <Select value={profileGender || NONE_VALUE} onValueChange={(value) => onProfileGenderChange(value === NONE_VALUE ? '' : value)}>
+              <SelectTrigger id="member-profile-gender" className="w-full">
+                <SelectValue placeholder="性別を選択" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={NONE_VALUE}>性別を選択</SelectItem>
+                {GENDER_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
+              </SelectContent>
+            </Select>
+          </Field>
+          <Field label="年代" htmlFor="member-profile-age-range">
+            <Select value={profileAgeRange || NONE_VALUE} onValueChange={(value) => onProfileAgeRangeChange(value === NONE_VALUE ? '' : value)}>
+              <SelectTrigger id="member-profile-age-range" className="w-full">
+                <SelectValue placeholder="年代を選択" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={NONE_VALUE}>年代を選択</SelectItem>
+                {AGE_RANGE_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
+              </SelectContent>
+            </Select>
+          </Field>
+          <Field htmlFor="member-profile-bio" label="自己紹介" className="md:col-span-2">
+            <Textarea id="member-profile-bio" rows={4} placeholder="自己紹介" value={profileBio} onChange={(event) => onProfileBioChange(event.target.value)} />
+          </Field>
+          <Field htmlFor="member-profile-current-password" label="現在のパスワード">
+            <Input id="member-profile-current-password" type="password" autoComplete="current-password" placeholder="現在のパスワード（変更時のみ）" value={profileCurrentPassword} onChange={(event) => onProfileCurrentPasswordChange(event.target.value)} />
+          </Field>
+          <Field htmlFor="member-profile-new-password" label="新しいパスワード">
+            <Input id="member-profile-new-password" type="password" autoComplete="new-password" placeholder="新しいパスワード（変更時のみ）" value={profileNewPassword} onChange={(event) => onProfileNewPasswordChange(event.target.value)} />
+          </Field>
+          <Field htmlFor="member-profile-new-password-confirm" label="新しいパスワード確認" className="md:col-span-2">
+            <Input id="member-profile-new-password-confirm" type="password" autoComplete="new-password" placeholder="新しいパスワード確認" value={profileNewPasswordConfirm} onChange={(event) => onProfileNewPasswordConfirmChange(event.target.value)} />
+          </Field>
+          <div className="flex flex-wrap gap-3 md:col-span-2">
+            <Button type="submit" disabled={loading}>プロフィール保存</Button>
+            <Button type="button" variant="outline" onClick={onSignOut} disabled={loading}>サインアウト</Button>
+          </div>
+        </form>
       </Section>
     </>
   );
