@@ -190,7 +190,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     }
     setEditEventTitle(selectedAdminEvent.title);
     setEditEventVenue(selectedAdminEvent.venue);
-    setEditEventDate(selectedAdminEvent.eventDate.slice(0, 10));
+    setEditEventDate(formatDateTimeLocal(selectedAdminEvent.eventDate));
     setEditEventStatus(selectedAdminEvent.status);
     setEditRound1StartAt(formatDateTimeLocal(selectedAdminEvent.round1StartAt));
     setEditRound1EndAt(formatDateTimeLocal(selectedAdminEvent.round1EndAt));
@@ -244,7 +244,12 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     const res = await fetch('/api/session-events', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: eventTitle, venue: eventVenue, eventDate, status: 'draft' }),
+      body: JSON.stringify({
+        title: eventTitle,
+        venue: eventVenue,
+        eventDate: eventDate ? new Date(eventDate).toISOString() : eventDate,
+        status: 'draft',
+      }),
     });
     const json = await parseJson(res);
     if (!res.ok) throw new Error(json.error ?? 'イベント作成に失敗しました');
@@ -259,7 +264,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
       body: JSON.stringify({
         title: editEventTitle,
         venue: editEventVenue,
-        eventDate: editEventDate,
+        eventDate: editEventDate ? new Date(editEventDate).toISOString() : editEventDate,
         status: editEventStatus,
         round1StartAt: editRound1StartAt ? new Date(editRound1StartAt).toISOString() : null,
         round1EndAt: editRound1EndAt ? new Date(editRound1EndAt).toISOString() : null,

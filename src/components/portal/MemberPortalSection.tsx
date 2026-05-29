@@ -16,6 +16,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Section } from './Section';
 import { AGE_RANGE_OPTIONS, GENDER_OPTIONS, PREFECTURE_OPTIONS } from '@/lib/memberProfile';
 import { getSessionEventStatusLabel, isSessionEventFinished } from '@/lib/sessionEventStatus';
+import { formatEventDateTime } from '@/lib/utils';
 import type {
   AnnouncementView,
   AttendanceStatus,
@@ -252,10 +253,10 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
         )}
       </Card>
 
-      <Card id="event-info" className="rounded-xl border bg-primary p-4 my-4">
+      <Card id="event-info" className="rounded-xl border bg-primary p-2 my-4">
         <CardTitle className="text-2xl font-semibold text-on-primary">イベント情報</CardTitle>
 
-        <Card>
+        <Card className="border p-2 bg-on-primary/5">
           <CardTitle className="text-sm font-semibold text-on-primary bg-neutral-50 px-4 py-1">開催予定イベント</CardTitle>
           <CardDescription className={announcedEvents.length === 0 ? 'hidden' : ''}>開催を予定しているベントです。<br />※日時は変更される場合があります。</CardDescription>
 
@@ -267,7 +268,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     <strong className="text-sm text-slate-600">{event.title}</strong>
                     <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
                   </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{new Date(event.eventDate).toLocaleDateString('ja-JP')} / {event.venue}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">{formatEventDateTime(event.eventDate)} / {event.venue}</p>
                   {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
                 </li>
               ))}
@@ -275,18 +276,18 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
           )}
         </Card>
 
-        <Card>
+        <Card className="border p-2 bg-orange-100">
           <CardTitle className="text-sm font-semibold text-orange-600 bg-neutral-50 px-4 py-1">参加募集中イベント(ラウンド1)</CardTitle>
           <CardDescription className={round1RecruitingEvents.length === 0 ? 'hidden' : ''}>参加可否とリクエスト曲を募っています。</CardDescription>
           {round1RecruitingEvents.length === 0 ? <p className="text-sm text-gray-50 bg-gray-400 p-2">表示できる参加募集中イベントはありません。</p> : (
             <ul className="space-y-3">
               {round1RecruitingEvents.map((event) => (
-                <li key={event.id} className="rounded-xl border bg-background/60 p-4">
+                <li key={event.id} className="rounded-xl border bg-background/20 p-4">
                   <div className="flex flex-wrap items-center gap-2">
                     <strong className="text-sm text-orange-600">{event.title}</strong>
                     <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
                   </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{new Date(event.eventDate).toLocaleDateString('ja-JP')} / {event.venue}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">{formatEventDateTime(event.eventDate)} / {event.venue}</p>
                   {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
                 </li>
               ))}
@@ -294,18 +295,18 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
           )}
         </Card>
 
-        <Card>
+        <Card className="border p-2 bg-pink-100">
           <CardTitle className="text-sm font-semibold text-pink-600 bg-neutral-50 px-4 py-1">追加リクエスト曲募集中イベント(ラウンド2)</CardTitle>
           <CardDescription className={round2RecruitingEvents.length === 0 ? 'hidden' : ''}>ラウンド1のリクエスト曲に加えて追加のリクエスト曲を募っています。</CardDescription>
           {round2RecruitingEvents.length === 0 ? <p className="text-sm text-gray-50 bg-gray-400 p-2">表示できる追加リクエスト曲募集中イベントはありません。</p> : (
             <ul className="space-y-3">
               {round2RecruitingEvents.map((event) => (
-                <li key={event.id} className="rounded-xl border bg-background/60 p-4">
+                <li key={event.id} className="rounded-xl border bg-background/20 p-4">
                   <div className="flex flex-wrap items-center gap-2">
                     <strong className="text-sm text-pink-600">{event.title}</strong>
                     <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
                   </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{new Date(event.eventDate).toLocaleDateString('ja-JP')} / {event.venue}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">{formatEventDateTime(event.eventDate)} / {event.venue}</p>
                   {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
                 </li>
               ))}
@@ -313,18 +314,18 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
           )}
         </Card>
 
-        <Card>
+        <Card className="border p-2 bg-sky-100">
           <CardTitle className="text-sm font-semibold text-sky-600 bg-neutral-50 px-4 py-1">セッションセット確定イベント(公開)</CardTitle>
           <CardDescription className={publishedEvents.length === 0 ? 'hidden' : ''}>演奏曲とメンバーが確定したイベントです。</CardDescription>
           {publishedEvents.length === 0 ? <p className="text-sm text-gray-50 bg-gray-400 p-2">表示できる確定イベントはありません。</p> : (
             <ul className="space-y-3">
               {publishedEvents.map((event) => (
-                <li key={event.id} className="rounded-xl border bg-background/60 p-4">
+                <li key={event.id} className="rounded-xl border bg-background/20 p-4">
                   <div className="flex flex-wrap items-center gap-2">
                     <strong className="text-sm text-sky-600">{event.title}</strong>
                     <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
                   </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{new Date(event.eventDate).toLocaleDateString('ja-JP')} / {event.venue}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">{formatEventDateTime(event.eventDate)} / {event.venue}</p>
                   {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
                 </li>
               ))}
@@ -332,18 +333,18 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
           )}
         </Card>
 
-        <Card>
+        <Card className="border p-2 bg-emerald-50">
           <CardTitle className="text-sm font-semibold text-emerald-600 bg-neutral-50 px-4 py-1">レイティング受付中イベント</CardTitle>
           <CardDescription className={ratingEvents.length === 0 ? 'hidden' : ''}>レイティングや感想をコメント出来るイベントです。</CardDescription>
           {ratingEvents.length === 0 ? <p className="text-sm text-gray-50 bg-gray-400 p-2">表示できるレイティング受付中イベントはありません。</p> : (
             <ul className="space-y-3">
               {ratingEvents.map((event) => (
-                <li key={event.id} className="rounded-xl border bg-background/60 p-4">
+                <li key={event.id} className="rounded-xl border bg-background/20 p-4">
                   <div className="flex flex-wrap items-center gap-2">
                     <strong className="text-sm text-emerald-600">{event.title}</strong>
                     <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
                   </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{new Date(event.eventDate).toLocaleDateString('ja-JP')} / {event.venue}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">{formatEventDateTime(event.eventDate)} / {event.venue}</p>
                   {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
                 </li>
               ))}
@@ -351,18 +352,18 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
           )}
         </Card>
 
-        <Card>
+        <Card className="border p-2">
           <CardTitle className="text-sm font-semibold text-neutral-600 bg-neutral-50 px-4 py-1">終了イベント</CardTitle>
           <CardDescription className={completedEvents.length === 0 ? 'hidden' : ''}>既に終了したイベントです。</CardDescription>
           {completedEvents.length === 0 ? <p className="text-sm text-gray-50 bg-gray-400 p-2">表示できる終了イベントはありません。</p> : (
             <ul className="space-y-3">
               {completedEvents.map((event) => (
-                <li key={event.id} className="rounded-xl border bg-background/60 p-4">
+                <li key={event.id} className="rounded-xl border bg-background/20 p-4">
                   <div className="flex flex-wrap items-center gap-2">
                     <strong className="text-sm text-neutral-600">{event.title}</strong>
                     <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
                   </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{new Date(event.eventDate).toLocaleDateString('ja-JP')} / {event.venue}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">{formatEventDateTime(event.eventDate)} / {event.venue}</p>
                   {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
                 </li>
               ))}
@@ -512,7 +513,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                   <Badge variant="outline">{entry.attendanceStatus}</Badge>
                   <span className="font-medium">{entry.sessionEvent.title}</span>
                 </div>
-                <p className="mt-2 text-muted-foreground">{entry.requests.length} 曲 / {new Date(entry.sessionEvent.eventDate).toLocaleDateString('ja-JP')}</p>
+                <p className="mt-2 text-muted-foreground">{entry.requests.length} 曲 / {formatEventDateTime(entry.sessionEvent.eventDate)}</p>
               </li>
             ))}
           </ul>
@@ -525,7 +526,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
               <strong>{selectedMemberEvent.title}</strong>
               <Badge variant="outline">{getSessionEventStatusLabel(selectedMemberEvent.status)}</Badge>
             </div>
-            <p className="mt-2 text-muted-foreground">{new Date(selectedMemberEvent.eventDate).toLocaleDateString('ja-JP')} / {selectedMemberEvent.venue}</p>
+            <p className="mt-2 text-muted-foreground">{formatEventDateTime(selectedMemberEvent.eventDate)} / {selectedMemberEvent.venue}</p>
           </div>
         ) : null}
         {memberSessionSets.length === 0 ? <p className="mt-3 text-sm text-muted-foreground">評価対象の公開済み sessionSet はありません。</p> : (
@@ -626,7 +627,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                 <summary className="cursor-pointer list-none">
                   <div className="flex flex-wrap items-center gap-2">
                     <strong>{event.title}</strong>
-                    <Badge variant="outline">{new Date(event.eventDate).toLocaleDateString('ja-JP')}</Badge>
+                    <Badge variant="outline">{formatEventDateTime(event.eventDate)}</Badge>
                   </div>
                 </summary>
                 <div className="mt-4 space-y-3 text-sm">

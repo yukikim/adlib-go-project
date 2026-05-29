@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { prisma } from '@/lib/prisma';
+import { formatEventDateTime } from '@/lib/utils';
 // import Image from 'next/image';
 // import { HeroSection } from "./HeroSection";
 import HeroSectionTop from "./HeroSectionTop";
@@ -98,7 +99,7 @@ export async function PublicHomePage() {
               <CardContent>
                 {upcomingEvent ? (
                   <div className="space-y-3">
-                    <Badge variant="secondary">{new Date(upcomingEvent.eventDate).toLocaleDateString('ja-JP')} / {upcomingEvent.venue}</Badge>
+                    <Badge variant="secondary">{formatEventDateTime(upcomingEvent.eventDate)} / {upcomingEvent.venue}</Badge>
                     <div>
                       <h3 className="text-xl font-semibold">{upcomingEvent.title}</h3>
                       <p className="mt-2 text-sm leading-7 text-muted-foreground">

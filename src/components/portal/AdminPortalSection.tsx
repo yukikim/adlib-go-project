@@ -67,10 +67,6 @@ function splitPreviewBody(body: string) {
   return body.split(/\n{2,}/).map((paragraph) => paragraph.trim()).filter(Boolean);
 }
 
-function formatEventDate(value: string) {
-  return new Date(value).toLocaleDateString('ja-JP');
-}
-
 function formatSessionMemberName(name: string, isForced?: boolean) {
   return isForced ? `${name} (強制追加)` : name;
 }
@@ -733,6 +729,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
   // console.log('selectedAdminEventId', selectedAdminEventId)
   // console.log('isChildVisible', isChildVisible)
   // console.log('savedSessionSetDrafts', savedSessionSetDrafts)
+  // console.log('sessionEvents', sessionEvents)
 
 
   return (
@@ -878,8 +875,8 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                         <Field htmlFor="admin-event-venue" label="会場">
                           <Input id="admin-event-venue" type="text" placeholder="会場" value={eventVenue} onChange={(event) => setEventVenue(event.target.value)} />
                         </Field>
-                        <Field htmlFor="admin-event-date" label="開催日">
-                          <Input id="admin-event-date" type="date" value={eventDate} onChange={(event) => setEventDate(event.target.value)} />
+                        <Field htmlFor="admin-event-date" label="開催日時">
+                          <Input id="admin-event-date" type="datetime-local" value={eventDate} onChange={(event) => setEventDate(event.target.value)} />
                         </Field>
                       </div>
                       <DialogFooter>
@@ -922,7 +919,14 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
 
                     function formatDateTime(dateTimeString: string | null | undefined): ReactNode {
                       if (!dateTimeString) return '未定';
-                      return new Date(dateTimeString).toLocaleDateString('ja-JP');
+                      return new Date(dateTimeString).toLocaleString('ja-JP', {
+                        year: 'numeric',
+                        month: 'numeric',
+                        day: 'numeric',
+                        weekday: 'short',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      });
                     }
 
                     // function savedSessionSet(sessionEventId: string) {
@@ -934,9 +938,13 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
 
                     return (
                       <li key={sessionEvent.id} className="overflow-hidden rounded-lg bg-taupe-100 p-2 space-y-2">
-                        <div className="flex flex-wrap items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-2 mb-0">
                           <span className="text-lg text-on-primary font-semibold">{sessionEvent.title}</span>
                           <Badge variant="outline">ステータス: {statusConversion(sessionEvent.status)}</Badge>
+                        </div>
+                        <div className="text-sm font-semibold bg-background text-on-background p-1 w-auto">
+                          {formatDateTime(sessionEvent.eventDate)}
+                          {sessionEvent.venue ? ` / ${sessionEvent.venue}` : ''}
                         </div>
                         <div className="pl-4">
                           <p className="text-sm text-gray-700"><span className="font-semibold text-xs">募集期間(Round1):</span> {formatDateTime(sessionEvent.round1StartAt)} 〜 {formatDateTime(sessionEvent.round1EndAt)}</p>
@@ -953,7 +961,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                           >
                             <div className="space-y-1">
                               <p className="text-sm text-on-tertiary">
-                                【参加状況】{formatEventDate(sessionEvent.eventDate)} / {sessionEvent.venue} / 参加エントリー {sessionEntries.length} 件
+                                【参加状況】 参加エントリー {sessionEntries.length} 件
                               </p>
                             </div>
                             <ChevronDown className={cn('mt-0.5 size-4 shrink-0 transition-transform', isOpen ? 'rotate-180' : 'rotate-0', 'text-gray-50')} />
@@ -979,8 +987,8 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                                       <Field htmlFor="admin-edit-event-venue" label="会場">
                                         <Input id="admin-edit-event-venue" type="text" placeholder="会場" value={editEventVenue} onChange={(event) => setEditEventVenue(event.target.value)} />
                                       </Field>
-                                      <Field htmlFor="admin-edit-event-date" label="開催日">
-                                        <Input id="admin-edit-event-date" type="date" value={editEventDate} onChange={(event) => setEditEventDate(event.target.value)} />
+                                      <Field htmlFor="admin-edit-event-date" label="開催日時">
+                                        <Input id="admin-edit-event-date" type="datetime-local" value={editEventDate} onChange={(event) => setEditEventDate(event.target.value)} />
                                       </Field>
                                       <Field label="ステータス" htmlFor="admin-edit-event-status">
                                         <Select value={editEventStatus} onValueChange={setEditEventStatus}>
