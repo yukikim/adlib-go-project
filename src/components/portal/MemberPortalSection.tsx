@@ -274,6 +274,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     <>
 
 
+      <div className="text-lg font-semibold text-secondary mb-4 px-4">{profileDisplayName}</div>
       <Card className="rounded-xl border bg-secondary/80 p-4 border-none">
         <CardTitle className="text-2xl font-semibold text-on-secondary">お知らせ</CardTitle>
           <CardDescription className="text-on-secondary">運営からのお知らせです。</CardDescription>
