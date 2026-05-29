@@ -20,6 +20,35 @@ export function formatDateTimeLocal(value?: string | null) {
   return localDate.toISOString().slice(0, 16);
 }
 
+export function formatDateLocal(value?: string | null) {
+  if (!value) return '';
+  const date = new Date(value);
+  const offset = date.getTimezoneOffset();
+  const localDate = new Date(date.getTime() - offset * 60_000);
+  return localDate.toISOString().slice(0, 10);
+}
+
+export function formatTimeLocal(value?: string | null) {
+  if (!value) return '';
+  const date = new Date(value);
+  const offset = date.getTimezoneOffset();
+  const localDate = new Date(date.getTime() - offset * 60_000);
+  return localDate.toISOString().slice(11, 16);
+}
+
+export function formatDateInputToIso(value?: string | null) {
+  if (!value) return '';
+  const [year, month, day] = value.split('-').map(Number);
+  return new Date(year, month - 1, day).toISOString();
+}
+
+export function combineDateAndTimeToIso(dateValue?: string | null, timeValue?: string | null) {
+  if (!dateValue || !timeValue) return null;
+  const [year, month, day] = dateValue.split('-').map(Number);
+  const [hours, minutes] = timeValue.split(':').map(Number);
+  return new Date(year, month - 1, day, hours, minutes).toISOString();
+}
+
 export function getEventEntryState(event?: SessionEventView | null) {
   if (!event) {
     return { canSubmit: false, round: null as 1 | 2 | null, reason: 'イベントを選択してください' };

@@ -34,7 +34,7 @@ import {
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
-import { cn } from '@/lib/utils';
+import { cn, formatEventDateTime, formatEventSchedule, formatYen } from '@/lib/utils';
 import { Section } from './Section';
 import { AGE_RANGE_OPTIONS, GENDER_OPTIONS, PREFECTURE_OPTIONS } from '@/lib/memberProfile';
 import { getSessionEventStatusLabel } from '@/lib/sessionEventStatus';
@@ -191,9 +191,21 @@ type AdminPortalSectionProps = {
   eventTitle: string;
   eventVenue: string;
   eventDate: string;
+  eventStartTime: string;
+  eventEndTime: string;
+  eventParticipationFee: string;
+  eventHasAfterParty: boolean;
+  eventAfterPartyFee: string;
+  eventNotes: string;
   editEventTitle: string;
   editEventVenue: string;
   editEventDate: string;
+  editEventStartTime: string;
+  editEventEndTime: string;
+  editEventParticipationFee: string;
+  editEventHasAfterParty: boolean;
+  editEventAfterPartyFee: string;
+  editEventNotes: string;
   editEventStatus: string;
   editRound1StartAt: string;
   editRound1EndAt: string;
@@ -244,9 +256,21 @@ type AdminPortalSectionProps = {
   setEventTitle: (value: string) => void;
   setEventVenue: (value: string) => void;
   setEventDate: (value: string) => void;
+  setEventStartTime: (value: string) => void;
+  setEventEndTime: (value: string) => void;
+  setEventParticipationFee: (value: string) => void;
+  setEventHasAfterParty: (value: boolean) => void;
+  setEventAfterPartyFee: (value: string) => void;
+  setEventNotes: (value: string) => void;
   setEditEventTitle: (value: string) => void;
   setEditEventVenue: (value: string) => void;
   setEditEventDate: (value: string) => void;
+  setEditEventStartTime: (value: string) => void;
+  setEditEventEndTime: (value: string) => void;
+  setEditEventParticipationFee: (value: string) => void;
+  setEditEventHasAfterParty: (value: boolean) => void;
+  setEditEventAfterPartyFee: (value: string) => void;
+  setEditEventNotes: (value: string) => void;
   setEditEventStatus: (value: string) => void;
   setEditRound1StartAt: (value: string) => void;
   setEditRound1EndAt: (value: string) => void;
@@ -309,9 +333,21 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     eventTitle,
     eventVenue,
     eventDate,
+    eventStartTime,
+    eventEndTime,
+    eventParticipationFee,
+    eventHasAfterParty,
+    eventAfterPartyFee,
+    eventNotes,
     editEventTitle,
     editEventVenue,
     editEventDate,
+    editEventStartTime,
+    editEventEndTime,
+    editEventParticipationFee,
+    editEventHasAfterParty,
+    editEventAfterPartyFee,
+    editEventNotes,
     editEventStatus,
     editRound1StartAt,
     editRound1EndAt,
@@ -362,9 +398,21 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     setEventTitle,
     setEventVenue,
     setEventDate,
+    setEventStartTime,
+    setEventEndTime,
+    setEventParticipationFee,
+    setEventHasAfterParty,
+    setEventAfterPartyFee,
+    setEventNotes,
     setEditEventTitle,
     setEditEventVenue,
     setEditEventDate,
+    setEditEventStartTime,
+    setEditEventEndTime,
+    setEditEventParticipationFee,
+    setEditEventHasAfterParty,
+    setEditEventAfterPartyFee,
+    setEditEventNotes,
     setEditEventStatus,
     setEditRound1StartAt,
     setEditRound1EndAt,
@@ -861,22 +909,43 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                     <DialogTrigger asChild>
                       <Button variant="secondary">新規イベント作成</Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-sm bg-neutral-200">
+                    <DialogContent className="sm:max-w-xl bg-neutral-200">
                       <DialogHeader>
                         <DialogTitle>イベント作成</DialogTitle>
                         <DialogDescription>
                           新しいイベントを作成します。
                         </DialogDescription>
                       </DialogHeader>
-                      <div id="admin-event-edit" className="grid gap-4 py-4">
-                        <Field htmlFor="admin-event-title" label="イベント名">
+                      <div id="admin-event-edit" className="grid gap-4 py-4 sm:grid-cols-2">
+                        <Field htmlFor="admin-event-title" label="イベント名" className="sm:col-span-2">
                           <Input id="admin-event-title" type="text" placeholder="イベント名" value={eventTitle} onChange={(event) => setEventTitle(event.target.value)} />
                         </Field>
-                        <Field htmlFor="admin-event-venue" label="会場">
+                        <Field htmlFor="admin-event-venue" label="会場" className="sm:col-span-2">
                           <Input id="admin-event-venue" type="text" placeholder="会場" value={eventVenue} onChange={(event) => setEventVenue(event.target.value)} />
                         </Field>
-                        <Field htmlFor="admin-event-date" label="開催日時">
-                          <Input id="admin-event-date" type="datetime-local" value={eventDate} onChange={(event) => setEventDate(event.target.value)} />
+                        <Field htmlFor="admin-event-date" label="開催日">
+                          <Input id="admin-event-date" type="date" value={eventDate} onChange={(event) => setEventDate(event.target.value)} />
+                        </Field>
+                        <Field htmlFor="admin-event-start-time" label="開始時間">
+                          <Input id="admin-event-start-time" type="time" value={eventStartTime} onChange={(event) => setEventStartTime(event.target.value)} />
+                        </Field>
+                        <Field htmlFor="admin-event-end-time" label="終了時間">
+                          <Input id="admin-event-end-time" type="time" value={eventEndTime} onChange={(event) => setEventEndTime(event.target.value)} />
+                        </Field>
+                        <Field htmlFor="admin-event-fee" label="参加料金">
+                          <Input id="admin-event-fee" type="number" min="0" step="1" placeholder="3000" value={eventParticipationFee} onChange={(event) => setEventParticipationFee(event.target.value)} />
+                        </Field>
+                        <div className="sm:col-span-2 flex items-center gap-3 rounded-lg border bg-background/70 px-3 py-3">
+                          <Checkbox id="admin-event-after-party" checked={eventHasAfterParty} onCheckedChange={(checked) => setEventHasAfterParty(checked === true)} />
+                          <Label htmlFor="admin-event-after-party">懇親会あり</Label>
+                        </div>
+                        {eventHasAfterParty ? (
+                          <Field htmlFor="admin-event-after-party-fee" label="懇親会参加料金">
+                            <Input id="admin-event-after-party-fee" type="number" min="0" step="1" placeholder="4000" value={eventAfterPartyFee} onChange={(event) => setEventAfterPartyFee(event.target.value)} />
+                          </Field>
+                        ) : null}
+                        <Field htmlFor="admin-event-notes" label="備考" className="sm:col-span-2">
+                          <Textarea id="admin-event-notes" rows={4} placeholder="注意事項や持ち物など" value={eventNotes} onChange={(event) => setEventNotes(event.target.value)} />
                         </Field>
                       </div>
                       <DialogFooter>
@@ -919,14 +988,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
 
                     function formatDateTime(dateTimeString: string | null | undefined): ReactNode {
                       if (!dateTimeString) return '未定';
-                      return new Date(dateTimeString).toLocaleString('ja-JP', {
-                        year: 'numeric',
-                        month: 'numeric',
-                        day: 'numeric',
-                        weekday: 'short',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      });
+                      return formatEventDateTime(dateTimeString);
                     }
 
                     // function savedSessionSet(sessionEventId: string) {
@@ -943,9 +1005,14 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                           <Badge variant="outline">ステータス: {statusConversion(sessionEvent.status)}</Badge>
                         </div>
                         <div className="text-sm font-semibold bg-background text-on-background p-1 w-auto">
-                          {formatDateTime(sessionEvent.eventDate)}
+                          {formatEventSchedule(sessionEvent.eventDate, sessionEvent.startTime, sessionEvent.endTime)}
                           {sessionEvent.venue ? ` / ${sessionEvent.venue}` : ''}
                         </div>
+                        <div className="flex flex-wrap items-center gap-2 text-sm">
+                          {sessionEvent.participationFee != null ? <Badge variant="secondary">参加料金 {formatYen(sessionEvent.participationFee)}</Badge> : null}
+                          {sessionEvent.hasAfterParty ? <Badge variant="secondary">懇親会 {sessionEvent.afterPartyFee != null ? formatYen(sessionEvent.afterPartyFee) : '料金未定'}</Badge> : null}
+                        </div>
+                        {sessionEvent.notes ? <p className="text-sm text-gray-700">備考: {sessionEvent.notes}</p> : null}
                         <div className="pl-4">
                           <p className="text-sm text-gray-700"><span className="font-semibold text-xs">募集期間(Round1):</span> {formatDateTime(sessionEvent.round1StartAt)} 〜 {formatDateTime(sessionEvent.round1EndAt)}</p>
                           <p className="text-sm text-gray-700"><span className="font-semibold text-xs">募集期間(Round2):</span> {formatDateTime(sessionEvent.round2StartAt)} 〜 {formatDateTime(sessionEvent.round2EndAt)}</p>
@@ -971,7 +1038,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                               <DialogTrigger asChild>
                                 <Button variant="default" onClick={() => setSelectedAdminEventId(sessionEvent.id)}>イベント編集</Button>
                               </DialogTrigger>
-                              <DialogContent className="sm:max-w-sm bg-neutral-200">
+                              <DialogContent className="sm:max-w-xl bg-neutral-200">
                                 <DialogHeader>
                                   <DialogTitle>イベント編集</DialogTitle>
                                   <DialogDescription>
@@ -987,8 +1054,17 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                                       <Field htmlFor="admin-edit-event-venue" label="会場">
                                         <Input id="admin-edit-event-venue" type="text" placeholder="会場" value={editEventVenue} onChange={(event) => setEditEventVenue(event.target.value)} />
                                       </Field>
-                                      <Field htmlFor="admin-edit-event-date" label="開催日時">
-                                        <Input id="admin-edit-event-date" type="datetime-local" value={editEventDate} onChange={(event) => setEditEventDate(event.target.value)} />
+                                      <Field htmlFor="admin-edit-event-date" label="開催日">
+                                        <Input id="admin-edit-event-date" type="date" value={editEventDate} onChange={(event) => setEditEventDate(event.target.value)} />
+                                      </Field>
+                                      <Field htmlFor="admin-edit-event-start-time" label="開始時間">
+                                        <Input id="admin-edit-event-start-time" type="time" value={editEventStartTime} onChange={(event) => setEditEventStartTime(event.target.value)} />
+                                      </Field>
+                                      <Field htmlFor="admin-edit-event-end-time" label="終了時間">
+                                        <Input id="admin-edit-event-end-time" type="time" value={editEventEndTime} onChange={(event) => setEditEventEndTime(event.target.value)} />
+                                      </Field>
+                                      <Field htmlFor="admin-edit-event-fee" label="参加料金">
+                                        <Input id="admin-edit-event-fee" type="number" min="0" step="1" placeholder="3000" value={editEventParticipationFee} onChange={(event) => setEditEventParticipationFee(event.target.value)} />
                                       </Field>
                                       <Field label="ステータス" htmlFor="admin-edit-event-status">
                                         <Select value={editEventStatus} onValueChange={setEditEventStatus}>
@@ -1007,7 +1083,18 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                                           </SelectContent>
                                         </Select>
                                       </Field>
-                                      <div className="hidden sm:block" />
+                                      <div className="sm:col-span-2 flex items-center gap-3 rounded-lg border bg-background/70 px-3 py-3">
+                                        <Checkbox id="admin-edit-event-after-party" checked={editEventHasAfterParty} onCheckedChange={(checked) => setEditEventHasAfterParty(checked === true)} />
+                                        <Label htmlFor="admin-edit-event-after-party">懇親会あり</Label>
+                                      </div>
+                                      {editEventHasAfterParty ? (
+                                        <Field htmlFor="admin-edit-event-after-party-fee" label="懇親会参加料金">
+                                          <Input id="admin-edit-event-after-party-fee" type="number" min="0" step="1" placeholder="4000" value={editEventAfterPartyFee} onChange={(event) => setEditEventAfterPartyFee(event.target.value)} />
+                                        </Field>
+                                      ) : null}
+                                      <Field htmlFor="admin-edit-event-notes" label="備考" className="sm:col-span-2">
+                                        <Textarea id="admin-edit-event-notes" rows={4} placeholder="注意事項や持ち物など" value={editEventNotes} onChange={(event) => setEditEventNotes(event.target.value)} />
+                                      </Field>
                                       <Field htmlFor="admin-edit-round1-start" label="Round1 開始">
                                         <Input id="admin-edit-round1-start" type="datetime-local" value={editRound1StartAt} onChange={(event) => setEditRound1StartAt(event.target.value)} />
                                       </Field>

@@ -54,6 +54,12 @@ export type SessionEventView = {
   title: string;
   venue: string;
   eventDate: string;
+  startTime?: string | null;
+  endTime?: string | null;
+  participationFee?: number | null;
+  hasAfterParty?: boolean;
+  afterPartyFee?: number | null;
+  notes?: string | null;
   round1StartAt?: string | null;
   round1EndAt?: string | null;
   round2StartAt?: string | null;
@@ -108,6 +114,12 @@ export type SessionEntryView = {
     title: string;
     venue: string;
     eventDate: string;
+    startTime?: string | null;
+    endTime?: string | null;
+    participationFee?: number | null;
+    hasAfterParty?: boolean;
+    afterPartyFee?: number | null;
+    notes?: string | null;
   };
   requests: {
     id: string;

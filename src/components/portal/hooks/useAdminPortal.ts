@@ -13,7 +13,15 @@ import type {
   SessionEventView,
   SessionSetView,
 } from '../types';
-import { formatDateTimeLocal, parseJson, type RunPortalAction } from '../utils';
+import {
+  combineDateAndTimeToIso,
+  formatDateInputToIso,
+  formatDateLocal,
+  formatDateTimeLocal,
+  formatTimeLocal,
+  parseJson,
+  type RunPortalAction,
+} from '../utils';
 
 type ArchivePreview = { participantCount: number; setCount: number; ratingSummaryIncluded: boolean } | null;
 
@@ -25,14 +33,43 @@ type UseAdminPortalArgs = {
   reloadShared: () => Promise<void>;
 };
 
+function parseOptionalInteger(value: string) {
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return null;
+  }
+  const parsed = Number(trimmed);
+  return Number.isFinite(parsed) ? Math.trunc(parsed) : null;
+}
+
+function hasLocalTime(value?: string | null) {
+  if (!value) {
+    return false;
+  }
+  const date = new Date(value);
+  return date.getHours() !== 0 || date.getMinutes() !== 0;
+}
+
 export function useAdminPortal({ currentUser, members, sessionEvents, runAction, reloadShared }: UseAdminPortalArgs) {
   const [selectedAdminEventId, setSelectedAdminEventId] = useState('');
   const [eventTitle, setEventTitle] = useState('');
   const [eventVenue, setEventVenue] = useState('');
   const [eventDate, setEventDate] = useState('');
+  const [eventStartTime, setEventStartTime] = useState('');
+  const [eventEndTime, setEventEndTime] = useState('');
+  const [eventParticipationFee, setEventParticipationFee] = useState('');
+  const [eventHasAfterParty, setEventHasAfterParty] = useState(false);
+  const [eventAfterPartyFee, setEventAfterPartyFee] = useState('');
+  const [eventNotes, setEventNotes] = useState('');
   const [editEventTitle, setEditEventTitle] = useState('');
   const [editEventVenue, setEditEventVenue] = useState('');
   const [editEventDate, setEditEventDate] = useState('');
+  const [editEventStartTime, setEditEventStartTime] = useState('');
+  const [editEventEndTime, setEditEventEndTime] = useState('');
+  const [editEventParticipationFee, setEditEventParticipationFee] = useState('');
+  const [editEventHasAfterParty, setEditEventHasAfterParty] = useState(false);
+  const [editEventAfterPartyFee, setEditEventAfterPartyFee] = useState('');
+  const [editEventNotes, setEditEventNotes] = useState('');
   const [editEventStatus, setEditEventStatus] = useState('draft');
   const [editRound1StartAt, setEditRound1StartAt] = useState('');
   const [editRound1EndAt, setEditRound1EndAt] = useState('');
@@ -190,7 +227,13 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     }
     setEditEventTitle(selectedAdminEvent.title);
     setEditEventVenue(selectedAdminEvent.venue);
-    setEditEventDate(formatDateTimeLocal(selectedAdminEvent.eventDate));
+    setEditEventDate(formatDateLocal(selectedAdminEvent.eventDate));
+    setEditEventStartTime(formatTimeLocal(selectedAdminEvent.startTime ?? (hasLocalTime(selectedAdminEvent.eventDate) ? selectedAdminEvent.eventDate : null)));
+    setEditEventEndTime(formatTimeLocal(selectedAdminEvent.endTime));
+    setEditEventParticipationFee(selectedAdminEvent.participationFee?.toString() ?? '');
+    setEditEventHasAfterParty(selectedAdminEvent.hasAfterParty === true);
+    setEditEventAfterPartyFee(selectedAdminEvent.afterPartyFee?.toString() ?? '');
+    setEditEventNotes(selectedAdminEvent.notes ?? '');
     setEditEventStatus(selectedAdminEvent.status);
     setEditRound1StartAt(formatDateTimeLocal(selectedAdminEvent.round1StartAt));
     setEditRound1EndAt(formatDateTimeLocal(selectedAdminEvent.round1EndAt));
@@ -222,6 +265,18 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
   }, [adminMemberMainInstrument]);
 
   useEffect(() => {
+    if (!eventHasAfterParty) {
+      setEventAfterPartyFee('');
+    }
+  }, [eventHasAfterParty]);
+
+  useEffect(() => {
+    if (!editEventHasAfterParty) {
+      setEditEventAfterPartyFee('');
+    }
+  }, [editEventHasAfterParty]);
+
+  useEffect(() => {
     if (!editingColumnSlug) {
       return;
     }
@@ -247,13 +302,28 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
       body: JSON.stringify({
         title: eventTitle,
         venue: eventVenue,
-        eventDate: eventDate ? new Date(eventDate).toISOString() : eventDate,
+        eventDate: formatDateInputToIso(eventDate),
+        startTime: combineDateAndTimeToIso(eventDate, eventStartTime),
+        endTime: combineDateAndTimeToIso(eventDate, eventEndTime),
+        participationFee: parseOptionalInteger(eventParticipationFee),
+        hasAfterParty: eventHasAfterParty,
+        afterPartyFee: eventHasAfterParty ? parseOptionalInteger(eventAfterPartyFee) : null,
+        notes: eventNotes.trim() || null,
         status: 'draft',
       }),
     });
     const json = await parseJson(res);
     if (!res.ok) throw new Error(json.error ?? 'イベント作成に失敗しました');
     await reloadShared();
+    setEventTitle('');
+    setEventVenue('');
+    setEventDate('');
+    setEventStartTime('');
+    setEventEndTime('');
+    setEventParticipationFee('');
+    setEventHasAfterParty(false);
+    setEventAfterPartyFee('');
+    setEventNotes('');
   }, 'イベントを作成しました');
 
   const handleUpdateEvent = async () => runAction(async () => {
@@ -264,7 +334,13 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
       body: JSON.stringify({
         title: editEventTitle,
         venue: editEventVenue,
-        eventDate: editEventDate ? new Date(editEventDate).toISOString() : editEventDate,
+        eventDate: formatDateInputToIso(editEventDate),
+        startTime: combineDateAndTimeToIso(editEventDate, editEventStartTime),
+        endTime: combineDateAndTimeToIso(editEventDate, editEventEndTime),
+        participationFee: parseOptionalInteger(editEventParticipationFee),
+        hasAfterParty: editEventHasAfterParty,
+        afterPartyFee: editEventHasAfterParty ? parseOptionalInteger(editEventAfterPartyFee) : null,
+        notes: editEventNotes.trim() || null,
         status: editEventStatus,
         round1StartAt: editRound1StartAt ? new Date(editRound1StartAt).toISOString() : null,
         round1EndAt: editRound1EndAt ? new Date(editRound1EndAt).toISOString() : null,
@@ -523,12 +599,36 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     setEventVenue,
     eventDate,
     setEventDate,
+    eventStartTime,
+    setEventStartTime,
+    eventEndTime,
+    setEventEndTime,
+    eventParticipationFee,
+    setEventParticipationFee,
+    eventHasAfterParty,
+    setEventHasAfterParty,
+    eventAfterPartyFee,
+    setEventAfterPartyFee,
+    eventNotes,
+    setEventNotes,
     editEventTitle,
     setEditEventTitle,
     editEventVenue,
     setEditEventVenue,
     editEventDate,
     setEditEventDate,
+    editEventStartTime,
+    setEditEventStartTime,
+    editEventEndTime,
+    setEditEventEndTime,
+    editEventParticipationFee,
+    setEditEventParticipationFee,
+    editEventHasAfterParty,
+    setEditEventHasAfterParty,
+    editEventAfterPartyFee,
+    setEditEventAfterPartyFee,
+    editEventNotes,
+    setEditEventNotes,
     editEventStatus,
     setEditEventStatus,
     editRound1StartAt,

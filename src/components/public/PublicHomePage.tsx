@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { prisma } from '@/lib/prisma';
-import { formatEventDateTime } from '@/lib/utils';
+import { formatEventSchedule, formatYen } from '@/lib/utils';
 // import Image from 'next/image';
 // import { HeroSection } from "./HeroSection";
 import HeroSectionTop from "./HeroSectionTop";
@@ -99,12 +99,17 @@ export async function PublicHomePage() {
               <CardContent>
                 {upcomingEvent ? (
                   <div className="space-y-3">
-                    <Badge variant="secondary">{formatEventDateTime(upcomingEvent.eventDate)} / {upcomingEvent.venue}</Badge>
+                    <Badge variant="secondary">{formatEventSchedule(upcomingEvent.eventDate, upcomingEvent.startTime, upcomingEvent.endTime)} / {upcomingEvent.venue}</Badge>
+                    <div className="flex flex-wrap gap-2">
+                      {upcomingEvent.participationFee != null ? <Badge variant="outline">参加料金 {formatYen(upcomingEvent.participationFee)}</Badge> : null}
+                      {upcomingEvent.hasAfterParty ? <Badge variant="outline">懇親会 {upcomingEvent.afterPartyFee != null ? formatYen(upcomingEvent.afterPartyFee) : '料金未定'}</Badge> : null}
+                    </div>
                     <div>
                       <h3 className="text-xl font-semibold">{upcomingEvent.title}</h3>
                       <p className="mt-2 text-sm leading-7 text-muted-foreground">
                         {upcomingEvent.description || '次回セッションの募集情報はメンバー画面から確認できます。'}
                       </p>
+                      {upcomingEvent.notes ? <p className="mt-2 text-sm leading-7 text-muted-foreground">備考: {upcomingEvent.notes}</p> : null}
                     </div>
                   </div>
                 ) : (

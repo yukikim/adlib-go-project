@@ -21,6 +21,8 @@ const optionalValidDateStringSchema = z.preprocess((value) => {
   return trimmed === '' ? null : trimmed;
 }, z.union([validDateStringSchema, z.null()]).optional());
 
+const optionalNonNegativeIntegerSchema = z.union([z.number().int().min(0), z.null()]).optional();
+
 export const participantCreateRequestSchema = z.object({
   name: z.string().trim().min(1, 'Invalid body'),
   instrument: z.enum(MAIN_INSTRUMENT_OPTIONS, { message: 'Invalid instrument' }),
@@ -59,6 +61,10 @@ export const sessionEventCreateRequestSchema = z.object({
   eventDate: validDateStringSchema,
   startTime: optionalValidDateStringSchema,
   endTime: optionalValidDateStringSchema,
+  participationFee: optionalNonNegativeIntegerSchema,
+  hasAfterParty: z.boolean().optional(),
+  afterPartyFee: optionalNonNegativeIntegerSchema,
+  notes: normalizedNullableStringSchema,
   round1StartAt: optionalValidDateStringSchema,
   round1EndAt: optionalValidDateStringSchema,
   round2StartAt: optionalValidDateStringSchema,
@@ -73,6 +79,10 @@ export const sessionEventUpdateRequestSchema = z.object({
   eventDate: validDateStringSchema.optional(),
   startTime: optionalValidDateStringSchema,
   endTime: optionalValidDateStringSchema,
+  participationFee: optionalNonNegativeIntegerSchema,
+  hasAfterParty: z.boolean().optional(),
+  afterPartyFee: optionalNonNegativeIntegerSchema,
+  notes: normalizedNullableStringSchema,
   round1StartAt: optionalValidDateStringSchema,
   round1EndAt: optionalValidDateStringSchema,
   round2StartAt: optionalValidDateStringSchema,

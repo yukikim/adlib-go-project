@@ -19,7 +19,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Section } from './Section';
 import { AGE_RANGE_OPTIONS, GENDER_OPTIONS, PREFECTURE_OPTIONS } from '@/lib/memberProfile';
 import { getSessionEventStatusLabel, isSessionEventFinished } from '@/lib/sessionEventStatus';
-import { formatEventDateTime } from '@/lib/utils';
+import { formatEventSchedule, formatYen } from '@/lib/utils';
 import type {
   AnnouncementView,
   AttendanceStatus,
@@ -44,6 +44,30 @@ const NONE_VALUE = '__none__';
 
 function formatSessionMemberName(name: string, isForced?: boolean) {
   return isForced ? `${name} (強制追加)` : name;
+}
+
+function EventMeta({
+  participationFee,
+  hasAfterParty,
+  afterPartyFee,
+  notes,
+}: {
+  participationFee?: number | null;
+  hasAfterParty?: boolean;
+  afterPartyFee?: number | null;
+  notes?: string | null;
+}) {
+  return (
+    <>
+      {participationFee != null || hasAfterParty ? (
+        <div className="mt-2 flex flex-wrap gap-2">
+          {participationFee != null ? <Badge variant="secondary">参加料金 {formatYen(participationFee)}</Badge> : null}
+          {hasAfterParty ? <Badge variant="secondary">懇親会 {afterPartyFee != null ? formatYen(afterPartyFee) : '料金未定'}</Badge> : null}
+        </div>
+      ) : null}
+      {notes ? <p className="mt-2 text-sm text-muted-foreground">備考: {notes}</p> : null}
+    </>
+  );
 }
 
 function formatAttendanceStatusLabel(status: AttendanceStatus) {
@@ -310,7 +334,8 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     <strong className="text-sm text-slate-600">{event.title}</strong>
                     <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
                   </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{formatEventDateTime(event.eventDate)} / {event.venue}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">{formatEventSchedule(event.eventDate, event.startTime, event.endTime)} / {event.venue}</p>
+                  <EventMeta participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
                   {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
                 </li>
               ))}
@@ -338,7 +363,8 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                               <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
                               <Badge variant={eventEntry ? 'default' : 'secondary'}>エントリー: {eventEntry ? '済' : '未'}</Badge>
                             </div>
-                            <p className="text-sm text-muted-foreground">{formatEventDateTime(event.eventDate)} / {event.venue}</p>
+                            <p className="text-sm text-muted-foreground">{formatEventSchedule(event.eventDate, event.startTime, event.endTime)} / {event.venue}</p>
+                            <EventMeta participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
                             {event.entryReason ? <p className="text-sm text-muted-foreground">{event.entryReason}</p> : null}
                             {eventEntry ? (
                               <div className="rounded-lg border bg-background/70 p-3 text-sm">
@@ -355,7 +381,9 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                               </div>
                             ) : null}
                           </div>
-                          <Button type="button" size="sm" onClick={() => handleRound1EntryOpen(event.id)} disabled={loading}>
+                        </div>
+                        <div className="text-right mt-2">
+                          <Button type="button" variant="secondary" size="sm" onClick={() => handleRound1EntryOpen(event.id)} disabled={loading}>
                             エントリー
                           </Button>
                         </div>
@@ -460,7 +488,8 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     <strong className="text-sm text-pink-600">{event.title}</strong>
                     <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
                   </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{formatEventDateTime(event.eventDate)} / {event.venue}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">{formatEventSchedule(event.eventDate, event.startTime, event.endTime)} / {event.venue}</p>
+                  <EventMeta participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
                   {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
                 </li>
               ))}
@@ -479,7 +508,8 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     <strong className="text-sm text-sky-600">{event.title}</strong>
                     <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
                   </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{formatEventDateTime(event.eventDate)} / {event.venue}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">{formatEventSchedule(event.eventDate, event.startTime, event.endTime)} / {event.venue}</p>
+                  <EventMeta participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
                   {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
                 </li>
               ))}
@@ -498,7 +528,8 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     <strong className="text-sm text-emerald-600">{event.title}</strong>
                     <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
                   </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{formatEventDateTime(event.eventDate)} / {event.venue}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">{formatEventSchedule(event.eventDate, event.startTime, event.endTime)} / {event.venue}</p>
+                  <EventMeta participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
                   {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
                 </li>
               ))}
@@ -517,7 +548,8 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     <strong className="text-sm text-neutral-600">{event.title}</strong>
                     <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
                   </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{formatEventDateTime(event.eventDate)} / {event.venue}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">{formatEventSchedule(event.eventDate, event.startTime, event.endTime)} / {event.venue}</p>
+                  <EventMeta participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
                   {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
                 </li>
               ))}
@@ -665,7 +697,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                   <Badge variant="outline">{entry.attendanceStatus}</Badge>
                   <span className="font-medium">{entry.sessionEvent.title}</span>
                 </div>
-                <p className="mt-2 text-muted-foreground">{entry.requests.length} 曲 / {formatEventDateTime(entry.sessionEvent.eventDate)}</p>
+                <p className="mt-2 text-muted-foreground">{entry.requests.length} 曲 / {formatEventSchedule(entry.sessionEvent.eventDate, entry.sessionEvent.startTime, entry.sessionEvent.endTime)}</p>
               </li>
             ))}
           </ul>
@@ -678,7 +710,8 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
               <strong>{selectedMemberEvent.title}</strong>
               <Badge variant="outline">{getSessionEventStatusLabel(selectedMemberEvent.status)}</Badge>
             </div>
-            <p className="mt-2 text-muted-foreground">{formatEventDateTime(selectedMemberEvent.eventDate)} / {selectedMemberEvent.venue}</p>
+            <p className="mt-2 text-muted-foreground">{formatEventSchedule(selectedMemberEvent.eventDate, selectedMemberEvent.startTime, selectedMemberEvent.endTime)} / {selectedMemberEvent.venue}</p>
+            <EventMeta participationFee={selectedMemberEvent.participationFee} hasAfterParty={selectedMemberEvent.hasAfterParty} afterPartyFee={selectedMemberEvent.afterPartyFee} notes={selectedMemberEvent.notes} />
           </div>
         ) : null}
         {memberSessionSets.length === 0 ? <p className="mt-3 text-sm text-muted-foreground">評価対象の公開済み sessionSet はありません。</p> : (
@@ -779,11 +812,12 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                 <summary className="cursor-pointer list-none">
                   <div className="flex flex-wrap items-center gap-2">
                     <strong>{event.title}</strong>
-                    <Badge variant="outline">{formatEventDateTime(event.eventDate)}</Badge>
+                    <Badge variant="outline">{formatEventSchedule(event.eventDate, event.startTime, event.endTime)}</Badge>
                   </div>
                 </summary>
                 <div className="mt-4 space-y-3 text-sm">
                   <p className="text-muted-foreground">{event.venue}</p>
+                  <EventMeta participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
                   {!event.ratingSummaries?.length ? <p className="text-muted-foreground">レイティング結果はまだありません。</p> : (
                     <ul className="space-y-2">
                       {event.ratingSummaries.map((summary) => (
