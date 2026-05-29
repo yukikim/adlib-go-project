@@ -11,7 +11,7 @@ import type {
   SessionEventView,
   SessionSetView,
 } from '../types';
-import { getEventEntryState, parseJson, type RunPortalAction } from '../utils';
+import { getEventEntryState, parseJson, type RunPortalAction, type RunPortalActionOptions } from '../utils';
 import { isSessionEventFinished } from '@/lib/sessionEventStatus';
 
 type UseMemberPortalArgs = {
@@ -49,6 +49,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
   const [memberRound1Key2, setMemberRound1Key2] = useState('');
   const [memberRound2Key1, setMemberRound2Key1] = useState('');
   const [memberRound2Key2, setMemberRound2Key2] = useState('');
+  const [round1SongOptions, setRound1SongOptions] = useState<string[]>([]);
   const [memberRatings, setMemberRatings] = useState<Record<string, number>>({});
   const [memberRatingComments, setMemberRatingComments] = useState<Record<string, string>>({});
   const [memberEventComment, setMemberEventComment] = useState('');
@@ -114,6 +115,34 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
   }, [loadMemberData]);
 
   useEffect(() => {
+    const loadRound1Songs = async () => {
+      const preferredResponse = await fetch('/api/songs?catalog=black-book');
+      const preferredJson = await parseJson(preferredResponse);
+      const preferredSongs = Array.isArray(preferredJson.songs)
+        ? preferredJson.songs
+          .map((song: { title?: unknown }) => (typeof song.title === 'string' ? song.title : ''))
+          .filter((title: string) => title.length > 0)
+        : [];
+
+      if (preferredSongs.length > 0) {
+        setRound1SongOptions(preferredSongs);
+        return;
+      }
+
+      const fallbackResponse = await fetch('/api/songs');
+      const fallbackJson = await parseJson(fallbackResponse);
+      const fallbackSongs = Array.isArray(fallbackJson.songs)
+        ? fallbackJson.songs
+          .map((song: { title?: unknown }) => (typeof song.title === 'string' ? song.title : ''))
+          .filter((title: string) => title.length > 0)
+        : [];
+      setRound1SongOptions(fallbackSongs);
+    };
+
+    loadRound1Songs().catch((error) => console.error(error));
+  }, []);
+
+  useEffect(() => {
     if (!selectedMemberId || !currentUser) {
       setSelectedMemberDetail(null);
       setSelectedMemberRatings([]);
@@ -131,9 +160,34 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
   useEffect(() => {
     const currentEntry = sessionEntries.find((entry) => entry.sessionEventId === memberEventId);
     if (!currentEntry) {
+      setMemberAttendanceStatus('attending');
+      setMemberRound1Song1('');
+      setMemberRound1Song2('');
+      setMemberRound1Key1('');
+      setMemberRound1Key2('');
+      setMemberRound2Song1('');
+      setMemberRound2Song2('');
+      setMemberRound2Key1('');
+      setMemberRound2Key2('');
       return;
     }
+
+    const round1Requests = currentEntry.requests
+      .filter((request) => request.round === 1)
+      .sort((a, b) => a.priority - b.priority);
+    const round2Requests = currentEntry.requests
+      .filter((request) => request.round === 2)
+      .sort((a, b) => a.priority - b.priority);
+
     setMemberAttendanceStatus(currentEntry.attendanceStatus);
+    setMemberRound1Song1(round1Requests[0]?.songTitleSnapshot ?? '');
+    setMemberRound1Song2(round1Requests[1]?.songTitleSnapshot ?? '');
+    setMemberRound1Key1(round1Requests[0]?.keyName ?? '');
+    setMemberRound1Key2(round1Requests[1]?.keyName ?? '');
+    setMemberRound2Song1(round2Requests[0]?.songTitleSnapshot ?? '');
+    setMemberRound2Song2(round2Requests[1]?.songTitleSnapshot ?? '');
+    setMemberRound2Key1(round2Requests[0]?.keyName ?? '');
+    setMemberRound2Key2(round2Requests[1]?.keyName ?? '');
   }, [memberEventId, sessionEntries]);
 
   useEffect(() => {
@@ -186,7 +240,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     await reloadShared();
   }, 'プロフィールを更新しました');
 
-  const handleSubmitEntry = async () => runAction(async () => {
+  const handleSubmitEntry = async (options?: RunPortalActionOptions) => runAction(async () => {
     if (!memberEventId || !entryState.round || !entryState.canSubmit) {
       throw new Error(entryState.reason ?? '現在は登録できません');
     }
@@ -212,7 +266,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     const json = await parseJson(res);
     if (!res.ok) throw new Error(json.error ?? 'エントリー保存に失敗しました');
     await loadMemberData();
-  }, 'セッションエントリーを保存しました');
+  }, 'セッションエントリーを保存しました', options);
 
   const handleSaveRating = async (sessionSetId: string) => runAction(async () => {
     const res = await fetch(`/api/session-sets/${sessionSetId}/ratings`, {
@@ -296,6 +350,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     setMemberRound2Key1,
     memberRound2Key2,
     setMemberRound2Key2,
+    round1SongOptions,
     memberRatings,
     setMemberRatings,
     memberRatingComments,

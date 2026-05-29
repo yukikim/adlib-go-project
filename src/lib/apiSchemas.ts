@@ -28,6 +28,8 @@ export const participantCreateRequestSchema = z.object({
 
 export const songCreateRequestSchema = z.object({
   title: z.string().trim().min(1, 'Invalid title'),
+  isJazzStandardBible1: z.boolean().optional(),
+  isJazzStandardBible2: z.boolean().optional(),
 }).strict();
 
 export const participantRequestCreateSchema = z.object({

@@ -21,8 +21,10 @@ model Participant {
 }
 
 model Song {
-  id    String  @id @default(uuid())
-  title String  @unique
+  id                   String  @id @default(uuid())
+  title                String  @unique
+  isJazzStandardBible1 Boolean @default(false)
+  isJazzStandardBible2 Boolean @default(false)
 
   requests             ParticipantSongRequest[]
   sessionEntryRequests SessionEntryRequest[]

@@ -191,6 +191,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           memberRound1Key2={member.memberRound1Key2}
           memberRound2Key1={member.memberRound2Key1}
           memberRound2Key2={member.memberRound2Key2}
+          round1SongOptions={member.round1SongOptions}
           memberRatings={member.memberRatings}
           memberRatingComments={member.memberRatingComments}
           memberEventComment={member.memberEventComment}

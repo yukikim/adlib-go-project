@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardTitle, CardDescription } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { SearchableCombobox } from '@/components/ui/searchable-combobox';
 import {
   Select,
   SelectContent,
@@ -29,6 +32,7 @@ import type {
   SessionEventView,
   SessionSetView,
 } from './types';
+import type { RunPortalActionOptions } from './utils';
 
 type EntryState = {
   canSubmit: boolean;
@@ -40,6 +44,19 @@ const NONE_VALUE = '__none__';
 
 function formatSessionMemberName(name: string, isForced?: boolean) {
   return isForced ? `${name} (強制追加)` : name;
+}
+
+function formatAttendanceStatusLabel(status: AttendanceStatus) {
+  switch (status) {
+    case 'attending':
+      return '参加';
+    case 'undecided':
+      return '未定';
+    case 'absent':
+      return '不参加';
+    default:
+      return status;
+  }
 }
 
 type FieldProps = {
@@ -81,6 +98,7 @@ type MemberPortalSectionProps = {
   memberRound1Key2: string;
   memberRound2Key1: string;
   memberRound2Key2: string;
+  round1SongOptions: string[];
   memberRatings: Record<string, number>;
   memberRatingComments: Record<string, string>;
   memberEventComment: string;
@@ -123,7 +141,7 @@ type MemberPortalSectionProps = {
   profileNewPasswordConfirm: string;
   onProfileUpdate: () => void;
   onSignOut: () => void;
-  onSubmitEntry: () => void;
+  onSubmitEntry: (options?: RunPortalActionOptions) => Promise<void>;
   onSaveRating: (sessionSetId: string) => void;
   onSaveEventComment: () => void;
 };
@@ -150,6 +168,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     memberRound1Key2,
     memberRound2Key1,
     memberRound2Key2,
+    round1SongOptions,
     memberRatings,
     memberRatingComments,
     memberEventComment,
@@ -196,6 +215,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     onSaveRating,
     onSaveEventComment,
   } = props;
+  const [isRound1EntryDialogOpen, setIsRound1EntryDialogOpen] = useState(false);
 
   const handleProfileSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -214,6 +234,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
   const round2CandidateListId = 'member-round2-song-candidates';
   const canPostEventComment = selectedMemberEvent?.status === 'published';
   const canRateSelectedEvent = selectedMemberEvent?.status === 'rating';
+  const isVocalMember = currentUser?.memberProfile?.mainInstrument === 'vocal';
 
   const announcedEvents = sessionEvents.filter((event) => event.status === 'announced');
   const round1RecruitingEvents = sessionEvents.filter((event) => event.status === 'recruiting_round1');
@@ -222,12 +243,32 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
   const ratingEvents = sessionEvents.filter((event) => event.status === 'rating');
   const completedEvents = sessionEvents.filter((event) => event.status === 'closed');
 
-  console.log('announcedEvents:', announcedEvents);
-  console.log('round1RecruitingEvents:', round1RecruitingEvents);
-  console.log('round2RecruitingEvents:', round2RecruitingEvents);
-  console.log('publishedEvents:', publishedEvents);
-  console.log('ratingEvents:', ratingEvents);
-  console.log('completedEvents:', completedEvents);
+  // console.log('announcedEvents:', announcedEvents);
+  // console.log('round1RecruitingEvents:', round1RecruitingEvents);
+  // console.log('round2RecruitingEvents:', round2RecruitingEvents);
+  // console.log('publishedEvents:', publishedEvents);
+  // console.log('ratingEvents:', ratingEvents);
+  // console.log('completedEvents:', completedEvents);
+
+  const selectedRound1Event = round1RecruitingEvents.find((event) => event.id === memberEventId) ?? null;
+
+  const handleRound1EntryOpen = (eventId: string) => {
+    setMemberEventId(eventId);
+    setIsRound1EntryDialogOpen(true);
+  };
+
+  const handleRound1EntrySubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (loading) {
+      return;
+    }
+
+    await onSubmitEntry({
+      onSuccess: () => {
+        setIsRound1EntryDialogOpen(false);
+      },
+    });
+  };
 
   return (
     <>
@@ -283,17 +324,129 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             <ul className="space-y-3">
               {round1RecruitingEvents.map((event) => (
                 <li key={event.id} className="rounded-xl border bg-background/20 p-4">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <strong className="text-sm text-orange-600">{event.title}</strong>
-                    <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
-                  </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{formatEventDateTime(event.eventDate)} / {event.venue}</p>
-                  {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
+                  {(() => {
+                    const eventEntry = sessionEntries.find((entry) => entry.sessionEventId === event.id);
+                    const round1Requests = (eventEntry?.requests ?? []).filter((request) => request.round === 1).sort((a, b) => a.priority - b.priority);
+
+                    return (
+                      <>
+                        <div className="flex flex-wrap items-start justify-between gap-3">
+                          <div className="space-y-2">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <strong className="text-sm text-orange-600">{event.title}</strong>
+                              <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
+                              <Badge variant={eventEntry ? 'default' : 'secondary'}>エントリー: {eventEntry ? '済' : '未'}</Badge>
+                            </div>
+                            <p className="text-sm text-muted-foreground">{formatEventDateTime(event.eventDate)} / {event.venue}</p>
+                            {event.entryReason ? <p className="text-sm text-muted-foreground">{event.entryReason}</p> : null}
+                            {eventEntry ? (
+                              <div className="rounded-lg border bg-background/70 p-3 text-sm">
+                                <p className="font-medium text-foreground">参加可否: {formatAttendanceStatusLabel(eventEntry.attendanceStatus)}</p>
+                                {round1Requests.length === 0 ? (
+                                  <p className="mt-1 text-muted-foreground">リクエスト曲は未登録です。</p>
+                                ) : (
+                                  <ul className="mt-2 space-y-1 text-muted-foreground">
+                                    {round1Requests.map((request) => (
+                                      <li key={request.id}>第{request.priority}希望: {request.songTitleSnapshot}{request.keyName ? ` / key ${request.keyName}` : ''}</li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </div>
+                            ) : null}
+                          </div>
+                          <Button type="button" size="sm" onClick={() => handleRound1EntryOpen(event.id)} disabled={loading}>
+                            エントリー
+                          </Button>
+                        </div>
+                      </>
+                    );
+                  })()}
                 </li>
               ))}
             </ul>
           )}
         </Card>
+
+        <Dialog open={isRound1EntryDialogOpen} onOpenChange={setIsRound1EntryDialogOpen}>
+          <DialogContent className="sm:max-w-2xl bg-neutral-200">
+            <DialogHeader>
+              <DialogTitle>{selectedRound1Event ? `${selectedRound1Event.title} のエントリー` : 'ラウンド1エントリー'}</DialogTitle>
+              <DialogDescription>
+                参加可否とラウンド1のリクエスト2曲を登録できます。募集期間中は何度でも修正できます。
+              </DialogDescription>
+            </DialogHeader>
+
+            {!selectedRound1Event ? (
+              <Alert variant="destructive">
+                <AlertTitle>イベントが選択されていません</AlertTitle>
+                <AlertDescription>参加募集中イベントの「エントリー」ボタンから開いてください。</AlertDescription>
+              </Alert>
+            ) : (
+              <form className="grid gap-4" onSubmit={handleRound1EntrySubmit}>
+                <Alert variant={entryState.canSubmit ? 'default' : 'destructive'}>
+                  <AlertTitle>{entryState.canSubmit ? '入力可能です' : '現在は入力できません'}</AlertTitle>
+                  <AlertDescription>{entryState.canSubmit ? 'ラウンド1の募集内容を保存できます。' : entryState.reason}</AlertDescription>
+                </Alert>
+
+                <Field label="参加可否" htmlFor="member-round1-attendance-status">
+                  <Select value={memberAttendanceStatus} onValueChange={(value) => setMemberAttendanceStatus(value as AttendanceStatus)}>
+                    <SelectTrigger id="member-round1-attendance-status" className="w-full bg-background">
+                      <SelectValue placeholder="参加可否を選択" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="attending">参加</SelectItem>
+                      <SelectItem value="undecided">未定</SelectItem>
+                      <SelectItem value="absent">不参加</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </Field>
+
+                <div className={isVocalMember ? 'grid gap-4 md:grid-cols-2' : 'grid gap-4'}>
+                  <Field htmlFor="member-round1-song1" label="リクエスト1曲目" description="黒本1 / 黒本2 の曲名を入力すると候補から選択できます。">
+                    <SearchableCombobox
+                      id="member-round1-song1"
+                      value={memberRound1Song1}
+                      onValueChange={setMemberRound1Song1}
+                      options={round1SongOptions}
+                      placeholder="曲名を選択"
+                      searchPlaceholder="黒本1 / 黒本2 から検索"
+                      emptyMessage="一致する曲がありません。"
+                    />
+                  </Field>
+                  {isVocalMember ? (
+                    <Field htmlFor="member-round1-key1" label="1曲目 key">
+                      <Input id="member-round1-key1" type="text" placeholder="例: F, Bb" value={memberRound1Key1} onChange={(event) => setMemberRound1Key1(event.target.value)} className="bg-background" />
+                    </Field>
+                  ) : null}
+                </div>
+
+                <div className={isVocalMember ? 'grid gap-4 md:grid-cols-2' : 'grid gap-4'}>
+                  <Field htmlFor="member-round1-song2" label="リクエスト2曲目" description="未入力でも保存できます。">
+                    <SearchableCombobox
+                      id="member-round1-song2"
+                      value={memberRound1Song2}
+                      onValueChange={setMemberRound1Song2}
+                      options={round1SongOptions}
+                      placeholder="曲名を選択"
+                      searchPlaceholder="黒本1 / 黒本2 から検索"
+                      emptyMessage="一致する曲がありません。"
+                    />
+                  </Field>
+                  {isVocalMember ? (
+                    <Field htmlFor="member-round1-key2" label="2曲目 key">
+                      <Input id="member-round1-key2" type="text" placeholder="例: Eb, G" value={memberRound1Key2} onChange={(event) => setMemberRound1Key2(event.target.value)} className="bg-background" />
+                    </Field>
+                  ) : null}
+                </div>
+
+                <DialogFooter>
+                  <Button type="button" variant="outline" onClick={() => setIsRound1EntryDialogOpen(false)} disabled={loading}>閉じる</Button>
+                  <Button type="submit" disabled={loading || !entryState.canSubmit}>保存</Button>
+                </DialogFooter>
+              </form>
+            )}
+          </DialogContent>
+        </Dialog>
 
         <Card className="border p-2 bg-pink-100">
           <CardTitle className="text-sm font-semibold text-pink-600 bg-neutral-50 px-4 py-1">追加リクエスト曲募集中イベント(ラウンド2)</CardTitle>
@@ -418,11 +571,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
 
 
 
-      <Section title="セッションエントリー" description="受付中のラウンドにあわせて希望曲を登録します。">
-        <Alert variant={entryState.canSubmit ? 'default' : 'destructive'}>
-          <AlertTitle>{entryState.canSubmit ? '入力可能です' : '現在は入力できません'}</AlertTitle>
-          <AlertDescription>{entryState.canSubmit ? `現在入力できるのは Round ${entryState.round} です。` : entryState.reason}</AlertDescription>
-        </Alert>
+      <Section title="セッションエントリー" description="ラウンド1は上のイベント一覧から、ラウンド2はここから追加リクエストを登録します。">
         <div className="mt-4 grid max-w-3xl gap-4 md:grid-cols-2">
           <Field label="イベント" htmlFor="member-event-id" className="md:col-span-2">
             <Select value={memberEventId || NONE_VALUE} onValueChange={(value) => setMemberEventId(value === NONE_VALUE ? '' : value)}>
@@ -437,35 +586,36 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
               </SelectContent>
             </Select>
           </Field>
-          <Field label="参加可否" htmlFor="member-attendance-status" className="md:col-span-2">
-            <Select value={memberAttendanceStatus} onValueChange={(value) => setMemberAttendanceStatus(value as AttendanceStatus)}>
-              <SelectTrigger id="member-attendance-status" className="w-full">
-                <SelectValue placeholder="参加可否を選択" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="attending">attending</SelectItem>
-                <SelectItem value="undecided">undecided</SelectItem>
-                <SelectItem value="absent">absent</SelectItem>
-              </SelectContent>
-            </Select>
-          </Field>
-          {entryState.round === 1 && (
+          {entryState.round === 1 ? (
+            <div className="md:col-span-2">
+              <Alert>
+                <AlertTitle>ラウンド1は上の一覧から登録します</AlertTitle>
+                <AlertDescription>
+                  参加募集中イベント(ラウンド1) の「エントリー」ボタンからモーダルを開いてください。募集期間中は何度でも修正できます。
+                </AlertDescription>
+              </Alert>
+            </div>
+          ) : null}
+          {entryState.round === 2 ? (
             <>
-              <Field htmlFor="member-round1-song1" label="Round1 1曲目">
-                <Input id="member-round1-song1" type="text" placeholder="Round1 1曲目" value={memberRound1Song1} onChange={(event) => setMemberRound1Song1(event.target.value)} />
+              <div className="md:col-span-2">
+                <Alert variant={entryState.canSubmit ? 'default' : 'destructive'}>
+                  <AlertTitle>{entryState.canSubmit ? '入力可能です' : '現在は入力できません'}</AlertTitle>
+                  <AlertDescription>{entryState.canSubmit ? '現在入力できるのは Round 2 です。' : entryState.reason}</AlertDescription>
+                </Alert>
+              </div>
+              <Field label="参加可否" htmlFor="member-attendance-status" className="md:col-span-2">
+                <Select value={memberAttendanceStatus} onValueChange={(value) => setMemberAttendanceStatus(value as AttendanceStatus)}>
+                  <SelectTrigger id="member-attendance-status" className="w-full">
+                    <SelectValue placeholder="参加可否を選択" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="attending">参加</SelectItem>
+                    <SelectItem value="undecided">未定</SelectItem>
+                    <SelectItem value="absent">不参加</SelectItem>
+                  </SelectContent>
+                </Select>
               </Field>
-              <Field htmlFor="member-round1-key1" label="Round1 1曲目 key">
-                <Input id="member-round1-key1" type="text" placeholder="Round1 1曲目 key" value={memberRound1Key1} onChange={(event) => setMemberRound1Key1(event.target.value)} />
-              </Field>
-              <Field htmlFor="member-round1-song2" label="Round1 2曲目">
-                <Input id="member-round1-song2" type="text" placeholder="Round1 2曲目" value={memberRound1Song2} onChange={(event) => setMemberRound1Song2(event.target.value)} />
-              </Field>
-              <Field htmlFor="member-round1-key2" label="Round1 2曲目 key">
-                <Input id="member-round1-key2" type="text" placeholder="Round1 2曲目 key" value={memberRound1Key2} onChange={(event) => setMemberRound1Key2(event.target.value)} />
-              </Field>
-            </>
-          )}
-          {entryState.round === 2 && (
             <>
               <Field htmlFor="member-round2-song1" label="Round2 1曲目" description={round2CandidateSongs.length > 0 ? '候補曲リストから選択してください。' : '候補曲はまだ生成されていません。'}>
                 <Input id="member-round2-song1" type="text" list={round2CandidateListId} placeholder="Round2 1曲目" value={memberRound2Song1} onChange={(event) => setMemberRound2Song1(event.target.value)} />
@@ -496,10 +646,11 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                 </div>
               ) : null}
             </>
-          )}
-          <div className="md:col-span-2">
-            <Button type="button" onClick={onSubmitEntry} disabled={loading || !entryState.canSubmit}>エントリー保存</Button>
-          </div>
+              <div className="md:col-span-2">
+                <Button type="button" onClick={() => { void onSubmitEntry(); }} disabled={loading || !entryState.canSubmit}>エントリー保存</Button>
+              </div>
+            </>
+          ) : null}
         </div>
       </Section>
 

@@ -5,8 +5,29 @@ import { getZodErrorMessage } from '@/lib/authSchemas';
 import { songCreateRequestSchema } from '@/lib/apiSchemas';
 
 // GET /api/songs
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const catalog = request.nextUrl.searchParams.get('catalog');
+  const query = request.nextUrl.searchParams.get('q')?.trim();
+
   const songs = await prisma.song.findMany({
+    where: {
+      ...(catalog === 'black-book'
+        ? {
+            OR: [
+              { isJazzStandardBible1: true },
+              { isJazzStandardBible2: true },
+            ],
+          }
+        : {}),
+      ...(query
+        ? {
+            title: {
+              contains: query,
+              mode: 'insensitive',
+            },
+          }
+        : {}),
+    },
     orderBy: { title: 'asc' },
   });
 
@@ -29,7 +50,11 @@ export async function POST(req: NextRequest) {
 
   try {
     const song = await prisma.song.create({
-      data: { title: body.title },
+      data: {
+        title: body.title,
+        isJazzStandardBible1: body.isJazzStandardBible1 ?? false,
+        isJazzStandardBible2: body.isJazzStandardBible2 ?? false,
+      },
     });
     return NextResponse.json({ song }, { status: 201 });
   } catch {
