@@ -253,7 +253,8 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
     // key は round=2 の vocal 希望から取得する
     let key: string | undefined;
     if (vocal) {
-      const req = vocal.requestedSongs.find(r => r.title === songTitle && r.round === 2);
+      const req = vocal.requestedSongs.find(r => r.title === songTitle && r.round === 2)
+        ?? vocal.requestedSongs.find(r => r.title === songTitle && r.round === 1);
       key = req?.key;
     }
 
@@ -356,7 +357,8 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
 
     let key: string | undefined;
     if (vocal) {
-      const request = vocal.requestedSongs.find((song) => song.title === songTitle && song.round === 2);
+      const request = vocal.requestedSongs.find((song) => song.title === songTitle && song.round === 2)
+        ?? vocal.requestedSongs.find((song) => song.title === songTitle && song.round === 1);
       key = request?.key;
     }
 

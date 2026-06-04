@@ -47,8 +47,6 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
   const [memberRound2Song2, setMemberRound2Song2] = useState('');
   const [memberRound1Key1, setMemberRound1Key1] = useState('');
   const [memberRound1Key2, setMemberRound1Key2] = useState('');
-  const [memberRound2Key1, setMemberRound2Key1] = useState('');
-  const [memberRound2Key2, setMemberRound2Key2] = useState('');
   const [round1SongOptions, setRound1SongOptions] = useState<string[]>([]);
   const [memberRatings, setMemberRatings] = useState<Record<string, number>>({});
   const [memberRatingComments, setMemberRatingComments] = useState<Record<string, string>>({});
@@ -167,8 +165,6 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
       setMemberRound1Key2('');
       setMemberRound2Song1('');
       setMemberRound2Song2('');
-      setMemberRound2Key1('');
-      setMemberRound2Key2('');
       return;
     }
 
@@ -186,8 +182,6 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     setMemberRound1Key2(round1Requests[1]?.keyName ?? '');
     setMemberRound2Song1(round2Requests[0]?.songTitleSnapshot ?? '');
     setMemberRound2Song2(round2Requests[1]?.songTitleSnapshot ?? '');
-    setMemberRound2Key1(round2Requests[0]?.keyName ?? '');
-    setMemberRound2Key2(round2Requests[1]?.keyName ?? '');
   }, [memberEventId, sessionEntries]);
 
   useEffect(() => {
@@ -250,8 +244,8 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
           { songTitle: memberRound1Song2.trim(), round: 1, priority: 2, keyName: memberRound1Key2.trim() || null },
         ]
       : [
-          { songTitle: memberRound2Song1.trim(), round: 2, priority: 1, keyName: memberRound2Key1.trim() || null },
-          { songTitle: memberRound2Song2.trim(), round: 2, priority: 2, keyName: memberRound2Key2.trim() || null },
+          { songTitle: memberRound2Song1.trim(), round: 2, priority: 1, keyName: null },
+          { songTitle: memberRound2Song2.trim(), round: 2, priority: 2, keyName: null },
         ];
 
     const res = await fetch('/api/session-entries', {
@@ -346,10 +340,6 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     setMemberRound1Key1,
     memberRound1Key2,
     setMemberRound1Key2,
-    memberRound2Key1,
-    setMemberRound2Key1,
-    memberRound2Key2,
-    setMemberRound2Key2,
     round1SongOptions,
     memberRatings,
     setMemberRatings,

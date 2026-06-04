@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
   }
 
   const memberProfile = auth.user.memberProfile!;
-  if (memberProfile.mainInstrument === 'vocal' && requests.some((item) => !item.keyName)) {
+  if (memberProfile.mainInstrument === 'vocal' && activeRound === 1 && requests.some((item) => !item.keyName)) {
     return NextResponse.json({ error: 'keyName is required for vocal' }, { status: 400 });
   }
 

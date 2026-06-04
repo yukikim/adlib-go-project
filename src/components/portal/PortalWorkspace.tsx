@@ -71,11 +71,18 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
         fetch("/api/members"),
         fetch("/api/session-events"),
       ]);
+
       const announcementJson = await parseJson(announcementRes);
       const memberJson = await parseJson(memberRes);
       // eventJson イベントリスト
       const eventJson = await parseJson(eventRes);
-      // console.log('eventJson', eventJson);
+
+      // console.log('round1 candidate songs', (eventJson.sessionEvents ?? []).map((sessionEvent: SessionEventView) => ({
+      //   sessionEventId: sessionEvent.id,
+      //   sessionEventTitle: sessionEvent.title,
+      //   songs: sessionEvent.round2CandidateSongs ?? [],
+      // })));
+
       setAnnouncements(announcementJson.announcements ?? []);
       setMembers(memberJson.members ?? []);
       setSessionEvents(eventJson.sessionEvents ?? []);
@@ -189,8 +196,6 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           memberRound2Song2={member.memberRound2Song2}
           memberRound1Key1={member.memberRound1Key1}
           memberRound1Key2={member.memberRound1Key2}
-          memberRound2Key1={member.memberRound2Key1}
-          memberRound2Key2={member.memberRound2Key2}
           round1SongOptions={member.round1SongOptions}
           memberRatings={member.memberRatings}
           memberRatingComments={member.memberRatingComments}
@@ -205,8 +210,6 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           setMemberRound2Song2={member.setMemberRound2Song2}
           setMemberRound1Key1={member.setMemberRound1Key1}
           setMemberRound1Key2={member.setMemberRound1Key2}
-          setMemberRound2Key1={member.setMemberRound2Key1}
-          setMemberRound2Key2={member.setMemberRound2Key2}
           setMemberRatings={member.setMemberRatings}
           setMemberRatingComments={member.setMemberRatingComments}
           setMemberEventComment={member.setMemberEventComment}
