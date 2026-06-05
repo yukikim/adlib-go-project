@@ -999,6 +999,11 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                     // sessionEntries イベントごとの参加エントリーリスト
                     const sessionEntries = sessionEvent.sessionEntries ?? [];
 
+                    // 懇親会参加者の名前リスト
+                    const afterPartyAttendMemberNames = sessionEntries
+                      .filter((entry) => entry.afterPartyAttendanceStatus === 'attending')
+                      .map((entry) => entry.memberProfile.displayName);
+
                     function formatDateTime(dateTimeString: string | null | undefined): ReactNode {
                       if (!dateTimeString) return '未定';
                       return formatEventDateTime(dateTimeString);
@@ -1159,6 +1164,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
 
                                     return (
                                       <li key={entry.id} className="rounded-lg border bg-card/80 p-4">
+                                        <p>{entry.afterPartyAttendanceStatus}</p>
                                         <div className="flex flex-wrap items-center gap-2">
                                           <span className="font-medium">{entry.memberProfile.displayName}</span>
                                           <Badge variant="secondary">{entry.memberProfile.mainInstrument}</Badge>
@@ -1227,6 +1233,23 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                                       <p className="text-sm text-muted-foreground">登録なし</p>
                                     )}
                                   </div>
+                                </div>
+                                <div>
+                                  <h4 className="text-sm bg-pearl-beige px-2 py-1 mb-4">懇親会参加人数({afterPartyAttendMemberNames.length || 0}人)</h4>
+                                  <div>
+                                    {afterPartyAttendMemberNames.length ? (
+                                      <ul className="space-y-1 text-sm text-muted-foreground">
+                                        {afterPartyAttendMemberNames.map((name, index) => (
+                                          <li key={index}>
+                                            {name}
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    ) : (
+                                      <p className="text-sm text-muted-foreground">参加なし</p>
+                                    )}
+                                  </div>
+
                                 </div>
                               </div>
                             )}
