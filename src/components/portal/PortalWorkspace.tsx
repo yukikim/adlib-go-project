@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { AdminPortalSection } from '@/components/portal/AdminPortalSection';
 import { AuthPortalSection } from '@/components/portal/AuthPortalSection';
 import { MemberPortalSection } from '@/components/portal/MemberPortalSection';
@@ -134,12 +135,24 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
         <h1 className="text-2xl font-semibold tracking-tight">{view === "admin" ? "管理ダッシュボード" : view === "member" ? "メンバーマイページ" : view === "signup" ? "メンバーサインアップ" : view === "admin-signin" ? "管理者サインイン" : "メンバーサインイン"}</h1>
       </div>
       {message && (
-        <Alert className="brand-success-surface mt-4">
-          <AlertTitle>ステータス</AlertTitle>
-          <AlertDescription className="text-red-500">{message}</AlertDescription>
-        </Alert>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setMessage(null)}>
+          <Alert
+            role="dialog"
+            aria-modal="true"
+            className="brand-success-surface w-full max-w-md border shadow-xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <AlertTitle>ステータス</AlertTitle>
+            <AlertDescription className="text-red-500">{message}</AlertDescription>
+            <div className="mt-4 flex justify-end">
+              <Button type="button" variant="outline" onClick={() => setMessage(null)}>
+                閉じる
+              </Button>
+            </div>
+          </Alert>
+        </div>
       )}
-      {loading && <p className="mt-4 text-sm text-muted-foreground">処理中...</p>}
+      {loading && <p className="mt-4 text-sm text-red-500 fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">処理中...</p>}
 
       {(view === "signin" || view === "signup" || view === "admin-signin") && (
         <AuthPortalSection
