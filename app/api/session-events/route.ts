@@ -67,6 +67,7 @@ export async function GET(request: NextRequest) {
             select: {
               round: true,
               songTitleSnapshot: true,
+              keyName: true,
             },
           },
         },

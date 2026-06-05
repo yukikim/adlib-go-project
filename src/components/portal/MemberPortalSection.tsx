@@ -20,6 +20,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Section } from './Section';
 import { AGE_RANGE_OPTIONS, GENDER_OPTIONS, PREFECTURE_OPTIONS } from '@/lib/memberProfile';
 import { getSessionEventStatusLabel, isSessionEventFinished } from '@/lib/sessionEventStatus';
+import { formatRoundCandidateSong } from '@/lib/sessionEventWindow';
 import { formatEventSchedule, formatYen } from '@/lib/utils';
 import type {
   AnnouncementView,
@@ -84,6 +85,10 @@ function formatAttendanceStatusLabel(status: AttendanceStatus) {
   }
 }
 
+function formatOptionalAttendanceStatusLabel(status?: AttendanceStatus | null) {
+  return status ? formatAttendanceStatusLabel(status) : '未回答';
+}
+
 type FieldProps = {
   htmlFor?: string;
   label: string;
@@ -123,6 +128,7 @@ type MemberPortalSectionProps = {
   memberSessionSets: SessionSetView[];
   memberEventId: string;
   memberAttendanceStatus: AttendanceStatus;
+  memberAfterPartyAttendanceStatus: AttendanceStatus;
   memberRound1Song1: string;
   memberRound1Song2: string;
   memberRound2Song1: string;
@@ -137,6 +143,7 @@ type MemberPortalSectionProps = {
   setSelectedMemberId: (value: string) => void;
   setMemberEventId: (value: string) => void;
   setMemberAttendanceStatus: (value: AttendanceStatus) => void;
+  setMemberAfterPartyAttendanceStatus: (value: AttendanceStatus) => void;
   setMemberRound1Song1: (value: string) => void;
   setMemberRound1Song2: (value: string) => void;
   setMemberRound2Song1: (value: string) => void;
@@ -189,6 +196,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     memberSessionSets,
     memberEventId,
     memberAttendanceStatus,
+    memberAfterPartyAttendanceStatus,
     memberRound1Song1,
     memberRound1Song2,
     memberRound2Song1,
@@ -203,6 +211,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     setSelectedMemberId,
     setMemberEventId,
     setMemberAttendanceStatus,
+    setMemberAfterPartyAttendanceStatus,
     setMemberRound1Song1,
     setMemberRound1Song2,
     setMemberRound2Song1,
@@ -253,9 +262,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
 
   const selectedMemberEvent = sessionEvents.find((event) => event.id === memberEventId) ?? null;
   const visibleSessionEvents = sessionEvents.filter((event) => event.isVisibleToMembers);
-  const scheduledEvents = visibleSessionEvents.filter((event) => !isSessionEventFinished(event.status));
   const closedEvents = visibleSessionEvents.filter((event) => isSessionEventFinished(event.status));
-  const round2CandidateSongs = selectedMemberEvent?.round2CandidateSongs ?? [];
   const canPostEventComment = selectedMemberEvent?.status === 'published';
   const canRateSelectedEvent = selectedMemberEvent?.status === 'rating';
   const isVocalMember = currentUser?.memberProfile?.mainInstrument === 'vocal';
@@ -326,7 +333,9 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
 
   const renderRound2SelectionBlock = (eventId: string, candidateSongs: string[], options?: { showSaveHint?: boolean; interactive?: boolean }) => {
     const round1Requests = getRound1RequestsForEvent(eventId);
-    const round1RequestSongSet = new Set(round1Requests.map((request) => normalizeSongTitle(request.songTitleSnapshot)));
+    const round1RequestSongSet = new Set(
+      round1Requests.map((request) => normalizeSongTitle(formatRoundCandidateSong(request.songTitleSnapshot, request.keyName))),
+    );
     const availableSongs = candidateSongs.filter((songTitle) => !round1RequestSongSet.has(normalizeSongTitle(songTitle)));
     const selectedSongs = getSelectedRound2SongsForEvent(eventId);
     const selectedSongSet = new Set(selectedSongs.map((songTitle) => normalizeSongTitle(songTitle)));
@@ -485,6 +494,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                             {eventEntry ? (
                               <div className="rounded-lg border bg-background/70 p-3 text-sm">
                                 <p className="font-medium text-foreground">参加可否: {formatAttendanceStatusLabel(eventEntry.attendanceStatus)}</p>
+                                {event.hasAfterParty ? <p className="mt-1 font-medium text-foreground">懇親会: {formatOptionalAttendanceStatusLabel(eventEntry.afterPartyAttendanceStatus)}</p> : null}
                                 {round1Requests.length === 0 ? (
                                   <p className="mt-1 text-muted-foreground">リクエスト曲は未登録です。</p>
                                 ) : (
@@ -545,6 +555,25 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     </SelectContent>
                   </Select>
                 </Field>
+
+                {selectedRound1Event.hasAfterParty ? (
+                  <Field
+                    label="懇親会参加可否"
+                    htmlFor="member-round1-after-party-attendance-status"
+                    description={selectedRound1Event.afterPartyFee != null ? `懇親会参加料金は ${formatYen(selectedRound1Event.afterPartyFee)} です。` : '懇親会の参加可否を選択してください。'}
+                  >
+                    <Select value={memberAfterPartyAttendanceStatus} onValueChange={(value) => setMemberAfterPartyAttendanceStatus(value as AttendanceStatus)}>
+                      <SelectTrigger id="member-round1-after-party-attendance-status" className="w-full bg-background">
+                        <SelectValue placeholder="懇親会参加可否を選択" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="attending">参加</SelectItem>
+                        <SelectItem value="undecided">未定</SelectItem>
+                        <SelectItem value="absent">不参加</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                ) : null}
 
                 <div className={isVocalMember ? 'grid gap-4 md:grid-cols-2' : 'grid gap-4'}>
                   <Field htmlFor="member-round1-song1" label="リクエスト1曲目" description="黒本1 / 黒本2 の曲名を入力すると候補から選択できます。">
@@ -855,7 +884,8 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             {sessionEntries.map((entry) => (
               <li key={entry.id} className="rounded-xl border bg-background/60 p-4 text-sm">
                 <div className="flex flex-wrap items-center gap-2">
-                  <Badge variant="outline">{entry.attendanceStatus}</Badge>
+                  <Badge variant="outline">参加 {formatAttendanceStatusLabel(entry.attendanceStatus)}</Badge>
+                  {entry.sessionEvent.hasAfterParty ? <Badge variant="outline">懇親会 {formatOptionalAttendanceStatusLabel(entry.afterPartyAttendanceStatus)}</Badge> : null}
                   <span className="font-medium">{entry.sessionEvent.title}</span>
                 </div>
                 <p className="mt-2 text-muted-foreground">{entry.requests.length} 曲 / {formatEventSchedule(entry.sessionEvent.eventDate, entry.sessionEvent.startTime, entry.sessionEvent.endTime)}</p>

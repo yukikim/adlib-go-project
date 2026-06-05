@@ -190,6 +190,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           memberSessionSets={member.memberSessionSets}
           memberEventId={member.memberEventId}
           memberAttendanceStatus={member.memberAttendanceStatus}
+          memberAfterPartyAttendanceStatus={member.memberAfterPartyAttendanceStatus}
           memberRound1Song1={member.memberRound1Song1}
           memberRound1Song2={member.memberRound1Song2}
           memberRound2Song1={member.memberRound2Song1}
@@ -204,6 +205,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           setSelectedMemberId={member.setSelectedMemberId}
           setMemberEventId={member.setMemberEventId}
           setMemberAttendanceStatus={member.setMemberAttendanceStatus}
+          setMemberAfterPartyAttendanceStatus={member.setMemberAfterPartyAttendanceStatus}
           setMemberRound1Song1={member.setMemberRound1Song1}
           setMemberRound1Song2={member.setMemberRound1Song2}
           setMemberRound2Song1={member.setMemberRound2Song1}

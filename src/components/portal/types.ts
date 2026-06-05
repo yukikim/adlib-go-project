@@ -81,6 +81,7 @@ export type SessionEventView = {
   sessionEntries?: {
     id: string;
     attendanceStatus: AttendanceStatus;
+    afterPartyAttendanceStatus?: AttendanceStatus | null;
     memberProfile: {
       id: string;
       displayName: string;
@@ -109,6 +110,7 @@ export type SessionEntryView = {
   id: string;
   sessionEventId: string;
   attendanceStatus: AttendanceStatus;
+  afterPartyAttendanceStatus?: AttendanceStatus | null;
   sessionEvent: {
     id: string;
     title: string;

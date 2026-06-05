@@ -772,12 +772,25 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     }
   };
 
+  const memberSubInstrument = (menberId: string) => {
+    const member = members.find((m) => m.id === menberId);
+    if (!member) {
+      return null;
+    }
+    if (member.mainInstrument === 'front') {
+      return member.subInstrument;
+    }
+    return null;
+  };
+
   // console.log(generatedResult.forcedSessionSets)
   // console.log(sessionSets)
   // console.log('selectedAdminEventId', selectedAdminEventId)
   // console.log('isChildVisible', isChildVisible)
   // console.log('savedSessionSetDrafts', savedSessionSetDrafts)
   // console.log('sessionEvents', sessionEvents)
+  // console.log('filteredMembers', filteredMembers)
+  // console.log(memberSubInstrument("f86759b3-8eb8-45cb-be74-373f538d058c"))
 
 
   return (
@@ -1138,56 +1151,84 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                             {sessionEntries.length === 0 ? (
                               <p className="text-sm text-muted-foreground">このイベントへの参加エントリーはまだありません。</p>
                             ) : (
-                              <ul className="space-y-3">
-                                {sessionEntries.map((entry) => {
-                                  const round1Requests = entry.requests.filter((request) => request.round === 1);
-                                  const round2Requests = entry.requests.filter((request) => request.round === 2);
+                              <div className="flex gap-4 md:flex-row">
+                                <ul className="space-y-1 grid gap-1 md:grid-cols-2">
+                                  {sessionEntries.map((entry) => {
+                                    const round1Requests = entry.requests.filter((request) => request.round === 1);
+                                    const round2Requests = entry.requests.filter((request) => request.round === 2);
 
-                                  return (
-                                    <li key={entry.id} className="rounded-lg border bg-card/80 p-4">
-                                      <div className="flex flex-wrap items-center gap-2">
-                                        <span className="font-medium">{entry.memberProfile.displayName}</span>
-                                        <Badge variant="secondary">{entry.memberProfile.mainInstrument}</Badge>
-                                        <Badge variant={entry.attendanceStatus === 'attending' ? 'default' : 'outline'}>
-                                          {attendanceStatusConversion(entry.attendanceStatus)}
-                                        </Badge>
-                                      </div>
-                                      <div className="mt-3 grid gap-4 md:grid-cols-2">
-                                        <div className="space-y-2">
-                                          <p className="text-sm font-medium">Round 1 の希望曲</p>
-                                          {round1Requests.length === 0 ? (
-                                            <p className="text-sm text-muted-foreground">登録なし</p>
-                                          ) : (
-                                            <ul className="space-y-1 text-sm text-muted-foreground">
-                                              {round1Requests.map((request) => (
-                                                <li key={request.id}>
-                                                  第{request.priority}希望: {request.songTitleSnapshot}
-                                                  {request.keyName ? ` (${request.keyName})` : ''}
-                                                </li>
-                                              ))}
-                                            </ul>
-                                          )}
+                                    return (
+                                      <li key={entry.id} className="rounded-lg border bg-card/80 p-4">
+                                        <div className="flex flex-wrap items-center gap-2">
+                                          <span className="font-medium">{entry.memberProfile.displayName}</span>
+                                          <Badge variant="secondary">{entry.memberProfile.mainInstrument}</Badge>
+                                          <span>{memberSubInstrument(entry.memberProfile.id)}</span>
+                                          <Badge variant={entry.attendanceStatus === 'attending' ? 'default' : 'outline'}>
+                                            {attendanceStatusConversion(entry.attendanceStatus)}
+                                          </Badge>
+                                          {sessionEvent.hasAfterParty ? (
+                                            <Badge variant={entry.afterPartyAttendanceStatus === 'attending' ? 'default' : 'outline'}>
+                                              懇親会 {entry.afterPartyAttendanceStatus ? attendanceStatusConversion(entry.afterPartyAttendanceStatus) : '未回答'}
+                                            </Badge>
+                                          ) : null}
                                         </div>
-                                        <div className="space-y-2">
-                                          <p className="text-sm font-medium">Round 2 の希望曲</p>
-                                          {round2Requests.length === 0 ? (
-                                            <p className="text-sm text-muted-foreground">登録なし</p>
-                                          ) : (
-                                            <ul className="space-y-1 text-sm text-muted-foreground">
-                                              {round2Requests.map((request) => (
-                                                <li key={request.id}>
-                                                  第{request.priority}希望: {request.songTitleSnapshot}
-                                                  {request.keyName ? ` (${request.keyName})` : ''}
-                                                </li>
-                                              ))}
-                                            </ul>
-                                          )}
+                                        <div className="mt-3">
+
+                                          <div className="">
+                                            <div className="space-y-2 mb-4">
+                                              <p className="text-xs font-medium py-1 px-2 bg-secondary text-on-secondary w-29">Round 1 の希望曲</p>
+                                              {round1Requests.length === 0 ? (
+                                                <p className="text-sm text-muted-foreground">登録なし</p>
+                                              ) : (
+                                                <ul className="space-y-1 text-sm text-muted-foreground">
+                                                  {round1Requests.map((request) => (
+                                                    <li key={request.id}>
+                                                      第{request.priority}希望: <span className="font-semibold">{request.songTitleSnapshot}
+                                                        {request.keyName ? ` (${request.keyName})` : ''}</span>
+                                                    </li>
+                                                  ))}
+                                                </ul>
+                                              )}
+                                            </div>
+                                            <div className="space-y-2">
+                                              <p className="text-xs font-medium py-1 px-2 bg-secondary text-on-secondary w-29">Round 2 の希望曲</p>
+                                              {round2Requests.length === 0 ? (
+                                                <p className="text-sm text-muted-foreground">登録なし</p>
+                                              ) : (
+                                                <ul className="space-y-1 text-sm text-muted-foreground">
+                                                  {round2Requests.map((request) => (
+                                                    <li key={request.id}>
+                                                      第{request.priority}希望: {request.songTitleSnapshot}
+                                                      {request.keyName ? ` (${request.keyName})` : ''}
+                                                    </li>
+                                                  ))}
+                                                </ul>
+                                              )}
+                                            </div>
+                                          </div>
+
                                         </div>
-                                      </div>
-                                    </li>
-                                  );
-                                })}
-                              </ul>
+                                      </li>
+                                    );
+                                  })}
+                                </ul>
+                                <div className="">
+                                  <h4 className="text-sm bg-pearl-beige px-2 py-1 mb-4">名寄せしたリクエスト曲リスト({sessionEvent.round2CandidateSongs?.length || 0}曲)</h4>
+                                  <div>
+                                    {sessionEvent.round2CandidateSongs?.length ? (
+                                      <ul className="space-y-1 text-sm text-muted-foreground">
+                                        {sessionEvent.round2CandidateSongs.map((song, index) => (
+                                          <li key={index}>
+                                            {song}
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    ) : (
+                                      <p className="text-sm text-muted-foreground">登録なし</p>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
                             )}
                             <div className="mt-4">
                               <h4 className="font-medium">イベントコメント</h4>

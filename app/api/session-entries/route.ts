@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireMemberUser } from '@/lib/auth';
-import { getRound1CandidateSongs, getSessionEventEntryState } from '@/lib/sessionEventWindow';
+import { getRound1CandidateSongOptions, getSessionEventEntryState } from '@/lib/sessionEventWindow';
 import { getZodErrorMessage } from '@/lib/authSchemas';
 import { sessionEntryCreateRequestSchema } from '@/lib/apiSchemas';
 
@@ -47,6 +47,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'SessionEvent not found' }, { status: 404 });
   }
 
+  const nextAfterPartyAttendanceStatus = sessionEvent.hasAfterParty
+    ? body.afterPartyAttendanceStatus ?? null
+    : null;
+  const afterPartyAttendanceStatusUpdate = sessionEvent.hasAfterParty
+    ? (body.afterPartyAttendanceStatus === undefined ? undefined : nextAfterPartyAttendanceStatus)
+    : null;
+
   const entryState = getSessionEventEntryState(sessionEvent);
   if (!entryState.canSubmit || !entryState.round) {
     return NextResponse.json({ error: entryState.reason ?? 'Entry is not allowed' }, { status: 400 });
@@ -71,6 +78,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'keyName is required for vocal' }, { status: 400 });
   }
 
+  let persistedRequests = requests;
+
   if (activeRound === 2) {
     const round1Entries = await prisma.sessionEntry.findMany({
       where: { sessionEventId: body.sessionEventId },
@@ -82,34 +91,48 @@ export async function POST(request: NextRequest) {
           select: {
             round: true,
             songTitleSnapshot: true,
+            keyName: true,
           },
         },
       },
     });
-    const candidateTitles = getRound1CandidateSongs(round1Entries);
-    const candidateTitleSet = new Set(candidateTitles);
+    const candidateOptions = getRound1CandidateSongOptions(round1Entries);
+    const candidateByTitle = new Map(candidateOptions.map((candidate) => [candidate.candidateSong, candidate]));
 
-    if (requests.some((item) => !candidateTitleSet.has(item.songTitle))) {
+    if (requests.some((item) => !candidateByTitle.has(item.songTitle))) {
       return NextResponse.json({
         error: 'Round2 では round1 の集計候補曲から選択してください',
-        candidateSongs: candidateTitles,
+        candidateSongs: candidateOptions.map((candidate) => candidate.candidateSong),
       }, { status: 400 });
     }
+
+    persistedRequests = requests.map((item) => {
+      const candidate = candidateByTitle.get(item.songTitle);
+      if (!candidate) {
+        return item;
+      }
+
+      return {
+        ...item,
+        songTitle: candidate.songTitle,
+        keyName: item.keyName ?? candidate.keyName,
+      };
+    });
   }
 
-  const round1Count = requests.filter((item) => item.round === 1).length;
-  const round2Count = requests.filter((item) => item.round === 2).length;
+  const round1Count = persistedRequests.filter((item) => item.round === 1).length;
+  const round2Count = persistedRequests.filter((item) => item.round === 2).length;
 
   if (memberProfile.mainInstrument === 'vocal') {
-    if (round1Count > 2 || round2Count > 1 || requests.length > 3) {
+    if (round1Count > 2 || round2Count > 1 || persistedRequests.length > 3) {
       return NextResponse.json({ error: 'Vocal request limits exceeded' }, { status: 400 });
     }
-  } else if (round1Count > 2 || round2Count > 2 || requests.length > 4) {
+  } else if (round1Count > 2 || round2Count > 2 || persistedRequests.length > 4) {
     return NextResponse.json({ error: 'Request limits exceeded' }, { status: 400 });
   }
 
   const existingSongs = await prisma.song.findMany({
-    where: { title: { in: requests.map((item) => item.songTitle) } },
+    where: { title: { in: persistedRequests.map((item) => item.songTitle) } },
     select: { id: true, title: true },
   });
   const songByTitle = new Map(existingSongs.map((song) => [song.title, song]));
@@ -124,11 +147,15 @@ export async function POST(request: NextRequest) {
       },
       update: {
         attendanceStatus: body.attendanceStatus,
+        ...(afterPartyAttendanceStatusUpdate !== undefined
+          ? { afterPartyAttendanceStatus: afterPartyAttendanceStatusUpdate }
+          : {}),
       },
       create: {
         sessionEventId: body.sessionEventId!,
         memberProfileId: memberProfile.id,
         attendanceStatus: body.attendanceStatus,
+        afterPartyAttendanceStatus: nextAfterPartyAttendanceStatus,
       },
     });
 
@@ -139,7 +166,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    for (const item of requests.sort((a, b) => a.priority - b.priority)) {
+    for (const item of persistedRequests.sort((a, b) => a.priority - b.priority)) {
       let song = songByTitle.get(item.songTitle);
       if (!song && item.round === 1) {
         song = await tx.song.create({ data: { title: item.songTitle } });

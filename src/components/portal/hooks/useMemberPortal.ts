@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AGE_RANGE_OPTIONS, GENDER_OPTIONS, PREFECTURE_OPTIONS } from '@/lib/memberProfile';
+import { formatRoundCandidateSong } from '@/lib/sessionEventWindow';
 import type {
   AttendanceStatus,
   AuthUser,
@@ -41,6 +42,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
   const [memberSessionSets, setMemberSessionSets] = useState<SessionSetView[]>([]);
   const [memberEventId, setMemberEventId] = useState('');
   const [memberAttendanceStatus, setMemberAttendanceStatus] = useState<AttendanceStatus>('attending');
+  const [memberAfterPartyAttendanceStatus, setMemberAfterPartyAttendanceStatus] = useState<AttendanceStatus>('undecided');
   const [memberRound1Song1, setMemberRound1Song1] = useState('');
   const [memberRound1Song2, setMemberRound1Song2] = useState('');
   const [memberRound2Song1, setMemberRound2Song1] = useState('');
@@ -159,6 +161,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     const currentEntry = sessionEntries.find((entry) => entry.sessionEventId === memberEventId);
     if (!currentEntry) {
       setMemberAttendanceStatus('attending');
+      setMemberAfterPartyAttendanceStatus('undecided');
       setMemberRound1Song1('');
       setMemberRound1Song2('');
       setMemberRound1Key1('');
@@ -176,12 +179,13 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
       .sort((a, b) => a.priority - b.priority);
 
     setMemberAttendanceStatus(currentEntry.attendanceStatus);
+  setMemberAfterPartyAttendanceStatus(currentEntry.afterPartyAttendanceStatus ?? 'undecided');
     setMemberRound1Song1(round1Requests[0]?.songTitleSnapshot ?? '');
     setMemberRound1Song2(round1Requests[1]?.songTitleSnapshot ?? '');
     setMemberRound1Key1(round1Requests[0]?.keyName ?? '');
     setMemberRound1Key2(round1Requests[1]?.keyName ?? '');
-    setMemberRound2Song1(round2Requests[0]?.songTitleSnapshot ?? '');
-    setMemberRound2Song2(round2Requests[1]?.songTitleSnapshot ?? '');
+    setMemberRound2Song1(formatRoundCandidateSong(round2Requests[0]?.songTitleSnapshot ?? '', round2Requests[0]?.keyName ?? null));
+    setMemberRound2Song2(formatRoundCandidateSong(round2Requests[1]?.songTitleSnapshot ?? '', round2Requests[1]?.keyName ?? null));
   }, [memberEventId, sessionEntries]);
 
   useEffect(() => {
@@ -254,6 +258,9 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
       body: JSON.stringify({
         sessionEventId: memberEventId,
         attendanceStatus: memberAttendanceStatus,
+        afterPartyAttendanceStatus: entryState.round === 1 && selectedMemberEvent?.hasAfterParty
+          ? memberAfterPartyAttendanceStatus
+          : undefined,
         requests: requests.filter((item) => item.songTitle),
       }),
     });
@@ -328,6 +335,8 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     setMemberEventId,
     memberAttendanceStatus,
     setMemberAttendanceStatus,
+    memberAfterPartyAttendanceStatus,
+    setMemberAfterPartyAttendanceStatus,
     memberRound1Song1,
     setMemberRound1Song1,
     memberRound1Song2,
