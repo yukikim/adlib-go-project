@@ -171,7 +171,7 @@ const chooseFrontWithPriority = (
  * 参加者一覧から sessionSet の配列を生成するメイン関数
  * - 曲リストは「round=1 の希望曲のユニークリスト」
  * - 各曲・各パートで round=1 を優先、足りなければ round=2 から補充
- * - vocal: round=2 で希望した曲のみ参加・最大3曲
+ * - vocal: round=1 で希望した曲のみ参加・最大3曲
  */
 export function generateSessionSets(participants: Participant[]): SessionGenerationResult {
   const participationCount: ParticipationCount = {};
@@ -210,7 +210,7 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
       piano: songParticipants.filter(p => p.instrument === 'piano'),
       front: songParticipants.filter(p => p.instrument === 'front'),
       vocal: songParticipants.filter(
-        p => p.instrument === 'vocal' && p.requestedSongs.some(r => r.title === songTitle && r.round === 2),
+        p => p.instrument === 'vocal' && p.requestedSongs.some(r => r.title === songTitle && r.round === 1),
       ),
     } as const;
 
@@ -228,7 +228,7 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
       continue;
     }
 
-    // vocal: round=2 の希望曲のみ参加 (最大3曲)
+    // vocal: round=1 の希望曲のみ参加 (最大3曲)
     const vocalCandidates = byInstrument.vocal.filter(v => participationCount[v.id] < 3);
     let vocal: Participant | undefined;
 
@@ -250,11 +250,10 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
       ...(vocal ? [vocal.id] : []),
     ];
 
-    // key は round=2 の vocal 希望から取得する
+    // key は round=1 の vocal 希望から取得する
     let key: string | undefined;
     if (vocal) {
-      const req = vocal.requestedSongs.find(r => r.title === songTitle && r.round === 2)
-        ?? vocal.requestedSongs.find(r => r.title === songTitle && r.round === 1);
+      const req = vocal.requestedSongs.find(r => r.title === songTitle && r.round === 1);
       key = req?.key;
     }
 
@@ -297,7 +296,7 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
       front: songParticipants.filter((participant) => participant.instrument === 'front'),
       vocal: songParticipants.filter(
         (participant) => participant.instrument === 'vocal'
-          && participant.requestedSongs.some((request) => request.title === songTitle && request.round === 2),
+          && participant.requestedSongs.some((request) => request.title === songTitle && request.round === 1),
       ),
     } as const;
 
@@ -357,8 +356,7 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
 
     let key: string | undefined;
     if (vocal) {
-      const request = vocal.requestedSongs.find((song) => song.title === songTitle && song.round === 2)
-        ?? vocal.requestedSongs.find((song) => song.title === songTitle && song.round === 1);
+      const request = vocal.requestedSongs.find((song) => song.title === songTitle && song.round === 1);
       key = request?.key;
     }
 

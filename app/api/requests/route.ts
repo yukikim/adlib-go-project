@@ -44,14 +44,14 @@ export async function POST(req: NextRequest) {
     if (!body.keyName) {
       return NextResponse.json({ error: 'keyName is required for vocal' }, { status: 400 });
     }
-    if (totalRequests >= 3) {
-      return NextResponse.json({ error: 'Vocal can have at most 3 requests' }, { status: 400 });
+    if (round === 2) {
+      return NextResponse.json({ error: 'Vocal cannot have round=2 requests' }, { status: 400 });
     }
-    if (round === 1 && round1Count >= 2) {
-      return NextResponse.json({ error: 'Vocal can have at most 2 round=1 requests' }, { status: 400 });
+    if (totalRequests >= 4) {
+      return NextResponse.json({ error: 'Vocal can have at most 4 requests' }, { status: 400 });
     }
-    if (round === 2 && round2Count >= 1) {
-      return NextResponse.json({ error: 'Vocal can have at most 1 round=2 request' }, { status: 400 });
+    if (round === 1 && round1Count >= 4) {
+      return NextResponse.json({ error: 'Vocal can have at most 4 round=1 requests' }, { status: 400 });
     }
   } else {
     // non-vocal

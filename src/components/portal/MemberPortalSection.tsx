@@ -151,10 +151,14 @@ type MemberPortalSectionProps = {
   memberAfterPartyAttendanceStatus: AttendanceStatus;
   memberRound1Song1: string;
   memberRound1Song2: string;
+  memberRound1Song3: string;
+  memberRound1Song4: string;
   memberRound2Song1: string;
   memberRound2Song2: string;
   memberRound1Key1: string;
   memberRound1Key2: string;
+  memberRound1Key3: string;
+  memberRound1Key4: string;
   round1SongOptions: string[];
   memberRatings: Record<string, number>;
   memberRatingComments: Record<string, string>;
@@ -166,10 +170,14 @@ type MemberPortalSectionProps = {
   setMemberAfterPartyAttendanceStatus: (value: AttendanceStatus) => void;
   setMemberRound1Song1: (value: string) => void;
   setMemberRound1Song2: (value: string) => void;
+  setMemberRound1Song3: (value: string) => void;
+  setMemberRound1Song4: (value: string) => void;
   setMemberRound2Song1: (value: string) => void;
   setMemberRound2Song2: (value: string) => void;
   setMemberRound1Key1: (value: string) => void;
   setMemberRound1Key2: (value: string) => void;
+  setMemberRound1Key3: (value: string) => void;
+  setMemberRound1Key4: (value: string) => void;
   setMemberRatings: (updater: (current: Record<string, number>) => Record<string, number>) => void;
   setMemberRatingComments: (updater: (current: Record<string, string>) => Record<string, string>) => void;
   setMemberEventComment: (value: string) => void;
@@ -219,10 +227,14 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     memberAfterPartyAttendanceStatus,
     memberRound1Song1,
     memberRound1Song2,
+    memberRound1Song3,
+    memberRound1Song4,
     memberRound2Song1,
     memberRound2Song2,
     memberRound1Key1,
     memberRound1Key2,
+    memberRound1Key3,
+    memberRound1Key4,
     round1SongOptions,
     memberRatings,
     memberRatingComments,
@@ -234,10 +246,14 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     setMemberAfterPartyAttendanceStatus,
     setMemberRound1Song1,
     setMemberRound1Song2,
+    setMemberRound1Song3,
+    setMemberRound1Song4,
     setMemberRound2Song1,
     setMemberRound2Song2,
     setMemberRound1Key1,
     setMemberRound1Key2,
+    setMemberRound1Key3,
+    setMemberRound1Key4,
     setMemberRatings,
     setMemberRatingComments,
     setMemberEventComment,
@@ -289,7 +305,9 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
 
   const announcedEvents = sessionEvents.filter((event) => event.status === 'announced');
   const round1RecruitingEvents = sessionEvents.filter((event) => event.status === 'recruiting_round1');
-  const round2RecruitingEvents = sessionEvents.filter((event) => event.status === 'recruiting_round2');
+  const round2RecruitingEvents = isVocalMember
+    ? []
+    : sessionEvents.filter((event) => event.status === 'recruiting_round2');
   const publishedEvents = sessionEvents.filter((event) => event.status === 'published');
   const ratingEvents = sessionEvents.filter((event) => event.status === 'rating');
   const completedEvents = sessionEvents.filter((event) => event.status === 'closed');
@@ -547,7 +565,9 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             <DialogHeader>
               <DialogTitle>{selectedRound1Event ? `${selectedRound1Event.title} のエントリー` : 'ラウンド1エントリー'}</DialogTitle>
               <DialogDescription>
-                参加可否とラウンド1のリクエスト2曲を登録できます。募集期間中は何度でも修正できます。
+                {isVocalMember
+                  ? '参加可否とラウンド1のリクエスト4曲を登録できます。募集期間中は何度でも修正できます。'
+                  : '参加可否とラウンド1のリクエスト2曲を登録できます。募集期間中は何度でも修正できます。'}
               </DialogDescription>
             </DialogHeader>
 
@@ -633,6 +653,44 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                   ) : null}
                 </div>
 
+                {isVocalMember ? (
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <Field htmlFor="member-round1-song3" label="リクエスト3曲目" description="未入力でも保存できます。">
+                      <SearchableCombobox
+                        id="member-round1-song3"
+                        value={memberRound1Song3}
+                        onValueChange={setMemberRound1Song3}
+                        options={round1SongOptions}
+                        placeholder="曲名を選択"
+                        searchPlaceholder="黒本1 / 黒本2 から検索"
+                        emptyMessage="一致する曲がありません。"
+                      />
+                    </Field>
+                    <Field htmlFor="member-round1-key3" label="3曲目 key">
+                      <Input id="member-round1-key3" type="text" placeholder="例: C, Ab" value={memberRound1Key3} onChange={(event) => setMemberRound1Key3(event.target.value)} className="bg-background" />
+                    </Field>
+                  </div>
+                ) : null}
+
+                {isVocalMember ? (
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <Field htmlFor="member-round1-song4" label="リクエスト4曲目" description="未入力でも保存できます。">
+                      <SearchableCombobox
+                        id="member-round1-song4"
+                        value={memberRound1Song4}
+                        onValueChange={setMemberRound1Song4}
+                        options={round1SongOptions}
+                        placeholder="曲名を選択"
+                        searchPlaceholder="黒本1 / 黒本2 から検索"
+                        emptyMessage="一致する曲がありません。"
+                      />
+                    </Field>
+                    <Field htmlFor="member-round1-key4" label="4曲目 key">
+                      <Input id="member-round1-key4" type="text" placeholder="例: D, F#" value={memberRound1Key4} onChange={(event) => setMemberRound1Key4(event.target.value)} className="bg-background" />
+                    </Field>
+                  </div>
+                ) : null}
+
                 <DialogFooter>
                   <Button type="button" variant="outline" onClick={() => setIsRound1EntryDialogOpen(false)} disabled={loading}>閉じる</Button>
                   <Button type="submit" disabled={loading || !entryState.canSubmit}>保存</Button>
@@ -642,41 +700,43 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
           </DialogContent>
         </Dialog>
 
-        <Card className="border p-2 bg-pink-100">
-          <CardTitle className="text-sm font-semibold text-pink-600 bg-neutral-50 px-4 py-1">追加リクエスト曲募集中イベント(ラウンド2)</CardTitle>
-          <CardDescription className={round2RecruitingEvents.length === 0 ? 'hidden' : ''}>ラウンド1のリクエスト曲に加えて追加のリクエスト曲を募っています。</CardDescription>
-          {round2RecruitingEvents.length === 0 ? <p className="text-sm text-gray-50 bg-gray-400 p-2">表示できる追加リクエスト曲募集中イベントはありません。</p> : (
-            <ul className="space-y-3">
-              {round2RecruitingEvents.map((event) => (
-                <li key={event.id} className="rounded-xl border bg-background/20 p-4">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <strong className="text-sm text-pink-600">{event.title}</strong>
-                    <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
-                  </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{formatEventSchedule(event.eventDate, event.startTime, event.endTime)} / {event.venue}</p>
-                  <EventMeta participantLimit={event.participantLimit} attendingEntryCount={event.attendingEntryCount} remainingEntryCapacity={event.remainingEntryCapacity} isEntryCapacityFull={event.isEntryCapacityFull} participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
-                  {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
-                  <div className="mt-4">
-                    <>
-                      <div className="md:col-span-2">
-                        <Alert variant={entryState.canSubmit ? 'default' : 'destructive'}>
-                          <AlertTitle>{entryState.canSubmit ? '入力可能です' : '現在は入力できません'}</AlertTitle>
-                          <AlertDescription>{entryState.canSubmit ? '現在入力できるのは Round 2 です。' : entryState.reason}</AlertDescription>
-                        </Alert>
-                      </div>
-                      <div className="md:col-span-2">
-                        {renderRound2SelectionBlock(event.id, event.round2CandidateSongs ?? [], { showSaveHint: true, interactive: true })}
-                      </div>
-                      <div className="md:col-span-2">
-                        <Button type="button" onClick={() => { void onSubmitEntry(); }} disabled={loading || !entryState.canSubmit}>エントリー保存</Button>
-                      </div>
-                    </>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </Card>
+        {!isVocalMember ? (
+          <Card className="border p-2 bg-pink-100">
+            <CardTitle className="text-sm font-semibold text-pink-600 bg-neutral-50 px-4 py-1">追加リクエスト曲募集中イベント(ラウンド2)</CardTitle>
+            <CardDescription className={round2RecruitingEvents.length === 0 ? 'hidden' : ''}>ラウンド1のリクエスト曲に加えて追加のリクエスト曲を募っています。</CardDescription>
+            {round2RecruitingEvents.length === 0 ? <p className="text-sm text-gray-50 bg-gray-400 p-2">表示できる追加リクエスト曲募集中イベントはありません。</p> : (
+              <ul className="space-y-3">
+                {round2RecruitingEvents.map((event) => (
+                  <li key={event.id} className="rounded-xl border bg-background/20 p-4">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <strong className="text-sm text-pink-600">{event.title}</strong>
+                      <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
+                    </div>
+                    <p className="mt-2 text-sm text-muted-foreground">{formatEventSchedule(event.eventDate, event.startTime, event.endTime)} / {event.venue}</p>
+                    <EventMeta participantLimit={event.participantLimit} attendingEntryCount={event.attendingEntryCount} remainingEntryCapacity={event.remainingEntryCapacity} isEntryCapacityFull={event.isEntryCapacityFull} participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
+                    {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
+                    <div className="mt-4">
+                      <>
+                        <div className="md:col-span-2">
+                          <Alert variant={entryState.canSubmit ? 'default' : 'destructive'}>
+                            <AlertTitle>{entryState.canSubmit ? '入力可能です' : '現在は入力できません'}</AlertTitle>
+                            <AlertDescription>{entryState.canSubmit ? '現在入力できるのは Round 2 です。' : entryState.reason}</AlertDescription>
+                          </Alert>
+                        </div>
+                        <div className="md:col-span-2">
+                          {renderRound2SelectionBlock(event.id, event.round2CandidateSongs ?? [], { showSaveHint: true, interactive: true })}
+                        </div>
+                        <div className="md:col-span-2">
+                          <Button type="button" onClick={() => { void onSubmitEntry(); }} disabled={loading || !entryState.canSubmit}>エントリー保存</Button>
+                        </div>
+                      </>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Card>
+        ) : null}
 
         {/* <Section title="セッションエントリー" description="ラウンド2はここから追加リクエストを登録します。">
         <div className="mt-4 grid max-w-3xl gap-4 md:grid-cols-2">

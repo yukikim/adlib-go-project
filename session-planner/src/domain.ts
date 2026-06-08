@@ -19,7 +19,7 @@ export interface Participant {
   subInstrument?: string;
   /**
    * non-vocal: round=1 が2件 + round=2 が2件 → 合計4
-   * vocal:     round=1 が2件 + round=2 が1件 → 合計3
+   * vocal:     round=1 が4件、round=2 はなし → 合計4
    */
   requestedSongs: RequestedSong[];
 }

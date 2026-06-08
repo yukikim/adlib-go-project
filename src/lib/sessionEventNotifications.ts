@@ -5,6 +5,7 @@ import { getSessionEventStatusLabel, normalizeSessionEventStatus, type SessionEv
 type Recipient = {
   email: string;
   displayName?: string | null;
+  mainInstrument?: string | null;
 };
 
 type MailSummary = {
@@ -68,7 +69,7 @@ async function findActiveMemberRecipients() {
     select: {
       email: true,
       memberProfile: {
-        select: { displayName: true },
+        select: { displayName: true, mainInstrument: true },
       },
     },
   });
@@ -76,6 +77,7 @@ async function findActiveMemberRecipients() {
   return users.map((user) => ({
     email: user.email,
     displayName: user.memberProfile?.displayName,
+    mainInstrument: user.memberProfile?.mainInstrument,
   }));
 }
 
@@ -95,6 +97,7 @@ async function findAttendingMemberRecipients(sessionEventId: string) {
       memberProfile: {
         select: {
           displayName: true,
+          mainInstrument: true,
           userAccount: {
             select: {
               email: true,
@@ -108,6 +111,7 @@ async function findAttendingMemberRecipients(sessionEventId: string) {
   return entries.map((entry) => ({
     email: entry.memberProfile.userAccount.email,
     displayName: entry.memberProfile.displayName,
+    mainInstrument: entry.memberProfile.mainInstrument,
   }));
 }
 
@@ -161,7 +165,7 @@ export async function sendSessionEventStatusNotification(params: {
       mailType: 'session_event_round1_started',
       subject: `【Adlib-go】${sessionEvent.title} の募集ラウンド1が始まりました`,
       createdById: params.createdById,
-      textBuilder: (recipient) => `${recipient.displayName ?? 'メンバー'} 様\n\n${sessionEvent.title} の募集ラウンド1を開始しました。\n参加可否とラウンド1のリクエスト曲をメンバーページから登録してください。\n開催日: ${formatEventDate(sessionEvent.eventDate)}\n会場: ${sessionEvent.venue}`,
+      textBuilder: (recipient) => `${recipient.displayName ?? 'メンバー'} 様\n\n${sessionEvent.title} の募集ラウンド1を開始しました。\n${recipient.mainInstrument === 'vocal' ? '参加可否とラウンド1のリクエスト4曲をメンバーページから登録してください。' : '参加可否とラウンド1のリクエスト2曲をメンバーページから登録してください。'}\n開催日: ${formatEventDate(sessionEvent.eventDate)}\n会場: ${sessionEvent.venue}`,
     });
   }
 
@@ -172,7 +176,7 @@ export async function sendSessionEventStatusNotification(params: {
       mailType: 'session_event_round2_started',
       subject: `【Adlib-go】${sessionEvent.title} の募集ラウンド2が始まりました`,
       createdById: params.createdById,
-      textBuilder: (recipient) => `${recipient.displayName ?? 'メンバー'} 様\n\n${sessionEvent.title} の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: ${formatEventDate(sessionEvent.eventDate)}\n会場: ${sessionEvent.venue}`,
+      textBuilder: (recipient) => `${recipient.displayName ?? 'メンバー'} 様\n\n${sessionEvent.title} の募集ラウンド2を開始しました。\n${recipient.mainInstrument === 'vocal' ? 'vocal の方はラウンド2での追加選曲はありません。結果公開までお待ちください。' : '候補曲の中から 2 曲を選び、メンバーページから登録してください。'}\n開催日: ${formatEventDate(sessionEvent.eventDate)}\n会場: ${sessionEvent.venue}`,
     });
   }
 

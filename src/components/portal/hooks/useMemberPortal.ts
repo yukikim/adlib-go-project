@@ -45,10 +45,14 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
   const [memberAfterPartyAttendanceStatus, setMemberAfterPartyAttendanceStatus] = useState<AttendanceStatus>('undecided');
   const [memberRound1Song1, setMemberRound1Song1] = useState('');
   const [memberRound1Song2, setMemberRound1Song2] = useState('');
+  const [memberRound1Song3, setMemberRound1Song3] = useState('');
+  const [memberRound1Song4, setMemberRound1Song4] = useState('');
   const [memberRound2Song1, setMemberRound2Song1] = useState('');
   const [memberRound2Song2, setMemberRound2Song2] = useState('');
   const [memberRound1Key1, setMemberRound1Key1] = useState('');
   const [memberRound1Key2, setMemberRound1Key2] = useState('');
+  const [memberRound1Key3, setMemberRound1Key3] = useState('');
+  const [memberRound1Key4, setMemberRound1Key4] = useState('');
   const [round1SongOptions, setRound1SongOptions] = useState<string[]>([]);
   const [memberRatings, setMemberRatings] = useState<Record<string, number>>({});
   const [memberRatingComments, setMemberRatingComments] = useState<Record<string, string>>({});
@@ -58,6 +62,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
   const visibleSessionEvents = sessionEvents.filter((event) => event.isVisibleToMembers);
   const selectableSessionEvents = visibleSessionEvents.filter((event) => !isSessionEventFinished(event.status));
   const entryState = getEventEntryState(selectedMemberEvent);
+  const isVocalMember = currentUser?.memberProfile?.mainInstrument === 'vocal';
 
   const loadMemberData = useCallback(async () => {
     if (currentUser?.role !== 'member') {
@@ -164,8 +169,12 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
       setMemberAfterPartyAttendanceStatus('undecided');
       setMemberRound1Song1('');
       setMemberRound1Song2('');
+      setMemberRound1Song3('');
+      setMemberRound1Song4('');
       setMemberRound1Key1('');
       setMemberRound1Key2('');
+      setMemberRound1Key3('');
+      setMemberRound1Key4('');
       setMemberRound2Song1('');
       setMemberRound2Song2('');
       return;
@@ -179,11 +188,15 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
       .sort((a, b) => a.priority - b.priority);
 
     setMemberAttendanceStatus(currentEntry.attendanceStatus);
-  setMemberAfterPartyAttendanceStatus(currentEntry.afterPartyAttendanceStatus ?? 'undecided');
+    setMemberAfterPartyAttendanceStatus(currentEntry.afterPartyAttendanceStatus ?? 'undecided');
     setMemberRound1Song1(round1Requests[0]?.songTitleSnapshot ?? '');
     setMemberRound1Song2(round1Requests[1]?.songTitleSnapshot ?? '');
+    setMemberRound1Song3(round1Requests[2]?.songTitleSnapshot ?? '');
+    setMemberRound1Song4(round1Requests[3]?.songTitleSnapshot ?? '');
     setMemberRound1Key1(round1Requests[0]?.keyName ?? '');
     setMemberRound1Key2(round1Requests[1]?.keyName ?? '');
+    setMemberRound1Key3(round1Requests[2]?.keyName ?? '');
+    setMemberRound1Key4(round1Requests[3]?.keyName ?? '');
     setMemberRound2Song1(formatRoundCandidateSong(round2Requests[0]?.songTitleSnapshot ?? '', round2Requests[0]?.keyName ?? null));
     setMemberRound2Song2(formatRoundCandidateSong(round2Requests[1]?.songTitleSnapshot ?? '', round2Requests[1]?.keyName ?? null));
   }, [memberEventId, sessionEntries]);
@@ -246,6 +259,12 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
       ? [
           { songTitle: memberRound1Song1.trim(), round: 1, priority: 1, keyName: memberRound1Key1.trim() || null },
           { songTitle: memberRound1Song2.trim(), round: 1, priority: 2, keyName: memberRound1Key2.trim() || null },
+          ...(isVocalMember
+            ? [
+                { songTitle: memberRound1Song3.trim(), round: 1 as const, priority: 3, keyName: memberRound1Key3.trim() || null },
+                { songTitle: memberRound1Song4.trim(), round: 1 as const, priority: 4, keyName: memberRound1Key4.trim() || null },
+              ]
+            : []),
         ]
       : [
           { songTitle: memberRound2Song1.trim(), round: 2, priority: 1, keyName: null },
@@ -341,6 +360,10 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     setMemberRound1Song1,
     memberRound1Song2,
     setMemberRound1Song2,
+    memberRound1Song3,
+    setMemberRound1Song3,
+    memberRound1Song4,
+    setMemberRound1Song4,
     memberRound2Song1,
     setMemberRound2Song1,
     memberRound2Song2,
@@ -349,6 +372,10 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     setMemberRound1Key1,
     memberRound1Key2,
     setMemberRound1Key2,
+    memberRound1Key3,
+    setMemberRound1Key3,
+    memberRound1Key4,
+    setMemberRound1Key4,
     round1SongOptions,
     memberRatings,
     setMemberRatings,

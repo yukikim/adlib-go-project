@@ -76,8 +76,12 @@ export async function POST(request: NextRequest) {
   }
 
   const memberProfile = auth.user.memberProfile!;
+  const isVocalMember = memberProfile.mainInstrument === 'vocal';
   if (memberProfile.mainInstrument === 'vocal' && activeRound === 1 && requests.some((item) => !item.keyName)) {
     return NextResponse.json({ error: 'keyName is required for vocal' }, { status: 400 });
+  }
+  if (isVocalMember && activeRound === 2 && requests.length > 0) {
+    return NextResponse.json({ error: 'Vocal does not accept round=2 requests' }, { status: 400 });
   }
 
   let persistedRequests = requests;
@@ -125,8 +129,8 @@ export async function POST(request: NextRequest) {
   const round1Count = persistedRequests.filter((item) => item.round === 1).length;
   const round2Count = persistedRequests.filter((item) => item.round === 2).length;
 
-  if (memberProfile.mainInstrument === 'vocal') {
-    if (round1Count > 2 || round2Count > 1 || persistedRequests.length > 3) {
+  if (isVocalMember) {
+    if (round1Count > 4 || round2Count > 0 || persistedRequests.length > 4) {
       return NextResponse.json({ error: 'Vocal request limits exceeded' }, { status: 400 });
     }
   } else if (round1Count > 2 || round2Count > 2 || persistedRequests.length > 4) {
