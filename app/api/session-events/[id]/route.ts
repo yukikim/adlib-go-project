@@ -44,6 +44,7 @@ export async function PATCH(request: NextRequest) {
   if (typeof body.eventDate === 'string') data.eventDate = new Date(body.eventDate);
   if (typeof body.startTime === 'string' || body.startTime === null) data.startTime = body.startTime ? new Date(body.startTime) : null;
   if (typeof body.endTime === 'string' || body.endTime === null) data.endTime = body.endTime ? new Date(body.endTime) : null;
+  if (typeof body.participantLimit === 'number' || body.participantLimit === null) data.participantLimit = body.participantLimit ?? null;
   if (typeof body.participationFee === 'number' || body.participationFee === null) data.participationFee = body.participationFee ?? null;
   if (typeof body.hasAfterParty === 'boolean') data.hasAfterParty = body.hasAfterParty;
   if (typeof body.afterPartyFee === 'number' || body.afterPartyFee === null) data.afterPartyFee = body.afterPartyFee ?? null;

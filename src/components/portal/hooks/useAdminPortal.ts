@@ -57,6 +57,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
   const [eventDate, setEventDate] = useState('');
   const [eventStartTime, setEventStartTime] = useState('');
   const [eventEndTime, setEventEndTime] = useState('');
+  const [eventParticipantLimit, setEventParticipantLimit] = useState('');
   const [eventParticipationFee, setEventParticipationFee] = useState('');
   const [eventHasAfterParty, setEventHasAfterParty] = useState(false);
   const [eventAfterPartyFee, setEventAfterPartyFee] = useState('');
@@ -66,6 +67,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
   const [editEventDate, setEditEventDate] = useState('');
   const [editEventStartTime, setEditEventStartTime] = useState('');
   const [editEventEndTime, setEditEventEndTime] = useState('');
+  const [editEventParticipantLimit, setEditEventParticipantLimit] = useState('');
   const [editEventParticipationFee, setEditEventParticipationFee] = useState('');
   const [editEventHasAfterParty, setEditEventHasAfterParty] = useState(false);
   const [editEventAfterPartyFee, setEditEventAfterPartyFee] = useState('');
@@ -230,6 +232,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     setEditEventDate(formatDateLocal(selectedAdminEvent.eventDate));
     setEditEventStartTime(formatTimeLocal(selectedAdminEvent.startTime ?? (hasLocalTime(selectedAdminEvent.eventDate) ? selectedAdminEvent.eventDate : null)));
     setEditEventEndTime(formatTimeLocal(selectedAdminEvent.endTime));
+    setEditEventParticipantLimit(selectedAdminEvent.participantLimit?.toString() ?? '');
     setEditEventParticipationFee(selectedAdminEvent.participationFee?.toString() ?? '');
     setEditEventHasAfterParty(selectedAdminEvent.hasAfterParty === true);
     setEditEventAfterPartyFee(selectedAdminEvent.afterPartyFee?.toString() ?? '');
@@ -305,6 +308,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
         eventDate: formatDateInputToIso(eventDate),
         startTime: combineDateAndTimeToIso(eventDate, eventStartTime),
         endTime: combineDateAndTimeToIso(eventDate, eventEndTime),
+        participantLimit: parseOptionalInteger(eventParticipantLimit),
         participationFee: parseOptionalInteger(eventParticipationFee),
         hasAfterParty: eventHasAfterParty,
         afterPartyFee: eventHasAfterParty ? parseOptionalInteger(eventAfterPartyFee) : null,
@@ -320,6 +324,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     setEventDate('');
     setEventStartTime('');
     setEventEndTime('');
+    setEventParticipantLimit('');
     setEventParticipationFee('');
     setEventHasAfterParty(false);
     setEventAfterPartyFee('');
@@ -337,6 +342,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
         eventDate: formatDateInputToIso(editEventDate),
         startTime: combineDateAndTimeToIso(editEventDate, editEventStartTime),
         endTime: combineDateAndTimeToIso(editEventDate, editEventEndTime),
+        participantLimit: parseOptionalInteger(editEventParticipantLimit),
         participationFee: parseOptionalInteger(editEventParticipationFee),
         hasAfterParty: editEventHasAfterParty,
         afterPartyFee: editEventHasAfterParty ? parseOptionalInteger(editEventAfterPartyFee) : null,
@@ -603,6 +609,8 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     setEventStartTime,
     eventEndTime,
     setEventEndTime,
+    eventParticipantLimit,
+    setEventParticipantLimit,
     eventParticipationFee,
     setEventParticipationFee,
     eventHasAfterParty,
@@ -621,6 +629,8 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     setEditEventStartTime,
     editEventEndTime,
     setEditEventEndTime,
+    editEventParticipantLimit,
+    setEditEventParticipantLimit,
     editEventParticipationFee,
     setEditEventParticipationFee,
     editEventHasAfterParty,

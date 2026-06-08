@@ -273,6 +273,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           eventHasAfterParty={admin.eventHasAfterParty}
           eventAfterPartyFee={admin.eventAfterPartyFee}
           eventNotes={admin.eventNotes}
+          eventParticipantLimit={admin.eventParticipantLimit}
           editEventTitle={admin.editEventTitle}
           editEventVenue={admin.editEventVenue}
           editEventDate={admin.editEventDate}
@@ -282,6 +283,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           editEventHasAfterParty={admin.editEventHasAfterParty}
           editEventAfterPartyFee={admin.editEventAfterPartyFee}
           editEventNotes={admin.editEventNotes}
+          editEventParticipantLimit={admin.editEventParticipantLimit}
           editEventStatus={admin.editEventStatus}
           editRound1StartAt={admin.editRound1StartAt}
           editRound1EndAt={admin.editRound1EndAt}
@@ -338,6 +340,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           setEventHasAfterParty={admin.setEventHasAfterParty}
           setEventAfterPartyFee={admin.setEventAfterPartyFee}
           setEventNotes={admin.setEventNotes}
+          setEventParticipantLimit={admin.setEventParticipantLimit}
           setEditEventTitle={admin.setEditEventTitle}
           setEditEventVenue={admin.setEditEventVenue}
           setEditEventDate={admin.setEditEventDate}
@@ -347,6 +350,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           setEditEventHasAfterParty={admin.setEditEventHasAfterParty}
           setEditEventAfterPartyFee={admin.setEditEventAfterPartyFee}
           setEditEventNotes={admin.setEditEventNotes}
+          setEditEventParticipantLimit={admin.setEditEventParticipantLimit}
           setEditEventStatus={admin.setEditEventStatus}
           setEditRound1StartAt={admin.setEditRound1StartAt}
           setEditRound1EndAt={admin.setEditRound1EndAt}

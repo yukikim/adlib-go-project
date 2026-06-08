@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-05-29T07:01:37.328Z",
+  "exportedAt": "2026-06-08T06:45:15.893Z",
   "version": 1,
   "data": {
     "participants": [
@@ -3762,9 +3762,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-05-29T01:38:34.004Z",
+        "lastSignedInAt": "2026-06-05T07:02:31.048Z",
         "createdAt": "2026-05-07T08:44:30.129Z",
-        "updatedAt": "2026-05-29T01:38:34.005Z"
+        "updatedAt": "2026-06-05T07:30:56.042Z"
       },
       {
         "id": "275f7e18-668c-43d6-82dd-000434809ea7",
@@ -3775,7 +3775,7 @@
         "status": "active",
         "lastSignedInAt": "2026-05-28T01:50:12.674Z",
         "createdAt": "2026-05-07T08:44:30.125Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-05T07:29:25.224Z"
       },
       {
         "id": "3b0de832-5385-4e33-80c3-e82c30f9e336",
@@ -3797,7 +3797,7 @@
         "status": "active",
         "lastSignedInAt": null,
         "createdAt": "2026-05-07T08:44:30.200Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-05T08:25:46.661Z"
       },
       {
         "id": "4a5b733f-d798-404c-9b20-8e5add18cb6c",
@@ -3808,7 +3808,7 @@
         "status": "active",
         "lastSignedInAt": null,
         "createdAt": "2026-05-07T08:44:30.142Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-05T07:39:18.390Z"
       },
       {
         "id": "4e0c8834-195e-4343-bb52-2bda851ff716",
@@ -3817,9 +3817,9 @@
         "emailVerifiedAt": null,
         "role": "admin",
         "status": "active",
-        "lastSignedInAt": "2026-05-29T05:36:37.023Z",
+        "lastSignedInAt": "2026-06-05T07:05:06.156Z",
         "createdAt": "2026-05-07T08:44:30.109Z",
-        "updatedAt": "2026-05-29T05:36:37.024Z"
+        "updatedAt": "2026-06-05T07:05:06.157Z"
       },
       {
         "id": "5229754f-ac5a-45c2-b97c-ce5dfaba3ad5",
@@ -3830,7 +3830,7 @@
         "status": "active",
         "lastSignedInAt": null,
         "createdAt": "2026-05-07T08:44:30.191Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-05T08:21:07.518Z"
       },
       {
         "id": "57a67c68-0ea9-4113-bcac-02b651e854e9",
@@ -3841,7 +3841,7 @@
         "status": "active",
         "lastSignedInAt": "2026-05-29T05:26:26.350Z",
         "createdAt": "2026-05-07T08:44:30.132Z",
-        "updatedAt": "2026-05-29T05:26:26.351Z"
+        "updatedAt": "2026-06-05T07:32:45.465Z"
       },
       {
         "id": "6324bd2a-b57b-4eb5-8002-aac5cdef41c2",
@@ -3852,7 +3852,7 @@
         "status": "active",
         "lastSignedInAt": null,
         "createdAt": "2026-05-07T08:44:30.148Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-05T07:42:56.919Z"
       },
       {
         "id": "697321d4-4d50-4bb3-aa1d-c92eb61bfca8",
@@ -3863,7 +3863,7 @@
         "status": "active",
         "lastSignedInAt": null,
         "createdAt": "2026-05-07T08:44:30.175Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-05T08:12:29.281Z"
       },
       {
         "id": "6cbdce80-5c3f-48e2-942f-8cda4adc73d8",
@@ -3874,7 +3874,7 @@
         "status": "active",
         "lastSignedInAt": null,
         "createdAt": "2026-05-07T08:44:30.172Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-05T08:10:59.778Z"
       },
       {
         "id": "6d549ad8-a93d-4e5e-9152-6d9f03d129a7",
@@ -3885,7 +3885,7 @@
         "status": "active",
         "lastSignedInAt": null,
         "createdAt": "2026-05-07T08:44:30.203Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-05T08:27:39.669Z"
       },
       {
         "id": "6de1ed0f-d1e5-40c1-90e3-9d21ec6c997c",
@@ -3896,7 +3896,7 @@
         "status": "active",
         "lastSignedInAt": null,
         "createdAt": "2026-05-07T08:44:30.145Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-05T07:40:50.946Z"
       },
       {
         "id": "6eaec50f-99bb-4aa9-834a-4d450a2de26b",
@@ -3907,7 +3907,7 @@
         "status": "active",
         "lastSignedInAt": null,
         "createdAt": "2026-05-07T08:44:30.166Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-05T08:07:55.388Z"
       },
       {
         "id": "79d89d74-d98e-40d1-9ff7-cb73114da3a9",
@@ -3918,7 +3918,7 @@
         "status": "active",
         "lastSignedInAt": null,
         "createdAt": "2026-05-07T08:44:30.157Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-05T07:47:50.845Z"
       },
       {
         "id": "7a9713d8-f29a-4e9c-b057-7b462b83adf7",
@@ -3929,7 +3929,7 @@
         "status": "active",
         "lastSignedInAt": null,
         "createdAt": "2026-05-07T08:44:30.197Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-05T08:24:08.320Z"
       },
       {
         "id": "7c88fdd8-d17b-4a5a-a2a7-604838801f91",
@@ -3940,7 +3940,7 @@
         "status": "active",
         "lastSignedInAt": null,
         "createdAt": "2026-05-07T08:44:30.160Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-05T08:06:25.064Z"
       },
       {
         "id": "86c28405-f30f-442f-95ec-dd825f098b2f",
@@ -3951,7 +3951,7 @@
         "status": "active",
         "lastSignedInAt": null,
         "createdAt": "2026-05-07T08:44:30.194Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-05T08:22:26.232Z"
       },
       {
         "id": "8dc8b974-c36d-41b6-af2f-f4fc02b2c977",
@@ -3962,7 +3962,7 @@
         "status": "active",
         "lastSignedInAt": "2026-05-29T06:24:15.780Z",
         "createdAt": "2026-05-07T08:44:30.139Z",
-        "updatedAt": "2026-05-29T06:24:15.781Z"
+        "updatedAt": "2026-06-05T07:37:47.529Z"
       },
       {
         "id": "8e75dac7-b8e4-4cf2-a75c-08f5d8e613e6",
@@ -3973,7 +3973,7 @@
         "status": "active",
         "lastSignedInAt": null,
         "createdAt": "2026-05-07T08:44:30.120Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-05T07:27:57.124Z"
       },
       {
         "id": "98bb550d-9b39-4755-a1a3-b992e8c86006",
@@ -3984,7 +3984,7 @@
         "status": "active",
         "lastSignedInAt": null,
         "createdAt": "2026-05-07T08:44:30.151Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-05T07:44:22.187Z"
       },
       {
         "id": "a16041dc-b6bb-48ab-8cca-69e0364b8ea9",
@@ -3995,7 +3995,7 @@
         "status": "active",
         "lastSignedInAt": null,
         "createdAt": "2026-05-07T08:44:30.154Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-05T07:46:05.992Z"
       },
       {
         "id": "c45711e4-28d6-48ab-b8c6-ae16148c1e9b",
@@ -4017,7 +4017,18 @@
         "status": "active",
         "lastSignedInAt": null,
         "createdAt": "2026-05-07T08:44:30.184Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-05T08:18:18.591Z"
+      },
+      {
+        "id": "cef60681-f8de-433a-bbf9-949661de1bd5",
+        "email": "ipikkoro@gmail.com",
+        "passwordHash": "scrypt$3cd3b6bf7cdf0e5aefa2ef0d11dcf773$57564e88048c025216cdf2060c578579462aac33a60f6010bd8724c465d12fc2064fddb9d343493af31db84c7074fb7a3b34b92c0ce80c2aa7e86173956347c4",
+        "emailVerifiedAt": null,
+        "role": "member",
+        "status": "suspended",
+        "lastSignedInAt": null,
+        "createdAt": "2026-06-03T07:44:15.037Z",
+        "updatedAt": "2026-06-05T07:09:25.753Z"
       },
       {
         "id": "dc934a75-0037-4162-a72c-f50968942e95",
@@ -4028,7 +4039,7 @@
         "status": "active",
         "lastSignedInAt": "2026-05-29T05:35:11.017Z",
         "createdAt": "2026-05-07T08:44:30.135Z",
-        "updatedAt": "2026-05-29T05:35:11.018Z"
+        "updatedAt": "2026-06-05T07:34:49.046Z"
       },
       {
         "id": "dcd4d74e-ca53-47bc-ac1f-25d546b4310c",
@@ -4039,7 +4050,7 @@
         "status": "active",
         "lastSignedInAt": null,
         "createdAt": "2026-05-07T08:44:30.206Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-05T08:29:01.339Z"
       },
       {
         "id": "dfe48b6c-dc70-4292-bf09-0fb576b29d4d",
@@ -4050,7 +4061,7 @@
         "status": "active",
         "lastSignedInAt": null,
         "createdAt": "2026-05-07T08:44:30.181Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-05T08:15:50.381Z"
       },
       {
         "id": "e0832ddd-1455-45ce-8422-78c70df97be5",
@@ -4061,7 +4072,7 @@
         "status": "active",
         "lastSignedInAt": null,
         "createdAt": "2026-05-07T08:44:30.169Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-05T08:09:42.120Z"
       },
       {
         "id": "f7ecc33e-fab2-4e93-b1f6-4d51197a4141",
@@ -4072,7 +4083,7 @@
         "status": "active",
         "lastSignedInAt": null,
         "createdAt": "2026-05-07T08:44:30.188Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-05T08:19:48.167Z"
       },
       {
         "id": "f85cb9a0-469f-4f80-8dfa-8d854eee9a49",
@@ -4083,23 +4094,23 @@
         "status": "active",
         "lastSignedInAt": null,
         "createdAt": "2026-05-07T08:44:30.178Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-05T08:13:52.190Z"
       }
     ],
     "memberProfiles": [
       {
         "id": "03ca1050-cf3e-4c1a-97ec-282ba50d1e35",
         "userAccountId": "e0832ddd-1455-45ce-8422-78c70df97be5",
-        "displayName": "酒井 優希",
-        "nickname": "優希",
-        "mainInstrument": "piano",
-        "subInstrument": "front",
+        "displayName": "上田",
+        "nickname": "上田",
+        "mainInstrument": "front",
+        "subInstrument": "ギター",
         "gender": "男性",
         "ageRange": "30代",
         "area": "神奈川県",
-        "bio": "酒井 優希 のデモプロフィールです。",
+        "bio": "上田 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.170Z",
-        "updatedAt": "2026-05-07T08:44:30.170Z"
+        "updatedAt": "2026-06-05T08:09:41.882Z"
       },
       {
         "id": "0b290a20-c57f-4a40-9421-02a97f3ce9aa",
@@ -4118,184 +4129,198 @@
       {
         "id": "11b6c403-5cfb-485b-a00d-1a02edcc7d57",
         "userAccountId": "4a5b733f-d798-404c-9b20-8e5add18cb6c",
-        "displayName": "岡田 蓮",
-        "nickname": "蓮",
+        "displayName": "藤井友",
+        "nickname": "藤井友",
         "mainInstrument": "bass",
-        "subInstrument": "front",
+        "subInstrument": null,
         "gender": "男性",
-        "ageRange": "80代",
+        "ageRange": "30代",
         "area": "京都府",
-        "bio": "岡田 蓮 のデモプロフィールです。",
+        "bio": "藤井友 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.143Z",
-        "updatedAt": "2026-05-07T08:44:30.143Z"
+        "updatedAt": "2026-06-05T07:39:18.236Z"
       },
       {
         "id": "275c9330-c939-4b89-8dbf-57a377420f02",
         "userAccountId": "6d549ad8-a93d-4e5e-9152-6d9f03d129a7",
-        "displayName": "鈴木 陽向",
-        "nickname": "陽向",
-        "mainInstrument": "front",
-        "subInstrument": "ギター",
+        "displayName": "中尾",
+        "nickname": "中尾",
+        "mainInstrument": "vocal",
+        "subInstrument": null,
         "gender": "その他",
-        "ageRange": "70代",
+        "ageRange": "40代",
         "area": "大阪府",
-        "bio": "鈴木 陽向 のデモプロフィールです。",
+        "bio": "中尾 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.204Z",
-        "updatedAt": "2026-05-07T08:44:30.204Z"
+        "updatedAt": "2026-06-05T08:27:39.524Z"
       },
       {
         "id": "4d24136f-3c36-4e6d-a595-be5545c23074",
         "userAccountId": "57a67c68-0ea9-4113-bcac-02b651e854e9",
-        "displayName": "藤田 直樹",
-        "nickname": "直樹",
-        "mainInstrument": "drum",
-        "subInstrument": "front",
+        "displayName": "山本慎",
+        "nickname": "山本慎",
+        "mainInstrument": "bass",
+        "subInstrument": null,
         "gender": "男性",
         "ageRange": "50代",
         "area": "千葉県",
-        "bio": "藤田 直樹 のデモプロフィールです。",
+        "bio": "山本慎 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.133Z",
-        "updatedAt": "2026-05-07T08:44:30.133Z"
+        "updatedAt": "2026-06-05T07:32:45.391Z"
       },
       {
         "id": "5335c4bc-48d2-4310-9d52-f5631987d4e1",
         "userAccountId": "4193bb06-87df-4b18-8fb8-e163fbdf289e",
-        "displayName": "渡辺 莉央",
-        "nickname": "莉央",
+        "displayName": "木村光",
+        "nickname": "木村光",
         "mainInstrument": "front",
-        "subInstrument": "ギター",
+        "subInstrument": "ソプラノサックス",
         "gender": "女性",
-        "ageRange": "60代",
+        "ageRange": "20代",
         "area": "愛知県",
-        "bio": "渡辺 莉央 のデモプロフィールです。",
+        "bio": "木村光 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.201Z",
-        "updatedAt": "2026-05-07T08:44:30.201Z"
+        "updatedAt": "2026-06-05T08:25:46.512Z"
       },
       {
         "id": "5dad37a5-b796-47ae-93d1-2d067fa7e461",
         "userAccountId": "dfe48b6c-dc70-4292-bf09-0fb576b29d4d",
-        "displayName": "小林 湊",
-        "nickname": "湊",
+        "displayName": "白井清",
+        "nickname": "白井清",
         "mainInstrument": "front",
         "subInstrument": "アルトサックス",
         "gender": "女性",
-        "ageRange": "70代",
+        "ageRange": "40代",
         "area": "大阪府",
-        "bio": "小林 湊 のデモプロフィールです。",
+        "bio": "白井清 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.182Z",
-        "updatedAt": "2026-05-07T08:44:30.182Z"
+        "updatedAt": "2026-06-05T08:15:50.080Z"
       },
       {
         "id": "72c840a7-33b1-4a18-96a4-9c8a7f78a69d",
         "userAccountId": "7c88fdd8-d17b-4a5a-a2a7-604838801f91",
-        "displayName": "原 翼",
-        "nickname": "翼",
-        "mainInstrument": "piano",
-        "subInstrument": "front",
+        "displayName": "網野",
+        "nickname": "網野",
+        "mainInstrument": "front",
+        "subInstrument": "ギター",
         "gender": "男性",
-        "ageRange": "70代",
+        "ageRange": "50代",
         "area": "大阪府",
-        "bio": "原 翼 のデモプロフィールです。",
+        "bio": "網野のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.161Z",
-        "updatedAt": "2026-05-07T08:44:30.161Z"
+        "updatedAt": "2026-06-05T08:06:24.828Z"
       },
       {
         "id": "72e11a37-0ada-48a5-bc72-0647a2ed9429",
         "userAccountId": "6cbdce80-5c3f-48e2-942f-8cda4adc73d8",
-        "displayName": "中村 樹",
-        "nickname": "樹",
+        "displayName": "鈴木了",
+        "nickname": "鈴木了",
         "mainInstrument": "front",
-        "subInstrument": "トロンボーン",
+        "subInstrument": "ギター",
         "gender": "女性",
         "ageRange": "40代",
         "area": "埼玉県",
-        "bio": "中村 樹 のデモプロフィールです。",
+        "bio": "鈴木了 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.173Z",
-        "updatedAt": "2026-05-07T08:44:30.173Z"
+        "updatedAt": "2026-06-05T08:10:59.632Z"
       },
       {
         "id": "746a9944-256d-4caf-b1ee-4a5651e4ee04",
         "userAccountId": "6324bd2a-b57b-4eb5-8002-aac5cdef41c2",
-        "displayName": "石井 健太",
-        "nickname": "健太",
-        "mainInstrument": "bass",
-        "subInstrument": "front",
+        "displayName": "竹本",
+        "nickname": "竹本",
+        "mainInstrument": "piano",
+        "subInstrument": null,
         "gender": "その他",
         "ageRange": "30代",
         "area": "神奈川県",
-        "bio": "石井 健太 のデモプロフィールです。",
+        "bio": "竹本 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.149Z",
-        "updatedAt": "2026-05-07T08:44:30.149Z"
+        "updatedAt": "2026-06-05T07:42:56.771Z"
+      },
+      {
+        "id": "89feb371-d775-468f-b0c2-944c5c825b6b",
+        "userAccountId": "cef60681-f8de-433a-bbf9-949661de1bd5",
+        "displayName": "イッタ",
+        "nickname": null,
+        "mainInstrument": "vocal",
+        "subInstrument": null,
+        "gender": "男性",
+        "ageRange": "50代",
+        "area": "埼玉県",
+        "bio": null,
+        "createdAt": "2026-06-03T07:44:15.037Z",
+        "updatedAt": "2026-06-05T07:09:25.606Z"
       },
       {
         "id": "94855245-1f8e-484b-99fd-3772b8309d28",
         "userAccountId": "f7ecc33e-fab2-4e93-b1f6-4d51197a4141",
-        "displayName": "木村 葵",
-        "nickname": "葵",
+        "displayName": "小川秀",
+        "nickname": "小川秀",
         "mainInstrument": "front",
-        "subInstrument": "フルート",
+        "subInstrument": "ソプラノサックス",
         "gender": "男性",
         "ageRange": "20代",
         "area": "東京都",
-        "bio": "木村 葵 のデモプロフィールです。",
+        "bio": "小川秀 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.189Z",
-        "updatedAt": "2026-05-07T08:44:30.189Z"
+        "updatedAt": "2026-06-05T08:19:47.998Z"
       },
       {
         "id": "959daf7b-e86c-42d3-967e-dca24101be02",
         "userAccountId": "98bb550d-9b39-4755-a1a3-b992e8c86006",
-        "displayName": "近藤 陽翔",
-        "nickname": "陽翔",
-        "mainInstrument": "bass",
-        "subInstrument": "front",
+        "displayName": "清水",
+        "nickname": "清水",
+        "mainInstrument": "piano",
+        "subInstrument": null,
         "gender": "男性",
         "ageRange": "40代",
         "area": "埼玉県",
-        "bio": "近藤 陽翔 のデモプロフィールです。",
+        "bio": "清水のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.152Z",
-        "updatedAt": "2026-05-07T08:44:30.152Z"
+        "updatedAt": "2026-06-05T07:44:21.907Z"
       },
       {
         "id": "96f1304f-e430-4b77-97e7-e44fafc8f593",
         "userAccountId": "f85cb9a0-469f-4f80-8dfa-8d854eee9a49",
-        "displayName": "井上 恒一",
-        "nickname": "恒一",
+        "displayName": "杉山",
+        "nickname": "杉山",
         "mainInstrument": "front",
-        "subInstrument": "フルート",
+        "subInstrument": "アルトサックス",
         "gender": "男性",
-        "ageRange": "60代",
+        "ageRange": "30代",
         "area": "愛知県",
-        "bio": "井上 恒一 のデモプロフィールです。",
+        "bio": "杉山 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.179Z",
-        "updatedAt": "2026-05-07T08:44:30.179Z"
+        "updatedAt": "2026-06-05T08:13:51.981Z"
       },
       {
         "id": "98f29d77-a472-4795-bf91-4d4dacf04a6e",
         "userAccountId": "5229754f-ac5a-45c2-b97c-ce5dfaba3ad5",
-        "displayName": "林 陸",
-        "nickname": "陸",
+        "displayName": "関",
+        "nickname": "関",
         "mainInstrument": "front",
-        "subInstrument": "フルート",
+        "subInstrument": "アルトサックス",
         "gender": "女性",
         "ageRange": "30代",
         "area": "神奈川県",
-        "bio": "林 陸 のデモプロフィールです。",
+        "bio": "関 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.191Z",
-        "updatedAt": "2026-05-07T08:44:30.191Z"
+        "updatedAt": "2026-06-05T08:21:07.372Z"
       },
       {
         "id": "ab02b3b9-f544-4ef9-8f17-f59724e6f0b6",
         "userAccountId": "239e550e-5e74-45c8-8d8a-03b91df51ac9",
-        "displayName": "田中 恒一",
-        "nickname": "恒一",
+        "displayName": "阪井",
+        "nickname": "阪井",
         "mainInstrument": "drum",
-        "subInstrument": "front",
+        "subInstrument": null,
         "gender": "その他",
         "ageRange": "40代",
         "area": "埼玉県",
-        "bio": "田中 恒一 のデモプロフィールです。",
+        "bio": "阪井 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.130Z",
-        "updatedAt": "2026-05-07T08:44:30.130Z"
+        "updatedAt": "2026-06-05T07:30:55.892Z"
       },
       {
         "id": "b63f763a-c938-4213-bb04-1d1d4431beb9",
@@ -4314,184 +4339,184 @@
       {
         "id": "b8412336-89fe-43e1-b882-b57dee50f7bb",
         "userAccountId": "8dc8b974-c36d-41b6-af2f-f4fc02b2c977",
-        "displayName": "上田 蒼真",
-        "nickname": "蒼真",
+        "displayName": "寺野",
+        "nickname": "寺野",
         "mainInstrument": "bass",
-        "subInstrument": "front",
+        "subInstrument": null,
         "gender": "その他",
         "ageRange": "70代",
         "area": "大阪府",
-        "bio": "上田 蒼真 のデモプロフィールです。",
+        "bio": "寺野 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.140Z",
-        "updatedAt": "2026-05-07T08:44:30.140Z"
+        "updatedAt": "2026-06-05T07:37:47.381Z"
       },
       {
         "id": "b9196cab-0ac9-48eb-9844-e22d17ec351f",
         "userAccountId": "dc934a75-0037-4162-a72c-f50968942e95",
-        "displayName": "西田 亮",
-        "nickname": "亮",
-        "mainInstrument": "drum",
-        "subInstrument": "front",
+        "displayName": "白浜",
+        "nickname": "白浜",
+        "mainInstrument": "bass",
+        "subInstrument": null,
         "gender": "女性",
         "ageRange": "60代",
         "area": "愛知県",
-        "bio": "西田 亮 のデモプロフィールです。",
+        "bio": "白浜 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.136Z",
-        "updatedAt": "2026-05-07T08:44:30.136Z"
+        "updatedAt": "2026-06-05T07:34:48.822Z"
       },
       {
         "id": "ba9fd6c6-bfee-4e48-9664-c02aa337d429",
         "userAccountId": "275f7e18-668c-43d6-82dd-000434809ea7",
-        "displayName": "森 悠太",
-        "nickname": "悠太",
+        "displayName": "小杉",
+        "nickname": "小杉",
         "mainInstrument": "drum",
-        "subInstrument": "front",
+        "subInstrument": null,
         "gender": "女性",
         "ageRange": "30代",
         "area": "神奈川県",
-        "bio": "森 悠太 のデモプロフィールです。",
+        "bio": "小杉 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.126Z",
-        "updatedAt": "2026-05-07T08:44:30.126Z"
+        "updatedAt": "2026-06-05T07:29:25.048Z"
       },
       {
         "id": "c15f6d57-51ee-4552-bc1d-4f4d4da3ca1f",
         "userAccountId": "6eaec50f-99bb-4aa9-834a-4d450a2de26b",
-        "displayName": "松田 玲",
-        "nickname": "玲",
-        "mainInstrument": "piano",
-        "subInstrument": "front",
+        "displayName": "篠原",
+        "nickname": "篠原",
+        "mainInstrument": "front",
+        "subInstrument": "ギター",
         "gender": "その他",
         "ageRange": "20代",
         "area": "東京都",
-        "bio": "松田 玲 のデモプロフィールです。",
+        "bio": "篠原 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.167Z",
-        "updatedAt": "2026-05-07T08:44:30.167Z"
+        "updatedAt": "2026-06-05T08:07:55.239Z"
       },
       {
         "id": "c51ec424-54eb-4479-b21e-96c3b0b9d47b",
         "userAccountId": "dcd4d74e-ca53-47bc-ac1f-25d546b4310c",
-        "displayName": "加藤 美優",
-        "nickname": "美優",
+        "displayName": "中川",
+        "nickname": "中川",
         "mainInstrument": "vocal",
         "subInstrument": null,
         "gender": "男性",
-        "ageRange": "80代",
+        "ageRange": "20代",
         "area": "京都府",
-        "bio": "加藤 美優 のデモプロフィールです。",
+        "bio": "中川 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.207Z",
-        "updatedAt": "2026-05-07T08:44:30.207Z"
+        "updatedAt": "2026-06-05T08:29:00.962Z"
       },
       {
         "id": "ca475c6b-b544-4da7-9571-3cb9fc9e35bc",
         "userAccountId": "cedad7da-51f5-4d50-8d36-ee1da36f181e",
-        "displayName": "山田 陽",
-        "nickname": "陽",
+        "displayName": "有海",
+        "nickname": "有海",
         "mainInstrument": "front",
-        "subInstrument": "アルトサックス",
+        "subInstrument": "unknown",
         "gender": "その他",
-        "ageRange": "80代",
+        "ageRange": "30代",
         "area": "京都府",
-        "bio": "山田 陽 のデモプロフィールです。",
+        "bio": "有海 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.186Z",
-        "updatedAt": "2026-05-07T08:44:30.186Z"
+        "updatedAt": "2026-06-05T08:18:18.445Z"
       },
       {
         "id": "d3a1d0d9-9967-4e19-aaf4-031414c028c4",
         "userAccountId": "86c28405-f30f-442f-95ec-dd825f098b2f",
-        "displayName": "森田 朝陽",
-        "nickname": "朝陽",
+        "displayName": "野澤",
+        "nickname": "野澤",
         "mainInstrument": "front",
-        "subInstrument": "ギター",
+        "subInstrument": "アルトサックス",
         "gender": "その他",
         "ageRange": "40代",
         "area": "埼玉県",
-        "bio": "森田 朝陽 のデモプロフィールです。",
+        "bio": "野澤 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.195Z",
-        "updatedAt": "2026-05-07T08:44:30.195Z"
+        "updatedAt": "2026-06-05T08:22:26.084Z"
       },
       {
         "id": "f25fd6bf-286f-4052-855b-ae4bd009445b",
         "userAccountId": "a16041dc-b6bb-48ab-8cca-69e0364b8ea9",
-        "displayName": "三浦 隼人",
-        "nickname": "隼人",
+        "displayName": "藤井",
+        "nickname": "藤井",
         "mainInstrument": "piano",
-        "subInstrument": "front",
+        "subInstrument": null,
         "gender": "女性",
-        "ageRange": "50代",
+        "ageRange": "30代",
         "area": "千葉県",
-        "bio": "三浦 隼人 のデモプロフィールです。",
+        "bio": "藤井 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.155Z",
-        "updatedAt": "2026-05-07T08:44:30.155Z"
+        "updatedAt": "2026-06-05T07:46:05.700Z"
       },
       {
         "id": "f33b54aa-3be9-4b05-b016-5e0017b33f03",
         "userAccountId": "79d89d74-d98e-40d1-9ff7-cb73114da3a9",
-        "displayName": "久米 聡",
-        "nickname": "聡",
-        "mainInstrument": "piano",
-        "subInstrument": "front",
+        "displayName": "内藤",
+        "nickname": "内藤",
+        "mainInstrument": "front",
+        "subInstrument": "ギター",
         "gender": "その他",
-        "ageRange": "60代",
+        "ageRange": "40代",
         "area": "愛知県",
-        "bio": "久米 聡 のデモプロフィールです。",
+        "bio": "内藤 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.158Z",
-        "updatedAt": "2026-05-07T08:44:30.158Z"
+        "updatedAt": "2026-06-05T07:47:50.555Z"
       },
       {
         "id": "f56deee6-733e-4d54-85e8-fe8730c2c5a3",
         "userAccountId": "6de1ed0f-d1e5-40c1-90e3-9d21ec6c997c",
-        "displayName": "新井 大地",
-        "nickname": "大地",
-        "mainInstrument": "bass",
-        "subInstrument": "front",
+        "displayName": "岡部",
+        "nickname": "岡部",
+        "mainInstrument": "piano",
+        "subInstrument": null,
         "gender": "女性",
         "ageRange": "20代",
         "area": "東京都",
-        "bio": "新井 大地 のデモプロフィールです。",
+        "bio": "岡部 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.146Z",
-        "updatedAt": "2026-05-07T08:44:30.146Z"
+        "updatedAt": "2026-06-05T07:40:50.791Z"
       },
       {
         "id": "f86759b3-8eb8-45cb-be74-373f538d058c",
         "userAccountId": "697321d4-4d50-4bb3-aa1d-c92eb61bfca8",
-        "displayName": "中野 星那",
-        "nickname": "星那",
+        "displayName": "加藤力",
+        "nickname": "加藤力",
         "mainInstrument": "front",
-        "subInstrument": "アルトサックス",
+        "subInstrument": "テナーサックス",
         "gender": "その他",
         "ageRange": "50代",
         "area": "千葉県",
-        "bio": "中野 星那 のデモプロフィールです。",
+        "bio": "加藤力 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.176Z",
-        "updatedAt": "2026-05-07T08:44:30.176Z"
+        "updatedAt": "2026-06-05T08:12:29.057Z"
       },
       {
         "id": "feaac6b3-58cd-4458-b83f-f6c2ea9080ff",
         "userAccountId": "8e75dac7-b8e4-4cf2-a75c-08f5d8e613e6",
-        "displayName": "佐藤 匠",
-        "nickname": "匠",
+        "displayName": "大橋",
+        "nickname": "大橋",
         "mainInstrument": "drum",
-        "subInstrument": "front",
+        "subInstrument": null,
         "gender": "男性",
         "ageRange": "20代",
         "area": "東京都",
-        "bio": "佐藤 匠 のデモプロフィールです。",
+        "bio": "大橋 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.121Z",
-        "updatedAt": "2026-05-07T08:44:30.121Z"
+        "updatedAt": "2026-06-05T07:27:56.972Z"
       },
       {
         "id": "fecf72f3-7dbe-48aa-a29a-2c6dadc21edb",
         "userAccountId": "7a9713d8-f29a-4e9c-b057-7b462b83adf7",
-        "displayName": "清水 悠成",
-        "nickname": "悠成",
+        "displayName": "木村孝",
+        "nickname": "木村孝",
         "mainInstrument": "front",
-        "subInstrument": "ギター",
+        "subInstrument": "テナーサックス",
         "gender": "男性",
         "ageRange": "50代",
         "area": "千葉県",
-        "bio": "清水 悠成 のデモプロフィールです。",
+        "bio": "木村孝 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.198Z",
-        "updatedAt": "2026-05-07T08:44:30.198Z"
+        "updatedAt": "2026-06-05T08:24:08.155Z"
       },
       {
         "id": "ff4136b8-7022-46e2-9384-b730aafbb56d",
@@ -4534,20 +4559,20 @@
         "title": "愉快ですよテストセッション",
         "description": null,
         "venue": "荒川第２会場",
-        "eventDate": "2026-06-12T15:00:00.000Z",
-        "startTime": "2026-06-13T04:00:00.000Z",
-        "endTime": "2026-06-13T09:00:00.000Z",
+        "eventDate": "2026-06-19T15:00:00.000Z",
+        "startTime": "2026-06-20T04:00:00.000Z",
+        "endTime": "2026-06-20T09:00:00.000Z",
         "participationFee": 3000,
         "hasAfterParty": true,
         "afterPartyFee": 3000,
         "notes": "懇親会は町屋界隈のあやしいお店でおこないます。",
         "round1StartAt": "2026-05-25T07:27:00.000Z",
-        "round1EndAt": "2026-06-01T07:27:00.000Z",
-        "round2StartAt": "2026-07-03T07:27:00.000Z",
-        "round2EndAt": "2026-06-06T07:28:00.000Z",
+        "round1EndAt": "2026-06-08T07:27:00.000Z",
+        "round2StartAt": "2026-06-10T07:27:00.000Z",
+        "round2EndAt": "2026-06-17T07:28:00.000Z",
         "status": "recruiting_round1",
         "createdAt": "2026-05-08T07:27:08.211Z",
-        "updatedAt": "2026-05-29T06:20:39.613Z"
+        "updatedAt": "2026-06-05T06:58:08.212Z"
       },
       {
         "id": "9444a23d-9a55-4d26-b12a-224efa5689fd",
@@ -5424,6 +5449,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "b9196cab-0ac9-48eb-9844-e22d17ec351f",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.835Z",
         "updatedAt": "2026-05-07T08:44:30.835Z"
       },
@@ -5432,6 +5458,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "d3a1d0d9-9967-4e19-aaf4-031414c028c4",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.927Z",
         "updatedAt": "2026-05-07T08:44:30.927Z"
       },
@@ -5440,6 +5467,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "72c840a7-33b1-4a18-96a4-9c8a7f78a69d",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.874Z",
         "updatedAt": "2026-05-07T08:44:30.874Z"
       },
@@ -5448,6 +5476,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "c51ec424-54eb-4479-b21e-96c3b0b9d47b",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.946Z",
         "updatedAt": "2026-05-07T08:44:30.946Z"
       },
@@ -5456,6 +5485,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "11b6c403-5cfb-485b-a00d-1a02edcc7d57",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.845Z",
         "updatedAt": "2026-05-07T08:44:30.845Z"
       },
@@ -5464,6 +5494,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "96f1304f-e430-4b77-97e7-e44fafc8f593",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.903Z",
         "updatedAt": "2026-05-07T08:44:30.903Z"
       },
@@ -5472,6 +5503,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "5335c4bc-48d2-4310-9d52-f5631987d4e1",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.937Z",
         "updatedAt": "2026-05-07T08:44:30.937Z"
       },
@@ -5480,6 +5512,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "f25fd6bf-286f-4052-855b-ae4bd009445b",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.864Z",
         "updatedAt": "2026-05-07T08:44:30.864Z"
       },
@@ -5488,6 +5521,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "c15f6d57-51ee-4552-bc1d-4f4d4da3ca1f",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.884Z",
         "updatedAt": "2026-05-07T08:44:30.884Z"
       },
@@ -5496,6 +5530,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "fecf72f3-7dbe-48aa-a29a-2c6dadc21edb",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.932Z",
         "updatedAt": "2026-05-07T08:44:30.932Z"
       },
@@ -5504,6 +5539,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "f56deee6-733e-4d54-85e8-fe8730c2c5a3",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.850Z",
         "updatedAt": "2026-05-07T08:44:30.850Z"
       },
@@ -5512,6 +5548,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "ff4136b8-7022-46e2-9384-b730aafbb56d",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.950Z",
         "updatedAt": "2026-05-07T08:44:30.950Z"
       },
@@ -5520,6 +5557,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "746a9944-256d-4caf-b1ee-4a5651e4ee04",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.854Z",
         "updatedAt": "2026-05-07T08:44:30.854Z"
       },
@@ -5528,6 +5566,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "03ca1050-cf3e-4c1a-97ec-282ba50d1e35",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.889Z",
         "updatedAt": "2026-05-07T08:44:30.889Z"
       },
@@ -5536,6 +5575,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "b8412336-89fe-43e1-b882-b57dee50f7bb",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.840Z",
         "updatedAt": "2026-05-07T08:44:30.840Z"
       },
@@ -5544,6 +5584,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "ca475c6b-b544-4da7-9571-3cb9fc9e35bc",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.913Z",
         "updatedAt": "2026-05-07T08:44:30.913Z"
       },
@@ -5552,6 +5593,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "72e11a37-0ada-48a5-bc72-0647a2ed9429",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.894Z",
         "updatedAt": "2026-05-07T08:44:30.894Z"
       },
@@ -5560,6 +5602,7 @@
         "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
         "memberProfileId": "b8412336-89fe-43e1-b882-b57dee50f7bb",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-29T06:31:47.342Z",
         "updatedAt": "2026-05-29T06:31:47.342Z"
       },
@@ -5568,6 +5611,7 @@
         "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
         "memberProfileId": "b9196cab-0ac9-48eb-9844-e22d17ec351f",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-29T05:36:01.831Z",
         "updatedAt": "2026-05-29T05:36:01.831Z"
       },
@@ -5576,6 +5620,7 @@
         "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
         "memberProfileId": "4d24136f-3c36-4e6d-a595-be5545c23074",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-29T05:33:15.123Z",
         "updatedAt": "2026-05-29T05:33:15.123Z"
       },
@@ -5584,6 +5629,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "275c9330-c939-4b89-8dbf-57a377420f02",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.941Z",
         "updatedAt": "2026-05-07T08:44:30.941Z"
       },
@@ -5592,6 +5638,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "5dad37a5-b796-47ae-93d1-2d067fa7e461",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.908Z",
         "updatedAt": "2026-05-07T08:44:30.908Z"
       },
@@ -5600,6 +5647,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "b63f763a-c938-4213-bb04-1d1d4431beb9",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.954Z",
         "updatedAt": "2026-05-07T08:44:30.954Z"
       },
@@ -5608,6 +5656,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "feaac6b3-58cd-4458-b83f-f6c2ea9080ff",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.811Z",
         "updatedAt": "2026-05-07T08:44:30.811Z"
       },
@@ -5616,6 +5665,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "4d24136f-3c36-4e6d-a595-be5545c23074",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.830Z",
         "updatedAt": "2026-05-07T08:44:30.830Z"
       },
@@ -5624,14 +5674,16 @@
         "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
         "memberProfileId": "ab02b3b9-f544-4ef9-8f17-f59724e6f0b6",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "attending",
         "createdAt": "2026-05-29T05:25:56.711Z",
-        "updatedAt": "2026-05-29T05:25:56.711Z"
+        "updatedAt": "2026-06-05T07:03:52.794Z"
       },
       {
         "id": "ce402cb0-1f22-4c3a-a901-5d3aa83cab3d",
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "f33b54aa-3be9-4b05-b016-5e0017b33f03",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.869Z",
         "updatedAt": "2026-05-07T08:44:30.869Z"
       },
@@ -5640,6 +5692,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "ba9fd6c6-bfee-4e48-9664-c02aa337d429",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.819Z",
         "updatedAt": "2026-05-07T08:44:30.819Z"
       },
@@ -5648,6 +5701,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "959daf7b-e86c-42d3-967e-dca24101be02",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.859Z",
         "updatedAt": "2026-05-07T08:44:30.859Z"
       },
@@ -5656,6 +5710,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "0b290a20-c57f-4a40-9421-02a97f3ce9aa",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.879Z",
         "updatedAt": "2026-05-07T08:44:30.879Z"
       },
@@ -5664,6 +5719,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "94855245-1f8e-484b-99fd-3772b8309d28",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.917Z",
         "updatedAt": "2026-05-07T08:44:30.917Z"
       },
@@ -5672,6 +5728,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "ab02b3b9-f544-4ef9-8f17-f59724e6f0b6",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.824Z",
         "updatedAt": "2026-05-07T08:44:30.824Z"
       },
@@ -5680,6 +5737,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "f86759b3-8eb8-45cb-be74-373f538d058c",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.898Z",
         "updatedAt": "2026-05-07T08:44:30.898Z"
       },
@@ -5688,6 +5746,7 @@
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "98f29d77-a472-4795-bf91-4d4dacf04a6e",
         "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.922Z",
         "updatedAt": "2026-05-07T08:44:30.922Z"
       }
@@ -6090,6 +6149,17 @@
         "updatedAt": "2026-05-07T08:44:30.860Z"
       },
       {
+        "id": "3d7b104f-6e86-4efe-866b-dd8f0d86ddab",
+        "sessionEntryId": "bedbbebb-4328-461e-ac26-a0ece3166d84",
+        "songId": "35404bb8-232f-426d-bc58-1801c221779a",
+        "songTitleSnapshot": "ALL OF ME",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-05T07:03:53.181Z",
+        "updatedAt": "2026-06-05T07:03:53.181Z"
+      },
+      {
         "id": "3d7dbef7-5316-487f-a8fe-1cc35caf9fb3",
         "sessionEntryId": "bea5633a-e450-448c-b04b-85ec0f5575da",
         "songId": "8eca6a25-86d8-40b8-855a-1c1d277c858c",
@@ -6220,6 +6290,17 @@
         "priority": 1,
         "createdAt": "2026-05-07T08:44:30.848Z",
         "updatedAt": "2026-05-07T08:44:30.848Z"
+      },
+      {
+        "id": "5a28c520-c133-4a80-bbc5-7af3bc61ea43",
+        "sessionEntryId": "bedbbebb-4328-461e-ac26-a0ece3166d84",
+        "songId": "00421cbe-06e4-43d4-a449-cef028fe9c22",
+        "songTitleSnapshot": "BEAUTIFUL LOVE",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-05T07:03:53.336Z",
+        "updatedAt": "2026-06-05T07:03:53.336Z"
       },
       {
         "id": "5c2a8e71-c840-4962-86a9-6bcebeeb8fd6",
@@ -6629,17 +6710,6 @@
         "updatedAt": "2026-05-07T08:44:30.905Z"
       },
       {
-        "id": "ab9b05d4-c182-4a85-86b8-df43108160df",
-        "sessionEntryId": "bedbbebb-4328-461e-ac26-a0ece3166d84",
-        "songId": "00421cbe-06e4-43d4-a449-cef028fe9c22",
-        "songTitleSnapshot": "BEAUTIFUL LOVE",
-        "keyName": null,
-        "round": 1,
-        "priority": 2,
-        "createdAt": "2026-05-29T05:25:56.720Z",
-        "updatedAt": "2026-05-29T05:25:56.720Z"
-      },
-      {
         "id": "b503cf36-c874-4b8f-9b53-326799580f97",
         "sessionEntryId": "28a20725-2692-493f-955c-85cf999d1223",
         "songId": "94498034-e0bf-4d3e-8b14-11cf2131c4e3",
@@ -7012,17 +7082,6 @@
         "priority": 2,
         "createdAt": "2026-05-07T08:44:30.834Z",
         "updatedAt": "2026-05-07T08:44:30.834Z"
-      },
-      {
-        "id": "f8977e70-1ae3-4f9b-8384-a4e690c6277a",
-        "sessionEntryId": "bedbbebb-4328-461e-ac26-a0ece3166d84",
-        "songId": "35404bb8-232f-426d-bc58-1801c221779a",
-        "songTitleSnapshot": "ALL OF ME",
-        "keyName": null,
-        "round": 1,
-        "priority": 1,
-        "createdAt": "2026-05-29T05:25:56.717Z",
-        "updatedAt": "2026-05-29T05:25:56.717Z"
       },
       {
         "id": "f8e75a7f-6c69-4f4a-8a60-0c254fb2cf24",
@@ -8443,6 +8502,14 @@
         "createdAt": "2026-05-08T04:28:24.138Z"
       },
       {
+        "id": "36cc284b-7c4b-4858-9aaa-e30de2d3c848",
+        "userAccountId": "4e0c8834-195e-4343-bb52-2bda851ff716",
+        "sessionTokenHash": "e013513814e81fe7a61ffe04c877bbd045030e5be1a5d80450839a4e888a079a",
+        "expiresAt": "2026-06-12T07:05:06.304Z",
+        "lastAccessedAt": "2026-06-05T08:29:04.564Z",
+        "createdAt": "2026-06-05T07:05:06.305Z"
+      },
+      {
         "id": "3ea86f6b-e18c-4759-9c75-8622aaf96ad3",
         "userAccountId": "275f7e18-668c-43d6-82dd-000434809ea7",
         "sessionTokenHash": "4b7459d10837c5341a89308702018981cbc11f4664d4241d996169128f1af021",
@@ -8459,6 +8526,14 @@
         "createdAt": "2026-05-07T08:45:05.208Z"
       },
       {
+        "id": "e9bb3047-4148-4cc1-958d-008fb06cc991",
+        "userAccountId": "239e550e-5e74-45c8-8d8a-03b91df51ac9",
+        "sessionTokenHash": "8d41c89468047b7dffc875c4c761ec54bf9a02fbc93190f294b09f28cbdea3a6",
+        "expiresAt": "2026-06-11T08:47:29.711Z",
+        "lastAccessedAt": "2026-06-08T03:02:08.911Z",
+        "createdAt": "2026-06-04T08:47:29.712Z"
+      },
+      {
         "id": "f0ce5a38-e67e-4380-9123-65874b742507",
         "userAccountId": "8dc8b974-c36d-41b6-af2f-f4fc02b2c977",
         "sessionTokenHash": "9797decb840f5babc6a5be389a4bb880ff34954596ebab173b01935ea6247cc4",
@@ -8468,7 +8543,16 @@
       }
     ],
     "passwordResetTokens": [],
-    "emailVerificationTokens": [],
+    "emailVerificationTokens": [
+      {
+        "id": "2878272c-5f5a-4c1b-b5a5-44366ed372ab",
+        "userAccountId": "cef60681-f8de-433a-bbf9-949661de1bd5",
+        "tokenHash": "8078ae8bea60d491093caed1b7cb336b7841937d869f1a0f1e7652d25e473478",
+        "expiresAt": "2026-06-04T07:44:17.161Z",
+        "usedAt": null,
+        "createdAt": "2026-06-03T07:44:17.591Z"
+      }
+    ],
     "announcements": [
       {
         "id": "5d87feeb-b8f3-4759-90de-0624567ee408",
@@ -9751,6 +9835,18 @@
         "createdAt": "2026-05-28T02:22:12.656Z",
         "sentAt": "2026-05-28T02:22:13.431Z",
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
+        "id": "b6aa5535-60c3-407f-a464-33c4c3b5e2f8",
+        "mailType": "email_verification",
+        "toAddress": "ipikkoro@gmail.com => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:ipikkoro@gmail.com] Adlib-go メールアドレス認証",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: ipikkoro@gmail.com\n\n以下の URL からメールアドレス認証を完了してください。\nhttps://www.adlib-go.com/verify-email?token=57cec320a658a4a5a3c5fd15e86e0f012e5fffb147008c2d94c1",
+        "status": "failed",
+        "errorMessage": "Can't send mail - all recipients were rejected: 554 5.7.1 <ec2-18-212-195-50.compute-1.amazonaws.com[18.212.195.50]>: Client host rejected: Incorrect country code US",
+        "createdAt": "2026-06-03T07:44:18.021Z",
+        "sentAt": null,
+        "createdById": null
       },
       {
         "id": "ba5ab972-0bf4-4e17-ae8c-d4d689718d45",

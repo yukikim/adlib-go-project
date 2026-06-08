@@ -21,6 +21,14 @@ export async function PublicHomePage() {
     },
     orderBy: [{ eventDate: 'asc' }],
   });
+  const upcomingEventAttendingCount = upcomingEvent
+    ? await prisma.sessionEntry.count({
+        where: {
+          sessionEventId: upcomingEvent.id,
+          attendanceStatus: 'attending',
+        },
+      })
+    : 0;
   const columns = await prisma.column.findMany({
     where: {
       isPublished: true,
@@ -101,6 +109,8 @@ export async function PublicHomePage() {
                   <div className="space-y-3">
                     <Badge variant="secondary">{formatEventSchedule(upcomingEvent.eventDate, upcomingEvent.startTime, upcomingEvent.endTime)} / {upcomingEvent.venue}</Badge>
                     <div className="flex flex-wrap gap-2">
+                      {upcomingEvent.participantLimit != null ? <Badge variant="outline">参加人数 {upcomingEventAttendingCount} / {upcomingEvent.participantLimit}</Badge> : <Badge variant="outline">参加人数 {upcomingEventAttendingCount}人</Badge>}
+                      {upcomingEvent.participantLimit != null ? <Badge variant={upcomingEventAttendingCount >= upcomingEvent.participantLimit ? 'destructive' : 'outline'}>{upcomingEventAttendingCount >= upcomingEvent.participantLimit ? '満員' : `残り ${Math.max(upcomingEvent.participantLimit - upcomingEventAttendingCount, 0)} 人`}</Badge> : null}
                       {upcomingEvent.participationFee != null ? <Badge variant="outline">参加料金 {formatYen(upcomingEvent.participationFee)}</Badge> : null}
                       {upcomingEvent.hasAfterParty ? <Badge variant="outline">懇親会 {upcomingEvent.afterPartyFee != null ? formatYen(upcomingEvent.afterPartyFee) : '料金未定'}</Badge> : null}
                     </div>

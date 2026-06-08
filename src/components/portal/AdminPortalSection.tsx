@@ -193,6 +193,7 @@ type AdminPortalSectionProps = {
   eventDate: string;
   eventStartTime: string;
   eventEndTime: string;
+  eventParticipantLimit: string;
   eventParticipationFee: string;
   eventHasAfterParty: boolean;
   eventAfterPartyFee: string;
@@ -202,6 +203,7 @@ type AdminPortalSectionProps = {
   editEventDate: string;
   editEventStartTime: string;
   editEventEndTime: string;
+  editEventParticipantLimit: string;
   editEventParticipationFee: string;
   editEventHasAfterParty: boolean;
   editEventAfterPartyFee: string;
@@ -258,6 +260,7 @@ type AdminPortalSectionProps = {
   setEventDate: (value: string) => void;
   setEventStartTime: (value: string) => void;
   setEventEndTime: (value: string) => void;
+  setEventParticipantLimit: (value: string) => void;
   setEventParticipationFee: (value: string) => void;
   setEventHasAfterParty: (value: boolean) => void;
   setEventAfterPartyFee: (value: string) => void;
@@ -267,6 +270,7 @@ type AdminPortalSectionProps = {
   setEditEventDate: (value: string) => void;
   setEditEventStartTime: (value: string) => void;
   setEditEventEndTime: (value: string) => void;
+  setEditEventParticipantLimit: (value: string) => void;
   setEditEventParticipationFee: (value: string) => void;
   setEditEventHasAfterParty: (value: boolean) => void;
   setEditEventAfterPartyFee: (value: string) => void;
@@ -335,6 +339,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     eventDate,
     eventStartTime,
     eventEndTime,
+    eventParticipantLimit,
     eventParticipationFee,
     eventHasAfterParty,
     eventAfterPartyFee,
@@ -344,6 +349,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     editEventDate,
     editEventStartTime,
     editEventEndTime,
+    editEventParticipantLimit,
     editEventParticipationFee,
     editEventHasAfterParty,
     editEventAfterPartyFee,
@@ -400,6 +406,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     setEventDate,
     setEventStartTime,
     setEventEndTime,
+    setEventParticipantLimit,
     setEventParticipationFee,
     setEventHasAfterParty,
     setEventAfterPartyFee,
@@ -409,6 +416,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     setEditEventDate,
     setEditEventStartTime,
     setEditEventEndTime,
+    setEditEventParticipantLimit,
     setEditEventParticipationFee,
     setEditEventHasAfterParty,
     setEditEventAfterPartyFee,
@@ -945,6 +953,9 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                         <Field htmlFor="admin-event-end-time" label="終了時間">
                           <Input id="admin-event-end-time" type="time" value={eventEndTime} onChange={(event) => setEventEndTime(event.target.value)} />
                         </Field>
+                        <Field htmlFor="admin-event-participant-limit" label="参加人数上限">
+                          <Input id="admin-event-participant-limit" type="number" min="0" step="1" placeholder="30" value={eventParticipantLimit} onChange={(event) => setEventParticipantLimit(event.target.value)} />
+                        </Field>
                         <Field htmlFor="admin-event-fee" label="参加料金">
                           <Input id="admin-event-fee" type="number" min="0" step="1" placeholder="3000" value={eventParticipationFee} onChange={(event) => setEventParticipationFee(event.target.value)} />
                         </Field>
@@ -1027,6 +1038,8 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                           {sessionEvent.venue ? ` / ${sessionEvent.venue}` : ''}
                         </div>
                         <div className="flex flex-wrap items-center gap-2 text-sm">
+                          {sessionEvent.participantLimit != null ? <Badge variant="secondary">参加人数 {sessionEvent.attendingEntryCount ?? 0} / {sessionEvent.participantLimit}</Badge> : <Badge variant="secondary">参加人数 {sessionEvent.attendingEntryCount ?? 0}人</Badge>}
+                          {sessionEvent.participantLimit != null ? <Badge variant={sessionEvent.isEntryCapacityFull ? 'destructive' : 'secondary'}>{sessionEvent.isEntryCapacityFull ? '満員' : `残り ${sessionEvent.remainingEntryCapacity ?? 0} 人`}</Badge> : null}
                           {sessionEvent.participationFee != null ? <Badge variant="secondary">参加料金 {formatYen(sessionEvent.participationFee)}</Badge> : null}
                           {sessionEvent.hasAfterParty ? <Badge variant="secondary">懇親会 {sessionEvent.afterPartyFee != null ? formatYen(sessionEvent.afterPartyFee) : '料金未定'}</Badge> : null}
                         </div>
@@ -1046,7 +1059,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                           >
                             <div className="space-y-1">
                               <p className="text-sm text-on-tertiary">
-                                【参加状況】 参加エントリー {sessionEntries.length} 件
+                                【参加状況】 参加 {sessionEvent.attendingEntryCount ?? 0} 人 / エントリー {sessionEntries.length} 件{sessionEvent.participantLimit != null ? ` / 残り ${sessionEvent.remainingEntryCapacity ?? 0} 人` : ''}
                               </p>
                             </div>
                             <ChevronDown className={cn('mt-0.5 size-4 shrink-0 transition-transform', isOpen ? 'rotate-180' : 'rotate-0', 'text-gray-50')} />
@@ -1080,6 +1093,9 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                                       </Field>
                                       <Field htmlFor="admin-edit-event-end-time" label="終了時間">
                                         <Input id="admin-edit-event-end-time" type="time" value={editEventEndTime} onChange={(event) => setEditEventEndTime(event.target.value)} />
+                                      </Field>
+                                      <Field htmlFor="admin-edit-event-participant-limit" label="参加人数上限">
+                                        <Input id="admin-edit-event-participant-limit" type="number" min="0" step="1" placeholder="30" value={editEventParticipantLimit} onChange={(event) => setEditEventParticipantLimit(event.target.value)} />
                                       </Field>
                                       <Field htmlFor="admin-edit-event-fee" label="参加料金">
                                         <Input id="admin-edit-event-fee" type="number" min="0" step="1" placeholder="3000" value={editEventParticipationFee} onChange={(event) => setEditEventParticipationFee(event.target.value)} />

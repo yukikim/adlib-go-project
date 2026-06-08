@@ -129,6 +129,7 @@ model SessionEvent {
   eventDate         DateTime
   startTime         DateTime?
   endTime           DateTime?
+  participantLimit  Int?
   participationFee  Int?
   hasAfterParty     Boolean              @default(false)
   afterPartyFee     Int?

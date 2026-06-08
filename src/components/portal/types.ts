@@ -56,6 +56,10 @@ export type SessionEventView = {
   eventDate: string;
   startTime?: string | null;
   endTime?: string | null;
+  participantLimit?: number | null;
+  attendingEntryCount?: number;
+  remainingEntryCapacity?: number | null;
+  isEntryCapacityFull?: boolean;
   participationFee?: number | null;
   hasAfterParty?: boolean;
   afterPartyFee?: number | null;
@@ -118,6 +122,7 @@ export type SessionEntryView = {
     eventDate: string;
     startTime?: string | null;
     endTime?: string | null;
+    participantLimit?: number | null;
     participationFee?: number | null;
     hasAfterParty?: boolean;
     afterPartyFee?: number | null;

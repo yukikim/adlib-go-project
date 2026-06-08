@@ -49,20 +49,40 @@ function formatSessionMemberName(name: string, isForced?: boolean) {
 }
 
 function EventMeta({
+  participantLimit,
+  attendingEntryCount,
+  remainingEntryCapacity,
+  isEntryCapacityFull,
   participationFee,
   hasAfterParty,
   afterPartyFee,
   notes,
 }: {
+  participantLimit?: number | null;
+  attendingEntryCount?: number;
+  remainingEntryCapacity?: number | null;
+  isEntryCapacityFull?: boolean;
   participationFee?: number | null;
   hasAfterParty?: boolean;
   afterPartyFee?: number | null;
   notes?: string | null;
 }) {
+  const hasCapacityMeta = typeof attendingEntryCount === 'number' || participantLimit != null;
+
   return (
     <>
-      {participationFee != null || hasAfterParty ? (
+      {hasCapacityMeta || participationFee != null || hasAfterParty ? (
         <div className="mt-2 flex flex-wrap gap-2">
+          {typeof attendingEntryCount === 'number' ? (
+            <Badge variant="secondary">
+              参加人数 {attendingEntryCount}{participantLimit != null ? ` / ${participantLimit}` : '人'}
+            </Badge>
+          ) : null}
+          {participantLimit != null && remainingEntryCapacity != null ? (
+            <Badge variant={isEntryCapacityFull ? 'destructive' : 'secondary'}>
+              {isEntryCapacityFull ? '満員' : `残り ${remainingEntryCapacity} 人`}
+            </Badge>
+          ) : null}
           {participationFee != null ? <Badge variant="secondary">参加料金 {formatYen(participationFee)}</Badge> : null}
           {hasAfterParty ? <Badge variant="secondary">懇親会 {afterPartyFee != null ? formatYen(afterPartyFee) : '料金未定'}</Badge> : null}
         </div>
@@ -460,7 +480,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
                   </div>
                   <p className="mt-2 text-sm text-muted-foreground">{formatEventSchedule(event.eventDate, event.startTime, event.endTime)} / {event.venue}</p>
-                  <EventMeta participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
+                  <EventMeta participantLimit={event.participantLimit} attendingEntryCount={event.attendingEntryCount} remainingEntryCapacity={event.remainingEntryCapacity} isEntryCapacityFull={event.isEntryCapacityFull} participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
                   {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
                 </li>
               ))}
@@ -489,7 +509,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                               <Badge variant={eventEntry ? 'default' : 'secondary'}>エントリー: {eventEntry ? '済' : '未'}</Badge>
                             </div>
                             <p className="text-sm text-muted-foreground">{formatEventSchedule(event.eventDate, event.startTime, event.endTime)} / {event.venue}</p>
-                            <EventMeta participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
+                            <EventMeta participantLimit={event.participantLimit} attendingEntryCount={event.attendingEntryCount} remainingEntryCapacity={event.remainingEntryCapacity} isEntryCapacityFull={event.isEntryCapacityFull} participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
                             {event.entryReason ? <p className="text-sm text-muted-foreground">{event.entryReason}</p> : null}
                             {eventEntry ? (
                               <div className="rounded-lg border bg-background/70 p-3 text-sm">
@@ -634,7 +654,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
                   </div>
                   <p className="mt-2 text-sm text-muted-foreground">{formatEventSchedule(event.eventDate, event.startTime, event.endTime)} / {event.venue}</p>
-                  <EventMeta participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
+                  <EventMeta participantLimit={event.participantLimit} attendingEntryCount={event.attendingEntryCount} remainingEntryCapacity={event.remainingEntryCapacity} isEntryCapacityFull={event.isEntryCapacityFull} participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
                   {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
                   <div className="mt-4">
                     <>
@@ -726,7 +746,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
                   </div>
                   <p className="mt-2 text-sm text-muted-foreground">{formatEventSchedule(event.eventDate, event.startTime, event.endTime)} / {event.venue}</p>
-                  <EventMeta participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
+                  <EventMeta participantLimit={event.participantLimit} attendingEntryCount={event.attendingEntryCount} remainingEntryCapacity={event.remainingEntryCapacity} isEntryCapacityFull={event.isEntryCapacityFull} participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
                   {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
                 </li>
               ))}
@@ -746,7 +766,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
                   </div>
                   <p className="mt-2 text-sm text-muted-foreground">{formatEventSchedule(event.eventDate, event.startTime, event.endTime)} / {event.venue}</p>
-                  <EventMeta participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
+                  <EventMeta participantLimit={event.participantLimit} attendingEntryCount={event.attendingEntryCount} remainingEntryCapacity={event.remainingEntryCapacity} isEntryCapacityFull={event.isEntryCapacityFull} participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
                   {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
                 </li>
               ))}
@@ -766,7 +786,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
                   </div>
                   <p className="mt-2 text-sm text-muted-foreground">{formatEventSchedule(event.eventDate, event.startTime, event.endTime)} / {event.venue}</p>
-                  <EventMeta participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
+                  <EventMeta participantLimit={event.participantLimit} attendingEntryCount={event.attendingEntryCount} remainingEntryCapacity={event.remainingEntryCapacity} isEntryCapacityFull={event.isEntryCapacityFull} participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
                   {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
                 </li>
               ))}
@@ -902,7 +922,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
               <Badge variant="outline">{getSessionEventStatusLabel(selectedMemberEvent.status)}</Badge>
             </div>
             <p className="mt-2 text-muted-foreground">{formatEventSchedule(selectedMemberEvent.eventDate, selectedMemberEvent.startTime, selectedMemberEvent.endTime)} / {selectedMemberEvent.venue}</p>
-            <EventMeta participationFee={selectedMemberEvent.participationFee} hasAfterParty={selectedMemberEvent.hasAfterParty} afterPartyFee={selectedMemberEvent.afterPartyFee} notes={selectedMemberEvent.notes} />
+            <EventMeta participantLimit={selectedMemberEvent.participantLimit} attendingEntryCount={selectedMemberEvent.attendingEntryCount} remainingEntryCapacity={selectedMemberEvent.remainingEntryCapacity} isEntryCapacityFull={selectedMemberEvent.isEntryCapacityFull} participationFee={selectedMemberEvent.participationFee} hasAfterParty={selectedMemberEvent.hasAfterParty} afterPartyFee={selectedMemberEvent.afterPartyFee} notes={selectedMemberEvent.notes} />
           </div>
         ) : null}
         {memberSessionSets.length === 0 ? <p className="mt-3 text-sm text-muted-foreground">評価対象の公開済み sessionSet はありません。</p> : (
@@ -1008,7 +1028,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                 </summary>
                 <div className="mt-4 space-y-3 text-sm">
                   <p className="text-muted-foreground">{event.venue}</p>
-                  <EventMeta participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
+                  <EventMeta participantLimit={event.participantLimit} attendingEntryCount={event.attendingEntryCount} remainingEntryCapacity={event.remainingEntryCapacity} isEntryCapacityFull={event.isEntryCapacityFull} participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
                   {!event.ratingSummaries?.length ? <p className="text-muted-foreground">レイティング結果はまだありません。</p> : (
                     <ul className="space-y-2">
                       {event.ratingSummaries.map((summary) => (

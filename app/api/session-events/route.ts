@@ -81,6 +81,14 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  const attendingEntryCountMap = new Map<string, number>();
+  for (const sessionEventId of sessionEventIds) {
+    attendingEntryCountMap.set(
+      sessionEventId,
+      candidateSourceEntries.filter((entry) => entry.sessionEventId === sessionEventId && entry.attendanceStatus === 'attending').length,
+    );
+  }
+
   const commentRows = !includeComments || sessionEventIds.length === 0
     ? []
     : await prisma.sessionEventComment.findMany({
@@ -164,6 +172,10 @@ export async function GET(request: NextRequest) {
       ...sessionEvent,
       ...(() => {
         const lifecycle = getSessionEventLifecycleState(sessionEvent);
+        const attendingEntryCount = attendingEntryCountMap.get(sessionEvent.id) ?? 0;
+        const remainingEntryCapacity = sessionEvent.participantLimit == null
+          ? null
+          : Math.max(sessionEvent.participantLimit - attendingEntryCount, 0);
         return {
           status: lifecycle.status,
           canSubmit: lifecycle.canSubmit,
@@ -172,6 +184,9 @@ export async function GET(request: NextRequest) {
           canGenerateSessionSets: lifecycle.canGenerateSessionSets,
           canPrepareRound2Candidates: lifecycle.canPrepareRound2Candidates,
           isVisibleToMembers: isSessionEventVisibleToMembers(lifecycle.status),
+          attendingEntryCount,
+          remainingEntryCapacity,
+          isEntryCapacityFull: remainingEntryCapacity === 0,
         };
       })(),
       round2CandidateSongs: candidateSongMap.get(sessionEvent.id) ?? [],
@@ -201,6 +216,7 @@ export async function POST(request: NextRequest) {
       eventDate: new Date(body.eventDate),
       startTime: body.startTime ? new Date(body.startTime) : null,
       endTime: body.endTime ? new Date(body.endTime) : null,
+      participantLimit: body.participantLimit ?? null,
       participationFee: body.participationFee ?? null,
       hasAfterParty: body.hasAfterParty ?? false,
       afterPartyFee: body.hasAfterParty ? (body.afterPartyFee ?? null) : null,

@@ -5,6 +5,8 @@ import { getRound1CandidateSongOptions, getSessionEventEntryState } from '@/lib/
 import { getZodErrorMessage } from '@/lib/authSchemas';
 import { sessionEntryCreateRequestSchema } from '@/lib/apiSchemas';
 
+const SESSION_EVENT_CAPACITY_ERROR = '参加人数が上限に達しているため、参加登録できません';
+
 export async function GET(request: NextRequest) {
   const auth = await requireMemberUser(request);
   if ('response' in auth) {
@@ -137,68 +139,101 @@ export async function POST(request: NextRequest) {
   });
   const songByTitle = new Map(existingSongs.map((song) => [song.title, song]));
 
-  const entry = await prisma.$transaction(async (tx) => {
-    const upsertedEntry = await tx.sessionEntry.upsert({
-      where: {
-        sessionEventId_memberProfileId: {
-          sessionEventId: body.sessionEventId!,
-          memberProfileId: memberProfile.id,
+  try {
+    const entry = await prisma.$transaction(async (tx) => {
+      const existingEntry = await tx.sessionEntry.findUnique({
+        where: {
+          sessionEventId_memberProfileId: {
+            sessionEventId: body.sessionEventId,
+            memberProfileId: memberProfile.id,
+          },
         },
-      },
-      update: {
-        attendanceStatus: body.attendanceStatus,
-        ...(afterPartyAttendanceStatusUpdate !== undefined
-          ? { afterPartyAttendanceStatus: afterPartyAttendanceStatusUpdate }
-          : {}),
-      },
-      create: {
-        sessionEventId: body.sessionEventId!,
-        memberProfileId: memberProfile.id,
-        attendanceStatus: body.attendanceStatus,
-        afterPartyAttendanceStatus: nextAfterPartyAttendanceStatus,
-      },
-    });
-
-    await tx.sessionEntryRequest.deleteMany({
-      where: {
-        sessionEntryId: upsertedEntry.id,
-        round: activeRound,
-      },
-    });
-
-    for (const item of persistedRequests.sort((a, b) => a.priority - b.priority)) {
-      let song = songByTitle.get(item.songTitle);
-      if (!song && item.round === 1) {
-        song = await tx.song.create({ data: { title: item.songTitle } });
-        songByTitle.set(song.title, song);
-      }
-
-      if (!song) {
-        throw new Error(`Song must be chosen from existing titles for round=2: ${item.songTitle}`);
-      }
-
-      await tx.sessionEntryRequest.create({
-        data: {
-          sessionEntryId: upsertedEntry.id,
-          songId: song.id,
-          songTitleSnapshot: song.title,
-          keyName: item.keyName ?? null,
-          round: item.round,
-          priority: item.priority,
+        select: {
+          attendanceStatus: true,
         },
       });
-    }
 
-    return tx.sessionEntry.findUniqueOrThrow({
-      where: { id: upsertedEntry.id },
-      include: {
-        sessionEvent: true,
-        requests: {
-          orderBy: [{ round: 'asc' }, { priority: 'asc' }],
+      const isTransitioningToAttending = body.attendanceStatus === 'attending' && existingEntry?.attendanceStatus !== 'attending';
+      if (sessionEvent.participantLimit != null && isTransitioningToAttending) {
+        const attendingCount = await tx.sessionEntry.count({
+          where: {
+            sessionEventId: body.sessionEventId,
+            attendanceStatus: 'attending',
+          },
+        });
+
+        if (attendingCount >= sessionEvent.participantLimit) {
+          throw new Error(SESSION_EVENT_CAPACITY_ERROR);
+        }
+      }
+
+      const upsertedEntry = await tx.sessionEntry.upsert({
+        where: {
+          sessionEventId_memberProfileId: {
+            sessionEventId: body.sessionEventId!,
+            memberProfileId: memberProfile.id,
+          },
         },
-      },
-    });
-  });
+        update: {
+          attendanceStatus: body.attendanceStatus,
+          ...(afterPartyAttendanceStatusUpdate !== undefined
+            ? { afterPartyAttendanceStatus: afterPartyAttendanceStatusUpdate }
+            : {}),
+        },
+        create: {
+          sessionEventId: body.sessionEventId!,
+          memberProfileId: memberProfile.id,
+          attendanceStatus: body.attendanceStatus,
+          afterPartyAttendanceStatus: nextAfterPartyAttendanceStatus,
+        },
+      });
 
-  return NextResponse.json({ entry }, { status: 201 });
+      await tx.sessionEntryRequest.deleteMany({
+        where: {
+          sessionEntryId: upsertedEntry.id,
+          round: activeRound,
+        },
+      });
+
+      for (const item of persistedRequests.sort((a, b) => a.priority - b.priority)) {
+        let song = songByTitle.get(item.songTitle);
+        if (!song && item.round === 1) {
+          song = await tx.song.create({ data: { title: item.songTitle } });
+          songByTitle.set(song.title, song);
+        }
+
+        if (!song) {
+          throw new Error(`Song must be chosen from existing titles for round=2: ${item.songTitle}`);
+        }
+
+        await tx.sessionEntryRequest.create({
+          data: {
+            sessionEntryId: upsertedEntry.id,
+            songId: song.id,
+            songTitleSnapshot: song.title,
+            keyName: item.keyName ?? null,
+            round: item.round,
+            priority: item.priority,
+          },
+        });
+      }
+
+      return tx.sessionEntry.findUniqueOrThrow({
+        where: { id: upsertedEntry.id },
+        include: {
+          sessionEvent: true,
+          requests: {
+            orderBy: [{ round: 'asc' }, { priority: 'asc' }],
+          },
+        },
+      });
+    });
+
+    return NextResponse.json({ entry }, { status: 201 });
+  } catch (error: unknown) {
+    if (error instanceof Error && error.message === SESSION_EVENT_CAPACITY_ERROR) {
+      return NextResponse.json({ error: error.message }, { status: 409 });
+    }
+    throw error;
+  }
 }
