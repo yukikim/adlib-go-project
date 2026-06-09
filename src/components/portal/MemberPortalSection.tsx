@@ -171,9 +171,9 @@ function EventMeta({
         </div>
       ) : null}
       {sessionEntries ? (
-        <details className="group mt-2 rounded-lg border bg-background/70 p-3">
+        <details className="group mt-2 rounded-lg border bg-background/70 p-1">
           <summary className="cursor-pointer list-none text-sm font-medium text-foreground">
-            <div className="flex flex-wrap items-center justify-between gap-2 bg-primary p-2">
+            <div className="flex flex-wrap items-center justify-between gap-2 bg-primary p-2 rounded-lg">
               <span>【参加状況】</span>
               <span className="text-xs text-muted-foreground">
                 参加 {attendingEntries.length} 人 / エントリー {eventEntries.length} 件
@@ -867,7 +867,8 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                               </p>
                             ) : null}
                             {eventEntry ? (
-                              <div className="rounded-lg border bg-background/70 p-3 text-sm">
+                              <div className="rounded-lg border bg-primary p-3 text-sm">
+                                <h4 className="text-md font-semibold mb-2">あなたのエントリー情報</h4>
                                 <p className="font-medium text-foreground">
                                   参加可否:{" "}
                                   {formatAttendanceStatusLabel(
@@ -1224,6 +1225,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                       participationFee={event.participationFee}
                       hasAfterParty={event.hasAfterParty}
                       afterPartyFee={event.afterPartyFee}
+                      sessionEntries={event.sessionEntries}
                       notes={event.notes}
                     />
                     {event.entryReason ? (
@@ -1258,7 +1260,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                             { showSaveHint: true, interactive: true },
                           )}
                         </div>
-                        <div className="md:col-span-2">
+                        <div className="md:col-span-2 text-right">
                           <Button
                             type="button"
                             onClick={() => {
