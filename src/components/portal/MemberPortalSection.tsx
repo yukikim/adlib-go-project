@@ -1,27 +1,41 @@
-import { useState } from 'react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardTitle, CardDescription } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { SearchableCombobox } from '@/components/ui/searchable-combobox';
+import { useState } from "react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { SearchableCombobox } from "@/components/ui/searchable-combobox";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
-import { Textarea } from '@/components/ui/textarea';
-import { Section } from './Section';
-import { AGE_RANGE_OPTIONS, GENDER_OPTIONS, PREFECTURE_OPTIONS } from '@/lib/memberProfile';
-import { getSessionEventStatusLabel, isSessionEventFinished } from '@/lib/sessionEventStatus';
-import { formatRoundCandidateSong } from '@/lib/sessionEventWindow';
-import { formatEventSchedule, formatYen } from '@/lib/utils';
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
+import { Section } from "./Section";
+import {
+  AGE_RANGE_OPTIONS,
+  GENDER_OPTIONS,
+  PREFECTURE_OPTIONS,
+} from "@/lib/memberProfile";
+import {
+  getSessionEventStatusLabel,
+  isSessionEventFinished,
+} from "@/lib/sessionEventStatus";
+import { formatRoundCandidateSong } from "@/lib/sessionEventWindow";
+import { formatEventSchedule, formatYen } from "@/lib/utils";
 import type {
   AnnouncementView,
   AttendanceStatus,
@@ -33,8 +47,8 @@ import type {
   SessionEntryView,
   SessionEventView,
   SessionSetView,
-} from './types';
-import type { RunPortalActionOptions } from './utils';
+} from "./types";
+import type { RunPortalActionOptions } from "./utils";
 
 type EntryState = {
   canSubmit: boolean;
@@ -42,7 +56,7 @@ type EntryState = {
   reason: string | null;
 };
 
-const NONE_VALUE = '__none__';
+const NONE_VALUE = "__none__";
 
 function formatSessionMemberName(name: string, isForced?: boolean) {
   return isForced ? `${name} (強制追加)` : name;
@@ -67,46 +81,61 @@ function EventMeta({
   afterPartyFee?: number | null;
   notes?: string | null;
 }) {
-  const hasCapacityMeta = typeof attendingEntryCount === 'number' || participantLimit != null;
+  const hasCapacityMeta =
+    typeof attendingEntryCount === "number" || participantLimit != null;
 
   return (
     <>
       {hasCapacityMeta || participationFee != null || hasAfterParty ? (
         <div className="mt-2 flex flex-wrap gap-2">
-          {typeof attendingEntryCount === 'number' ? (
+          {typeof attendingEntryCount === "number" ? (
             <Badge variant="secondary">
-              参加人数 {attendingEntryCount}{participantLimit != null ? ` / ${participantLimit}` : '人'}
+              参加人数 {attendingEntryCount}
+              {participantLimit != null ? ` / ${participantLimit}` : "人"}
             </Badge>
           ) : null}
           {participantLimit != null && remainingEntryCapacity != null ? (
-            <Badge variant={isEntryCapacityFull ? 'destructive' : 'secondary'}>
-              {isEntryCapacityFull ? '満員' : `残り ${remainingEntryCapacity} 人`}
+            <Badge variant={isEntryCapacityFull ? "destructive" : "secondary"}>
+              {isEntryCapacityFull
+                ? "満員"
+                : `残り ${remainingEntryCapacity} 人`}
             </Badge>
           ) : null}
-          {participationFee != null ? <Badge variant="secondary">参加料金 {formatYen(participationFee)}</Badge> : null}
-          {hasAfterParty ? <Badge variant="secondary">懇親会 {afterPartyFee != null ? formatYen(afterPartyFee) : '料金未定'}</Badge> : null}
+          {participationFee != null ? (
+            <Badge variant="secondary">
+              参加料金 {formatYen(participationFee)}
+            </Badge>
+          ) : null}
+          {hasAfterParty ? (
+            <Badge variant="secondary">
+              懇親会{" "}
+              {afterPartyFee != null ? formatYen(afterPartyFee) : "料金未定"}
+            </Badge>
+          ) : null}
         </div>
       ) : null}
-      {notes ? <p className="mt-2 text-sm text-muted-foreground">備考: {notes}</p> : null}
+      {notes ? (
+        <p className="mt-2 text-sm text-muted-foreground">備考: {notes}</p>
+      ) : null}
     </>
   );
 }
 
 function formatAttendanceStatusLabel(status: AttendanceStatus) {
   switch (status) {
-    case 'attending':
-      return '参加';
-    case 'undecided':
-      return '未定';
-    case 'absent':
-      return '不参加';
+    case "attending":
+      return "参加";
+    case "undecided":
+      return "未定";
+    case "absent":
+      return "不参加";
     default:
       return status;
   }
 }
 
 function formatOptionalAttendanceStatusLabel(status?: AttendanceStatus | null) {
-  return status ? formatAttendanceStatusLabel(status) : '未回答';
+  return status ? formatAttendanceStatusLabel(status) : "未回答";
 }
 
 type FieldProps = {
@@ -117,18 +146,26 @@ type FieldProps = {
   className?: string;
 };
 
-function Field({ htmlFor, label, description, children, className }: FieldProps) {
+function Field({
+  htmlFor,
+  label,
+  description,
+  children,
+  className,
+}: FieldProps) {
   return (
-    <div className={className ?? 'grid gap-2'}>
+    <div className={className ?? "grid gap-2"}>
       <Label htmlFor={htmlFor}>{label}</Label>
-      {description ? <p className="text-xs text-muted-foreground">{description}</p> : null}
+      {description ? (
+        <p className="text-xs text-muted-foreground">{description}</p>
+      ) : null}
       {children}
     </div>
   );
 }
 
 function normalizeSongTitle(value: string) {
-  return value.trim().replace(/\s+/g, ' ').toLocaleLowerCase('ja-JP');
+  return value.trim().replace(/\s+/g, " ").toLocaleLowerCase("ja-JP");
 }
 
 function formatSongWithKey(songTitle: string, keyName?: string | null) {
@@ -178,8 +215,12 @@ type MemberPortalSectionProps = {
   setMemberRound1Key2: (value: string) => void;
   setMemberRound1Key3: (value: string) => void;
   setMemberRound1Key4: (value: string) => void;
-  setMemberRatings: (updater: (current: Record<string, number>) => Record<string, number>) => void;
-  setMemberRatingComments: (updater: (current: Record<string, string>) => Record<string, string>) => void;
+  setMemberRatings: (
+    updater: (current: Record<string, number>) => Record<string, number>,
+  ) => void;
+  setMemberRatingComments: (
+    updater: (current: Record<string, string>) => Record<string, string>,
+  ) => void;
   setMemberEventComment: (value: string) => void;
   onProfileDisplayNameChange: (value: string) => void;
   onProfileMainInstrumentChange: (value: Instrument) => void;
@@ -296,24 +337,39 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     onProfileUpdate();
   };
 
-  const selectedMemberEvent = sessionEvents.find((event) => event.id === memberEventId) ?? null;
-  const visibleSessionEvents = sessionEvents.filter((event) => event.isVisibleToMembers);
-  const closedEvents = visibleSessionEvents.filter((event) => isSessionEventFinished(event.status));
-  const canPostEventComment = selectedMemberEvent?.status === 'published';
-  const canRateSelectedEvent = selectedMemberEvent?.status === 'rating';
-  const isVocalMember = currentUser?.memberProfile?.mainInstrument === 'vocal';
+  const selectedMemberEvent =
+    sessionEvents.find((event) => event.id === memberEventId) ?? null;
+  const visibleSessionEvents = sessionEvents.filter(
+    (event) => event.isVisibleToMembers,
+  );
+  const closedEvents = visibleSessionEvents.filter((event) =>
+    isSessionEventFinished(event.status),
+  );
+  const canPostEventComment = selectedMemberEvent?.status === "published";
+  const canRateSelectedEvent = selectedMemberEvent?.status === "rating";
+  const isVocalMember = currentUser?.memberProfile?.mainInstrument === "vocal";
 
-  const announcedEvents = sessionEvents.filter((event) => event.status === 'announced');
-  const round1RecruitingEvents = sessionEvents.filter((event) => event.status === 'recruiting_round1');
+  const announcedEvents = sessionEvents.filter(
+    (event) => event.status === "announced",
+  );
+  const round1RecruitingEvents = sessionEvents.filter(
+    (event) => event.status === "recruiting_round1",
+  );
   const round2RecruitingEvents = isVocalMember
     ? []
-    : sessionEvents.filter((event) => event.status === 'recruiting_round2');
-  const publishedEvents = sessionEvents.filter((event) => event.status === 'published');
-  const ratingEvents = sessionEvents.filter((event) => event.status === 'rating');
-  const completedEvents = sessionEvents.filter((event) => event.status === 'closed');
+    : sessionEvents.filter((event) => event.status === "recruiting_round2");
+  const publishedEvents = sessionEvents.filter(
+    (event) => event.status === "published",
+  );
+  const ratingEvents = sessionEvents.filter(
+    (event) => event.status === "rating",
+  );
+  const completedEvents = sessionEvents.filter(
+    (event) => event.status === "closed",
+  );
 
   // console.log('announcedEvents:', announcedEvents);
-  // console.log('round1RecruitingEvents:', round1RecruitingEvents);
+  console.log("round1RecruitingEvents:", round1RecruitingEvents);
   // console.log('round2RecruitingEvents:', round2RecruitingEvents);
   // console.log('publishedEvents:', publishedEvents);
   // console.log('ratingEvents:', ratingEvents);
@@ -321,30 +377,37 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
   // console.log('selectedMemberEvent:', selectedMemberEvent);
   // console.log('round2CandidateSongs:', round2CandidateSongs);
 
-  const selectedRound1Event = round1RecruitingEvents.find((event) => event.id === memberEventId) ?? null;
+  const selectedRound1Event =
+    round1RecruitingEvents.find((event) => event.id === memberEventId) ?? null;
 
-  const getSessionEntryForEvent = (eventId: string) => sessionEntries.find((entry) => entry.sessionEventId === eventId) ?? null;
+  const getSessionEntryForEvent = (eventId: string) =>
+    sessionEntries.find((entry) => entry.sessionEventId === eventId) ?? null;
 
-  const getRound1RequestsForEvent = (eventId: string) => (
-    getSessionEntryForEvent(eventId)?.requests
-      .filter((request) => request.round === 1)
-      .sort((left, right) => left.priority - right.priority) ?? []
-  );
+  const getRound1RequestsForEvent = (eventId: string) =>
+    getSessionEntryForEvent(eventId)
+      ?.requests.filter((request) => request.round === 1)
+      .sort((left, right) => left.priority - right.priority) ?? [];
 
   const getSelectedRound2SongsForEvent = (eventId: string) => {
     if (memberEventId !== eventId) {
       return [] as string[];
     }
 
-    return [memberRound2Song1, memberRound2Song2].filter((songTitle) => songTitle.trim().length > 0);
+    return [memberRound2Song1, memberRound2Song2].filter(
+      (songTitle) => songTitle.trim().length > 0,
+    );
   };
 
   const setSelectedRound2Songs = (songTitles: string[]) => {
-    setMemberRound2Song1(songTitles[0] ?? '');
-    setMemberRound2Song2(songTitles[1] ?? '');
+    setMemberRound2Song1(songTitles[0] ?? "");
+    setMemberRound2Song2(songTitles[1] ?? "");
   };
 
-  const handleRound2SongToggle = (eventId: string, songTitle: string, checked: boolean) => {
+  const handleRound2SongToggle = (
+    eventId: string,
+    songTitle: string,
+    checked: boolean,
+  ) => {
     if (memberEventId !== eventId) {
       setMemberEventId(eventId);
     }
@@ -353,7 +416,12 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     const currentSelections = getSelectedRound2SongsForEvent(eventId);
 
     if (checked) {
-      if (currentSelections.some((selectedSong) => normalizeSongTitle(selectedSong) === normalizedSongTitle)) {
+      if (
+        currentSelections.some(
+          (selectedSong) =>
+            normalizeSongTitle(selectedSong) === normalizedSongTitle,
+        )
+      ) {
         return;
       }
       if (currentSelections.length >= 2) {
@@ -365,35 +433,66 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     }
 
     setSelectedRound2Songs(
-      currentSelections.filter((selectedSong) => normalizeSongTitle(selectedSong) !== normalizedSongTitle),
+      currentSelections.filter(
+        (selectedSong) =>
+          normalizeSongTitle(selectedSong) !== normalizedSongTitle,
+      ),
     );
   };
 
-  const renderRound2SelectionBlock = (eventId: string, candidateSongs: string[], options?: { showSaveHint?: boolean; interactive?: boolean }) => {
+  const renderRound2SelectionBlock = (
+    eventId: string,
+    candidateSongs: string[],
+    options?: { showSaveHint?: boolean; interactive?: boolean },
+  ) => {
     const round1Requests = getRound1RequestsForEvent(eventId);
     const round1RequestSongSet = new Set(
-      round1Requests.map((request) => normalizeSongTitle(formatRoundCandidateSong(request.songTitleSnapshot, request.keyName))),
+      round1Requests.map((request) =>
+        normalizeSongTitle(
+          formatRoundCandidateSong(request.songTitleSnapshot, request.keyName),
+        ),
+      ),
     );
-    const availableSongs = candidateSongs.filter((songTitle) => !round1RequestSongSet.has(normalizeSongTitle(songTitle)));
+    const availableSongs = candidateSongs.filter(
+      (songTitle) => !round1RequestSongSet.has(normalizeSongTitle(songTitle)),
+    );
     const selectedSongs = getSelectedRound2SongsForEvent(eventId);
-    const selectedSongSet = new Set(selectedSongs.map((songTitle) => normalizeSongTitle(songTitle)));
+    const selectedSongSet = new Set(
+      selectedSongs.map((songTitle) => normalizeSongTitle(songTitle)),
+    );
     const selectionLimitReached = selectedSongs.length >= 2;
     const interactive = options?.interactive ?? true;
 
     return (
       <div className="my-2">
         <p className="text-sm font-medium">Round2 追加リクエスト</p>
-        <p className="mt-1 text-sm text-muted-foreground">Round1 の名寄せ済み候補から、自分が Round1 で選んだ曲を除いた曲を 2 曲まで選択できます。</p>
-        {options?.showSaveHint ? <p className="mt-1 text-xs text-muted-foreground">選択は下の「セッションエントリー」欄で行い、「エントリー保存」で反映されます。</p> : null}
+        <p className="mt-1 text-sm text-muted-foreground">
+          Round1 の名寄せ済み候補から、自分が Round1 で選んだ曲を除いた曲を 2
+          曲まで選択できます。
+        </p>
+        {options?.showSaveHint ? (
+          <p className="mt-1 text-xs text-muted-foreground">
+            選択は下の「セッションエントリー」欄で行い、「エントリー保存」で反映されます。
+          </p>
+        ) : null}
 
         <div className="mt-2 rounded-lg border bg-background/80 p-3">
-          <p className="text-xs font-medium text-muted-foreground">あなたの Round1 リクエスト</p>
+          <p className="text-xs font-medium text-muted-foreground">
+            あなたの Round1 リクエスト
+          </p>
           {round1Requests.length === 0 ? (
-            <p className="mt-2 text-sm text-muted-foreground">Round1 のリクエストはまだありません。</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Round1 のリクエストはまだありません。
+            </p>
           ) : (
             <div className="mt-2 flex flex-wrap gap-2">
               {round1Requests.map((request) => (
-                <Badge key={request.id} variant="secondary">{formatSongWithKey(request.songTitleSnapshot, request.keyName)}</Badge>
+                <Badge key={request.id} variant="secondary">
+                  {formatSongWithKey(
+                    request.songTitleSnapshot,
+                    request.keyName,
+                  )}
+                </Badge>
               ))}
             </div>
           )}
@@ -401,19 +500,29 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
 
         <div className="mt-2 rounded-lg border bg-background/50 p-1">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <p className="text-xs font-medium text-muted-foreground">選択可能な候補曲</p>
+            <p className="text-xs font-medium text-muted-foreground">
+              選択可能な候補曲
+            </p>
             <Badge variant="outline">選択中 {selectedSongs.length}/2</Badge>
           </div>
           {availableSongs.length === 0 ? (
-            <p className="mt-2 text-sm text-muted-foreground">選択可能な候補曲はありません。</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              選択可能な候補曲はありません。
+            </p>
           ) : (
             <div className="mt-3 grid gap-1 md:grid-cols-2">
               {availableSongs.map((songTitle, index) => {
                 const checkboxId = `member-round2-${eventId}-${index}`;
-                const checked = selectedSongSet.has(normalizeSongTitle(songTitle));
+                const checked = selectedSongSet.has(
+                  normalizeSongTitle(songTitle),
+                );
 
                 return (
-                  <label key={songTitle} htmlFor={checkboxId} className={`flex cursor-pointer items-start gap-3 rounded-lg border p-1 ${checked ? 'border-primary bg-primary/5' : 'bg-background'}`}>
+                  <label
+                    key={songTitle}
+                    htmlFor={checkboxId}
+                    className={`flex cursor-pointer items-start gap-3 rounded-lg border p-1 ${checked ? "border-primary bg-primary/5" : "bg-background"}`}
+                  >
                     <Checkbox
                       id={checkboxId}
                       checked={checked}
@@ -421,13 +530,25 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                         if (!interactive) {
                           return;
                         }
-                        handleRound2SongToggle(eventId, songTitle, nextChecked === true);
+                        handleRound2SongToggle(
+                          eventId,
+                          songTitle,
+                          nextChecked === true,
+                        );
                       }}
-                      disabled={!interactive || (!checked && selectionLimitReached)}
+                      disabled={
+                        !interactive || (!checked && selectionLimitReached)
+                      }
                     />
                     <div className="space-y-1">
-                      <p className="text-sm font-medium leading-5">{songTitle}</p>
-                      {!checked && selectionLimitReached ? <p className="text-xs text-muted-foreground">2 曲選択中のため追加できません。</p> : null}
+                      <p className="text-sm font-medium leading-5">
+                        {songTitle}
+                      </p>
+                      {!checked && selectionLimitReached ? (
+                        <p className="text-xs text-muted-foreground">
+                          2 曲選択中のため追加できません。
+                        </p>
+                      ) : null}
                     </div>
                   </label>
                 );
@@ -444,7 +565,9 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     setIsRound1EntryDialogOpen(true);
   };
 
-  const handleRound1EntrySubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleRound1EntrySubmit = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
     event.preventDefault();
     if (loading) {
       return;
@@ -459,23 +582,44 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
 
   return (
     <>
-
-
-      <div className="text-lg font-semibold text-secondary mb-4 px-4">{profileDisplayName}</div>
+      <div className="text-lg font-semibold text-secondary mb-4 px-4">
+        {profileDisplayName}
+      </div>
       <Card className="rounded-xl border bg-secondary/80 p-4 border-none">
-        <CardTitle className="text-2xl font-semibold text-on-secondary">お知らせ</CardTitle>
-        <CardDescription className="text-on-secondary">運営からのお知らせです。</CardDescription>
+        <CardTitle className="text-2xl font-semibold text-on-secondary">
+          お知らせ
+        </CardTitle>
+        <CardDescription className="text-on-secondary">
+          運営からのお知らせです。
+        </CardDescription>
 
-        {announcements.length === 0 ? <p className="text-sm text-on-secondary">公開中のお知らせはありません。</p> : (
+        {announcements.length === 0 ? (
+          <p className="text-sm text-on-secondary">
+            公開中のお知らせはありません。
+          </p>
+        ) : (
           <ul className="space-y-3">
             {announcements.map((announcement) => (
-              <li key={announcement.id} className="rounded-xl border bg-neutral-100 p-4">
+              <li
+                key={announcement.id}
+                className="rounded-xl border bg-neutral-100 p-4"
+              >
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge variant="secondary">お知らせ</Badge>
-                  {announcement.publishedAt ? <span className="text-sm text-muted-foreground">{new Date(announcement.publishedAt).toLocaleDateString('ja-JP')}</span> : null}
+                  {announcement.publishedAt ? (
+                    <span className="text-sm text-muted-foreground">
+                      {new Date(announcement.publishedAt).toLocaleDateString(
+                        "ja-JP",
+                      )}
+                    </span>
+                  ) : null}
                 </div>
-                <strong className="mt-3 block text-base">{announcement.title}</strong>
-                <div className="mt-2 text-sm leading-7 text-muted-foreground">{announcement.body}</div>
+                <strong className="mt-3 block text-base">
+                  {announcement.title}
+                </strong>
+                <div className="mt-2 text-sm leading-7 text-muted-foreground">
+                  {announcement.body}
+                </div>
               </li>
             ))}
           </ul>
@@ -483,23 +627,64 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
       </Card>
 
       <Card id="event-info" className="rounded-xl border bg-primary p-2 my-4">
-        <CardTitle className="text-2xl font-semibold text-on-primary">イベント情報</CardTitle>
+        <CardTitle className="text-2xl font-semibold text-on-primary">
+          イベント情報
+        </CardTitle>
 
         <Card className="border p-2 bg-on-primary/5">
-          <CardTitle className="text-sm font-semibold text-on-primary bg-neutral-50 px-4 py-1">開催予定イベント</CardTitle>
-          <CardDescription className={announcedEvents.length === 0 ? 'hidden' : ''}>開催を予定しているベントです。<br />※日時は変更される場合があります。</CardDescription>
+          <CardTitle className="text-sm font-semibold text-on-primary bg-neutral-50 px-4 py-1">
+            開催予定イベント
+          </CardTitle>
+          <CardDescription
+            className={announcedEvents.length === 0 ? "hidden" : ""}
+          >
+            開催を予定しているベントです。
+            <br />
+            ※日時は変更される場合があります。
+          </CardDescription>
 
-          {announcedEvents.length === 0 ? <p className="text-sm text-gray-50 bg-gray-400 p-2">表示できる開催予定イベントはありません。</p> : (
+          {announcedEvents.length === 0 ? (
+            <p className="text-sm text-gray-50 bg-gray-400 p-2">
+              表示できる開催予定イベントはありません。
+            </p>
+          ) : (
             <ul className="space-y-3">
               {announcedEvents.map((event) => (
-                <li key={event.id} className="rounded-xl border bg-background/60 p-4">
+                <li
+                  key={event.id}
+                  className="rounded-xl border bg-background/60 p-4"
+                >
                   <div className="flex flex-wrap items-center gap-2">
-                    <strong className="text-sm text-slate-600">{event.title}</strong>
-                    <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
+                    <strong className="text-sm text-slate-600">
+                      {event.title}
+                    </strong>
+                    <Badge variant="outline">
+                      {getSessionEventStatusLabel(event.status)}
+                    </Badge>
                   </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{formatEventSchedule(event.eventDate, event.startTime, event.endTime)} / {event.venue}</p>
-                  <EventMeta participantLimit={event.participantLimit} attendingEntryCount={event.attendingEntryCount} remainingEntryCapacity={event.remainingEntryCapacity} isEntryCapacityFull={event.isEntryCapacityFull} participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
-                  {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    {formatEventSchedule(
+                      event.eventDate,
+                      event.startTime,
+                      event.endTime,
+                    )}{" "}
+                    / {event.venue}
+                  </p>
+                  <EventMeta
+                    participantLimit={event.participantLimit}
+                    attendingEntryCount={event.attendingEntryCount}
+                    remainingEntryCapacity={event.remainingEntryCapacity}
+                    isEntryCapacityFull={event.isEntryCapacityFull}
+                    participationFee={event.participationFee}
+                    hasAfterParty={event.hasAfterParty}
+                    afterPartyFee={event.afterPartyFee}
+                    notes={event.notes}
+                  />
+                  {event.entryReason ? (
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {event.entryReason}
+                    </p>
+                  ) : null}
                 </li>
               ))}
             </ul>
@@ -507,38 +692,105 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
         </Card>
 
         <Card className="border p-2 bg-orange-100">
-          <CardTitle className="text-sm font-semibold text-orange-600 bg-neutral-50 px-4 py-1">参加募集中イベント(ラウンド1)</CardTitle>
-          <CardDescription className={round1RecruitingEvents.length === 0 ? 'hidden' : ''}>参加可否とリクエスト曲を募っています。</CardDescription>
-          {round1RecruitingEvents.length === 0 ? <p className="text-sm text-gray-50 bg-gray-400 p-2">表示できる参加募集中イベントはありません。</p> : (
+          <CardTitle className="text-sm font-semibold text-orange-600 bg-neutral-50 px-4 py-1">
+            参加募集中イベント(ラウンド1)
+          </CardTitle>
+          <CardDescription
+            className={round1RecruitingEvents.length === 0 ? "hidden" : ""}
+          >
+            参加可否とリクエスト曲を募っています。
+          </CardDescription>
+          {round1RecruitingEvents.length === 0 ? (
+            <p className="text-sm text-gray-50 bg-gray-400 p-2">
+              表示できる参加募集中イベントはありません。
+            </p>
+          ) : (
             <ul className="space-y-3">
               {round1RecruitingEvents.map((event) => (
-                <li key={event.id} className="rounded-xl border bg-background/20 p-4">
+                <li
+                  key={event.id}
+                  className="rounded-xl border bg-background/20 p-4"
+                >
                   {(() => {
-                    const eventEntry = sessionEntries.find((entry) => entry.sessionEventId === event.id);
-                    const round1Requests = (eventEntry?.requests ?? []).filter((request) => request.round === 1).sort((a, b) => a.priority - b.priority);
+                    const eventEntry = sessionEntries.find(
+                      (entry) => entry.sessionEventId === event.id,
+                    );
+                    const round1Requests = (eventEntry?.requests ?? [])
+                      .filter((request) => request.round === 1)
+                      .sort((a, b) => a.priority - b.priority);
 
                     return (
                       <>
                         <div className="flex flex-wrap items-start justify-between gap-3">
                           <div className="space-y-2">
                             <div className="flex flex-wrap items-center gap-2">
-                              <strong className="text-sm text-orange-600">{event.title}</strong>
-                              <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
-                              <Badge variant={eventEntry ? 'default' : 'secondary'}>エントリー: {eventEntry ? '済' : '未'}</Badge>
+                              <strong className="text-sm text-orange-600">
+                                {event.title}
+                              </strong>
+                              <Badge variant="outline">
+                                {getSessionEventStatusLabel(event.status)}
+                              </Badge>
+                              <Badge
+                                variant={eventEntry ? "default" : "secondary"}
+                              >
+                                エントリー: {eventEntry ? "済" : "未"}
+                              </Badge>
                             </div>
-                            <p className="text-sm text-muted-foreground">{formatEventSchedule(event.eventDate, event.startTime, event.endTime)} / {event.venue}</p>
-                            <EventMeta participantLimit={event.participantLimit} attendingEntryCount={event.attendingEntryCount} remainingEntryCapacity={event.remainingEntryCapacity} isEntryCapacityFull={event.isEntryCapacityFull} participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
-                            {event.entryReason ? <p className="text-sm text-muted-foreground">{event.entryReason}</p> : null}
+                            <p className="text-sm text-muted-foreground">
+                              {formatEventSchedule(
+                                event.eventDate,
+                                event.startTime,
+                                event.endTime,
+                              )}{" "}
+                              / {event.venue}
+                            </p>
+                            <EventMeta
+                              participantLimit={event.participantLimit}
+                              attendingEntryCount={event.attendingEntryCount}
+                              remainingEntryCapacity={
+                                event.remainingEntryCapacity
+                              }
+                              isEntryCapacityFull={event.isEntryCapacityFull}
+                              participationFee={event.participationFee}
+                              hasAfterParty={event.hasAfterParty}
+                              afterPartyFee={event.afterPartyFee}
+                              notes={event.notes}
+                            />
+                            {event.entryReason ? (
+                              <p className="text-sm text-muted-foreground">
+                                {event.entryReason}
+                              </p>
+                            ) : null}
                             {eventEntry ? (
                               <div className="rounded-lg border bg-background/70 p-3 text-sm">
-                                <p className="font-medium text-foreground">参加可否: {formatAttendanceStatusLabel(eventEntry.attendanceStatus)}</p>
-                                {event.hasAfterParty ? <p className="mt-1 font-medium text-foreground">懇親会: {formatOptionalAttendanceStatusLabel(eventEntry.afterPartyAttendanceStatus)}</p> : null}
+                                <p className="font-medium text-foreground">
+                                  参加可否:{" "}
+                                  {formatAttendanceStatusLabel(
+                                    eventEntry.attendanceStatus,
+                                  )}
+                                </p>
+                                {event.hasAfterParty ? (
+                                  <p className="mt-1 font-medium text-foreground">
+                                    懇親会:{" "}
+                                    {formatOptionalAttendanceStatusLabel(
+                                      eventEntry.afterPartyAttendanceStatus,
+                                    )}
+                                  </p>
+                                ) : null}
                                 {round1Requests.length === 0 ? (
-                                  <p className="mt-1 text-muted-foreground">リクエスト曲は未登録です。</p>
+                                  <p className="mt-1 text-muted-foreground">
+                                    リクエスト曲は未登録です。
+                                  </p>
                                 ) : (
                                   <ul className="mt-2 space-y-1 text-muted-foreground">
                                     {round1Requests.map((request) => (
-                                      <li key={request.id}>第{request.priority}希望: {formatSongWithKey(request.songTitleSnapshot, request.keyName)}</li>
+                                      <li key={request.id}>
+                                        第{request.priority}希望:{" "}
+                                        {formatSongWithKey(
+                                          request.songTitleSnapshot,
+                                          request.keyName,
+                                        )}
+                                      </li>
                                     ))}
                                   </ul>
                                 )}
@@ -547,7 +799,13 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                           </div>
                         </div>
                         <div className="text-right mt-2">
-                          <Button type="button" variant="secondary" size="sm" onClick={() => handleRound1EntryOpen(event.id)} disabled={loading}>
+                          <Button
+                            type="button"
+                            variant="secondary"
+                            size="sm"
+                            onClick={() => handleRound1EntryOpen(event.id)}
+                            disabled={loading}
+                          >
                             エントリー
                           </Button>
                         </div>
@@ -560,32 +818,62 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
           )}
         </Card>
 
-        <Dialog open={isRound1EntryDialogOpen} onOpenChange={setIsRound1EntryDialogOpen}>
+        <Dialog
+          open={isRound1EntryDialogOpen}
+          onOpenChange={setIsRound1EntryDialogOpen}
+        >
           <DialogContent className="sm:max-w-2xl bg-neutral-200">
             <DialogHeader>
-              <DialogTitle>{selectedRound1Event ? `${selectedRound1Event.title} のエントリー` : 'ラウンド1エントリー'}</DialogTitle>
+              <DialogTitle>
+                {selectedRound1Event
+                  ? `${selectedRound1Event.title} のエントリー`
+                  : "ラウンド1エントリー"}
+              </DialogTitle>
               <DialogDescription>
                 {isVocalMember
-                  ? '参加可否とラウンド1のリクエスト4曲を登録できます。募集期間中は何度でも修正できます。'
-                  : '参加可否とラウンド1のリクエスト2曲を登録できます。募集期間中は何度でも修正できます。'}
+                  ? "参加可否とラウンド1のリクエスト4曲を登録できます。募集期間中は何度でも修正できます。"
+                  : "参加可否とラウンド1のリクエスト2曲を登録できます。募集期間中は何度でも修正できます。"}
               </DialogDescription>
             </DialogHeader>
 
             {!selectedRound1Event ? (
               <Alert variant="destructive">
                 <AlertTitle>イベントが選択されていません</AlertTitle>
-                <AlertDescription>参加募集中イベントの「エントリー」ボタンから開いてください。</AlertDescription>
+                <AlertDescription>
+                  参加募集中イベントの「エントリー」ボタンから開いてください。
+                </AlertDescription>
               </Alert>
             ) : (
               <form className="grid gap-4" onSubmit={handleRound1EntrySubmit}>
-                <Alert variant={entryState.canSubmit ? 'default' : 'destructive'}>
-                  <AlertTitle>{entryState.canSubmit ? '入力可能です' : '現在は入力できません'}</AlertTitle>
-                  <AlertDescription>{entryState.canSubmit ? 'ラウンド1の募集内容を保存できます。' : entryState.reason}</AlertDescription>
+                <Alert
+                  variant={entryState.canSubmit ? "default" : "destructive"}
+                >
+                  <AlertTitle>
+                    {entryState.canSubmit
+                      ? "入力可能です"
+                      : "現在は入力できません"}
+                  </AlertTitle>
+                  <AlertDescription>
+                    {entryState.canSubmit
+                      ? "ラウンド1の募集内容を保存できます。"
+                      : entryState.reason}
+                  </AlertDescription>
                 </Alert>
 
-                <Field label="参加可否" htmlFor="member-round1-attendance-status">
-                  <Select value={memberAttendanceStatus} onValueChange={(value) => setMemberAttendanceStatus(value as AttendanceStatus)}>
-                    <SelectTrigger id="member-round1-attendance-status" className="w-full bg-background">
+                <Field
+                  label="参加可否"
+                  htmlFor="member-round1-attendance-status"
+                >
+                  <Select
+                    value={memberAttendanceStatus}
+                    onValueChange={(value) =>
+                      setMemberAttendanceStatus(value as AttendanceStatus)
+                    }
+                  >
+                    <SelectTrigger
+                      id="member-round1-attendance-status"
+                      className="w-full bg-background"
+                    >
                       <SelectValue placeholder="参加可否を選択" />
                     </SelectTrigger>
                     <SelectContent>
@@ -600,10 +888,24 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                   <Field
                     label="懇親会参加可否"
                     htmlFor="member-round1-after-party-attendance-status"
-                    description={selectedRound1Event.afterPartyFee != null ? `懇親会参加料金は ${formatYen(selectedRound1Event.afterPartyFee)} です。` : '懇親会の参加可否を選択してください。'}
+                    description={
+                      selectedRound1Event.afterPartyFee != null
+                        ? `懇親会参加料金は ${formatYen(selectedRound1Event.afterPartyFee)} です。`
+                        : "懇親会の参加可否を選択してください。"
+                    }
                   >
-                    <Select value={memberAfterPartyAttendanceStatus} onValueChange={(value) => setMemberAfterPartyAttendanceStatus(value as AttendanceStatus)}>
-                      <SelectTrigger id="member-round1-after-party-attendance-status" className="w-full bg-background">
+                    <Select
+                      value={memberAfterPartyAttendanceStatus}
+                      onValueChange={(value) =>
+                        setMemberAfterPartyAttendanceStatus(
+                          value as AttendanceStatus,
+                        )
+                      }
+                    >
+                      <SelectTrigger
+                        id="member-round1-after-party-attendance-status"
+                        className="w-full bg-background"
+                      >
                         <SelectValue placeholder="懇親会参加可否を選択" />
                       </SelectTrigger>
                       <SelectContent>
@@ -615,8 +917,16 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                   </Field>
                 ) : null}
 
-                <div className={isVocalMember ? 'grid gap-4 md:grid-cols-2' : 'grid gap-4'}>
-                  <Field htmlFor="member-round1-song1" label="リクエスト1曲目" description="黒本1 / 黒本2 の曲名を入力すると候補から選択できます。">
+                <div
+                  className={
+                    isVocalMember ? "grid gap-4 md:grid-cols-2" : "grid gap-4"
+                  }
+                >
+                  <Field
+                    htmlFor="member-round1-song1"
+                    label="リクエスト1曲目"
+                    description="黒本1 / 黒本2 の曲名を入力すると候補から選択できます。"
+                  >
                     <SearchableCombobox
                       id="member-round1-song1"
                       value={memberRound1Song1}
@@ -629,13 +939,30 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                   </Field>
                   {isVocalMember ? (
                     <Field htmlFor="member-round1-key1" label="1曲目 key">
-                      <Input id="member-round1-key1" type="text" placeholder="例: F, Bb" value={memberRound1Key1} onChange={(event) => setMemberRound1Key1(event.target.value)} className="bg-background" />
+                      <Input
+                        id="member-round1-key1"
+                        type="text"
+                        placeholder="例: F, Bb"
+                        value={memberRound1Key1}
+                        onChange={(event) =>
+                          setMemberRound1Key1(event.target.value)
+                        }
+                        className="bg-background"
+                      />
                     </Field>
                   ) : null}
                 </div>
 
-                <div className={isVocalMember ? 'grid gap-4 md:grid-cols-2' : 'grid gap-4'}>
-                  <Field htmlFor="member-round1-song2" label="リクエスト2曲目" description="未入力でも保存できます。">
+                <div
+                  className={
+                    isVocalMember ? "grid gap-4 md:grid-cols-2" : "grid gap-4"
+                  }
+                >
+                  <Field
+                    htmlFor="member-round1-song2"
+                    label="リクエスト2曲目"
+                    description="未入力でも保存できます。"
+                  >
                     <SearchableCombobox
                       id="member-round1-song2"
                       value={memberRound1Song2}
@@ -648,14 +975,27 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                   </Field>
                   {isVocalMember ? (
                     <Field htmlFor="member-round1-key2" label="2曲目 key">
-                      <Input id="member-round1-key2" type="text" placeholder="例: Eb, G" value={memberRound1Key2} onChange={(event) => setMemberRound1Key2(event.target.value)} className="bg-background" />
+                      <Input
+                        id="member-round1-key2"
+                        type="text"
+                        placeholder="例: Eb, G"
+                        value={memberRound1Key2}
+                        onChange={(event) =>
+                          setMemberRound1Key2(event.target.value)
+                        }
+                        className="bg-background"
+                      />
                     </Field>
                   ) : null}
                 </div>
 
                 {isVocalMember ? (
                   <div className="grid gap-4 md:grid-cols-2">
-                    <Field htmlFor="member-round1-song3" label="リクエスト3曲目" description="未入力でも保存できます。">
+                    <Field
+                      htmlFor="member-round1-song3"
+                      label="リクエスト3曲目"
+                      description="未入力でも保存できます。"
+                    >
                       <SearchableCombobox
                         id="member-round1-song3"
                         value={memberRound1Song3}
@@ -667,14 +1007,27 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                       />
                     </Field>
                     <Field htmlFor="member-round1-key3" label="3曲目 key">
-                      <Input id="member-round1-key3" type="text" placeholder="例: C, Ab" value={memberRound1Key3} onChange={(event) => setMemberRound1Key3(event.target.value)} className="bg-background" />
+                      <Input
+                        id="member-round1-key3"
+                        type="text"
+                        placeholder="例: C, Ab"
+                        value={memberRound1Key3}
+                        onChange={(event) =>
+                          setMemberRound1Key3(event.target.value)
+                        }
+                        className="bg-background"
+                      />
                     </Field>
                   </div>
                 ) : null}
 
                 {isVocalMember ? (
                   <div className="grid gap-4 md:grid-cols-2">
-                    <Field htmlFor="member-round1-song4" label="リクエスト4曲目" description="未入力でも保存できます。">
+                    <Field
+                      htmlFor="member-round1-song4"
+                      label="リクエスト4曲目"
+                      description="未入力でも保存できます。"
+                    >
                       <SearchableCombobox
                         id="member-round1-song4"
                         value={memberRound1Song4}
@@ -686,14 +1039,35 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                       />
                     </Field>
                     <Field htmlFor="member-round1-key4" label="4曲目 key">
-                      <Input id="member-round1-key4" type="text" placeholder="例: D, F#" value={memberRound1Key4} onChange={(event) => setMemberRound1Key4(event.target.value)} className="bg-background" />
+                      <Input
+                        id="member-round1-key4"
+                        type="text"
+                        placeholder="例: D, F#"
+                        value={memberRound1Key4}
+                        onChange={(event) =>
+                          setMemberRound1Key4(event.target.value)
+                        }
+                        className="bg-background"
+                      />
                     </Field>
                   </div>
                 ) : null}
 
                 <DialogFooter>
-                  <Button type="button" variant="outline" onClick={() => setIsRound1EntryDialogOpen(false)} disabled={loading}>閉じる</Button>
-                  <Button type="submit" disabled={loading || !entryState.canSubmit}>保存</Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setIsRound1EntryDialogOpen(false)}
+                    disabled={loading}
+                  >
+                    閉じる
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={loading || !entryState.canSubmit}
+                  >
+                    保存
+                  </Button>
                 </DialogFooter>
               </form>
             )}
@@ -702,32 +1076,93 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
 
         {!isVocalMember ? (
           <Card className="border p-2 bg-pink-100">
-            <CardTitle className="text-sm font-semibold text-pink-600 bg-neutral-50 px-4 py-1">追加リクエスト曲募集中イベント(ラウンド2)</CardTitle>
-            <CardDescription className={round2RecruitingEvents.length === 0 ? 'hidden' : ''}>ラウンド1のリクエスト曲に加えて追加のリクエスト曲を募っています。</CardDescription>
-            {round2RecruitingEvents.length === 0 ? <p className="text-sm text-gray-50 bg-gray-400 p-2">表示できる追加リクエスト曲募集中イベントはありません。</p> : (
+            <CardTitle className="text-sm font-semibold text-pink-600 bg-neutral-50 px-4 py-1">
+              追加リクエスト曲募集中イベント(ラウンド2)
+            </CardTitle>
+            <CardDescription
+              className={round2RecruitingEvents.length === 0 ? "hidden" : ""}
+            >
+              ラウンド1のリクエスト曲に加えて追加のリクエスト曲を募っています。
+            </CardDescription>
+            {round2RecruitingEvents.length === 0 ? (
+              <p className="text-sm text-gray-50 bg-gray-400 p-2">
+                表示できる追加リクエスト曲募集中イベントはありません。
+              </p>
+            ) : (
               <ul className="space-y-3">
                 {round2RecruitingEvents.map((event) => (
-                  <li key={event.id} className="rounded-xl border bg-background/20 p-4">
+                  <li
+                    key={event.id}
+                    className="rounded-xl border bg-background/20 p-4"
+                  >
                     <div className="flex flex-wrap items-center gap-2">
-                      <strong className="text-sm text-pink-600">{event.title}</strong>
-                      <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
+                      <strong className="text-sm text-pink-600">
+                        {event.title}
+                      </strong>
+                      <Badge variant="outline">
+                        {getSessionEventStatusLabel(event.status)}
+                      </Badge>
                     </div>
-                    <p className="mt-2 text-sm text-muted-foreground">{formatEventSchedule(event.eventDate, event.startTime, event.endTime)} / {event.venue}</p>
-                    <EventMeta participantLimit={event.participantLimit} attendingEntryCount={event.attendingEntryCount} remainingEntryCapacity={event.remainingEntryCapacity} isEntryCapacityFull={event.isEntryCapacityFull} participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
-                    {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {formatEventSchedule(
+                        event.eventDate,
+                        event.startTime,
+                        event.endTime,
+                      )}{" "}
+                      / {event.venue}
+                    </p>
+                    <EventMeta
+                      participantLimit={event.participantLimit}
+                      attendingEntryCount={event.attendingEntryCount}
+                      remainingEntryCapacity={event.remainingEntryCapacity}
+                      isEntryCapacityFull={event.isEntryCapacityFull}
+                      participationFee={event.participationFee}
+                      hasAfterParty={event.hasAfterParty}
+                      afterPartyFee={event.afterPartyFee}
+                      notes={event.notes}
+                    />
+                    {event.entryReason ? (
+                      <p className="mt-2 text-sm text-muted-foreground">
+                        {event.entryReason}
+                      </p>
+                    ) : null}
                     <div className="mt-4">
                       <>
                         <div className="md:col-span-2">
-                          <Alert variant={entryState.canSubmit ? 'default' : 'destructive'}>
-                            <AlertTitle>{entryState.canSubmit ? '入力可能です' : '現在は入力できません'}</AlertTitle>
-                            <AlertDescription>{entryState.canSubmit ? '現在入力できるのは Round 2 です。' : entryState.reason}</AlertDescription>
+                          <Alert
+                            variant={
+                              entryState.canSubmit ? "default" : "destructive"
+                            }
+                          >
+                            <AlertTitle>
+                              {entryState.canSubmit
+                                ? "入力可能です"
+                                : "現在は入力できません"}
+                            </AlertTitle>
+                            <AlertDescription>
+                              {entryState.canSubmit
+                                ? "現在入力できるのは Round 2 です。"
+                                : entryState.reason}
+                            </AlertDescription>
                           </Alert>
                         </div>
                         <div className="md:col-span-2">
-                          {renderRound2SelectionBlock(event.id, event.round2CandidateSongs ?? [], { showSaveHint: true, interactive: true })}
+                          {renderRound2SelectionBlock(
+                            event.id,
+                            event.round2CandidateSongs ?? [],
+                            { showSaveHint: true, interactive: true },
+                          )}
                         </div>
                         <div className="md:col-span-2">
-                          <Button type="button" onClick={() => { void onSubmitEntry(); }} disabled={loading || !entryState.canSubmit}>エントリー保存</Button>
+                          <Button
+                            type="button"
+                            onClick={() => {
+                              void onSubmitEntry();
+                            }}
+                            disabled={loading || !entryState.canSubmit}
+                          >
+                            エントリー保存
+                          </Button>
                         </div>
                       </>
                     </div>
@@ -795,19 +1230,56 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
       </Section> */}
 
         <Card className="border p-2 bg-sky-100">
-          <CardTitle className="text-sm font-semibold text-sky-600 bg-neutral-50 px-4 py-1">セッションセット確定イベント(公開)</CardTitle>
-          <CardDescription className={publishedEvents.length === 0 ? 'hidden' : ''}>演奏曲とメンバーが確定したイベントです。</CardDescription>
-          {publishedEvents.length === 0 ? <p className="text-sm text-gray-50 bg-gray-400 p-2">表示できる確定イベントはありません。</p> : (
+          <CardTitle className="text-sm font-semibold text-sky-600 bg-neutral-50 px-4 py-1">
+            セッションセット確定イベント(公開)
+          </CardTitle>
+          <CardDescription
+            className={publishedEvents.length === 0 ? "hidden" : ""}
+          >
+            演奏曲とメンバーが確定したイベントです。
+          </CardDescription>
+          {publishedEvents.length === 0 ? (
+            <p className="text-sm text-gray-50 bg-gray-400 p-2">
+              表示できる確定イベントはありません。
+            </p>
+          ) : (
             <ul className="space-y-3">
               {publishedEvents.map((event) => (
-                <li key={event.id} className="rounded-xl border bg-background/20 p-4">
+                <li
+                  key={event.id}
+                  className="rounded-xl border bg-background/20 p-4"
+                >
                   <div className="flex flex-wrap items-center gap-2">
-                    <strong className="text-sm text-sky-600">{event.title}</strong>
-                    <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
+                    <strong className="text-sm text-sky-600">
+                      {event.title}
+                    </strong>
+                    <Badge variant="outline">
+                      {getSessionEventStatusLabel(event.status)}
+                    </Badge>
                   </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{formatEventSchedule(event.eventDate, event.startTime, event.endTime)} / {event.venue}</p>
-                  <EventMeta participantLimit={event.participantLimit} attendingEntryCount={event.attendingEntryCount} remainingEntryCapacity={event.remainingEntryCapacity} isEntryCapacityFull={event.isEntryCapacityFull} participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
-                  {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    {formatEventSchedule(
+                      event.eventDate,
+                      event.startTime,
+                      event.endTime,
+                    )}{" "}
+                    / {event.venue}
+                  </p>
+                  <EventMeta
+                    participantLimit={event.participantLimit}
+                    attendingEntryCount={event.attendingEntryCount}
+                    remainingEntryCapacity={event.remainingEntryCapacity}
+                    isEntryCapacityFull={event.isEntryCapacityFull}
+                    participationFee={event.participationFee}
+                    hasAfterParty={event.hasAfterParty}
+                    afterPartyFee={event.afterPartyFee}
+                    notes={event.notes}
+                  />
+                  {event.entryReason ? (
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {event.entryReason}
+                    </p>
+                  ) : null}
                 </li>
               ))}
             </ul>
@@ -815,19 +1287,56 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
         </Card>
 
         <Card className="border p-2 bg-emerald-50">
-          <CardTitle className="text-sm font-semibold text-emerald-600 bg-neutral-50 px-4 py-1">レイティング受付中イベント</CardTitle>
-          <CardDescription className={ratingEvents.length === 0 ? 'hidden' : ''}>レイティングや感想をコメント出来るイベントです。</CardDescription>
-          {ratingEvents.length === 0 ? <p className="text-sm text-gray-50 bg-gray-400 p-2">表示できるレイティング受付中イベントはありません。</p> : (
+          <CardTitle className="text-sm font-semibold text-emerald-600 bg-neutral-50 px-4 py-1">
+            レイティング受付中イベント
+          </CardTitle>
+          <CardDescription
+            className={ratingEvents.length === 0 ? "hidden" : ""}
+          >
+            レイティングや感想をコメント出来るイベントです。
+          </CardDescription>
+          {ratingEvents.length === 0 ? (
+            <p className="text-sm text-gray-50 bg-gray-400 p-2">
+              表示できるレイティング受付中イベントはありません。
+            </p>
+          ) : (
             <ul className="space-y-3">
               {ratingEvents.map((event) => (
-                <li key={event.id} className="rounded-xl border bg-background/20 p-4">
+                <li
+                  key={event.id}
+                  className="rounded-xl border bg-background/20 p-4"
+                >
                   <div className="flex flex-wrap items-center gap-2">
-                    <strong className="text-sm text-emerald-600">{event.title}</strong>
-                    <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
+                    <strong className="text-sm text-emerald-600">
+                      {event.title}
+                    </strong>
+                    <Badge variant="outline">
+                      {getSessionEventStatusLabel(event.status)}
+                    </Badge>
                   </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{formatEventSchedule(event.eventDate, event.startTime, event.endTime)} / {event.venue}</p>
-                  <EventMeta participantLimit={event.participantLimit} attendingEntryCount={event.attendingEntryCount} remainingEntryCapacity={event.remainingEntryCapacity} isEntryCapacityFull={event.isEntryCapacityFull} participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
-                  {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    {formatEventSchedule(
+                      event.eventDate,
+                      event.startTime,
+                      event.endTime,
+                    )}{" "}
+                    / {event.venue}
+                  </p>
+                  <EventMeta
+                    participantLimit={event.participantLimit}
+                    attendingEntryCount={event.attendingEntryCount}
+                    remainingEntryCapacity={event.remainingEntryCapacity}
+                    isEntryCapacityFull={event.isEntryCapacityFull}
+                    participationFee={event.participationFee}
+                    hasAfterParty={event.hasAfterParty}
+                    afterPartyFee={event.afterPartyFee}
+                    notes={event.notes}
+                  />
+                  {event.entryReason ? (
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {event.entryReason}
+                    </p>
+                  ) : null}
                 </li>
               ))}
             </ul>
@@ -835,37 +1344,87 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
         </Card>
 
         <Card className="border p-2">
-          <CardTitle className="text-sm font-semibold text-neutral-600 bg-neutral-50 px-4 py-1">終了イベント</CardTitle>
-          <CardDescription className={completedEvents.length === 0 ? 'hidden' : ''}>既に終了したイベントです。</CardDescription>
-          {completedEvents.length === 0 ? <p className="text-sm text-gray-50 bg-gray-400 p-2">表示できる終了イベントはありません。</p> : (
+          <CardTitle className="text-sm font-semibold text-neutral-600 bg-neutral-50 px-4 py-1">
+            終了イベント
+          </CardTitle>
+          <CardDescription
+            className={completedEvents.length === 0 ? "hidden" : ""}
+          >
+            既に終了したイベントです。
+          </CardDescription>
+          {completedEvents.length === 0 ? (
+            <p className="text-sm text-gray-50 bg-gray-400 p-2">
+              表示できる終了イベントはありません。
+            </p>
+          ) : (
             <ul className="space-y-3">
               {completedEvents.map((event) => (
-                <li key={event.id} className="rounded-xl border bg-background/20 p-4">
+                <li
+                  key={event.id}
+                  className="rounded-xl border bg-background/20 p-4"
+                >
                   <div className="flex flex-wrap items-center gap-2">
-                    <strong className="text-sm text-neutral-600">{event.title}</strong>
-                    <Badge variant="outline">{getSessionEventStatusLabel(event.status)}</Badge>
+                    <strong className="text-sm text-neutral-600">
+                      {event.title}
+                    </strong>
+                    <Badge variant="outline">
+                      {getSessionEventStatusLabel(event.status)}
+                    </Badge>
                   </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{formatEventSchedule(event.eventDate, event.startTime, event.endTime)} / {event.venue}</p>
-                  <EventMeta participantLimit={event.participantLimit} attendingEntryCount={event.attendingEntryCount} remainingEntryCapacity={event.remainingEntryCapacity} isEntryCapacityFull={event.isEntryCapacityFull} participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
-                  {event.entryReason ? <p className="mt-2 text-sm text-muted-foreground">{event.entryReason}</p> : null}
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    {formatEventSchedule(
+                      event.eventDate,
+                      event.startTime,
+                      event.endTime,
+                    )}{" "}
+                    / {event.venue}
+                  </p>
+                  <EventMeta
+                    participantLimit={event.participantLimit}
+                    attendingEntryCount={event.attendingEntryCount}
+                    remainingEntryCapacity={event.remainingEntryCapacity}
+                    isEntryCapacityFull={event.isEntryCapacityFull}
+                    participationFee={event.participationFee}
+                    hasAfterParty={event.hasAfterParty}
+                    afterPartyFee={event.afterPartyFee}
+                    notes={event.notes}
+                  />
+                  {event.entryReason ? (
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {event.entryReason}
+                    </p>
+                  ) : null}
                 </li>
               ))}
             </ul>
           )}
         </Card>
-
       </Card>
 
       <div className="hidden">
-        <Section title="メンバー一覧 / 詳細" description="参加メンバーのプロフィールと最近の評価履歴を確認できます。">
+        <Section
+          title="メンバー一覧 / 詳細"
+          description="参加メンバーのプロフィールと最近の評価履歴を確認できます。"
+        >
           <div className="grid gap-4 xl:grid-cols-[320px_1fr]">
             <ul className="space-y-2">
               {members.map((member) => (
                 <li key={member.id}>
-                  <Button type="button" variant={selectedMemberId === member.id ? 'default' : 'ghost'} className="h-auto w-full justify-between px-3 py-3" onClick={() => setSelectedMemberId(member.id)}>
+                  <Button
+                    type="button"
+                    variant={
+                      selectedMemberId === member.id ? "default" : "ghost"
+                    }
+                    className="h-auto w-full justify-between px-3 py-3"
+                    onClick={() => setSelectedMemberId(member.id)}
+                  >
                     <span className="text-left">
-                      <span className="block font-medium">{member.displayName}</span>
-                      <span className="block text-xs text-muted-foreground">{member.mainInstrument}</span>
+                      <span className="block font-medium">
+                        {member.displayName}
+                      </span>
+                      <span className="block text-xs text-muted-foreground">
+                        {member.mainInstrument}
+                      </span>
                     </span>
                     <Badge variant="outline">{member.entryCount}件</Badge>
                   </Button>
@@ -876,30 +1435,56 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
               {selectedMemberDetail ? (
                 <div className="rounded-xl border bg-background/60 p-4">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="text-lg font-semibold">{selectedMemberDetail.displayName}</h3>
-                    <Badge variant="outline">{selectedMemberDetail.mainInstrument}</Badge>
+                    <h3 className="text-lg font-semibold">
+                      {selectedMemberDetail.displayName}
+                    </h3>
+                    <Badge variant="outline">
+                      {selectedMemberDetail.mainInstrument}
+                    </Badge>
                   </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{selectedMemberDetail.mainInstrument === 'front' && selectedMemberDetail.subInstrument ? `演奏楽器 ${selectedMemberDetail.subInstrument}` : 'サブ楽器未設定'}</p>
-                  <p className="mt-2 text-sm text-muted-foreground">{selectedMemberDetail.area || '地域未設定'} / {selectedMemberDetail.gender || '性別未設定'} / {selectedMemberDetail.ageRange || '年代未設定'}</p>
-                  <p className="mt-4 text-sm leading-7">{selectedMemberDetail.bio || '自己紹介未設定'}</p>
-                  <p className="mt-4 text-sm text-muted-foreground">活動件数: {selectedMemberDetail.sessionEntries.length}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    {selectedMemberDetail.mainInstrument === "front" &&
+                      selectedMemberDetail.subInstrument
+                      ? `演奏楽器 ${selectedMemberDetail.subInstrument}`
+                      : "サブ楽器未設定"}
+                  </p>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    {selectedMemberDetail.area || "地域未設定"} /{" "}
+                    {selectedMemberDetail.gender || "性別未設定"} /{" "}
+                    {selectedMemberDetail.ageRange || "年代未設定"}
+                  </p>
+                  <p className="mt-4 text-sm leading-7">
+                    {selectedMemberDetail.bio || "自己紹介未設定"}
+                  </p>
+                  <p className="mt-4 text-sm text-muted-foreground">
+                    活動件数: {selectedMemberDetail.sessionEntries.length}
+                  </p>
                   <Separator className="my-4" />
                   <h4 className="font-medium">最近の評価</h4>
-                  {selectedMemberRatings.length === 0 ? <p className="mt-3 text-sm text-muted-foreground">評価履歴はありません。</p> : (
+                  {selectedMemberRatings.length === 0 ? (
+                    <p className="mt-3 text-sm text-muted-foreground">
+                      評価履歴はありません。
+                    </p>
+                  ) : (
                     <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
                       {selectedMemberRatings.slice(0, 5).map((rating) => (
-                        <li key={rating.id}>{rating.sessionEvent.title} / {rating.sessionSet.title} / {rating.rating} 星</li>
+                        <li key={rating.id}>
+                          {rating.sessionEvent.title} /{" "}
+                          {rating.sessionSet.title} / {rating.rating} 星
+                        </li>
                       ))}
                     </ul>
                   )}
                 </div>
-              ) : <p className="text-sm text-muted-foreground">メンバーを選択してください。</p>}
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  メンバーを選択してください。
+                </p>
+              )}
             </div>
           </div>
         </Section>
       </div>
-
-
 
       {/* <Section title="セッションエントリー" description="ラウンド1は上のイベント一覧から、ラウンド2はここから追加リクエストを登録します。">
         <div className="mt-4 grid max-w-3xl gap-4 md:grid-cols-2">
@@ -957,18 +1542,46 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
         </div>
       </Section> */}
 
-      <Section title="自分の履歴 / 公開情報" description="過去エントリー、公開中イベントのコメント、レイティング、終了イベントの結果を確認できます。">
+      <Section
+        title="自分の履歴 / 公開情報"
+        description="過去エントリー、公開中イベントのコメント、レイティング、終了イベントの結果を確認できます。"
+      >
         <h3 className="font-medium">エントリー履歴</h3>
-        {sessionEntries.length === 0 ? <p className="mt-3 text-sm text-muted-foreground">まだエントリーはありません。</p> : (
+        {sessionEntries.length === 0 ? (
+          <p className="mt-3 text-sm text-muted-foreground">
+            まだエントリーはありません。
+          </p>
+        ) : (
           <ul className="mt-3 space-y-3">
             {sessionEntries.map((entry) => (
-              <li key={entry.id} className="rounded-xl border bg-background/60 p-4 text-sm">
+              <li
+                key={entry.id}
+                className="rounded-xl border bg-background/60 p-4 text-sm"
+              >
                 <div className="flex flex-wrap items-center gap-2">
-                  <Badge variant="outline">参加 {formatAttendanceStatusLabel(entry.attendanceStatus)}</Badge>
-                  {entry.sessionEvent.hasAfterParty ? <Badge variant="outline">懇親会 {formatOptionalAttendanceStatusLabel(entry.afterPartyAttendanceStatus)}</Badge> : null}
-                  <span className="font-medium">{entry.sessionEvent.title}</span>
+                  <Badge variant="outline">
+                    参加 {formatAttendanceStatusLabel(entry.attendanceStatus)}
+                  </Badge>
+                  {entry.sessionEvent.hasAfterParty ? (
+                    <Badge variant="outline">
+                      懇親会{" "}
+                      {formatOptionalAttendanceStatusLabel(
+                        entry.afterPartyAttendanceStatus,
+                      )}
+                    </Badge>
+                  ) : null}
+                  <span className="font-medium">
+                    {entry.sessionEvent.title}
+                  </span>
                 </div>
-                <p className="mt-2 text-muted-foreground">{entry.requests.length} 曲 / {formatEventSchedule(entry.sessionEvent.eventDate, entry.sessionEvent.startTime, entry.sessionEvent.endTime)}</p>
+                <p className="mt-2 text-muted-foreground">
+                  {entry.requests.length} 曲 /{" "}
+                  {formatEventSchedule(
+                    entry.sessionEvent.eventDate,
+                    entry.sessionEvent.startTime,
+                    entry.sessionEvent.endTime,
+                  )}
+                </p>
               </li>
             ))}
           </ul>
@@ -979,46 +1592,132 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
           <div className="mt-3 rounded-xl border bg-background/60 p-4 text-sm">
             <div className="flex flex-wrap items-center gap-2">
               <strong>{selectedMemberEvent.title}</strong>
-              <Badge variant="outline">{getSessionEventStatusLabel(selectedMemberEvent.status)}</Badge>
+              <Badge variant="outline">
+                {getSessionEventStatusLabel(selectedMemberEvent.status)}
+              </Badge>
             </div>
-            <p className="mt-2 text-muted-foreground">{formatEventSchedule(selectedMemberEvent.eventDate, selectedMemberEvent.startTime, selectedMemberEvent.endTime)} / {selectedMemberEvent.venue}</p>
-            <EventMeta participantLimit={selectedMemberEvent.participantLimit} attendingEntryCount={selectedMemberEvent.attendingEntryCount} remainingEntryCapacity={selectedMemberEvent.remainingEntryCapacity} isEntryCapacityFull={selectedMemberEvent.isEntryCapacityFull} participationFee={selectedMemberEvent.participationFee} hasAfterParty={selectedMemberEvent.hasAfterParty} afterPartyFee={selectedMemberEvent.afterPartyFee} notes={selectedMemberEvent.notes} />
+            <p className="mt-2 text-muted-foreground">
+              {formatEventSchedule(
+                selectedMemberEvent.eventDate,
+                selectedMemberEvent.startTime,
+                selectedMemberEvent.endTime,
+              )}{" "}
+              / {selectedMemberEvent.venue}
+            </p>
+            <EventMeta
+              participantLimit={selectedMemberEvent.participantLimit}
+              attendingEntryCount={selectedMemberEvent.attendingEntryCount}
+              remainingEntryCapacity={
+                selectedMemberEvent.remainingEntryCapacity
+              }
+              isEntryCapacityFull={selectedMemberEvent.isEntryCapacityFull}
+              participationFee={selectedMemberEvent.participationFee}
+              hasAfterParty={selectedMemberEvent.hasAfterParty}
+              afterPartyFee={selectedMemberEvent.afterPartyFee}
+              notes={selectedMemberEvent.notes}
+            />
           </div>
         ) : null}
-        {memberSessionSets.length === 0 ? <p className="mt-3 text-sm text-muted-foreground">評価対象の公開済み sessionSet はありません。</p> : (
+        {memberSessionSets.length === 0 ? (
+          <p className="mt-3 text-sm text-muted-foreground">
+            評価対象の公開済み sessionSet はありません。
+          </p>
+        ) : (
           <ul className="mt-3 space-y-4">
             {memberSessionSets.map((sessionSet) => (
-              <li key={sessionSet.id} className="rounded-xl border bg-background/60 p-4">
+              <li
+                key={sessionSet.id}
+                className="rounded-xl border bg-background/60 p-4"
+              >
                 <div className="flex flex-wrap items-center gap-2">
                   <strong className="text-base">{sessionSet.songTitle}</strong>
-                  {sessionSet.key ? <Badge variant="outline">key {sessionSet.key}</Badge> : null}
+                  {sessionSet.key ? (
+                    <Badge variant="outline">key {sessionSet.key}</Badge>
+                  ) : null}
                 </div>
                 <div className="mt-3 grid gap-2 text-sm text-muted-foreground">
-                  <p>drum {sessionSet.drum ? formatSessionMemberName(sessionSet.drum.name, sessionSet.drum.isForced) : '-'}</p>
-                  <p>bass {sessionSet.bass ? formatSessionMemberName(sessionSet.bass.name, sessionSet.bass.isForced) : '-'}</p>
-                  <p>piano {sessionSet.piano ? formatSessionMemberName(sessionSet.piano.name, sessionSet.piano.isForced) : '-'}</p>
                   <p>
-                    front {sessionSet.front?.length
-                      ? sessionSet.front.map((member) => {
-                        const baseName = formatSessionMemberName(member.name, member.isForced);
-                        return member.subInstrument ? `${baseName} (${member.subInstrument})` : baseName;
-                      }).join(', ')
-                      : '-'}
+                    drum{" "}
+                    {sessionSet.drum
+                      ? formatSessionMemberName(
+                        sessionSet.drum.name,
+                        sessionSet.drum.isForced,
+                      )
+                      : "-"}
                   </p>
                   <p>
-                    vocal {sessionSet.vocal?.length
-                      ? sessionSet.vocal.map((member) => {
-                        const baseName = formatSessionMemberName(member.name, member.isForced);
-                        return sessionSet.key ? `${baseName} (key ${sessionSet.key})` : baseName;
-                      }).join(', ')
-                      : '-'}
+                    bass{" "}
+                    {sessionSet.bass
+                      ? formatSessionMemberName(
+                        sessionSet.bass.name,
+                        sessionSet.bass.isForced,
+                      )
+                      : "-"}
+                  </p>
+                  <p>
+                    piano{" "}
+                    {sessionSet.piano
+                      ? formatSessionMemberName(
+                        sessionSet.piano.name,
+                        sessionSet.piano.isForced,
+                      )
+                      : "-"}
+                  </p>
+                  <p>
+                    front{" "}
+                    {sessionSet.front?.length
+                      ? sessionSet.front
+                        .map((member) => {
+                          const baseName = formatSessionMemberName(
+                            member.name,
+                            member.isForced,
+                          );
+                          return member.subInstrument
+                            ? `${baseName} (${member.subInstrument})`
+                            : baseName;
+                        })
+                        .join(", ")
+                      : "-"}
+                  </p>
+                  <p>
+                    vocal{" "}
+                    {sessionSet.vocal?.length
+                      ? sessionSet.vocal
+                        .map((member) => {
+                          const baseName = formatSessionMemberName(
+                            member.name,
+                            member.isForced,
+                          );
+                          return sessionSet.key
+                            ? `${baseName} (key ${sessionSet.key})`
+                            : baseName;
+                        })
+                        .join(", ")
+                      : "-"}
                   </p>
                 </div>
                 {canRateSelectedEvent ? (
                   <div className="mt-4 grid max-w-xl gap-3 md:grid-cols-[180px_1fr]">
-                    <Field label="評価" htmlFor={`member-rating-${sessionSet.id}`}>
-                      <Select value={String(memberRatings[sessionSet.id] ?? NONE_VALUE)} onValueChange={(value) => setMemberRatings((current) => ({ ...current, [sessionSet.id]: value === NONE_VALUE ? 0 : Number(value) }))}>
-                        <SelectTrigger id={`member-rating-${sessionSet.id}`} className="w-full">
+                    <Field
+                      label="評価"
+                      htmlFor={`member-rating-${sessionSet.id}`}
+                    >
+                      <Select
+                        value={String(
+                          memberRatings[sessionSet.id] ?? NONE_VALUE,
+                        )}
+                        onValueChange={(value) =>
+                          setMemberRatings((current) => ({
+                            ...current,
+                            [sessionSet.id]:
+                              value === NONE_VALUE ? 0 : Number(value),
+                          }))
+                        }
+                      >
+                        <SelectTrigger
+                          id={`member-rating-${sessionSet.id}`}
+                          className="w-full"
+                        >
                           <SelectValue placeholder="星を選択" />
                         </SelectTrigger>
                         <SelectContent>
@@ -1031,18 +1730,38 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                         </SelectContent>
                       </Select>
                     </Field>
-                    <Field label="コメント" htmlFor={`member-rating-comment-${sessionSet.id}`}>
-                      <Textarea id={`member-rating-comment-${sessionSet.id}`} rows={3} placeholder="コメント" value={memberRatingComments[sessionSet.id] ?? ''} onChange={(event) => setMemberRatingComments((current) => ({ ...current, [sessionSet.id]: event.target.value }))} />
+                    <Field
+                      label="コメント"
+                      htmlFor={`member-rating-comment-${sessionSet.id}`}
+                    >
+                      <Textarea
+                        id={`member-rating-comment-${sessionSet.id}`}
+                        rows={3}
+                        placeholder="コメント"
+                        value={memberRatingComments[sessionSet.id] ?? ""}
+                        onChange={(event) =>
+                          setMemberRatingComments((current) => ({
+                            ...current,
+                            [sessionSet.id]: event.target.value,
+                          }))
+                        }
+                      />
                     </Field>
                     <div className="md:col-span-2">
-                      <Button type="button" onClick={() => onSaveRating(sessionSet.id)} disabled={loading || !memberRatings[sessionSet.id]}>評価を保存</Button>
+                      <Button
+                        type="button"
+                        onClick={() => onSaveRating(sessionSet.id)}
+                        disabled={loading || !memberRatings[sessionSet.id]}
+                      >
+                        評価を保存
+                      </Button>
                     </div>
                   </div>
                 ) : (
                   <p className="mt-4 text-sm text-muted-foreground">
-                    {selectedMemberEvent?.status === 'published'
-                      ? '現在は sessionSet 公開中です。レイティング開始後に各曲を評価できます。'
-                      : 'このイベントではレイティング入力を受け付けていません。'}
+                    {selectedMemberEvent?.status === "published"
+                      ? "現在は sessionSet 公開中です。レイティング開始後に各曲を評価できます。"
+                      : "このイベントではレイティング入力を受け付けていません。"}
                   </p>
                 )}
               </li>
@@ -1054,48 +1773,108 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
         {selectedMemberEvent?.comments?.length ? (
           <ul className="mt-3 space-y-3">
             {selectedMemberEvent.comments.map((comment) => (
-              <li key={comment.id} className="rounded-xl border bg-background/60 p-4 text-sm">
+              <li
+                key={comment.id}
+                className="rounded-xl border bg-background/60 p-4 text-sm"
+              >
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge variant="outline">{comment.memberDisplayName}</Badge>
-                  <span className="text-muted-foreground">{new Date(comment.createdAt).toLocaleString('ja-JP')}</span>
+                  <span className="text-muted-foreground">
+                    {new Date(comment.createdAt).toLocaleString("ja-JP")}
+                  </span>
                 </div>
                 <p className="mt-2 leading-7">{comment.body}</p>
               </li>
             ))}
           </ul>
-        ) : <p className="mt-3 text-sm text-muted-foreground">イベントコメントはまだありません。</p>}
+        ) : (
+          <p className="mt-3 text-sm text-muted-foreground">
+            イベントコメントはまだありません。
+          </p>
+        )}
         {canPostEventComment ? (
           <div className="mt-4 grid max-w-3xl gap-3">
-            <Field htmlFor="member-event-comment" label="公開イベントへのコメント">
-              <Textarea id="member-event-comment" rows={4} placeholder="公開された sessionSet やイベント全体へのコメントを入力してください" value={memberEventComment} onChange={(event) => setMemberEventComment(event.target.value)} />
+            <Field
+              htmlFor="member-event-comment"
+              label="公開イベントへのコメント"
+            >
+              <Textarea
+                id="member-event-comment"
+                rows={4}
+                placeholder="公開された sessionSet やイベント全体へのコメントを入力してください"
+                value={memberEventComment}
+                onChange={(event) => setMemberEventComment(event.target.value)}
+              />
             </Field>
             <div>
-              <Button type="button" onClick={onSaveEventComment} disabled={loading || !memberEventComment.trim()}>コメントを投稿</Button>
+              <Button
+                type="button"
+                onClick={onSaveEventComment}
+                disabled={loading || !memberEventComment.trim()}
+              >
+                コメントを投稿
+              </Button>
             </div>
           </div>
         ) : null}
         <Separator className="my-4" />
         <h3 className="font-medium">終了イベント</h3>
-        {closedEvents.length === 0 ? <p className="mt-3 text-sm text-muted-foreground">終了イベントはまだありません。</p> : (
+        {closedEvents.length === 0 ? (
+          <p className="mt-3 text-sm text-muted-foreground">
+            終了イベントはまだありません。
+          </p>
+        ) : (
           <div className="mt-3 space-y-3">
             {closedEvents.map((event) => (
-              <details key={event.id} className="rounded-xl border bg-background/60 p-4">
+              <details
+                key={event.id}
+                className="rounded-xl border bg-background/60 p-4"
+              >
                 <summary className="cursor-pointer list-none">
                   <div className="flex flex-wrap items-center gap-2">
                     <strong>{event.title}</strong>
-                    <Badge variant="outline">{formatEventSchedule(event.eventDate, event.startTime, event.endTime)}</Badge>
+                    <Badge variant="outline">
+                      {formatEventSchedule(
+                        event.eventDate,
+                        event.startTime,
+                        event.endTime,
+                      )}
+                    </Badge>
                   </div>
                 </summary>
                 <div className="mt-4 space-y-3 text-sm">
                   <p className="text-muted-foreground">{event.venue}</p>
-                  <EventMeta participantLimit={event.participantLimit} attendingEntryCount={event.attendingEntryCount} remainingEntryCapacity={event.remainingEntryCapacity} isEntryCapacityFull={event.isEntryCapacityFull} participationFee={event.participationFee} hasAfterParty={event.hasAfterParty} afterPartyFee={event.afterPartyFee} notes={event.notes} />
-                  {!event.ratingSummaries?.length ? <p className="text-muted-foreground">レイティング結果はまだありません。</p> : (
+                  <EventMeta
+                    participantLimit={event.participantLimit}
+                    attendingEntryCount={event.attendingEntryCount}
+                    remainingEntryCapacity={event.remainingEntryCapacity}
+                    isEntryCapacityFull={event.isEntryCapacityFull}
+                    participationFee={event.participationFee}
+                    hasAfterParty={event.hasAfterParty}
+                    afterPartyFee={event.afterPartyFee}
+                    notes={event.notes}
+                  />
+                  {!event.ratingSummaries?.length ? (
+                    <p className="text-muted-foreground">
+                      レイティング結果はまだありません。
+                    </p>
+                  ) : (
                     <ul className="space-y-2">
                       {event.ratingSummaries.map((summary) => (
-                        <li key={summary.sessionSetId} className="rounded-lg border bg-background/70 p-3">
+                        <li
+                          key={summary.sessionSetId}
+                          className="rounded-lg border bg-background/70 p-3"
+                        >
                           <div className="flex flex-wrap items-center justify-between gap-2">
-                            <span className="font-medium">{summary.songTitle}</span>
-                            <span className="text-muted-foreground">{summary.ratingCount} 件 / 平均 {summary.averageRating ? summary.averageRating.toFixed(1) : '-'}</span>
+                            <span className="font-medium">
+                              {summary.songTitle}
+                            </span>
+                            <span className="text-muted-foreground">
+                              {summary.ratingCount} 件 / 平均{" "}
+                              {summary.averageRating
+                                ? summary.averageRating.toFixed(1)
+                                : "-"}
+                            </span>
                           </div>
                         </li>
                       ))}
@@ -1107,18 +1886,46 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
           </div>
         )}
       </Section>
-      <Section title="プロフィール" description="プロフィール更新とパスワード変更をこの画面で行います。">
+      <Section
+        title="プロフィール"
+        description="プロフィール更新とパスワード変更をこの画面で行います。"
+      >
         <div className="mb-4 flex flex-wrap items-center gap-2">
-          <Badge variant="outline">{currentUser?.role ?? 'member'}</Badge>
-          <span className="text-sm text-muted-foreground">{currentUser?.email}</span>
+          <Badge variant="outline">{currentUser?.role ?? "member"}</Badge>
+          <span className="text-sm text-muted-foreground">
+            {currentUser?.email}
+          </span>
         </div>
-        <form className="grid max-w-3xl gap-4 md:grid-cols-2" onSubmit={handleProfileSubmit}>
-          <Field htmlFor="member-profile-display-name" label="表示名" className="md:col-span-2">
-            <Input id="member-profile-display-name" type="text" placeholder="表示名" value={profileDisplayName} onChange={(event) => onProfileDisplayNameChange(event.target.value)} />
+        <form
+          className="grid max-w-3xl gap-4 md:grid-cols-2"
+          onSubmit={handleProfileSubmit}
+        >
+          <Field
+            htmlFor="member-profile-display-name"
+            label="表示名"
+            className="md:col-span-2"
+          >
+            <Input
+              id="member-profile-display-name"
+              type="text"
+              placeholder="表示名"
+              value={profileDisplayName}
+              onChange={(event) =>
+                onProfileDisplayNameChange(event.target.value)
+              }
+            />
           </Field>
           <Field label="メイン楽器" htmlFor="member-profile-main-instrument">
-            <Select value={profileMainInstrument} onValueChange={(value) => onProfileMainInstrumentChange(value as Instrument)}>
-              <SelectTrigger id="member-profile-main-instrument" className="w-full">
+            <Select
+              value={profileMainInstrument}
+              onValueChange={(value) =>
+                onProfileMainInstrumentChange(value as Instrument)
+              }
+            >
+              <SelectTrigger
+                id="member-profile-main-instrument"
+                className="w-full"
+              >
                 <SelectValue placeholder="メイン楽器を選択" />
               </SelectTrigger>
               <SelectContent>
@@ -1131,63 +1938,157 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             </Select>
           </Field>
           <Field htmlFor="member-profile-nickname" label="ニックネーム">
-            <Input id="member-profile-nickname" type="text" placeholder="ニックネーム" value={profileNickname} onChange={(event) => onProfileNicknameChange(event.target.value)} />
+            <Input
+              id="member-profile-nickname"
+              type="text"
+              placeholder="ニックネーム"
+              value={profileNickname}
+              onChange={(event) => onProfileNicknameChange(event.target.value)}
+            />
           </Field>
-          {profileMainInstrument === 'front' ? (
+          {profileMainInstrument === "front" ? (
             <Field htmlFor="member-profile-sub-instrument" label="演奏楽器">
-              <Input id="member-profile-sub-instrument" type="text" placeholder="演奏楽器" value={profileSubInstrument} onChange={(event) => onProfileSubInstrumentChange(event.target.value)} />
+              <Input
+                id="member-profile-sub-instrument"
+                type="text"
+                placeholder="演奏楽器"
+                value={profileSubInstrument}
+                onChange={(event) =>
+                  onProfileSubInstrumentChange(event.target.value)
+                }
+              />
             </Field>
           ) : (
             <div className="hidden md:block" />
           )}
           <Field label="居住地域" htmlFor="member-profile-area">
-            <Select value={profileArea || NONE_VALUE} onValueChange={(value) => onProfileAreaChange(value === NONE_VALUE ? '' : value)}>
+            <Select
+              value={profileArea || NONE_VALUE}
+              onValueChange={(value) =>
+                onProfileAreaChange(value === NONE_VALUE ? "" : value)
+              }
+            >
               <SelectTrigger id="member-profile-area" className="w-full">
                 <SelectValue placeholder="居住地域を選択" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value={NONE_VALUE}>居住地域を選択</SelectItem>
-                {PREFECTURE_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
+                {PREFECTURE_OPTIONS.map((option) => (
+                  <SelectItem key={option} value={option}>
+                    {option}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </Field>
           <Field label="性別" htmlFor="member-profile-gender">
-            <Select value={profileGender || NONE_VALUE} onValueChange={(value) => onProfileGenderChange(value === NONE_VALUE ? '' : value)}>
+            <Select
+              value={profileGender || NONE_VALUE}
+              onValueChange={(value) =>
+                onProfileGenderChange(value === NONE_VALUE ? "" : value)
+              }
+            >
               <SelectTrigger id="member-profile-gender" className="w-full">
                 <SelectValue placeholder="性別を選択" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value={NONE_VALUE}>性別を選択</SelectItem>
-                {GENDER_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
+                {GENDER_OPTIONS.map((option) => (
+                  <SelectItem key={option} value={option}>
+                    {option}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </Field>
           <Field label="年代" htmlFor="member-profile-age-range">
-            <Select value={profileAgeRange || NONE_VALUE} onValueChange={(value) => onProfileAgeRangeChange(value === NONE_VALUE ? '' : value)}>
+            <Select
+              value={profileAgeRange || NONE_VALUE}
+              onValueChange={(value) =>
+                onProfileAgeRangeChange(value === NONE_VALUE ? "" : value)
+              }
+            >
               <SelectTrigger id="member-profile-age-range" className="w-full">
                 <SelectValue placeholder="年代を選択" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value={NONE_VALUE}>年代を選択</SelectItem>
-                {AGE_RANGE_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
+                {AGE_RANGE_OPTIONS.map((option) => (
+                  <SelectItem key={option} value={option}>
+                    {option}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </Field>
-          <Field htmlFor="member-profile-bio" label="自己紹介" className="md:col-span-2">
-            <Textarea id="member-profile-bio" rows={4} placeholder="自己紹介" value={profileBio} onChange={(event) => onProfileBioChange(event.target.value)} />
+          <Field
+            htmlFor="member-profile-bio"
+            label="自己紹介"
+            className="md:col-span-2"
+          >
+            <Textarea
+              id="member-profile-bio"
+              rows={4}
+              placeholder="自己紹介"
+              value={profileBio}
+              onChange={(event) => onProfileBioChange(event.target.value)}
+            />
           </Field>
-          <Field htmlFor="member-profile-current-password" label="現在のパスワード">
-            <Input id="member-profile-current-password" type="password" autoComplete="current-password" placeholder="現在のパスワード（変更時のみ）" value={profileCurrentPassword} onChange={(event) => onProfileCurrentPasswordChange(event.target.value)} />
+          <Field
+            htmlFor="member-profile-current-password"
+            label="現在のパスワード"
+          >
+            <Input
+              id="member-profile-current-password"
+              type="password"
+              autoComplete="current-password"
+              placeholder="現在のパスワード（変更時のみ）"
+              value={profileCurrentPassword}
+              onChange={(event) =>
+                onProfileCurrentPasswordChange(event.target.value)
+              }
+            />
           </Field>
           <Field htmlFor="member-profile-new-password" label="新しいパスワード">
-            <Input id="member-profile-new-password" type="password" autoComplete="new-password" placeholder="新しいパスワード（変更時のみ）" value={profileNewPassword} onChange={(event) => onProfileNewPasswordChange(event.target.value)} />
+            <Input
+              id="member-profile-new-password"
+              type="password"
+              autoComplete="new-password"
+              placeholder="新しいパスワード（変更時のみ）"
+              value={profileNewPassword}
+              onChange={(event) =>
+                onProfileNewPasswordChange(event.target.value)
+              }
+            />
           </Field>
-          <Field htmlFor="member-profile-new-password-confirm" label="新しいパスワード確認" className="md:col-span-2">
-            <Input id="member-profile-new-password-confirm" type="password" autoComplete="new-password" placeholder="新しいパスワード確認" value={profileNewPasswordConfirm} onChange={(event) => onProfileNewPasswordConfirmChange(event.target.value)} />
+          <Field
+            htmlFor="member-profile-new-password-confirm"
+            label="新しいパスワード確認"
+            className="md:col-span-2"
+          >
+            <Input
+              id="member-profile-new-password-confirm"
+              type="password"
+              autoComplete="new-password"
+              placeholder="新しいパスワード確認"
+              value={profileNewPasswordConfirm}
+              onChange={(event) =>
+                onProfileNewPasswordConfirmChange(event.target.value)
+              }
+            />
           </Field>
           <div className="flex flex-wrap gap-3 md:col-span-2">
-            <Button type="submit" disabled={loading}>プロフィール保存</Button>
-            <Button type="button" variant="outline" onClick={onSignOut} disabled={loading}>サインアウト</Button>
+            <Button type="submit" disabled={loading}>
+              プロフィール保存
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onSignOut}
+              disabled={loading}
+            >
+              サインアウト
+            </Button>
           </div>
         </form>
       </Section>
