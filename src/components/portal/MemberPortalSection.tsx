@@ -36,6 +36,7 @@ import {
 } from "@/lib/sessionEventStatus";
 import { formatRoundCandidateSong } from "@/lib/sessionEventWindow";
 import { formatEventSchedule, formatYen } from "@/lib/utils";
+import { ChevronDown } from 'lucide-react';
 import type {
   AnnouncementView,
   AttendanceStatus,
@@ -71,6 +72,7 @@ function EventMeta({
   hasAfterParty,
   afterPartyFee,
   notes,
+  sessionEntries,
 }: {
   participantLimit?: number | null;
   attendingEntryCount?: number;
@@ -80,9 +82,63 @@ function EventMeta({
   hasAfterParty?: boolean;
   afterPartyFee?: number | null;
   notes?: string | null;
+  sessionEntries?: SessionEventView["sessionEntries"];
 }) {
   const hasCapacityMeta =
     typeof attendingEntryCount === "number" || participantLimit != null;
+  const eventEntries = sessionEntries ?? [];
+  const attendingEntries = eventEntries.filter(
+    (entry) => entry.attendanceStatus === "attending",
+  );
+  const participationInstrumentOrder: Instrument[] = [
+    "piano",
+    "drum",
+    "bass",
+    "front",
+    "vocal",
+  ];
+  const participationInstrumentCounts = participationInstrumentOrder
+    .map((instrument) => ({
+      instrument,
+      count: attendingEntries.filter(
+        (entry) => entry.memberProfile.mainInstrument === instrument,
+      ).length,
+    }))
+    .filter((item) => item.count > 0);
+  const requestSongMap = new Map<string, { label: string; instruments: string[] }>();
+
+  for (const entry of eventEntries) {
+    if (entry.attendanceStatus === "absent") {
+      continue;
+    }
+
+    const instrumentLabel =
+      entry.memberProfile.mainInstrument === "front"
+        ? entry.memberProfile.subInstrument?.trim() || "front"
+        : entry.memberProfile.mainInstrument;
+
+    for (const request of entry.requests) {
+      const songLabel = formatRoundCandidateSong(
+        request.songTitleSnapshot,
+        request.keyName,
+      );
+      if (!songLabel) {
+        continue;
+      }
+
+      const requestKey = normalizeSongTitle(songLabel);
+      const requestSummary = requestSongMap.get(requestKey) ?? {
+        label: songLabel,
+        instruments: [],
+      };
+      requestSummary.instruments.push(instrumentLabel);
+      requestSongMap.set(requestKey, requestSummary);
+    }
+  }
+
+  const requestSongs = [...requestSongMap.values()].sort((left, right) =>
+    left.label.localeCompare(right.label, "ja-JP"),
+  );
 
   return (
     <>
@@ -113,6 +169,53 @@ function EventMeta({
             </Badge>
           ) : null}
         </div>
+      ) : null}
+      {sessionEntries ? (
+        <details className="group mt-2 rounded-lg border bg-background/70 p-3">
+          <summary className="cursor-pointer list-none text-sm font-medium text-foreground">
+            <div className="flex flex-wrap items-center justify-between gap-2 bg-primary p-2">
+              <span>【参加状況】</span>
+              <span className="text-xs text-muted-foreground">
+                参加 {attendingEntries.length} 人 / エントリー {eventEntries.length} 件
+              </span>
+              <ChevronDown className="mt-0.5 size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" />
+            </div>
+          </summary>
+          <div className="mt-3 space-y-3 text-sm">
+            <div>
+              <p className="font-medium text-foreground">【参加楽器】</p>
+              {participationInstrumentCounts.length === 0 ? (
+                <p className="mt-1 text-muted-foreground">
+                  参加登録はまだありません。
+                </p>
+              ) : (
+                <ul className="mt-1 space-y-1 text-muted-foreground pl-8 list-disc">
+                  {participationInstrumentCounts.map((item) => (
+                    <li key={item.instrument}>
+                      {item.instrument}({item.count}名)
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <div>
+              <p className="font-medium text-foreground">【リクエスト曲】</p>
+              {requestSongs.length === 0 ? (
+                <p className="mt-1 text-muted-foreground">
+                  リクエスト曲はまだありません。
+                </p>
+              ) : (
+                <ul className="mt-1 space-y-1 text-muted-foreground pl-8 list-disc">
+                  {requestSongs.map((requestSummary) => (
+                    <li key={requestSummary.label}>
+                      {requestSummary.label}({requestSummary.instruments.join(",")})
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        </details>
       ) : null}
       {notes ? (
         <p className="mt-2 text-sm text-muted-foreground">備考: {notes}</p>
@@ -678,6 +781,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     participationFee={event.participationFee}
                     hasAfterParty={event.hasAfterParty}
                     afterPartyFee={event.afterPartyFee}
+                    sessionEntries={event.sessionEntries}
                     notes={event.notes}
                   />
                   {event.entryReason ? (
@@ -754,6 +858,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                               participationFee={event.participationFee}
                               hasAfterParty={event.hasAfterParty}
                               afterPartyFee={event.afterPartyFee}
+                              sessionEntries={event.sessionEntries}
                               notes={event.notes}
                             />
                             {event.entryReason ? (
@@ -1273,6 +1378,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     participationFee={event.participationFee}
                     hasAfterParty={event.hasAfterParty}
                     afterPartyFee={event.afterPartyFee}
+                    sessionEntries={event.sessionEntries}
                     notes={event.notes}
                   />
                   {event.entryReason ? (
@@ -1330,6 +1436,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     participationFee={event.participationFee}
                     hasAfterParty={event.hasAfterParty}
                     afterPartyFee={event.afterPartyFee}
+                    sessionEntries={event.sessionEntries}
                     notes={event.notes}
                   />
                   {event.entryReason ? (
@@ -1387,6 +1494,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     participationFee={event.participationFee}
                     hasAfterParty={event.hasAfterParty}
                     afterPartyFee={event.afterPartyFee}
+                    sessionEntries={event.sessionEntries}
                     notes={event.notes}
                   />
                   {event.entryReason ? (
@@ -1614,6 +1722,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
               participationFee={selectedMemberEvent.participationFee}
               hasAfterParty={selectedMemberEvent.hasAfterParty}
               afterPartyFee={selectedMemberEvent.afterPartyFee}
+              sessionEntries={selectedMemberEvent.sessionEntries}
               notes={selectedMemberEvent.notes}
             />
           </div>
@@ -1852,6 +1961,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     participationFee={event.participationFee}
                     hasAfterParty={event.hasAfterParty}
                     afterPartyFee={event.afterPartyFee}
+                    sessionEntries={event.sessionEntries}
                     notes={event.notes}
                   />
                   {!event.ratingSummaries?.length ? (

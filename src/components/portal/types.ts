@@ -90,6 +90,7 @@ export type SessionEventView = {
       id: string;
       displayName: string;
       mainInstrument: Instrument;
+      subInstrument?: string | null;
       nickname?: string | null;
     };
     requests: {

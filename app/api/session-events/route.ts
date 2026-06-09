@@ -9,7 +9,7 @@ import { isSessionEventVisibleToMembers } from '@/lib/sessionEventStatus';
 
 export async function GET(request: NextRequest) {
   const authenticatedUser = await getAuthenticatedUser(request);
-  const includeAdminSessionEntries = authenticatedUser?.role === 'admin' && authenticatedUser.status === 'active';
+  const includeSessionEntries = authenticatedUser?.status === 'active';
   const includeComments = Boolean(authenticatedUser?.status === 'active');
 
   const sessionEvents = await prisma.sessionEvent.findMany({
@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
           sessionSets: true,
         },
       },
-      ...(includeAdminSessionEntries
+      ...(includeSessionEntries
         ? {
           sessionEntries: {
             include: {
@@ -29,6 +29,7 @@ export async function GET(request: NextRequest) {
                   id: true,
                   displayName: true,
                   mainInstrument: true,
+                  subInstrument: true,
                   nickname: true,
                 },
               },
