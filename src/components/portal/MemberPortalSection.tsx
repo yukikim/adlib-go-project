@@ -473,7 +473,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
 
   // console.log('announcedEvents:', announcedEvents);
   // console.log("sessionEvent:", sessionEvents);
-  console.log('round2RecruitingEvents:', round2RecruitingEvents);
+  // console.log('round2RecruitingEvents:', round2RecruitingEvents);
   // console.log('publishedEvents:', publishedEvents);
   // console.log('ratingEvents:', ratingEvents);
   // console.log('completedEvents:', completedEvents);
