@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { hashPassword, verifyPassword } from '@/lib/password';
 import { getZodErrorMessage } from '@/lib/authSchemas';
 import { memberSelfUpdateRequestSchema, validateMemberProfileInput } from '@/lib/memberProfile';
+import { syncParticipantForMemberProfile } from '@/lib/participantSync';
 
 export async function GET(request: NextRequest) {
   const user = await getAuthenticatedUser(request);
@@ -19,6 +20,7 @@ export async function PATCH(request: NextRequest) {
   if (!user?.memberProfile) {
     return NextResponse.json({ error: 'member profile not found' }, { status: 404 });
   }
+  const currentMemberProfile = user.memberProfile;
 
   const parsed = memberSelfUpdateRequestSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) {
@@ -29,12 +31,12 @@ export async function PATCH(request: NextRequest) {
   const profileValidation = validateMemberProfileInput(body, {
     requireDisplayName: true,
     requireRequiredSelections: true,
-    currentMainInstrument: user.memberProfile.mainInstrument,
+    currentMainInstrument: currentMemberProfile.mainInstrument,
   });
   if ('error' in profileValidation) {
     return NextResponse.json({ error: profileValidation.error }, { status: 400 });
   }
-  const memberProfileId = user.memberProfile.id;
+  const memberProfileId = currentMemberProfile.id;
 
   const shouldChangePassword = body.currentPassword || body.newPassword;
   if (shouldChangePassword) {
@@ -49,6 +51,13 @@ export async function PATCH(request: NextRequest) {
     const memberProfile = await tx.memberProfile.update({
       where: { id: memberProfileId },
       data: profileValidation.data,
+    });
+
+    await syncParticipantForMemberProfile(tx, {
+      previousDisplayName: currentMemberProfile.displayName,
+      previousMainInstrument: currentMemberProfile.mainInstrument,
+      nextDisplayName: memberProfile.displayName,
+      nextMainInstrument: memberProfile.mainInstrument,
     });
 
     if (shouldChangePassword && body.newPassword) {

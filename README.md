@@ -803,6 +803,7 @@ npm run seed:demo
 ```bash
 npm run seed:reset
 npm run seed:participants
+npm run seed:participants:members
 npm run seed:requests
 npm run seed:auth
 npm run seed:columns
@@ -810,6 +811,12 @@ npm run seed:events
 npm run seed:notices
 npm run seed:ratings-archives
 ```
+
+補足:
+
+- `npm run seed:participants` は prisma/demo-data.mjs の参加者を Participant に投入します
+- `npm run seed:participants:members` は現在の MemberProfile の `displayName` と `mainInstrument` を Participant に投入します
+- どちらのコマンドも既存 Participant を削除せず、不足分だけを追加します
 
 現在の DB 内容を seed スナップショットとして保存 / 復元:
 

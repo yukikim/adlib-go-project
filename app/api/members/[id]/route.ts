@@ -4,6 +4,7 @@ import { requireAuthenticatedUser } from '@/lib/auth';
 import { requireAdmin } from '@/lib/adminApi';
 import { getZodErrorMessage } from '@/lib/authSchemas';
 import { adminMemberUpdateRequestSchema, validateMemberProfileInput } from '@/lib/memberProfile';
+import { syncParticipantForMemberProfile } from '@/lib/participantSync';
 
 export async function GET(request: NextRequest) {
   const auth = await requireAuthenticatedUser(request);
@@ -98,9 +99,16 @@ export async function PATCH(request: NextRequest) {
   }
 
   const updated = await prisma.$transaction(async (tx) => {
-    await tx.memberProfile.update({
+    const updatedMemberProfile = await tx.memberProfile.update({
       where: { id: memberId },
       data: profileValidation.data,
+    });
+
+    await syncParticipantForMemberProfile(tx, {
+      previousDisplayName: member.displayName,
+      previousMainInstrument: member.mainInstrument,
+      nextDisplayName: updatedMemberProfile.displayName,
+      nextMainInstrument: updatedMemberProfile.mainInstrument,
     });
 
     if (body.role || body.status) {

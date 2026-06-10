@@ -17,6 +17,7 @@
     "fix:member-duplicates": "node prisma/fix-member-duplicates.mjs",
     "seed:reset": "node prisma/reset-demo-data.mjs",
     "seed:participants": "node prisma/seed-participants.mjs",
+    "seed:participants:members": "node prisma/seed-participants.mjs --from-member-profiles",
     "seed:requests": "node prisma/seed-requests.mjs",
     "seed:black-book-songs": "node prisma/seed-black-book-songs.mjs",
     "seed:auth": "node prisma/seed-auth.mjs",

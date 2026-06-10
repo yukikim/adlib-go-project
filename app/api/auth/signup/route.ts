@@ -4,6 +4,7 @@ import { hashPassword } from '@/lib/password';
 import { buildMemberDuplicateFingerprint, validateMemberProfileInput } from '@/lib/memberProfile';
 import { getZodErrorMessage, signUpRequestSchema } from '@/lib/authSchemas';
 import { sendEmailVerificationMail } from '@/lib/emailVerification';
+import { syncParticipantForMemberProfile } from '@/lib/participantSync';
 
 export async function POST(request: NextRequest) {
   const parsed = signUpRequestSchema.safeParse(await request.json().catch(() => null));
@@ -81,27 +82,39 @@ export async function POST(request: NextRequest) {
   }
 
   const passwordHash = await hashPassword(body.password);
-  const user = await prisma.userAccount.create({
-    data: {
-      email: body.email,
-      passwordHash,
-      role: 'member',
-      status: 'active',
-      emailVerifiedAt: null,
-      memberProfile: {
-        create: {
-          displayName: body.displayName,
-          mainInstrument: profileData.mainInstrument!,
-          subInstrument: profileData.subInstrument ?? null,
-          gender: profileData.gender!,
-          ageRange: profileData.ageRange!,
-          area: profileData.area!,
-          nickname: null,
-          bio: null,
+  const user = await prisma.$transaction(async (tx) => {
+    const createdUser = await tx.userAccount.create({
+      data: {
+        email: body.email,
+        passwordHash,
+        role: 'member',
+        status: 'active',
+        emailVerifiedAt: null,
+        memberProfile: {
+          create: {
+            displayName: body.displayName,
+            mainInstrument: profileData.mainInstrument!,
+            subInstrument: profileData.subInstrument ?? null,
+            gender: profileData.gender!,
+            ageRange: profileData.ageRange!,
+            area: profileData.area!,
+            nickname: null,
+            bio: null,
+          },
         },
       },
-    },
-    include: { memberProfile: true },
+      include: { memberProfile: true },
+    });
+    if (!createdUser.memberProfile) {
+      throw new Error('member profile was not created');
+    }
+
+    await syncParticipantForMemberProfile(tx, {
+      nextDisplayName: createdUser.memberProfile.displayName,
+      nextMainInstrument: createdUser.memberProfile.mainInstrument,
+    });
+
+    return createdUser;
   });
 
   const verification = await sendEmailVerificationMail(user.id, user.email);
