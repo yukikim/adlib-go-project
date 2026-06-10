@@ -209,6 +209,23 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     setMemberEventComment('');
   }, [memberEventId]);
 
+  const getRound2SongsForEvent = (eventId: string) => {
+    if (eventId === memberEventId) {
+      return memberRound2Songs;
+    }
+
+    const entry = sessionEntries.find((item) => item.sessionEventId === eventId);
+    if (!entry) {
+      return [] as string[];
+    }
+
+    return entry.requests
+      .filter((request) => request.round === 2)
+      .sort((left, right) => left.priority - right.priority)
+      .map((request) => formatRoundCandidateSong(request.songTitleSnapshot, request.keyName ?? null))
+      .filter((songTitle) => songTitle.trim().length > 0);
+  };
+
   const handleProfileUpdate = async () => runAction(async () => {
     if (!profileDisplayName.trim()) {
       throw new Error('表示名を入力してください');
@@ -255,11 +272,32 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     await reloadShared();
   }, 'プロフィールを更新しました');
 
-  const handleSubmitEntry = async (options?: RunPortalActionOptions) => runAction(async () => {
-    if (!memberEventId || !entryState.round || !entryState.canSubmit) {
-      throw new Error(entryState.reason ?? '現在は登録できません');
-    }
-    const requests = entryState.round === 1
+  const handleSubmitEntry = async (
+    eventIdOrOptions?: string | RunPortalActionOptions,
+    maybeOptions?: RunPortalActionOptions,
+  ) => {
+    const targetEventId = typeof eventIdOrOptions === 'string' ? eventIdOrOptions : memberEventId;
+    const options = typeof eventIdOrOptions === 'string' ? maybeOptions : eventIdOrOptions;
+
+    return runAction(async () => {
+      const targetEvent = sessionEvents.find((event) => event.id === targetEventId) ?? null;
+      const targetEntryState = getEventEntryState(targetEvent);
+      const currentEntry = sessionEntries.find((entry) => entry.sessionEventId === targetEventId) ?? null;
+      const attendanceStatus = targetEventId === memberEventId
+        ? memberAttendanceStatus
+        : currentEntry?.attendanceStatus ?? 'attending';
+      const afterPartyAttendanceStatus = targetEventId === memberEventId
+        ? memberAfterPartyAttendanceStatus
+        : currentEntry?.afterPartyAttendanceStatus ?? 'undecided';
+      const allowForcedAssignment = targetEventId === memberEventId
+        ? memberAllowForcedAssignment
+        : currentEntry?.allowForcedAssignment ?? true;
+
+      if (!targetEventId || !targetEntryState.round || !targetEntryState.canSubmit) {
+        throw new Error(targetEntryState.reason ?? '現在は登録できません');
+      }
+
+      const requests = targetEntryState.round === 1
       ? [
           { songTitle: memberRound1Song1.trim(), round: 1, priority: 1, keyName: memberRound1Key1.trim() || null },
           { songTitle: memberRound1Song2.trim(), round: 1, priority: 2, keyName: memberRound1Key2.trim() || null },
@@ -271,7 +309,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
             : []),
         ]
       : [
-          ...memberRound2Songs.map((songTitle, index) => ({
+          ...getRound2SongsForEvent(targetEventId).map((songTitle, index) => ({
             songTitle: songTitle.trim(),
             round: 2 as const,
             priority: index + 1,
@@ -279,23 +317,24 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
           })),
         ];
 
-    const res = await fetch('/api/session-entries', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        sessionEventId: memberEventId,
-        attendanceStatus: memberAttendanceStatus,
-        afterPartyAttendanceStatus: entryState.round === 1 && selectedMemberEvent?.hasAfterParty
-          ? memberAfterPartyAttendanceStatus
-          : undefined,
-        allowForcedAssignment: memberAllowForcedAssignment,
-        requests: requests.filter((item) => item.songTitle),
-      }),
-    });
-    const json = await parseJson(res);
-    if (!res.ok) throw new Error(json.error ?? 'エントリー保存に失敗しました');
-    await loadMemberData();
-  }, 'セッションエントリーを保存しました', options);
+      const res = await fetch('/api/session-entries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionEventId: targetEventId,
+          attendanceStatus,
+          afterPartyAttendanceStatus: targetEntryState.round === 1 && targetEvent?.hasAfterParty
+            ? afterPartyAttendanceStatus
+            : undefined,
+          allowForcedAssignment,
+          requests: requests.filter((item) => item.songTitle),
+        }),
+      });
+      const json = await parseJson(res);
+      if (!res.ok) throw new Error(json.error ?? 'エントリー保存に失敗しました');
+      await loadMemberData();
+    }, 'セッションエントリーを保存しました', options);
+  };
 
   const handleSaveRating = async (sessionSetId: string) => runAction(async () => {
     const res = await fetch(`/api/session-sets/${sessionSetId}/ratings`, {

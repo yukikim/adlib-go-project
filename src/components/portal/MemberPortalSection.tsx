@@ -25,6 +25,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { Section } from "./Section";
+import { getEventEntryState } from "./utils";
 import {
   AGE_RANGE_OPTIONS,
   GENDER_OPTIONS,
@@ -349,7 +350,10 @@ type MemberPortalSectionProps = {
   profileNewPasswordConfirm: string;
   onProfileUpdate: () => void;
   onSignOut: () => void;
-  onSubmitEntry: (options?: RunPortalActionOptions) => Promise<void>;
+  onSubmitEntry: (
+    eventIdOrOptions?: string | RunPortalActionOptions,
+    options?: RunPortalActionOptions,
+  ) => Promise<void>;
   onSaveRating: (sessionSetId: string) => void;
   onSaveEventComment: () => void;
 };
@@ -492,11 +496,19 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
       .sort((left, right) => left.priority - right.priority) ?? [];
 
   const getSelectedRound2SongsForEvent = (eventId: string) => {
-    if (memberEventId !== eventId) {
-      return [] as string[];
+    if (memberEventId === eventId) {
+      return memberRound2Songs.filter((songTitle) => songTitle.trim().length > 0);
     }
 
-    return memberRound2Songs.filter((songTitle) => songTitle.trim().length > 0);
+    return (
+      getSessionEntryForEvent(eventId)
+        ?.requests.filter((request) => request.round === 2)
+        .sort((left, right) => left.priority - right.priority)
+        .map((request) =>
+          formatRoundCandidateSong(request.songTitleSnapshot, request.keyName),
+        )
+        .filter((songTitle) => songTitle.trim().length > 0) ?? []
+    );
   };
 
   const setSelectedRound2Songs = (songTitles: string[]) => {
@@ -587,7 +599,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
         </p>
         {options?.showSaveHint ? (
           <p className="mt-1 text-xs text-muted-foreground">
-            選択は下の「セッションエントリー」欄で行い、「エントリー保存」で反映されます。
+            選択した曲は、「エントリー保存」で確定されます。
           </p>
         ) : null}
 
@@ -1245,86 +1257,92 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
               </p>
             ) : (
               <ul className="space-y-3">
-                {round2RecruitingEvents.map((event) => (
-                  <li
-                    key={event.id}
-                    className="rounded-xl border bg-background/20 p-4"
-                  >
-                    <div className="flex flex-wrap items-center gap-2">
-                      <strong className="text-sm text-pink-600">
-                        {event.title}
-                      </strong>
-                      <Badge variant="outline">
-                        {getSessionEventStatusLabel(event.status)}
-                      </Badge>
-                    </div>
-                    <p className="mt-2 text-sm text-muted-foreground">
-                      {formatEventSchedule(
-                        event.eventDate,
-                        event.startTime,
-                        event.endTime,
-                      )}{" "}
-                      / {event.venue}
-                    </p>
-                    <p>ラウンド2募集期間: {event.round2StartAt ? formatEventDate(event.round2StartAt) : ""} ~ {event.round2EndAt ? formatEventDate(event.round2EndAt) : ""}</p>
-                    <EventMeta
-                      participantLimit={event.participantLimit}
-                      attendingEntryCount={event.attendingEntryCount}
-                      remainingEntryCapacity={event.remainingEntryCapacity}
-                      isEntryCapacityFull={event.isEntryCapacityFull}
-                      participationFee={event.participationFee}
-                      hasAfterParty={event.hasAfterParty}
-                      afterPartyFee={event.afterPartyFee}
-                      sessionEntries={event.sessionEntries}
-                      notes={event.notes}
-                    />
-                    {event.entryReason ? (
+                {round2RecruitingEvents.map((event) => {
+                  const round2EntryState = getEventEntryState(event);
+
+                  return (
+                    <li
+                      key={event.id}
+                      className="rounded-xl border bg-background/20 p-4"
+                    >
+                      <div className="flex flex-wrap items-center gap-2">
+                        <strong className="text-sm text-pink-600">
+                          {event.title}
+                        </strong>
+                        <Badge variant="outline">
+                          {getSessionEventStatusLabel(event.status)}
+                        </Badge>
+                      </div>
                       <p className="mt-2 text-sm text-muted-foreground">
-                        {event.entryReason}
+                        {formatEventSchedule(
+                          event.eventDate,
+                          event.startTime,
+                          event.endTime,
+                        )}{" "}
+                        / {event.venue}
                       </p>
-                    ) : null}
-                    <div className="mt-4">
-                      <>
-                        <div className="md:col-span-2">
-                          <Alert
-                            variant={
-                              entryState.canSubmit ? "default" : "destructive"
-                            }
-                          >
-                            <AlertTitle>
-                              {entryState.canSubmit
-                                ? "入力可能です"
-                                : "現在は入力できません"}
-                            </AlertTitle>
-                            <AlertDescription>
-                              {entryState.canSubmit
-                                ? "現在入力できるのは Round 2 です。"
-                                : entryState.reason}
-                            </AlertDescription>
-                          </Alert>
-                        </div>
-                        <div className="md:col-span-2">
-                          {renderRound2SelectionBlock(
-                            event.id,
-                            event.round2CandidateSongs ?? [],
-                            { showSaveHint: true, interactive: true },
-                          )}
-                        </div>
-                        <div className="md:col-span-2 text-right">
-                          <Button
-                            type="button"
-                            onClick={() => {
-                              void onSubmitEntry();
-                            }}
-                            disabled={loading || !entryState.canSubmit}
-                          >
-                            エントリー保存
-                          </Button>
-                        </div>
-                      </>
-                    </div>
-                  </li>
-                ))}
+                      <p>ラウンド2募集期間: {event.round2StartAt ? formatEventDate(event.round2StartAt) : ""} ~ {event.round2EndAt ? formatEventDate(event.round2EndAt) : ""}</p>
+                      <EventMeta
+                        participantLimit={event.participantLimit}
+                        attendingEntryCount={event.attendingEntryCount}
+                        remainingEntryCapacity={event.remainingEntryCapacity}
+                        isEntryCapacityFull={event.isEntryCapacityFull}
+                        participationFee={event.participationFee}
+                        hasAfterParty={event.hasAfterParty}
+                        afterPartyFee={event.afterPartyFee}
+                        sessionEntries={event.sessionEntries}
+                        notes={event.notes}
+                      />
+                      {event.entryReason ? (
+                        <p className="mt-2 text-sm text-muted-foreground">
+                          {event.entryReason}
+                        </p>
+                      ) : null}
+                      <div className="mt-4">
+                        <>
+                          <div className="md:col-span-2">
+                            <Alert
+                              variant={
+                                round2EntryState.canSubmit
+                                  ? "default"
+                                  : "destructive"
+                              }
+                            >
+                              <AlertTitle>
+                                {round2EntryState.canSubmit
+                                  ? "入力可能です"
+                                  : "現在は入力できません"}
+                              </AlertTitle>
+                              <AlertDescription>
+                                {round2EntryState.canSubmit
+                                  ? "現在入力できるのは Round 2 です。"
+                                  : round2EntryState.reason}
+                              </AlertDescription>
+                            </Alert>
+                          </div>
+                          <div className="md:col-span-2">
+                            {renderRound2SelectionBlock(
+                              event.id,
+                              event.round2CandidateSongs ?? [],
+                              { showSaveHint: true, interactive: true },
+                            )}
+                          </div>
+                          <div className="md:col-span-2 text-right">
+                            <Button
+                              type="button"
+                              onClick={() => {
+                                void onSubmitEntry(event.id);
+                              }}
+                              disabled={loading || !round2EntryState.canSubmit}
+                            >
+                              エントリー保存
+                            </Button>
+                          </div>
+                        </>
+                      </div>
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </Card>
