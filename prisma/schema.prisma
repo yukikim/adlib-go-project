@@ -172,6 +172,7 @@ model SessionEntry {
   memberProfileId   String
   attendanceStatus  AttendanceStatus   @default(attending)
   afterPartyAttendanceStatus AttendanceStatus?
+  allowForcedAssignment Boolean        @default(true)
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
 

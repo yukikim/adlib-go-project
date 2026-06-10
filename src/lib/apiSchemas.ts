@@ -52,6 +52,7 @@ export const sessionEntryCreateRequestSchema = z.object({
   sessionEventId: nonEmptyTrimmedStringSchema,
   attendanceStatus: z.enum(['attending', 'absent', 'undecided']),
   afterPartyAttendanceStatus: z.enum(['attending', 'absent', 'undecided']).nullable().optional(),
+  allowForcedAssignment: z.boolean().optional(),
   requests: z.array(sessionEntryRequestItemSchema).optional().default([]),
 }).strict();
 

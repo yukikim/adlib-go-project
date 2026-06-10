@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-06-08T06:45:15.893Z",
+  "exportedAt": "2026-06-10T01:29:45.034Z",
   "version": 1,
   "data": {
     "participants": [
@@ -260,6 +260,12 @@
       {
         "id": "09a302ba-835f-4285-9142-4fbf9adb2ad0",
         "title": "I DIDN T KNOW WHAT TIME IT WAS",
+        "isJazzStandardBible1": true,
+        "isJazzStandardBible2": false
+      },
+      {
+        "id": "0aa459fa-ed2c-463b-b5f9-edb61fa94eb0",
+        "title": "NIGHT IN TUNISIA A",
         "isJazzStandardBible1": true,
         "isJazzStandardBible2": false
       },
@@ -894,6 +900,12 @@
         "isJazzStandardBible2": false
       },
       {
+        "id": "429b5c64-05fb-4404-80be-990691957975",
+        "title": "I REMEMBER YOU",
+        "isJazzStandardBible1": true,
+        "isJazzStandardBible2": false
+      },
+      {
         "id": "42bfc820-9bcf-412a-bf3d-613f35d9bade",
         "title": "FIRST SONG (FOR RUTH)",
         "isJazzStandardBible1": false,
@@ -1260,6 +1272,12 @@
         "isJazzStandardBible2": true
       },
       {
+        "id": "624bbd11-b30b-4e08-8bf5-8a9a2bab60b8",
+        "title": "NIGHT HAS A THOUSAND EYES The",
+        "isJazzStandardBible1": true,
+        "isJazzStandardBible2": false
+      },
+      {
         "id": "63e4357b-272c-4e89-831d-8e1b39a4000f",
         "title": "GOD BLESS THE CHILD",
         "isJazzStandardBible1": false,
@@ -1436,6 +1454,12 @@
       {
         "id": "78ea1ed3-26a9-40ae-8bfc-31a35dac9829",
         "title": "SOLAR",
+        "isJazzStandardBible1": true,
+        "isJazzStandardBible2": false
+      },
+      {
+        "id": "795f9199-0d49-4c4d-9bc5-0cfe4b1399fc",
+        "title": "BOLIVIA",
         "isJazzStandardBible1": true,
         "isJazzStandardBible2": false
       },
@@ -2286,6 +2310,12 @@
         "isJazzStandardBible2": false
       },
       {
+        "id": "c6f50fd0-bee6-469e-a744-4602f192a352",
+        "title": "YES OR NO",
+        "isJazzStandardBible1": true,
+        "isJazzStandardBible2": false
+      },
+      {
         "id": "c7009943-b04b-460d-ab52-7531629a1d59",
         "title": "REFLECTIONS",
         "isJazzStandardBible1": false,
@@ -2458,6 +2488,12 @@
         "title": "I m A FOOL TO WANT YOU",
         "isJazzStandardBible1": false,
         "isJazzStandardBible2": true
+      },
+      {
+        "id": "d71152a3-f026-4788-81a7-0183a2d76672",
+        "title": "NICA S DREAM",
+        "isJazzStandardBible1": true,
+        "isJazzStandardBible2": false
       },
       {
         "id": "d72413cb-55c5-45cb-b042-90730c5bd1bc",
@@ -2660,6 +2696,12 @@
       {
         "id": "e7a342c4-7d96-4dc8-808c-276add051a0e",
         "title": "VERY THOUGHT OF YOU, The",
+        "isJazzStandardBible1": false,
+        "isJazzStandardBible2": true
+      },
+      {
+        "id": "e7e6d6d9-914e-40c7-8309-d4a4ab0a791c",
+        "title": "JAMES(Old version)",
         "isJazzStandardBible1": false,
         "isJazzStandardBible2": true
       },
@@ -3762,9 +3804,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-05T07:02:31.048Z",
+        "lastSignedInAt": "2026-06-09T07:11:18.394Z",
         "createdAt": "2026-05-07T08:44:30.129Z",
-        "updatedAt": "2026-06-05T07:30:56.042Z"
+        "updatedAt": "2026-06-09T07:11:18.395Z"
       },
       {
         "id": "275f7e18-668c-43d6-82dd-000434809ea7",
@@ -3773,9 +3815,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-05-28T01:50:12.674Z",
+        "lastSignedInAt": "2026-06-09T07:09:30.391Z",
         "createdAt": "2026-05-07T08:44:30.125Z",
-        "updatedAt": "2026-06-05T07:29:25.224Z"
+        "updatedAt": "2026-06-09T07:09:30.392Z"
       },
       {
         "id": "3b0de832-5385-4e33-80c3-e82c30f9e336",
@@ -3795,9 +3837,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": null,
+        "lastSignedInAt": "2026-06-09T08:09:34.994Z",
         "createdAt": "2026-05-07T08:44:30.200Z",
-        "updatedAt": "2026-06-05T08:25:46.661Z"
+        "updatedAt": "2026-06-09T08:09:34.995Z"
       },
       {
         "id": "4a5b733f-d798-404c-9b20-8e5add18cb6c",
@@ -3806,9 +3848,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": null,
+        "lastSignedInAt": "2026-06-09T07:18:49.929Z",
         "createdAt": "2026-05-07T08:44:30.142Z",
-        "updatedAt": "2026-06-05T07:39:18.390Z"
+        "updatedAt": "2026-06-09T07:18:49.930Z"
       },
       {
         "id": "4e0c8834-195e-4343-bb52-2bda851ff716",
@@ -3817,9 +3859,9 @@
         "emailVerifiedAt": null,
         "role": "admin",
         "status": "active",
-        "lastSignedInAt": "2026-06-05T07:05:06.156Z",
+        "lastSignedInAt": "2026-06-09T08:44:11.148Z",
         "createdAt": "2026-05-07T08:44:30.109Z",
-        "updatedAt": "2026-06-05T07:05:06.157Z"
+        "updatedAt": "2026-06-09T08:44:11.149Z"
       },
       {
         "id": "5229754f-ac5a-45c2-b97c-ce5dfaba3ad5",
@@ -3828,9 +3870,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": null,
+        "lastSignedInAt": "2026-06-09T08:02:56.133Z",
         "createdAt": "2026-05-07T08:44:30.191Z",
-        "updatedAt": "2026-06-05T08:21:07.518Z"
+        "updatedAt": "2026-06-09T08:02:56.134Z"
       },
       {
         "id": "57a67c68-0ea9-4113-bcac-02b651e854e9",
@@ -3839,9 +3881,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-05-29T05:26:26.350Z",
+        "lastSignedInAt": "2026-06-09T07:13:11.779Z",
         "createdAt": "2026-05-07T08:44:30.132Z",
-        "updatedAt": "2026-06-05T07:32:45.465Z"
+        "updatedAt": "2026-06-09T07:13:11.780Z"
       },
       {
         "id": "6324bd2a-b57b-4eb5-8002-aac5cdef41c2",
@@ -3850,9 +3892,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": null,
+        "lastSignedInAt": "2026-06-09T07:21:23.931Z",
         "createdAt": "2026-05-07T08:44:30.148Z",
-        "updatedAt": "2026-06-05T07:42:56.919Z"
+        "updatedAt": "2026-06-09T07:21:23.932Z"
       },
       {
         "id": "697321d4-4d50-4bb3-aa1d-c92eb61bfca8",
@@ -3861,9 +3903,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": null,
+        "lastSignedInAt": "2026-06-09T07:37:01.505Z",
         "createdAt": "2026-05-07T08:44:30.175Z",
-        "updatedAt": "2026-06-05T08:12:29.281Z"
+        "updatedAt": "2026-06-09T07:37:01.506Z"
       },
       {
         "id": "6cbdce80-5c3f-48e2-942f-8cda4adc73d8",
@@ -3872,9 +3914,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": null,
+        "lastSignedInAt": "2026-06-09T07:36:05.773Z",
         "createdAt": "2026-05-07T08:44:30.172Z",
-        "updatedAt": "2026-06-05T08:10:59.778Z"
+        "updatedAt": "2026-06-09T07:36:05.774Z"
       },
       {
         "id": "6d549ad8-a93d-4e5e-9152-6d9f03d129a7",
@@ -3883,9 +3925,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": null,
+        "lastSignedInAt": "2026-06-09T08:10:37.231Z",
         "createdAt": "2026-05-07T08:44:30.203Z",
-        "updatedAt": "2026-06-05T08:27:39.669Z"
+        "updatedAt": "2026-06-09T08:10:37.232Z"
       },
       {
         "id": "6de1ed0f-d1e5-40c1-90e3-9d21ec6c997c",
@@ -3894,9 +3936,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": null,
+        "lastSignedInAt": "2026-06-09T07:19:55.321Z",
         "createdAt": "2026-05-07T08:44:30.145Z",
-        "updatedAt": "2026-06-05T07:40:50.946Z"
+        "updatedAt": "2026-06-09T07:19:55.321Z"
       },
       {
         "id": "6eaec50f-99bb-4aa9-834a-4d450a2de26b",
@@ -3905,9 +3947,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": null,
+        "lastSignedInAt": "2026-06-09T07:30:36.310Z",
         "createdAt": "2026-05-07T08:44:30.166Z",
-        "updatedAt": "2026-06-05T08:07:55.388Z"
+        "updatedAt": "2026-06-09T07:30:36.311Z"
       },
       {
         "id": "79d89d74-d98e-40d1-9ff7-cb73114da3a9",
@@ -3916,9 +3958,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": null,
+        "lastSignedInAt": "2026-06-09T07:25:26.972Z",
         "createdAt": "2026-05-07T08:44:30.157Z",
-        "updatedAt": "2026-06-05T07:47:50.845Z"
+        "updatedAt": "2026-06-09T07:25:26.973Z"
       },
       {
         "id": "7a9713d8-f29a-4e9c-b057-7b462b83adf7",
@@ -3927,9 +3969,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": null,
+        "lastSignedInAt": "2026-06-09T08:08:32.377Z",
         "createdAt": "2026-05-07T08:44:30.197Z",
-        "updatedAt": "2026-06-05T08:24:08.320Z"
+        "updatedAt": "2026-06-09T08:08:32.378Z"
       },
       {
         "id": "7c88fdd8-d17b-4a5a-a2a7-604838801f91",
@@ -3938,9 +3980,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": null,
+        "lastSignedInAt": "2026-06-09T07:26:34.421Z",
         "createdAt": "2026-05-07T08:44:30.160Z",
-        "updatedAt": "2026-06-05T08:06:25.064Z"
+        "updatedAt": "2026-06-09T07:26:34.422Z"
       },
       {
         "id": "86c28405-f30f-442f-95ec-dd825f098b2f",
@@ -3949,9 +3991,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": null,
+        "lastSignedInAt": "2026-06-09T08:07:29.093Z",
         "createdAt": "2026-05-07T08:44:30.194Z",
-        "updatedAt": "2026-06-05T08:22:26.232Z"
+        "updatedAt": "2026-06-09T08:07:29.094Z"
       },
       {
         "id": "8dc8b974-c36d-41b6-af2f-f4fc02b2c977",
@@ -3960,9 +4002,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-05-29T06:24:15.780Z",
+        "lastSignedInAt": "2026-06-09T07:16:16.100Z",
         "createdAt": "2026-05-07T08:44:30.139Z",
-        "updatedAt": "2026-06-05T07:37:47.529Z"
+        "updatedAt": "2026-06-09T07:16:16.101Z"
       },
       {
         "id": "8e75dac7-b8e4-4cf2-a75c-08f5d8e613e6",
@@ -3971,9 +4013,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": null,
+        "lastSignedInAt": "2026-06-09T08:17:27.284Z",
         "createdAt": "2026-05-07T08:44:30.120Z",
-        "updatedAt": "2026-06-05T07:27:57.124Z"
+        "updatedAt": "2026-06-09T08:17:27.285Z"
       },
       {
         "id": "98bb550d-9b39-4755-a1a3-b992e8c86006",
@@ -3982,9 +4024,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": null,
+        "lastSignedInAt": "2026-06-09T07:22:35.511Z",
         "createdAt": "2026-05-07T08:44:30.151Z",
-        "updatedAt": "2026-06-05T07:44:22.187Z"
+        "updatedAt": "2026-06-09T07:22:35.512Z"
       },
       {
         "id": "a16041dc-b6bb-48ab-8cca-69e0364b8ea9",
@@ -3993,9 +4035,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": null,
+        "lastSignedInAt": "2026-06-09T07:24:00.429Z",
         "createdAt": "2026-05-07T08:44:30.154Z",
-        "updatedAt": "2026-06-05T07:46:05.992Z"
+        "updatedAt": "2026-06-09T07:24:00.430Z"
       },
       {
         "id": "c45711e4-28d6-48ab-b8c6-ae16148c1e9b",
@@ -4004,9 +4046,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": null,
+        "lastSignedInAt": "2026-06-09T07:27:51.786Z",
         "createdAt": "2026-05-07T08:44:30.163Z",
-        "updatedAt": "2026-05-28T02:19:33.149Z"
+        "updatedAt": "2026-06-09T07:27:51.787Z"
       },
       {
         "id": "cedad7da-51f5-4d50-8d36-ee1da36f181e",
@@ -4015,9 +4057,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": null,
+        "lastSignedInAt": "2026-06-09T07:55:33.243Z",
         "createdAt": "2026-05-07T08:44:30.184Z",
-        "updatedAt": "2026-06-05T08:18:18.591Z"
+        "updatedAt": "2026-06-09T07:55:33.244Z"
       },
       {
         "id": "cef60681-f8de-433a-bbf9-949661de1bd5",
@@ -4037,9 +4079,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-05-29T05:35:11.017Z",
+        "lastSignedInAt": "2026-06-09T07:14:43.978Z",
         "createdAt": "2026-05-07T08:44:30.135Z",
-        "updatedAt": "2026-06-05T07:34:49.046Z"
+        "updatedAt": "2026-06-09T07:14:43.979Z"
       },
       {
         "id": "dcd4d74e-ca53-47bc-ac1f-25d546b4310c",
@@ -4048,9 +4090,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": null,
+        "lastSignedInAt": "2026-06-09T08:11:01.873Z",
         "createdAt": "2026-05-07T08:44:30.206Z",
-        "updatedAt": "2026-06-05T08:29:01.339Z"
+        "updatedAt": "2026-06-09T08:11:01.874Z"
       },
       {
         "id": "dfe48b6c-dc70-4292-bf09-0fb576b29d4d",
@@ -4059,9 +4101,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": null,
+        "lastSignedInAt": "2026-06-09T07:39:24.549Z",
         "createdAt": "2026-05-07T08:44:30.181Z",
-        "updatedAt": "2026-06-05T08:15:50.381Z"
+        "updatedAt": "2026-06-09T07:39:24.550Z"
       },
       {
         "id": "e0832ddd-1455-45ce-8422-78c70df97be5",
@@ -4070,9 +4112,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": null,
+        "lastSignedInAt": "2026-06-09T07:34:52.533Z",
         "createdAt": "2026-05-07T08:44:30.169Z",
-        "updatedAt": "2026-06-05T08:09:42.120Z"
+        "updatedAt": "2026-06-09T07:34:52.534Z"
       },
       {
         "id": "f7ecc33e-fab2-4e93-b1f6-4d51197a4141",
@@ -4081,9 +4123,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": null,
+        "lastSignedInAt": "2026-06-09T07:56:37.589Z",
         "createdAt": "2026-05-07T08:44:30.188Z",
-        "updatedAt": "2026-06-05T08:19:48.167Z"
+        "updatedAt": "2026-06-09T07:56:37.590Z"
       },
       {
         "id": "f85cb9a0-469f-4f80-8dfa-8d854eee9a49",
@@ -4092,9 +4134,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": null,
+        "lastSignedInAt": "2026-06-09T07:38:06.709Z",
         "createdAt": "2026-05-07T08:44:30.178Z",
-        "updatedAt": "2026-06-05T08:13:52.190Z"
+        "updatedAt": "2026-06-09T07:38:06.710Z"
       }
     ],
     "memberProfiles": [
@@ -4412,13 +4454,13 @@
         "displayName": "有海",
         "nickname": "有海",
         "mainInstrument": "front",
-        "subInstrument": "unknown",
+        "subInstrument": "アルトサックス",
         "gender": "その他",
         "ageRange": "30代",
         "area": "京都府",
         "bio": "有海 のデモプロフィールです。",
         "createdAt": "2026-05-07T08:44:30.186Z",
-        "updatedAt": "2026-06-05T08:18:18.445Z"
+        "updatedAt": "2026-06-09T04:09:03.084Z"
       },
       {
         "id": "d3a1d0d9-9967-4e19-aaf4-031414c028c4",
@@ -4542,6 +4584,7 @@
         "eventDate": "2026-05-16T15:00:00.000Z",
         "startTime": "2026-05-17T06:00:00.000Z",
         "endTime": "2026-05-17T10:00:00.000Z",
+        "participantLimit": null,
         "participationFee": 4000,
         "hasAfterParty": false,
         "afterPartyFee": null,
@@ -4562,17 +4605,18 @@
         "eventDate": "2026-06-19T15:00:00.000Z",
         "startTime": "2026-06-20T04:00:00.000Z",
         "endTime": "2026-06-20T09:00:00.000Z",
+        "participantLimit": 30,
         "participationFee": 3000,
         "hasAfterParty": true,
         "afterPartyFee": 3000,
-        "notes": "懇親会は町屋界隈のあやしいお店でおこないます。",
+        "notes": "懇親会参加は任意です。\n募集は6月8日までです。",
         "round1StartAt": "2026-05-25T07:27:00.000Z",
         "round1EndAt": "2026-06-08T07:27:00.000Z",
-        "round2StartAt": "2026-06-10T07:27:00.000Z",
+        "round2StartAt": "2026-06-09T07:27:00.000Z",
         "round2EndAt": "2026-06-17T07:28:00.000Z",
-        "status": "recruiting_round1",
+        "status": "recruiting_round2",
         "createdAt": "2026-05-08T07:27:08.211Z",
-        "updatedAt": "2026-06-05T06:58:08.212Z"
+        "updatedAt": "2026-06-09T08:45:32.912Z"
       },
       {
         "id": "9444a23d-9a55-4d26-b12a-224efa5689fd",
@@ -4582,6 +4626,7 @@
         "eventDate": "2026-07-17T15:00:00.000Z",
         "startTime": "2026-07-18T04:00:00.000Z",
         "endTime": "2026-07-18T09:00:00.000Z",
+        "participantLimit": null,
         "participationFee": 2000,
         "hasAfterParty": true,
         "afterPartyFee": 3000,
@@ -5454,6 +5499,42 @@
         "updatedAt": "2026-05-07T08:44:30.835Z"
       },
       {
+        "id": "0472525a-7f70-44c4-a2c0-a09fac05e733",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "f86759b3-8eb8-45cb-be74-373f538d058c",
+        "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "attending",
+        "createdAt": "2026-06-09T07:37:45.732Z",
+        "updatedAt": "2026-06-09T07:37:45.732Z"
+      },
+      {
+        "id": "078bc315-07a4-47ed-9570-21b04b0cc20c",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "f33b54aa-3be9-4b05-b016-5e0017b33f03",
+        "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "attending",
+        "createdAt": "2026-06-09T07:26:12.469Z",
+        "updatedAt": "2026-06-09T07:26:12.469Z"
+      },
+      {
+        "id": "0f379057-7cb5-4031-b5a3-aa9908bd531a",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "d3a1d0d9-9967-4e19-aaf4-031414c028c4",
+        "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "attending",
+        "createdAt": "2026-06-09T08:08:13.708Z",
+        "updatedAt": "2026-06-09T08:08:13.708Z"
+      },
+      {
+        "id": "103115d2-e894-4632-a0f9-e21c20f95077",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "11b6c403-5cfb-485b-a00d-1a02edcc7d57",
+        "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "absent",
+        "createdAt": "2026-06-09T07:19:27.427Z",
+        "updatedAt": "2026-06-09T07:19:27.427Z"
+      },
+      {
         "id": "1764aaf8-a202-4044-8d5e-e5839a724524",
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "d3a1d0d9-9967-4e19-aaf4-031414c028c4",
@@ -5463,6 +5544,15 @@
         "updatedAt": "2026-05-07T08:44:30.927Z"
       },
       {
+        "id": "1ffffa4f-0af1-4fde-83b5-9a22152ba44f",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "c51ec424-54eb-4479-b21e-96c3b0b9d47b",
+        "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "attending",
+        "createdAt": "2026-06-09T08:12:36.066Z",
+        "updatedAt": "2026-06-09T08:12:36.066Z"
+      },
+      {
         "id": "218985e2-ea21-4976-a55c-8dc9738ffb31",
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "72c840a7-33b1-4a18-96a4-9c8a7f78a69d",
@@ -5470,6 +5560,15 @@
         "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.874Z",
         "updatedAt": "2026-05-07T08:44:30.874Z"
+      },
+      {
+        "id": "22251191-e67d-4e3a-9e84-c8a9780c6fbc",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "94855245-1f8e-484b-99fd-3772b8309d28",
+        "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "absent",
+        "createdAt": "2026-06-09T08:02:19.682Z",
+        "updatedAt": "2026-06-09T08:02:19.682Z"
       },
       {
         "id": "28a20725-2692-493f-955c-85cf999d1223",
@@ -5490,6 +5589,15 @@
         "updatedAt": "2026-05-07T08:44:30.845Z"
       },
       {
+        "id": "2d95a0bc-d9ff-4947-aafd-ebdff6078814",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "ca475c6b-b544-4da7-9571-3cb9fc9e35bc",
+        "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "attending",
+        "createdAt": "2026-06-09T07:56:19.964Z",
+        "updatedAt": "2026-06-09T07:56:19.964Z"
+      },
+      {
         "id": "3c526b34-5e9f-44e0-bbb6-c8a6ada5a217",
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "96f1304f-e430-4b77-97e7-e44fafc8f593",
@@ -5508,6 +5616,15 @@
         "updatedAt": "2026-05-07T08:44:30.937Z"
       },
       {
+        "id": "3ccd934a-cafb-4a39-bb70-b220dfe3ca7c",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "c15f6d57-51ee-4552-bc1d-4f4d4da3ca1f",
+        "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "absent",
+        "createdAt": "2026-06-09T07:34:31.676Z",
+        "updatedAt": "2026-06-09T07:34:31.676Z"
+      },
+      {
         "id": "403bd5b4-06ca-43cb-a957-b3c8b402b9b3",
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "f25fd6bf-286f-4052-855b-ae4bd009445b",
@@ -5517,6 +5634,15 @@
         "updatedAt": "2026-05-07T08:44:30.864Z"
       },
       {
+        "id": "456e3b03-24e5-4970-80b5-dde02f46ad98",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "fecf72f3-7dbe-48aa-a29a-2c6dadc21edb",
+        "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "attending",
+        "createdAt": "2026-06-09T08:09:11.073Z",
+        "updatedAt": "2026-06-09T08:09:11.073Z"
+      },
+      {
         "id": "497b90c5-3d4f-43f8-8e42-e4feea6806fa",
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "c15f6d57-51ee-4552-bc1d-4f4d4da3ca1f",
@@ -5524,6 +5650,15 @@
         "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.884Z",
         "updatedAt": "2026-05-07T08:44:30.884Z"
+      },
+      {
+        "id": "4b5e5bf8-3417-47fd-becc-a1aaa2f91ce1",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "275c9330-c939-4b89-8dbf-57a377420f02",
+        "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "attending",
+        "createdAt": "2026-06-09T06:33:39.412Z",
+        "updatedAt": "2026-06-09T06:33:39.412Z"
       },
       {
         "id": "4b8349e7-faa8-4879-bbc2-32aa475a3745",
@@ -5542,6 +5677,15 @@
         "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.850Z",
         "updatedAt": "2026-05-07T08:44:30.850Z"
+      },
+      {
+        "id": "54b11aba-4479-4764-8764-47f4f4ab3dd1",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "5335c4bc-48d2-4310-9d52-f5631987d4e1",
+        "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "attending",
+        "createdAt": "2026-06-09T08:10:17.666Z",
+        "updatedAt": "2026-06-09T08:10:17.666Z"
       },
       {
         "id": "5abca729-1181-4518-9589-01e9882995bc",
@@ -5580,6 +5724,15 @@
         "updatedAt": "2026-05-07T08:44:30.840Z"
       },
       {
+        "id": "7267e37b-d5ee-430d-a50e-332ab05de387",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "5dad37a5-b796-47ae-93d1-2d067fa7e461",
+        "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "absent",
+        "createdAt": "2026-06-09T07:55:09.633Z",
+        "updatedAt": "2026-06-09T07:55:09.633Z"
+      },
+      {
         "id": "74eb7a34-c66f-4dee-81c6-da79705cffbb",
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "ca475c6b-b544-4da7-9571-3cb9fc9e35bc",
@@ -5587,6 +5740,24 @@
         "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.913Z",
         "updatedAt": "2026-05-07T08:44:30.913Z"
+      },
+      {
+        "id": "7fc605ee-7c9f-4382-89b5-02edf11abf23",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "72e11a37-0ada-48a5-bc72-0647a2ed9429",
+        "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "absent",
+        "createdAt": "2026-06-09T07:36:43.798Z",
+        "updatedAt": "2026-06-09T07:36:43.798Z"
+      },
+      {
+        "id": "7fe23d56-5548-4339-8ee4-583dc404cb2a",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "f56deee6-733e-4d54-85e8-fe8730c2c5a3",
+        "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "attending",
+        "createdAt": "2026-06-09T07:20:34.846Z",
+        "updatedAt": "2026-06-09T07:20:34.846Z"
       },
       {
         "id": "88cabb25-825f-4f13-9c91-fd2f11993bef",
@@ -5602,27 +5773,54 @@
         "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
         "memberProfileId": "b8412336-89fe-43e1-b882-b57dee50f7bb",
         "attendanceStatus": "attending",
-        "afterPartyAttendanceStatus": null,
+        "afterPartyAttendanceStatus": "absent",
         "createdAt": "2026-05-29T06:31:47.342Z",
-        "updatedAt": "2026-05-29T06:31:47.342Z"
+        "updatedAt": "2026-06-09T07:18:25.564Z"
+      },
+      {
+        "id": "901389b5-b4dd-4fed-acf7-54be22f59542",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "f25fd6bf-286f-4052-855b-ae4bd009445b",
+        "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "attending",
+        "createdAt": "2026-06-09T07:24:50.466Z",
+        "updatedAt": "2026-06-09T07:24:50.466Z"
+      },
+      {
+        "id": "90fbbb29-dd51-4b83-a564-51749f1a946a",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "959daf7b-e86c-42d3-967e-dca24101be02",
+        "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "absent",
+        "createdAt": "2026-06-09T07:23:25.605Z",
+        "updatedAt": "2026-06-09T07:23:25.605Z"
       },
       {
         "id": "928fdccd-011f-4ebb-8e1f-fd97bed0d24a",
         "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
         "memberProfileId": "b9196cab-0ac9-48eb-9844-e22d17ec351f",
         "attendanceStatus": "attending",
-        "afterPartyAttendanceStatus": null,
+        "afterPartyAttendanceStatus": "absent",
         "createdAt": "2026-05-29T05:36:01.831Z",
-        "updatedAt": "2026-05-29T05:36:01.831Z"
+        "updatedAt": "2026-06-09T07:15:37.279Z"
+      },
+      {
+        "id": "9c57dc8b-b12e-4ad2-b057-a9f3909683a9",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "ba9fd6c6-bfee-4e48-9664-c02aa337d429",
+        "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "absent",
+        "createdAt": "2026-06-09T07:10:30.824Z",
+        "updatedAt": "2026-06-09T07:10:30.824Z"
       },
       {
         "id": "9da2db89-14be-4016-b64d-b42c24dc5109",
         "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
         "memberProfileId": "4d24136f-3c36-4e6d-a595-be5545c23074",
         "attendanceStatus": "attending",
-        "afterPartyAttendanceStatus": null,
+        "afterPartyAttendanceStatus": "attending",
         "createdAt": "2026-05-29T05:33:15.123Z",
-        "updatedAt": "2026-05-29T05:33:15.123Z"
+        "updatedAt": "2026-06-09T07:14:04.187Z"
       },
       {
         "id": "a06dfb3e-3baa-4165-adc9-fa7646be225b",
@@ -5632,6 +5830,24 @@
         "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.941Z",
         "updatedAt": "2026-05-07T08:44:30.941Z"
+      },
+      {
+        "id": "a2ffbdb7-4755-4a48-ada0-fc1b18c7f71a",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "98f29d77-a472-4795-bf91-4d4dacf04a6e",
+        "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "attending",
+        "createdAt": "2026-06-09T08:07:12.971Z",
+        "updatedAt": "2026-06-09T08:07:12.971Z"
+      },
+      {
+        "id": "a500b001-d8ed-4a9c-a6ac-e8f26dc00c5b",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "746a9944-256d-4caf-b1ee-4a5651e4ee04",
+        "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "attending",
+        "createdAt": "2026-06-09T07:22:11.748Z",
+        "updatedAt": "2026-06-09T07:22:11.748Z"
       },
       {
         "id": "a92f59eb-a3a0-4f97-91c6-f64aae9575c9",
@@ -5676,7 +5892,34 @@
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "attending",
         "createdAt": "2026-05-29T05:25:56.711Z",
-        "updatedAt": "2026-06-05T07:03:52.794Z"
+        "updatedAt": "2026-06-09T07:12:44.868Z"
+      },
+      {
+        "id": "bf13ee5f-2231-416b-9670-170f8a46de59",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "72c840a7-33b1-4a18-96a4-9c8a7f78a69d",
+        "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "attending",
+        "createdAt": "2026-06-09T07:27:31.443Z",
+        "updatedAt": "2026-06-09T07:27:31.443Z"
+      },
+      {
+        "id": "bf34a0b6-ff78-411c-b591-98d8cefe83f4",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "feaac6b3-58cd-4458-b83f-f6c2ea9080ff",
+        "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "absent",
+        "createdAt": "2026-06-09T07:08:58.471Z",
+        "updatedAt": "2026-06-09T07:08:58.471Z"
+      },
+      {
+        "id": "c9ee9994-e2dd-40f1-adac-cb831a6c8f6b",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "0b290a20-c57f-4a40-9421-02a97f3ce9aa",
+        "attendanceStatus": "absent",
+        "afterPartyAttendanceStatus": "undecided",
+        "createdAt": "2026-06-09T07:30:08.942Z",
+        "updatedAt": "2026-06-09T07:30:08.942Z"
       },
       {
         "id": "ce402cb0-1f22-4c3a-a901-5d3aa83cab3d",
@@ -5733,6 +5976,15 @@
         "updatedAt": "2026-05-07T08:44:30.824Z"
       },
       {
+        "id": "f304198c-6ddf-4e5b-83ae-dcc8f6d8c3d6",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "03ca1050-cf3e-4c1a-97ec-282ba50d1e35",
+        "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "attending",
+        "createdAt": "2026-06-09T07:35:33.769Z",
+        "updatedAt": "2026-06-09T07:35:33.769Z"
+      },
+      {
         "id": "f5e438d5-164c-469b-b927-22ba89b6e301",
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "memberProfileId": "f86759b3-8eb8-45cb-be74-373f538d058c",
@@ -5740,6 +5992,15 @@
         "afterPartyAttendanceStatus": null,
         "createdAt": "2026-05-07T08:44:30.898Z",
         "updatedAt": "2026-05-07T08:44:30.898Z"
+      },
+      {
+        "id": "fa9bf079-db1b-45e2-bcc2-78f47a994c9e",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "memberProfileId": "96f1304f-e430-4b77-97e7-e44fafc8f593",
+        "attendanceStatus": "attending",
+        "afterPartyAttendanceStatus": "attending",
+        "createdAt": "2026-06-09T07:38:59.880Z",
+        "updatedAt": "2026-06-09T07:38:59.880Z"
       },
       {
         "id": "feaa771a-8b17-4fe0-bd41-2d067f52eeb4",
@@ -5752,6 +6013,17 @@
       }
     ],
     "sessionEntryRequests": [
+      {
+        "id": "0155d40a-a639-4e21-a2d3-4468c37b0fdc",
+        "sessionEntryId": "f304198c-6ddf-4e5b-83ae-dcc8f6d8c3d6",
+        "songId": "f371d659-bc8b-407b-9096-b20199e61bcd",
+        "songTitleSnapshot": "SATIN DOLL",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T07:35:34.294Z",
+        "updatedAt": "2026-06-09T07:35:34.294Z"
+      },
       {
         "id": "01f2843f-830d-424f-b983-45294ec3d704",
         "sessionEntryId": "723deeeb-c213-43a1-bc2e-fb1d155c67d6",
@@ -5786,6 +6058,17 @@
         "updatedAt": "2026-05-07T08:44:30.897Z"
       },
       {
+        "id": "0aa20463-994a-4eca-a221-207c3c140ff1",
+        "sessionEntryId": "22251191-e67d-4e3a-9e84-c8a9780c6fbc",
+        "songId": "d238cacb-1f0f-4624-b789-8ba90fe51eb4",
+        "songTitleSnapshot": "THAT S ALL",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T08:02:20.281Z",
+        "updatedAt": "2026-06-09T08:02:20.281Z"
+      },
+      {
         "id": "0cf5f281-45f6-4172-b480-7b554e65c027",
         "sessionEntryId": "dd341340-44da-41ca-b1e9-bf8f93245b0e",
         "songId": "8eca6a25-86d8-40b8-855a-1c1d277c858c",
@@ -5795,6 +6078,17 @@
         "priority": 2,
         "createdAt": "2026-05-07T08:44:30.881Z",
         "updatedAt": "2026-05-07T08:44:30.881Z"
+      },
+      {
+        "id": "0d090dae-84f3-415f-936e-1a21ddcd8cc3",
+        "sessionEntryId": "928fdccd-011f-4ebb-8e1f-fd97bed0d24a",
+        "songId": "780bc879-a8dd-4250-8045-f84465d86d25",
+        "songTitleSnapshot": "SUMMER NIGHT",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T07:15:38.328Z",
+        "updatedAt": "2026-06-09T07:15:38.328Z"
       },
       {
         "id": "0d50ea72-1502-4c15-8896-9403ed044d79",
@@ -5828,6 +6122,28 @@
         "priority": 2,
         "createdAt": "2026-05-07T08:44:30.921Z",
         "updatedAt": "2026-05-07T08:44:30.921Z"
+      },
+      {
+        "id": "0fd485b5-4102-4612-965e-13f63a5c69a1",
+        "sessionEntryId": "7fc605ee-7c9f-4382-89b5-02edf11abf23",
+        "songId": "78ea1ed3-26a9-40ae-8bfc-31a35dac9829",
+        "songTitleSnapshot": "SOLAR",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T07:36:44.323Z",
+        "updatedAt": "2026-06-09T07:36:44.323Z"
+      },
+      {
+        "id": "11dea5c7-a171-488e-aace-668fa128407c",
+        "sessionEntryId": "0472525a-7f70-44c4-a2c0-a09fac05e733",
+        "songId": "616a0dcc-fd6d-4775-835a-71cbf9358c5c",
+        "songTitleSnapshot": "ON A MISTY NIGHT",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T07:37:46.278Z",
+        "updatedAt": "2026-06-09T07:37:46.278Z"
       },
       {
         "id": "11ec5614-25d8-41f5-9d27-0fa507df0dc2",
@@ -5874,6 +6190,17 @@
         "updatedAt": "2026-05-07T08:44:30.893Z"
       },
       {
+        "id": "1428fefa-beff-4f24-b877-029933f9547c",
+        "sessionEntryId": "f304198c-6ddf-4e5b-83ae-dcc8f6d8c3d6",
+        "songId": "e81e65b2-772e-4ffa-a522-8da58c36d831",
+        "songTitleSnapshot": "IN A MELLOW TONE",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T07:35:34.059Z",
+        "updatedAt": "2026-06-09T07:35:34.059Z"
+      },
+      {
         "id": "15f05ca7-dff3-43bd-9f65-4a4c60449cdf",
         "sessionEntryId": "a06dfb3e-3baa-4165-adc9-fa7646be225b",
         "songId": "1ea9b675-8bc5-4cf3-b03d-66a3444d79ae",
@@ -5885,6 +6212,17 @@
         "updatedAt": "2026-05-07T08:44:30.945Z"
       },
       {
+        "id": "1671b37f-1571-4b02-80da-86831673d319",
+        "sessionEntryId": "2d95a0bc-d9ff-4947-aafd-ebdff6078814",
+        "songId": "b8114bf3-1616-4340-ab00-e2c0a3501c8c",
+        "songTitleSnapshot": "THERE WILL NEVER BE ANOTHER YOU",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T07:56:20.406Z",
+        "updatedAt": "2026-06-09T07:56:20.406Z"
+      },
+      {
         "id": "16b033fe-8c55-4299-a103-f61bb70cbe06",
         "sessionEntryId": "a06dfb3e-3baa-4165-adc9-fa7646be225b",
         "songId": "5ba248e3-e152-45f4-a255-68a1165109b2",
@@ -5894,17 +6232,6 @@
         "priority": 1,
         "createdAt": "2026-05-07T08:44:30.944Z",
         "updatedAt": "2026-05-07T08:44:30.944Z"
-      },
-      {
-        "id": "180128b1-1931-49e4-97d8-e495a991a54b",
-        "sessionEntryId": "928fdccd-011f-4ebb-8e1f-fd97bed0d24a",
-        "songId": "92ead2b2-be25-4373-a55e-8977a74b6a6b",
-        "songTitleSnapshot": "AUTUMN LEAVES",
-        "keyName": null,
-        "round": 1,
-        "priority": 1,
-        "createdAt": "2026-05-29T05:36:01.834Z",
-        "updatedAt": "2026-05-29T05:36:01.834Z"
       },
       {
         "id": "186251ca-cb33-4831-aafe-0f63c98cca3e",
@@ -5929,6 +6256,17 @@
         "updatedAt": "2026-05-07T08:44:30.948Z"
       },
       {
+        "id": "1a37f075-d018-4e35-a69c-3bf3b5e46411",
+        "sessionEntryId": "7fe23d56-5548-4339-8ee4-583dc404cb2a",
+        "songId": "c75bd7ad-7444-47e9-a361-c4dc41c1827a",
+        "songTitleSnapshot": "ON GREEN DOLPHIN STREET",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T07:20:35.368Z",
+        "updatedAt": "2026-06-09T07:20:35.368Z"
+      },
+      {
         "id": "1bccfd5d-c2f3-492f-bd06-4a9640d71b16",
         "sessionEntryId": "ce402cb0-1f22-4c3a-a901-5d3aa83cab3d",
         "songId": "f79ed277-2e63-4f75-9b1c-a15abba54e7e",
@@ -5951,17 +6289,6 @@
         "updatedAt": "2026-05-07T08:44:30.925Z"
       },
       {
-        "id": "1ec89b22-a3fc-4c1e-8fb9-989555b8d0b6",
-        "sessionEntryId": "8b587478-5b73-4250-acbd-e64862a4faa5",
-        "songId": "00421cbe-06e4-43d4-a449-cef028fe9c22",
-        "songTitleSnapshot": "BEAUTIFUL LOVE",
-        "keyName": null,
-        "round": 1,
-        "priority": 1,
-        "createdAt": "2026-05-29T06:31:47.345Z",
-        "updatedAt": "2026-05-29T06:31:47.345Z"
-      },
-      {
         "id": "204e98f1-20bd-4f67-b62f-1283670650fb",
         "sessionEntryId": "28df94f2-871a-4739-8e3b-ce8906ae57ee",
         "songId": "1ea9b675-8bc5-4cf3-b03d-66a3444d79ae",
@@ -5971,6 +6298,17 @@
         "priority": 2,
         "createdAt": "2026-05-07T08:44:30.848Z",
         "updatedAt": "2026-05-07T08:44:30.848Z"
+      },
+      {
+        "id": "2379be81-f8b1-48e8-ab43-ce78761b82a9",
+        "sessionEntryId": "9c57dc8b-b12e-4ad2-b057-a9f3909683a9",
+        "songId": "466966e4-7781-4bcd-8443-762303d29726",
+        "songTitleSnapshot": "STAR EYES",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T07:10:31.178Z",
+        "updatedAt": "2026-06-09T07:10:31.178Z"
       },
       {
         "id": "24b1825e-21b7-4949-9b98-103d144c14e0",
@@ -6006,17 +6344,6 @@
         "updatedAt": "2026-05-07T08:44:30.911Z"
       },
       {
-        "id": "273f3125-dbf1-44f6-9bf3-7465436c7a31",
-        "sessionEntryId": "8b587478-5b73-4250-acbd-e64862a4faa5",
-        "songId": "52fc7d44-a61a-422a-9ff6-f816c1ed68de",
-        "songTitleSnapshot": "CANDY",
-        "keyName": null,
-        "round": 1,
-        "priority": 2,
-        "createdAt": "2026-05-29T06:31:47.346Z",
-        "updatedAt": "2026-05-29T06:31:47.346Z"
-      },
-      {
         "id": "2aaff6fa-ea5b-4fec-ac02-10f5399ec667",
         "sessionEntryId": "1764aaf8-a202-4044-8d5e-e5839a724524",
         "songId": "0fbf01e1-9c66-4280-88e5-bfa3b61f2d14",
@@ -6026,6 +6353,17 @@
         "priority": 2,
         "createdAt": "2026-05-07T08:44:30.931Z",
         "updatedAt": "2026-05-07T08:44:30.931Z"
+      },
+      {
+        "id": "2acb8c1b-8c28-428e-8b29-3762894f4a6f",
+        "sessionEntryId": "8b587478-5b73-4250-acbd-e64862a4faa5",
+        "songId": "e630279f-561e-4e32-8fe7-fe7a3199875f",
+        "songTitleSnapshot": "BUD POWELL",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T07:18:25.862Z",
+        "updatedAt": "2026-06-09T07:18:25.862Z"
       },
       {
         "id": "2b041943-9de7-4b26-8978-822c41cbf00c",
@@ -6050,6 +6388,39 @@
         "updatedAt": "2026-05-07T08:44:30.892Z"
       },
       {
+        "id": "2cc2b0a7-2e9d-41b0-a499-c130edc92bd9",
+        "sessionEntryId": "4b5e5bf8-3417-47fd-becc-a1aaa2f91ce1",
+        "songId": "c7009943-b04b-460d-ab52-7531629a1d59",
+        "songTitleSnapshot": "REFLECTIONS",
+        "keyName": "Eb",
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T06:33:40.019Z",
+        "updatedAt": "2026-06-09T06:33:40.019Z"
+      },
+      {
+        "id": "2d1cce7b-53fa-4215-81c2-d0148614ffbb",
+        "sessionEntryId": "901389b5-b4dd-4fed-acf7-54be22f59542",
+        "songId": "955fe793-18fd-48f0-a9c7-4f86a968326d",
+        "songTitleSnapshot": "SPEAK NO EVIL",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T07:24:50.910Z",
+        "updatedAt": "2026-06-09T07:24:50.910Z"
+      },
+      {
+        "id": "2d407500-c258-472a-874c-9755668baa41",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "1b75236e-4122-4358-95c5-f451e0e92445",
+        "songTitleSnapshot": "HOW HIGH THE MOON",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T07:14:04.712Z",
+        "updatedAt": "2026-06-09T07:14:04.712Z"
+      },
+      {
         "id": "2e630247-e08c-4565-ba8d-29fea39f0c64",
         "sessionEntryId": "e8195406-3fc9-46ed-9448-197d66a9c23d",
         "songId": "f79ed277-2e63-4f75-9b1c-a15abba54e7e",
@@ -6072,6 +6443,17 @@
         "updatedAt": "2026-05-07T08:44:30.914Z"
       },
       {
+        "id": "2eca00b4-a736-47c8-aaa3-336679c6891a",
+        "sessionEntryId": "078bc315-07a4-47ed-9570-21b04b0cc20c",
+        "songId": "a3e88dae-c2a4-4dc2-aed9-2206643f9af7",
+        "songTitleSnapshot": "IT S ONLY A PAPER MOON",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T07:26:12.991Z",
+        "updatedAt": "2026-06-09T07:26:12.991Z"
+      },
+      {
         "id": "2f0c2312-bfb4-455d-8b33-71373cc1f074",
         "sessionEntryId": "50cd8d54-4fc0-4fc2-a35c-ebbe3fd049dc",
         "songId": "19197396-0969-43db-b3a7-17411d6cc8b0",
@@ -6081,6 +6463,17 @@
         "priority": 2,
         "createdAt": "2026-05-07T08:44:30.851Z",
         "updatedAt": "2026-05-07T08:44:30.851Z"
+      },
+      {
+        "id": "32e74085-437b-4c92-959c-9511396e8d78",
+        "sessionEntryId": "1ffffa4f-0af1-4fde-83b5-9a22152ba44f",
+        "songId": "d32089c9-78a3-4468-921b-e72b0c60403b",
+        "songTitleSnapshot": "SENTIMENTAL JOURNEY",
+        "keyName": "G",
+        "round": 1,
+        "priority": 3,
+        "createdAt": "2026-06-09T08:12:36.671Z",
+        "updatedAt": "2026-06-09T08:12:36.671Z"
       },
       {
         "id": "35de0efc-0ce1-41dc-91b8-95a227d30d47",
@@ -6127,6 +6520,17 @@
         "updatedAt": "2026-05-07T08:44:30.900Z"
       },
       {
+        "id": "3a8b4e50-e654-40d6-83ee-7164f7a20f40",
+        "sessionEntryId": "0f379057-7cb5-4031-b5a3-aa9908bd531a",
+        "songId": "4c1cd8b1-60b3-4efc-bd3f-e9563f2c244e",
+        "songTitleSnapshot": "MY FOOLISH HEART",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T08:08:14.230Z",
+        "updatedAt": "2026-06-09T08:08:14.230Z"
+      },
+      {
         "id": "3ae23b54-92e1-4aa6-8649-c9d3a229b9bc",
         "sessionEntryId": "5abca729-1181-4518-9589-01e9882995bc",
         "songId": "1ea9b675-8bc5-4cf3-b03d-66a3444d79ae",
@@ -6147,17 +6551,6 @@
         "priority": 1,
         "createdAt": "2026-05-07T08:44:30.860Z",
         "updatedAt": "2026-05-07T08:44:30.860Z"
-      },
-      {
-        "id": "3d7b104f-6e86-4efe-866b-dd8f0d86ddab",
-        "sessionEntryId": "bedbbebb-4328-461e-ac26-a0ece3166d84",
-        "songId": "35404bb8-232f-426d-bc58-1801c221779a",
-        "songTitleSnapshot": "ALL OF ME",
-        "keyName": null,
-        "round": 1,
-        "priority": 1,
-        "createdAt": "2026-06-05T07:03:53.181Z",
-        "updatedAt": "2026-06-05T07:03:53.181Z"
       },
       {
         "id": "3d7dbef7-5316-487f-a8fe-1cc35caf9fb3",
@@ -6182,6 +6575,28 @@
         "updatedAt": "2026-05-07T08:44:30.856Z"
       },
       {
+        "id": "4089aa6b-d2b9-4cd7-b2df-063ece5f9b21",
+        "sessionEntryId": "a500b001-d8ed-4a9c-a6ac-e8f26dc00c5b",
+        "songId": "905a9f60-58e2-46a2-af4b-81c248d1674e",
+        "songTitleSnapshot": "SONG FOR MY FATHER",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T07:22:12.133Z",
+        "updatedAt": "2026-06-09T07:22:12.133Z"
+      },
+      {
+        "id": "41daeca4-1a3b-4707-bf36-8ab75104b60e",
+        "sessionEntryId": "1ffffa4f-0af1-4fde-83b5-9a22152ba44f",
+        "songId": "9c0cd09f-4c50-4e89-b6e9-0ab2f971da65",
+        "songTitleSnapshot": "ALFIE",
+        "keyName": "F",
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T08:12:36.593Z",
+        "updatedAt": "2026-06-09T08:12:36.593Z"
+      },
+      {
         "id": "4211562b-543e-4751-b7b3-62806031f80a",
         "sessionEntryId": "a92f59eb-a3a0-4f97-91c6-f64aae9575c9",
         "songId": "515e0911-a088-4156-b3e5-0fe62eb0baf3",
@@ -6204,6 +6619,28 @@
         "updatedAt": "2026-05-07T08:44:30.831Z"
       },
       {
+        "id": "46813548-b635-4576-9252-460cff7e062a",
+        "sessionEntryId": "1ffffa4f-0af1-4fde-83b5-9a22152ba44f",
+        "songId": "8d396f41-66e0-4b52-9a88-89bdda78231c",
+        "songTitleSnapshot": "SUMMERTIME",
+        "keyName": "C",
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T08:12:36.369Z",
+        "updatedAt": "2026-06-09T08:12:36.369Z"
+      },
+      {
+        "id": "471353ab-dc6a-43c2-922d-b12a1a1cbdcf",
+        "sessionEntryId": "4b5e5bf8-3417-47fd-becc-a1aaa2f91ce1",
+        "songId": "b19ffc89-17cc-41d7-a99c-fa41045de7fe",
+        "songTitleSnapshot": "IT NEVER ENTERED MY MIND",
+        "keyName": "Bb",
+        "round": 1,
+        "priority": 3,
+        "createdAt": "2026-06-09T06:33:40.151Z",
+        "updatedAt": "2026-06-09T06:33:40.151Z"
+      },
+      {
         "id": "474b40e7-39a5-48fa-a606-f0f1579e07ad",
         "sessionEntryId": "bc017621-ff92-4cab-bf90-98941d561616",
         "songId": "2e959cd7-4d60-438d-9fe3-42b4abc5d292",
@@ -6215,6 +6652,17 @@
         "updatedAt": "2026-05-07T08:44:30.817Z"
       },
       {
+        "id": "4890dc16-6911-4c8d-a0b8-a822a6acb616",
+        "sessionEntryId": "7267e37b-d5ee-430d-a50e-332ab05de387",
+        "songId": "c6f50fd0-bee6-469e-a744-4602f192a352",
+        "songTitleSnapshot": "YES OR NO",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T07:55:10.236Z",
+        "updatedAt": "2026-06-09T07:55:10.236Z"
+      },
+      {
         "id": "498aa404-7ba0-481f-8c46-30002cac14bd",
         "sessionEntryId": "dd341340-44da-41ca-b1e9-bf8f93245b0e",
         "songId": "e1c59105-e2f0-4eaf-ae92-53dc67c79f07",
@@ -6224,6 +6672,17 @@
         "priority": 1,
         "createdAt": "2026-05-07T08:44:30.882Z",
         "updatedAt": "2026-05-07T08:44:30.882Z"
+      },
+      {
+        "id": "4ad55700-146d-4b97-a8c5-ee0b14d84c82",
+        "sessionEntryId": "fa9bf079-db1b-45e2-bcc2-78f47a994c9e",
+        "songId": "ce52889d-429f-4cbe-82e2-c0bc6d727608",
+        "songTitleSnapshot": "HAVE YOU MET MISS JONES?",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T07:39:00.404Z",
+        "updatedAt": "2026-06-09T07:39:00.404Z"
       },
       {
         "id": "4af68348-b08a-420a-b5b0-948e83df98f9",
@@ -6248,6 +6707,28 @@
         "updatedAt": "2026-05-07T08:44:30.885Z"
       },
       {
+        "id": "4c10e00a-a4b1-4f4a-baec-513f31af0d98",
+        "sessionEntryId": "bf34a0b6-ff78-411c-b591-98d8cefe83f4",
+        "songId": "d71152a3-f026-4788-81a7-0183a2d76672",
+        "songTitleSnapshot": "NICA S DREAM",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T07:08:58.993Z",
+        "updatedAt": "2026-06-09T07:08:58.993Z"
+      },
+      {
+        "id": "4e469135-7501-4f1d-817c-7f13def4d350",
+        "sessionEntryId": "54b11aba-4479-4764-8764-47f4f4ab3dd1",
+        "songId": "b83d33c9-cb61-4dad-bb8a-6f7d484704b7",
+        "songTitleSnapshot": "DOLPHIN DANCE",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T08:10:17.964Z",
+        "updatedAt": "2026-06-09T08:10:17.964Z"
+      },
+      {
         "id": "5151051b-1b4a-4a0e-a9c9-31ea749b4fe9",
         "sessionEntryId": "403bd5b4-06ca-43cb-a957-b3c8b402b9b3",
         "songId": "cbbf066d-b46c-4209-8773-966629c93763",
@@ -6257,6 +6738,17 @@
         "priority": 1,
         "createdAt": "2026-05-07T08:44:30.865Z",
         "updatedAt": "2026-05-07T08:44:30.865Z"
+      },
+      {
+        "id": "52197cd0-ae56-4b8b-b9f7-010b7206039e",
+        "sessionEntryId": "0472525a-7f70-44c4-a2c0-a09fac05e733",
+        "songId": "552a1f2a-1627-45fb-85c6-8489d85458b0",
+        "songTitleSnapshot": "INNER URGE",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T07:37:46.108Z",
+        "updatedAt": "2026-06-09T07:37:46.108Z"
       },
       {
         "id": "524cbf03-ad91-4a45-9a5c-550e5cc48a3e",
@@ -6292,15 +6784,15 @@
         "updatedAt": "2026-05-07T08:44:30.848Z"
       },
       {
-        "id": "5a28c520-c133-4a80-bbc5-7af3bc61ea43",
-        "sessionEntryId": "bedbbebb-4328-461e-ac26-a0ece3166d84",
-        "songId": "00421cbe-06e4-43d4-a449-cef028fe9c22",
-        "songTitleSnapshot": "BEAUTIFUL LOVE",
-        "keyName": null,
+        "id": "564cfef7-ae26-4de2-86f2-82e33bb921e6",
+        "sessionEntryId": "4b5e5bf8-3417-47fd-becc-a1aaa2f91ce1",
+        "songId": "2e03d29b-0499-4bcb-8186-885af500dcf4",
+        "songTitleSnapshot": "NEVER LET ME GO",
+        "keyName": "F",
         "round": 1,
-        "priority": 2,
-        "createdAt": "2026-06-05T07:03:53.336Z",
-        "updatedAt": "2026-06-05T07:03:53.336Z"
+        "priority": 1,
+        "createdAt": "2026-06-09T06:33:39.779Z",
+        "updatedAt": "2026-06-09T06:33:39.779Z"
       },
       {
         "id": "5c2a8e71-c840-4962-86a9-6bcebeeb8fd6",
@@ -6358,6 +6850,28 @@
         "updatedAt": "2026-05-07T08:44:30.939Z"
       },
       {
+        "id": "644c01b5-d2cc-46e4-af2f-0844e6323543",
+        "sessionEntryId": "8b587478-5b73-4250-acbd-e64862a4faa5",
+        "songId": "801f4902-65bd-42be-aebb-04949eb106ba",
+        "songTitleSnapshot": "ARMANDO S RHUMBA",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T07:18:26.011Z",
+        "updatedAt": "2026-06-09T07:18:26.011Z"
+      },
+      {
+        "id": "6646d4d9-d835-4f8e-bd88-be4b09261208",
+        "sessionEntryId": "7fe23d56-5548-4339-8ee4-583dc404cb2a",
+        "songId": "9fbd4827-7415-453a-aefc-a4fedc204c31",
+        "songTitleSnapshot": "YOU AND THE NIGHT AND THE MUSIC",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T07:20:35.216Z",
+        "updatedAt": "2026-06-09T07:20:35.216Z"
+      },
+      {
         "id": "679a7807-476b-4715-a237-4d07229ad43d",
         "sessionEntryId": "bc017621-ff92-4cab-bf90-98941d561616",
         "songId": "82031da6-19f5-4aa8-914b-00ea432d46d7",
@@ -6380,6 +6894,28 @@
         "updatedAt": "2026-05-07T08:44:30.837Z"
       },
       {
+        "id": "6a6e9aee-d079-460e-bb07-61673b36d066",
+        "sessionEntryId": "22251191-e67d-4e3a-9e84-c8a9780c6fbc",
+        "songId": "e7e6d6d9-914e-40c7-8309-d4a4ab0a791c",
+        "songTitleSnapshot": "JAMES(Old version)",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T08:02:20.134Z",
+        "updatedAt": "2026-06-09T08:02:20.134Z"
+      },
+      {
+        "id": "6bee8328-2167-45bd-ba3b-9755981b5b22",
+        "sessionEntryId": "928fdccd-011f-4ebb-8e1f-fd97bed0d24a",
+        "songId": "48c8bb17-0028-4845-b382-2d5197c69e45",
+        "songTitleSnapshot": "SUMMER KNOWS, The",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T07:15:38.113Z",
+        "updatedAt": "2026-06-09T07:15:38.113Z"
+      },
+      {
         "id": "6caabf8a-f3c0-4600-8a00-6f4cfa2b4461",
         "sessionEntryId": "5f6cc774-8a38-43e8-8452-9448b0092d17",
         "songId": "04c0453f-d2af-49d3-8deb-da6724332613",
@@ -6400,17 +6936,6 @@
         "priority": 2,
         "createdAt": "2026-05-07T08:44:30.902Z",
         "updatedAt": "2026-05-07T08:44:30.902Z"
-      },
-      {
-        "id": "7376c797-9600-43fd-ad50-392aa033b2ad",
-        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
-        "songId": "2fcfea0b-7827-4454-97c4-a5f8f387db23",
-        "songTitleSnapshot": "BLUE BOSSA",
-        "keyName": null,
-        "round": 1,
-        "priority": 2,
-        "createdAt": "2026-05-29T05:33:15.127Z",
-        "updatedAt": "2026-05-29T05:33:15.127Z"
       },
       {
         "id": "750ed3c6-6ce4-4411-aacd-aa959dfa92e8",
@@ -6490,6 +7015,17 @@
         "updatedAt": "2026-05-07T08:44:30.868Z"
       },
       {
+        "id": "7d4673d4-4a94-4dd2-b3da-fe41d35d19da",
+        "sessionEntryId": "a2ffbdb7-4755-4a48-ada0-fc1b18c7f71a",
+        "songId": "79bebb8b-c969-449e-a67e-ae745463e503",
+        "songTitleSnapshot": "HOW INSENSITIVE",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T08:07:13.642Z",
+        "updatedAt": "2026-06-09T08:07:13.642Z"
+      },
+      {
         "id": "7e884877-bfdc-458c-867a-54fde4674edd",
         "sessionEntryId": "ce402cb0-1f22-4c3a-a901-5d3aa83cab3d",
         "songId": "67f285aa-4838-40e9-a3c7-37a2f701159c",
@@ -6499,6 +7035,17 @@
         "priority": 2,
         "createdAt": "2026-05-07T08:44:30.871Z",
         "updatedAt": "2026-05-07T08:44:30.871Z"
+      },
+      {
+        "id": "7f1a3e97-7348-4e0e-81ad-0a3c9a456add",
+        "sessionEntryId": "2d95a0bc-d9ff-4947-aafd-ebdff6078814",
+        "songId": "0e66dd60-e1e1-455d-aaed-90caf8f5750f",
+        "songTitleSnapshot": "CUTE",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T07:56:20.555Z",
+        "updatedAt": "2026-06-09T07:56:20.555Z"
       },
       {
         "id": "833d5832-8de7-4177-ae75-f61e80ffe632",
@@ -6521,6 +7068,17 @@
         "priority": 2,
         "createdAt": "2026-05-07T08:44:30.910Z",
         "updatedAt": "2026-05-07T08:44:30.910Z"
+      },
+      {
+        "id": "86161847-dcfb-43ce-aeda-cb241655f2b3",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "fb1a575b-c7c3-4c1d-a118-b7e920a91117",
+        "songTitleSnapshot": "LOVE FOR SALE",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T07:14:05.083Z",
+        "updatedAt": "2026-06-09T07:14:05.083Z"
       },
       {
         "id": "86c11df6-55ce-4a59-a557-bf1f3dcb067e",
@@ -6644,6 +7202,28 @@
         "updatedAt": "2026-05-07T08:44:30.833Z"
       },
       {
+        "id": "9cb51e8c-9fdd-45f0-86c4-652516d3c5b7",
+        "sessionEntryId": "7267e37b-d5ee-430d-a50e-332ab05de387",
+        "songId": "8974832a-8bce-4b3a-9203-25a7db2489d9",
+        "songTitleSnapshot": "SONG FOR BILBAO",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T07:55:10.023Z",
+        "updatedAt": "2026-06-09T07:55:10.023Z"
+      },
+      {
+        "id": "9ecede02-64be-4d98-9de1-9e49e0a1cff8",
+        "sessionEntryId": "90fbbb29-dd51-4b83-a564-51749f1a946a",
+        "songId": "35404bb8-232f-426d-bc58-1801c221779a",
+        "songTitleSnapshot": "ALL OF ME",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T07:23:25.829Z",
+        "updatedAt": "2026-06-09T07:23:25.829Z"
+      },
+      {
         "id": "9ff0b1cb-29ed-453f-9858-c1806fe6747e",
         "sessionEntryId": "bc017621-ff92-4cab-bf90-98941d561616",
         "songId": "8eca6a25-86d8-40b8-855a-1c1d277c858c",
@@ -6677,6 +7257,17 @@
         "updatedAt": "2026-05-07T08:44:30.947Z"
       },
       {
+        "id": "a3043123-9550-483f-898a-ad087fe0d537",
+        "sessionEntryId": "4b5e5bf8-3417-47fd-becc-a1aaa2f91ce1",
+        "songId": "7ad90953-f3d5-4ee7-921f-2459fa2added",
+        "songTitleSnapshot": "BUT NOT FOR ME",
+        "keyName": "Bb",
+        "round": 1,
+        "priority": 4,
+        "createdAt": "2026-06-09T06:33:40.226Z",
+        "updatedAt": "2026-06-09T06:33:40.226Z"
+      },
+      {
         "id": "a51c2aa6-37d6-4225-b9da-191efcf731ac",
         "sessionEntryId": "d294c22f-d530-4924-8fb4-46458f3ecc0f",
         "songId": "67f285aa-4838-40e9-a3c7-37a2f701159c",
@@ -6686,6 +7277,17 @@
         "priority": 2,
         "createdAt": "2026-05-07T08:44:30.821Z",
         "updatedAt": "2026-05-07T08:44:30.821Z"
+      },
+      {
+        "id": "a5bd0ef2-a305-42dc-b513-9ecd7e7c54e0",
+        "sessionEntryId": "bf34a0b6-ff78-411c-b591-98d8cefe83f4",
+        "songId": "8b92a977-4615-41b7-b967-9900f47991f3",
+        "songTitleSnapshot": "MOMENT S NOTICE",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T07:08:58.833Z",
+        "updatedAt": "2026-06-09T07:08:58.833Z"
       },
       {
         "id": "a6c37b0c-b819-4028-b092-88ee26eddcec",
@@ -6699,6 +7301,17 @@
         "updatedAt": "2026-05-07T08:44:30.916Z"
       },
       {
+        "id": "aaa9f00e-08ec-4208-8d29-a9863311a754",
+        "sessionEntryId": "fa9bf079-db1b-45e2-bcc2-78f47a994c9e",
+        "songId": "4e6ab062-9c8d-4f69-bc96-66cccbc45ca6",
+        "songTitleSnapshot": "IT COULD HAPPEN TO YOU",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T07:39:00.176Z",
+        "updatedAt": "2026-06-09T07:39:00.176Z"
+      },
+      {
         "id": "aad2cb6d-bbb6-4f44-a365-546266b8b05a",
         "sessionEntryId": "3c526b34-5e9f-44e0-bbb6-c8a6ada5a217",
         "songId": "c5ea632f-5c80-489e-a020-81136a885e1c",
@@ -6708,6 +7321,50 @@
         "priority": 2,
         "createdAt": "2026-05-07T08:44:30.905Z",
         "updatedAt": "2026-05-07T08:44:30.905Z"
+      },
+      {
+        "id": "ab2c14b7-856f-4394-a9c4-fe2f213407c7",
+        "sessionEntryId": "3ccd934a-cafb-4a39-bb70-b220dfe3ca7c",
+        "songId": "0e4ccdfa-bf0a-45e2-b343-fa239b47a064",
+        "songTitleSnapshot": "SPAIN",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T07:34:32.294Z",
+        "updatedAt": "2026-06-09T07:34:32.294Z"
+      },
+      {
+        "id": "ac58b196-4d31-48f4-b410-7978ff6e1a11",
+        "sessionEntryId": "a2ffbdb7-4755-4a48-ada0-fc1b18c7f71a",
+        "songId": "429b5c64-05fb-4404-80be-990691957975",
+        "songTitleSnapshot": "I REMEMBER YOU",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T08:07:13.353Z",
+        "updatedAt": "2026-06-09T08:07:13.353Z"
+      },
+      {
+        "id": "ac69767e-8204-4d82-a764-5883fd5e419a",
+        "sessionEntryId": "078bc315-07a4-47ed-9570-21b04b0cc20c",
+        "songId": "cc51adc2-987a-457b-b450-cf270a88976b",
+        "songTitleSnapshot": "FIVE SPOT AFTER DARK",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T07:26:12.840Z",
+        "updatedAt": "2026-06-09T07:26:12.840Z"
+      },
+      {
+        "id": "b3d401df-63ab-462d-9c80-90c33896e86a",
+        "sessionEntryId": "456e3b03-24e5-4970-80b5-dde02f46ad98",
+        "songId": "8d396f41-66e0-4b52-9a88-89bdda78231c",
+        "songTitleSnapshot": "SUMMERTIME",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T08:09:11.602Z",
+        "updatedAt": "2026-06-09T08:09:11.602Z"
       },
       {
         "id": "b503cf36-c874-4b8f-9b53-326799580f97",
@@ -6776,6 +7433,17 @@
         "updatedAt": "2026-05-07T08:44:30.934Z"
       },
       {
+        "id": "bc23f204-fd96-4ee8-b2e8-215fbfd9a407",
+        "sessionEntryId": "901389b5-b4dd-4fed-acf7-54be22f59542",
+        "songId": "1a0ce149-f1f4-4dd7-abd7-f7d017256d06",
+        "songTitleSnapshot": "DAT DERE",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T07:24:50.620Z",
+        "updatedAt": "2026-06-09T07:24:50.620Z"
+      },
+      {
         "id": "bc48d34c-81d7-4b10-88e6-a15f720beb14",
         "sessionEntryId": "feaa771a-8b17-4fe0-bd41-2d067f52eeb4",
         "songId": "515e0911-a088-4156-b3e5-0fe62eb0baf3",
@@ -6842,6 +7510,28 @@
         "updatedAt": "2026-05-07T08:44:30.906Z"
       },
       {
+        "id": "c522206a-64d9-4d79-b1b8-67ee99a315e6",
+        "sessionEntryId": "7fc605ee-7c9f-4382-89b5-02edf11abf23",
+        "songId": "b79df733-5ba3-4f3b-b9b2-bf828f159574",
+        "songTitleSnapshot": "INVITATION",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T07:36:44.175Z",
+        "updatedAt": "2026-06-09T07:36:44.175Z"
+      },
+      {
+        "id": "c582d427-bbe9-45d0-a849-668872849543",
+        "sessionEntryId": "103115d2-e894-4632-a0f9-e21c20f95077",
+        "songId": "92ead2b2-be25-4373-a55e-8977a74b6a6b",
+        "songTitleSnapshot": "AUTUMN LEAVES",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T07:19:27.961Z",
+        "updatedAt": "2026-06-09T07:19:27.961Z"
+      },
+      {
         "id": "c706f66c-21bd-4889-b5e0-ae3a60c7b947",
         "sessionEntryId": "d294c22f-d530-4924-8fb4-46458f3ecc0f",
         "songId": "f79ed277-2e63-4f75-9b1c-a15abba54e7e",
@@ -6873,6 +7563,28 @@
         "priority": 1,
         "createdAt": "2026-05-07T08:44:30.880Z",
         "updatedAt": "2026-05-07T08:44:30.880Z"
+      },
+      {
+        "id": "cab7f1f8-2cb1-4c0a-978f-ee3a5b8f3d1f",
+        "sessionEntryId": "9c57dc8b-b12e-4ad2-b057-a9f3909683a9",
+        "songId": "5132bfb8-bf96-4d0a-872b-f785e49e2035",
+        "songTitleSnapshot": "MY FAVORITE THINGS",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T07:10:31.336Z",
+        "updatedAt": "2026-06-09T07:10:31.336Z"
+      },
+      {
+        "id": "cc950f56-fae9-4426-b386-d0950feadba6",
+        "sessionEntryId": "0f379057-7cb5-4031-b5a3-aa9908bd531a",
+        "songId": "263b6bb5-8b2e-458e-84c1-66326ef6a731",
+        "songTitleSnapshot": "RECORDAME",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T08:08:14.081Z",
+        "updatedAt": "2026-06-09T08:08:14.081Z"
       },
       {
         "id": "ce2ff15a-2e1c-408f-87cb-e4393c1f380e",
@@ -6908,6 +7620,28 @@
         "updatedAt": "2026-05-07T08:44:30.867Z"
       },
       {
+        "id": "d44ec1c8-6ddc-472c-abab-52395da98f25",
+        "sessionEntryId": "3ccd934a-cafb-4a39-bb70-b220dfe3ca7c",
+        "songId": "795f9199-0d49-4c4d-9bc5-0cfe4b1399fc",
+        "songTitleSnapshot": "BOLIVIA",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T07:34:32.055Z",
+        "updatedAt": "2026-06-09T07:34:32.055Z"
+      },
+      {
+        "id": "d4c7b6dd-5e2a-4a58-bf4b-19015653add6",
+        "sessionEntryId": "1ffffa4f-0af1-4fde-83b5-9a22152ba44f",
+        "songId": "f3a7db74-5fd2-4be3-80ca-97cc0d2f6ac5",
+        "songTitleSnapshot": "I CAN T GIVE YOU ANYTHING BUT LOVE",
+        "keyName": "C",
+        "round": 1,
+        "priority": 4,
+        "createdAt": "2026-06-09T08:12:36.745Z",
+        "updatedAt": "2026-06-09T08:12:36.745Z"
+      },
+      {
         "id": "d4f97446-d4d4-484c-8dfa-0c748b5a0470",
         "sessionEntryId": "d294c22f-d530-4924-8fb4-46458f3ecc0f",
         "songId": "064e8c68-8ad8-433d-9e99-ce1aa92cd631",
@@ -6917,17 +7651,6 @@
         "priority": 2,
         "createdAt": "2026-05-07T08:44:30.823Z",
         "updatedAt": "2026-05-07T08:44:30.823Z"
-      },
-      {
-        "id": "d69f095f-70c5-4953-8e75-bba166a6017a",
-        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
-        "songId": "53ae1e4b-5739-4a39-8f76-14b72c1bd7d0",
-        "songTitleSnapshot": "ALL THE THINGS YOU ARE",
-        "keyName": null,
-        "round": 1,
-        "priority": 1,
-        "createdAt": "2026-05-29T05:33:15.126Z",
-        "updatedAt": "2026-05-29T05:33:15.126Z"
       },
       {
         "id": "d6b1b3c1-50d8-4205-b6b0-293b8d854f7c",
@@ -6963,6 +7686,17 @@
         "updatedAt": "2026-05-07T08:44:30.890Z"
       },
       {
+        "id": "da1b5677-60c0-4f3c-b908-cf8211855bcd",
+        "sessionEntryId": "bf13ee5f-2231-416b-9670-170f8a46de59",
+        "songId": "7c25efbc-ec67-43fd-ae98-c066b39df375",
+        "songTitleSnapshot": "I SHOULD CARE",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T07:27:32.043Z",
+        "updatedAt": "2026-06-09T07:27:32.043Z"
+      },
+      {
         "id": "daac4189-555e-4bda-b522-c526b148e19b",
         "sessionEntryId": "50cd8d54-4fc0-4fc2-a35c-ebbe3fd049dc",
         "songId": "48ed3836-7d89-46f2-b91b-4467b704e176",
@@ -6974,6 +7708,17 @@
         "updatedAt": "2026-05-07T08:44:30.850Z"
       },
       {
+        "id": "dc83675f-ccaf-4ec3-8f00-755fdbbabf91",
+        "sessionEntryId": "a500b001-d8ed-4a9c-a6ac-e8f26dc00c5b",
+        "songId": "5db867f4-d04d-4c10-b099-d5fc57856cf0",
+        "songTitleSnapshot": "APRIL IN PARIS",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T07:22:12.284Z",
+        "updatedAt": "2026-06-09T07:22:12.284Z"
+      },
+      {
         "id": "dedb6a73-c9b8-425d-bb81-18e66dfb9558",
         "sessionEntryId": "f5e438d5-164c-469b-b927-22ba89b6e301",
         "songId": "cbbf066d-b46c-4209-8773-966629c93763",
@@ -6983,6 +7728,17 @@
         "priority": 1,
         "createdAt": "2026-05-07T08:44:30.901Z",
         "updatedAt": "2026-05-07T08:44:30.901Z"
+      },
+      {
+        "id": "df3374b0-ef39-4915-908b-743c0c9470ec",
+        "sessionEntryId": "bf13ee5f-2231-416b-9670-170f8a46de59",
+        "songId": "01ba577f-65aa-48c8-a019-53a814a17000",
+        "songTitleSnapshot": "AIREGIN",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T07:27:31.746Z",
+        "updatedAt": "2026-06-09T07:27:31.746Z"
       },
       {
         "id": "dfbfca09-92a9-4160-8ba6-ca043e4d679b",
@@ -7016,6 +7772,39 @@
         "priority": 1,
         "createdAt": "2026-05-07T08:44:30.875Z",
         "updatedAt": "2026-05-07T08:44:30.875Z"
+      },
+      {
+        "id": "e71488ad-fac8-44ea-97fd-e6ed651aa15f",
+        "sessionEntryId": "456e3b03-24e5-4970-80b5-dde02f46ad98",
+        "songId": "c053fdd1-9e63-4272-9af3-74e9879a5e70",
+        "songTitleSnapshot": "GIRL FROM IPANEMA",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T08:09:11.371Z",
+        "updatedAt": "2026-06-09T08:09:11.371Z"
+      },
+      {
+        "id": "ea7c1ebe-e007-4eef-a6c0-b1bbb4c1b1a6",
+        "sessionEntryId": "54b11aba-4479-4764-8764-47f4f4ab3dd1",
+        "songId": "71859ccd-cd7b-47c1-844e-dfef098036f6",
+        "songTitleSnapshot": "WORK SONG",
+        "keyName": null,
+        "round": 1,
+        "priority": 2,
+        "createdAt": "2026-06-09T08:10:18.267Z",
+        "updatedAt": "2026-06-09T08:10:18.267Z"
+      },
+      {
+        "id": "ec1f2817-5447-46bb-af5d-0ca1580476c4",
+        "sessionEntryId": "103115d2-e894-4632-a0f9-e21c20f95077",
+        "songId": "6092b866-6689-498b-8024-cec02f65d31c",
+        "songTitleSnapshot": "LADY BIRD",
+        "keyName": null,
+        "round": 1,
+        "priority": 1,
+        "createdAt": "2026-06-09T07:19:27.730Z",
+        "updatedAt": "2026-06-09T07:19:27.730Z"
       },
       {
         "id": "ed476a09-64bf-402e-b67b-aed0e82ff7ec",
@@ -7117,15 +7906,15 @@
         "updatedAt": "2026-05-07T08:44:30.829Z"
       },
       {
-        "id": "fe1d7690-193f-4f00-a3be-86bd3b17f9d1",
-        "sessionEntryId": "928fdccd-011f-4ebb-8e1f-fd97bed0d24a",
-        "songId": "7ad90953-f3d5-4ee7-921f-2459fa2added",
-        "songTitleSnapshot": "BUT NOT FOR ME",
+        "id": "fc6d1bcb-c6bf-47c1-a0e0-9ee9b30fbde3",
+        "sessionEntryId": "90fbbb29-dd51-4b83-a564-51749f1a946a",
+        "songId": "1f889dca-949a-48d7-bacf-24cefafb08af",
+        "songTitleSnapshot": "SOFTLY, AS IN A MORNING SUNRISE",
         "keyName": null,
         "round": 1,
-        "priority": 2,
-        "createdAt": "2026-05-29T05:36:01.836Z",
-        "updatedAt": "2026-05-29T05:36:01.836Z"
+        "priority": 1,
+        "createdAt": "2026-06-09T07:23:25.756Z",
+        "updatedAt": "2026-06-09T07:23:25.756Z"
       }
     ],
     "sessionSets": [
@@ -8530,7 +9319,7 @@
         "userAccountId": "239e550e-5e74-45c8-8d8a-03b91df51ac9",
         "sessionTokenHash": "8d41c89468047b7dffc875c4c761ec54bf9a02fbc93190f294b09f28cbdea3a6",
         "expiresAt": "2026-06-11T08:47:29.711Z",
-        "lastAccessedAt": "2026-06-08T03:02:08.911Z",
+        "lastAccessedAt": "2026-06-08T07:33:51.553Z",
         "createdAt": "2026-06-04T08:47:29.712Z"
       },
       {
@@ -8586,6 +9375,18 @@
         "errorMessage": null,
         "createdAt": "2026-05-28T04:58:46.774Z",
         "sentAt": "2026-05-28T04:58:54.524Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
+        "id": "0544a8ea-a4e5-4451-a326-a5ed135df827",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member26@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member26@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member26@adlib-go.local\n\n木村光 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.944Z",
+        "sentAt": "2026-06-09T08:16:01.431Z",
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
       },
       {
@@ -8961,6 +9762,18 @@
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
       },
       {
+        "id": "29329864-5875-4d95-b398-9df603c6cabc",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member20@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member20@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member20@adlib-go.local\n\n白井清 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.945Z",
+        "sentAt": "2026-06-09T08:15:42.844Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
         "id": "2a2327f0-6856-49a3-b402-23c02ecfab81",
         "mailType": "session_event_announced",
         "toAddress": "member08@adlib-go.local => tki6ra@icloud.com",
@@ -9066,6 +9879,18 @@
         "errorMessage": null,
         "createdAt": "2026-05-28T04:22:45.694Z",
         "sentAt": "2026-05-28T04:22:50.779Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
+        "id": "37508e43-7f7b-4cc0-87ef-7c68a36145d0",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member25@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member25@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member25@adlib-go.local\n\n木村孝 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.943Z",
+        "sentAt": "2026-06-09T08:15:47.555Z",
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
       },
       {
@@ -9177,6 +10002,18 @@
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
       },
       {
+        "id": "4953e614-10ed-4c2f-b5c8-421ee19ba28c",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member07@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member07@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member07@adlib-go.local\n\n藤井友 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.942Z",
+        "sentAt": "2026-06-09T08:15:37.094Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
         "id": "4a4a3c2c-b624-40dd-ba25-1d9120e95623",
         "mailType": "session_event_announced",
         "toAddress": "member22@adlib-go.local => tki6ra@icloud.com",
@@ -9210,6 +10047,18 @@
         "errorMessage": null,
         "createdAt": "2026-05-28T02:51:52.974Z",
         "sentAt": "2026-05-28T02:51:54.843Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
+        "id": "4f0a4c95-8e0a-4115-b0e0-a2cbf1472acd",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member18@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member18@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member18@adlib-go.local\n\n加藤力 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.943Z",
+        "sentAt": "2026-06-09T08:16:05.373Z",
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
       },
       {
@@ -9261,6 +10110,18 @@
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
       },
       {
+        "id": "57bf2a92-46bc-4c7e-98a1-879c5b7f4abe",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member04@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member04@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member04@adlib-go.local\n\n山本慎 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.942Z",
+        "sentAt": "2026-06-09T08:15:35.964Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
         "id": "58bfdd14-e747-404c-8f27-0db3f78eea67",
         "mailType": "session_event_round1_started",
         "toAddress": "member11@adlib-go.local => tki6ra@icloud.com",
@@ -9309,6 +10170,18 @@
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
       },
       {
+        "id": "5ec06dd5-078f-40cf-94c4-b0c181b2a0da",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member02@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member02@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member02@adlib-go.local\n\n小杉 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.944Z",
+        "sentAt": "2026-06-09T08:16:02.837Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
         "id": "6065cbe0-b50e-421f-a20f-c8f6137bcc13",
         "mailType": "session_event_announced",
         "toAddress": "member29@adlib-go.local => tki6ra@icloud.com",
@@ -9333,6 +10206,18 @@
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
       },
       {
+        "id": "669e75a9-a059-4596-ba9b-b2e36e930f01",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member01@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member01@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member01@adlib-go.local\n\n大橋 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.944Z",
+        "sentAt": "2026-06-09T08:15:53.320Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
         "id": "67215a23-47c5-447b-849f-6ac2bfc238f5",
         "mailType": "session_event_announced",
         "toAddress": "member29@adlib-go.local => tki6ra@icloud.com",
@@ -9342,6 +10227,18 @@
         "errorMessage": "Invalid greeting. response=421 4.7.0 mail1023.onamae.ne.jp Error: too many connections from 1.33.51.179: 421 4.7.0 mail1023.onamae.ne.jp Error: too many connections from 1.33.51.179",
         "createdAt": "2026-05-28T02:22:12.654Z",
         "sentAt": null,
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
+        "id": "67948de4-2885-4ad2-80be-0cd909d5fb70",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member10@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member10@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member10@adlib-go.local\n\n清水 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.945Z",
+        "sentAt": "2026-06-09T08:15:39.362Z",
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
       },
       {
@@ -9381,6 +10278,18 @@
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
       },
       {
+        "id": "6976c410-ba41-432e-a117-94b2d549668e",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member16@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member16@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member16@adlib-go.local\n\n上田 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.944Z",
+        "sentAt": "2026-06-09T08:15:58.035Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
         "id": "698615d9-ef88-4eaf-8046-f854a5a9a128",
         "mailType": "session_event_round1_started",
         "toAddress": "member12@adlib-go.local => tki6ra@icloud.com",
@@ -9417,6 +10326,30 @@
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
       },
       {
+        "id": "6f845b7b-70aa-4526-9bf2-9f959b81cd8f",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member19@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member19@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member19@adlib-go.local\n\n杉山 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.945Z",
+        "sentAt": "2026-06-09T08:15:41.683Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
+        "id": "704444bb-175d-415d-81e3-beace96e2015",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member21@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member21@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member21@adlib-go.local\n\n有海 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.945Z",
+        "sentAt": "2026-06-09T08:15:43.969Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
         "id": "705b4d48-6f6c-4170-a330-0894a2d4a6e8",
         "mailType": "session_event_announced",
         "toAddress": "member28@adlib-go.local => tki6ra@icloud.com",
@@ -9438,6 +10371,18 @@
         "errorMessage": null,
         "createdAt": "2026-05-28T04:40:04.704Z",
         "sentAt": "2026-05-28T04:40:09.545Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
+        "id": "7661049d-e290-4d1e-9e1e-f50655da18b9",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member27@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member27@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member27@adlib-go.local\n\n中尾 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\nvocal の方はラウンド2での追加選曲はありません。結果公開までお待ちください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.944Z",
+        "sentAt": "2026-06-09T08:15:52.143Z",
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
       },
       {
@@ -9498,6 +10443,18 @@
         "errorMessage": null,
         "createdAt": "2026-05-28T02:51:52.974Z",
         "sentAt": "2026-05-28T02:51:58.190Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
+        "id": "7d2789c9-0869-42e0-876a-4488904a86f5",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member03@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member03@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member03@adlib-go.local\n\n阪井 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.942Z",
+        "sentAt": "2026-06-09T08:15:34.712Z",
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
       },
       {
@@ -9681,6 +10638,18 @@
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
       },
       {
+        "id": "96038ca6-58da-4fc4-9534-a800cd24b0f4",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member06@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member06@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member06@adlib-go.local\n\n寺野 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.944Z",
+        "sentAt": "2026-06-09T08:15:56.857Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
         "id": "9795f2c5-9152-454f-bf6e-932e35686eaa",
         "mailType": "session_event_announced",
         "toAddress": "member20@adlib-go.local => tki6ra@icloud.com",
@@ -9717,6 +10686,18 @@
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
       },
       {
+        "id": "9d8754df-cdd2-46cb-8041-d4f75e042f3c",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member13@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member13@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member13@adlib-go.local\n\n網野 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.943Z",
+        "sentAt": "2026-06-09T08:15:54.460Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
         "id": "9dfc80db-ee4b-4f8f-8be0-ade6c5f6d6c3",
         "mailType": "session_event_announced",
         "toAddress": "member03@adlib-go.local => tki6ra@icloud.com",
@@ -9726,6 +10707,18 @@
         "errorMessage": null,
         "createdAt": "2026-05-28T04:58:46.774Z",
         "sentAt": "2026-05-28T04:59:19.099Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
+        "id": "9fb669e7-d1d1-4dcd-93cd-b5da5df162f6",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member17@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member17@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member17@adlib-go.local\n\n鈴木了 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.943Z",
+        "sentAt": "2026-06-09T08:15:50.942Z",
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
       },
       {
@@ -9849,6 +10842,30 @@
         "createdById": null
       },
       {
+        "id": "b8d5705a-8b6a-4a68-b083-e4db65d7b7e8",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member28@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member28@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member28@adlib-go.local\n\n中川 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\nvocal の方はラウンド2での追加選曲はありません。結果公開までお待ちください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.945Z",
+        "sentAt": "2026-06-09T08:15:46.372Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
+        "id": "ba085038-37c1-4224-bec5-bdfe878303dd",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member11@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member11@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member11@adlib-go.local\n\n藤井 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.944Z",
+        "sentAt": "2026-06-09T08:16:04.202Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
         "id": "ba5ab972-0bf4-4e17-ae8c-d4d689718d45",
         "mailType": "session_event_round1_started",
         "toAddress": "member07@adlib-go.local => tki6ra@icloud.com",
@@ -9870,6 +10887,18 @@
         "errorMessage": null,
         "createdAt": "2026-05-28T04:22:45.692Z",
         "sentAt": "2026-05-28T04:22:46.809Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
+        "id": "bb381c44-8bd6-41ca-9863-49aa835ee513",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member24@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member24@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member24@adlib-go.local\n\n野澤 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.943Z",
+        "sentAt": "2026-06-09T08:16:00.293Z",
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
       },
       {
@@ -9981,6 +11010,18 @@
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
       },
       {
+        "id": "c89c53fd-e106-4322-8a0b-8f7b75ccca63",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member22@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member22@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member22@adlib-go.local\n\n小川秀 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.945Z",
+        "sentAt": "2026-06-09T08:15:45.104Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
         "id": "cc5c9b1f-79aa-49ba-b1c8-d6ef11e0ac4a",
         "mailType": "session_event_round1_started",
         "toAddress": "member15@adlib-go.local => tki6ra@icloud.com",
@@ -10017,6 +11058,18 @@
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
       },
       {
+        "id": "cfc83d62-128e-4c52-be9f-efb68c19a237",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member12@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member12@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member12@adlib-go.local\n\n内藤 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.943Z",
+        "sentAt": "2026-06-09T08:15:48.683Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
         "id": "d12717c2-33b8-4763-a16f-4bad04e919b0",
         "mailType": "session_event_round1_started",
         "toAddress": "member01@adlib-go.local => tki6ra@icloud.com",
@@ -10038,6 +11091,18 @@
         "errorMessage": null,
         "createdAt": "2026-05-28T04:40:04.706Z",
         "sentAt": "2026-05-28T04:40:07.466Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
+        "id": "d4aa9c04-d03c-4d8f-b172-e01b6b988200",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member15@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member15@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member15@adlib-go.local\n\n篠原 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.943Z",
+        "sentAt": "2026-06-09T08:15:55.586Z",
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
       },
       {
@@ -10257,6 +11322,18 @@
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
       },
       {
+        "id": "ee28fa12-848d-478c-ad03-b633d1df5fa0",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member23@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member23@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member23@adlib-go.local\n\n関 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.943Z",
+        "sentAt": "2026-06-09T08:15:59.164Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
         "id": "ef79e3f5-6f63-4c09-9660-0584a8694777",
         "mailType": "session_event_announced",
         "toAddress": "member13@adlib-go.local => tki6ra@icloud.com",
@@ -10341,6 +11418,30 @@
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
       },
       {
+        "id": "f6da0661-62f7-4a78-9a2f-0db0766844c7",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member09@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member09@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member09@adlib-go.local\n\n竹本 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.942Z",
+        "sentAt": "2026-06-09T08:15:40.497Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
+        "id": "f7e99ab7-f67e-4f3e-b02e-11a9ee893859",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member05@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member05@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member05@adlib-go.local\n\n白浜 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.944Z",
+        "sentAt": "2026-06-09T08:15:49.814Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
         "id": "fb10e87c-1b2e-4e84-badc-9702df88b4ac",
         "mailType": "session_event_announced",
         "toAddress": "member06@adlib-go.local => tki6ra@icloud.com",
@@ -10362,6 +11463,18 @@
         "errorMessage": null,
         "createdAt": "2026-05-28T04:58:46.771Z",
         "sentAt": "2026-05-28T04:58:47.563Z",
+        "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
+      },
+      {
+        "id": "fbac9844-d4ce-4443-99b3-8669eb5d05ea",
+        "mailType": "session_event_round2_started",
+        "toAddress": "member08@adlib-go.local => tki6ra@icloud.com",
+        "subject": "[MAIL TEST to:member08@adlib-go.local] 【Adlib-go】愉快ですよテストセッション の募集ラウンド2が始まりました",
+        "bodySummary": "このメールはテストモードで tki6ra@icloud.com にリダイレクトされています。\n本来の宛先: member08@adlib-go.local\n\n岡部 様\n\n愉快ですよテストセッション の募集ラウンド2を開始しました。\n候補曲の中から 2 曲を選び、メンバーページから登録してください。\n開催日: 2026/6/20\n会場: 荒川第２会場",
+        "status": "sent",
+        "errorMessage": null,
+        "createdAt": "2026-06-09T08:15:33.942Z",
+        "sentAt": "2026-06-09T08:15:38.234Z",
         "createdById": "4e0c8834-195e-4343-bb52-2bda851ff716"
       },
       {

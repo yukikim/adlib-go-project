@@ -27,6 +27,10 @@ export function formatEventDateTime(value: string | Date) {
   const date = value instanceof Date ? value : new Date(value);
   return `${jaEventDateFormatter.format(date)} ${jaTimeFormatter.format(date)}`;
 }
+export function formatEventDate(value: string | Date) {
+  const date = value instanceof Date ? value : new Date(value);
+  return `${jaEventDateFormatter.format(date)}`;
+}
 
 export function formatEventSchedule(eventDate: string | Date, startTime?: string | Date | null, endTime?: string | Date | null) {
   const eventDateValue = eventDate instanceof Date ? eventDate : new Date(eventDate);

@@ -63,7 +63,9 @@ const chooseRandomForcedParticipant = (
   maxCount: number,
   participationCount: ParticipationCount,
 ): Participant | undefined => {
-  const available = candidates.filter((candidate) => participationCount[candidate.id] < maxCount);
+  const available = candidates.filter(
+    (candidate) => candidate.allowForcedAssignment !== false && participationCount[candidate.id] < maxCount,
+  );
 
   if (available.length === 0) {
     return undefined;
@@ -79,6 +81,26 @@ const chooseRandomForcedParticipant = (
 
   const randomIndex = Math.floor(Math.random() * prioritized.length);
   return prioritized[randomIndex];
+};
+
+const getMissingForcedPartReason = (
+  candidates: Participant[],
+  maxCount: number,
+  participationCount: ParticipationCount,
+  partLabel: string,
+): string => {
+  const forceAllowed = candidates.filter((candidate) => candidate.allowForcedAssignment !== false);
+
+  if (forceAllowed.length === 0) {
+    return `${partLabel} の強制参加許可者がいません`;
+  }
+
+  const available = forceAllowed.filter((candidate) => participationCount[candidate.id] < maxCount);
+  if (available.length === 0) {
+    return `${partLabel} の強制参加許可者が割り当て上限に達しています`;
+  }
+
+  return `${partLabel} の強制参加候補を確保できません`;
 };
 
 const buildSkippedSong = (
@@ -327,9 +349,14 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
     }
 
     if (!drum || !bass || !piano) {
-      remainingSkippedSongs.push(
-        buildSkippedSong(songTitle, drum, bass, piano, byInstrument, participationCount),
-      );
+      remainingSkippedSongs.push({
+        songTitle,
+        reasons: [
+          !drum ? getMissingForcedPartReason(allByInstrument.drum, 4, participationCount, 'Drum') : undefined,
+          !bass ? getMissingForcedPartReason(allByInstrument.bass, 4, participationCount, 'Bass') : undefined,
+          !piano ? getMissingForcedPartReason(allByInstrument.piano, 4, participationCount, 'Piano') : undefined,
+        ].filter((reason): reason is string => Boolean(reason)),
+      });
       continue;
     }
 

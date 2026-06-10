@@ -55,6 +55,7 @@ export async function POST(request: NextRequest) {
   const afterPartyAttendanceStatusUpdate = sessionEvent.hasAfterParty
     ? (body.afterPartyAttendanceStatus === undefined ? undefined : nextAfterPartyAttendanceStatus)
     : null;
+  const nextAllowForcedAssignment = body.allowForcedAssignment ?? true;
 
   const entryState = getSessionEventEntryState(sessionEvent);
   if (!entryState.canSubmit || !entryState.round) {
@@ -133,7 +134,7 @@ export async function POST(request: NextRequest) {
     if (round1Count > 4 || round2Count > 0 || persistedRequests.length > 4) {
       return NextResponse.json({ error: 'Vocal request limits exceeded' }, { status: 400 });
     }
-  } else if (round1Count > 2 || round2Count > 2 || persistedRequests.length > 4) {
+  } else if (round1Count > 2) {
     return NextResponse.json({ error: 'Request limits exceeded' }, { status: 400 });
   }
 
@@ -180,6 +181,7 @@ export async function POST(request: NextRequest) {
         },
         update: {
           attendanceStatus: body.attendanceStatus,
+          allowForcedAssignment: nextAllowForcedAssignment,
           ...(afterPartyAttendanceStatusUpdate !== undefined
             ? { afterPartyAttendanceStatus: afterPartyAttendanceStatusUpdate }
             : {}),
@@ -189,6 +191,7 @@ export async function POST(request: NextRequest) {
           memberProfileId: memberProfile.id,
           attendanceStatus: body.attendanceStatus,
           afterPartyAttendanceStatus: nextAfterPartyAttendanceStatus,
+          allowForcedAssignment: nextAllowForcedAssignment,
         },
       });
 

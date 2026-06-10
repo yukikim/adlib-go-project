@@ -86,6 +86,7 @@ export type SessionEventView = {
     id: string;
     attendanceStatus: AttendanceStatus;
     afterPartyAttendanceStatus?: AttendanceStatus | null;
+    allowForcedAssignment?: boolean;
     memberProfile: {
       id: string;
       displayName: string;
@@ -116,6 +117,7 @@ export type SessionEntryView = {
   sessionEventId: string;
   attendanceStatus: AttendanceStatus;
   afterPartyAttendanceStatus?: AttendanceStatus | null;
+  allowForcedAssignment?: boolean;
   sessionEvent: {
     id: string;
     title: string;

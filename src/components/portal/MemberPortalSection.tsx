@@ -35,7 +35,7 @@ import {
   isSessionEventFinished,
 } from "@/lib/sessionEventStatus";
 import { formatRoundCandidateSong } from "@/lib/sessionEventWindow";
-import { formatEventSchedule, formatYen } from "@/lib/utils";
+import { formatEventDate, formatEventSchedule, formatYen } from "@/lib/utils";
 import { ChevronDown } from 'lucide-react';
 import type {
   AnnouncementView,
@@ -289,12 +289,12 @@ type MemberPortalSectionProps = {
   memberEventId: string;
   memberAttendanceStatus: AttendanceStatus;
   memberAfterPartyAttendanceStatus: AttendanceStatus;
+  memberAllowForcedAssignment: boolean;
   memberRound1Song1: string;
   memberRound1Song2: string;
   memberRound1Song3: string;
   memberRound1Song4: string;
-  memberRound2Song1: string;
-  memberRound2Song2: string;
+  memberRound2Songs: string[];
   memberRound1Key1: string;
   memberRound1Key2: string;
   memberRound1Key3: string;
@@ -308,12 +308,12 @@ type MemberPortalSectionProps = {
   setMemberEventId: (value: string) => void;
   setMemberAttendanceStatus: (value: AttendanceStatus) => void;
   setMemberAfterPartyAttendanceStatus: (value: AttendanceStatus) => void;
+  setMemberAllowForcedAssignment: (value: boolean) => void;
   setMemberRound1Song1: (value: string) => void;
   setMemberRound1Song2: (value: string) => void;
   setMemberRound1Song3: (value: string) => void;
   setMemberRound1Song4: (value: string) => void;
-  setMemberRound2Song1: (value: string) => void;
-  setMemberRound2Song2: (value: string) => void;
+  setMemberRound2Songs: (value: string[]) => void;
   setMemberRound1Key1: (value: string) => void;
   setMemberRound1Key2: (value: string) => void;
   setMemberRound1Key3: (value: string) => void;
@@ -369,12 +369,12 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     memberEventId,
     memberAttendanceStatus,
     memberAfterPartyAttendanceStatus,
+    memberAllowForcedAssignment,
     memberRound1Song1,
     memberRound1Song2,
     memberRound1Song3,
     memberRound1Song4,
-    memberRound2Song1,
-    memberRound2Song2,
+    memberRound2Songs,
     memberRound1Key1,
     memberRound1Key2,
     memberRound1Key3,
@@ -388,12 +388,12 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     setMemberEventId,
     setMemberAttendanceStatus,
     setMemberAfterPartyAttendanceStatus,
+    setMemberAllowForcedAssignment,
     setMemberRound1Song1,
     setMemberRound1Song2,
     setMemberRound1Song3,
     setMemberRound1Song4,
-    setMemberRound2Song1,
-    setMemberRound2Song2,
+    setMemberRound2Songs,
     setMemberRound1Key1,
     setMemberRound1Key2,
     setMemberRound1Key3,
@@ -472,8 +472,8 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
   );
 
   // console.log('announcedEvents:', announcedEvents);
-  console.log("sessionEvent:", sessionEvents);
-  // console.log('round2RecruitingEvents:', round2RecruitingEvents);
+  // console.log("sessionEvent:", sessionEvents);
+  console.log('round2RecruitingEvents:', round2RecruitingEvents);
   // console.log('publishedEvents:', publishedEvents);
   // console.log('ratingEvents:', ratingEvents);
   // console.log('completedEvents:', completedEvents);
@@ -496,14 +496,30 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
       return [] as string[];
     }
 
-    return [memberRound2Song1, memberRound2Song2].filter(
-      (songTitle) => songTitle.trim().length > 0,
-    );
+    return memberRound2Songs.filter((songTitle) => songTitle.trim().length > 0);
   };
 
   const setSelectedRound2Songs = (songTitles: string[]) => {
-    setMemberRound2Song1(songTitles[0] ?? "");
-    setMemberRound2Song2(songTitles[1] ?? "");
+    setMemberRound2Songs(songTitles);
+  };
+
+  const getAllowForcedAssignmentForEvent = (eventId: string) => {
+    if (memberEventId === eventId) {
+      return memberAllowForcedAssignment;
+    }
+
+    return getSessionEntryForEvent(eventId)?.allowForcedAssignment ?? true;
+  };
+
+  const handleAllowForcedAssignmentChange = (
+    eventId: string,
+    checked: boolean,
+  ) => {
+    if (memberEventId !== eventId) {
+      setMemberEventId(eventId);
+    }
+
+    setMemberAllowForcedAssignment(checked);
   };
 
   const handleRound2SongToggle = (
@@ -525,9 +541,6 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             normalizeSongTitle(selectedSong) === normalizedSongTitle,
         )
       ) {
-        return;
-      }
-      if (currentSelections.length >= 2) {
         return;
       }
 
@@ -563,15 +576,14 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     const selectedSongSet = new Set(
       selectedSongs.map((songTitle) => normalizeSongTitle(songTitle)),
     );
-    const selectionLimitReached = selectedSongs.length >= 2;
     const interactive = options?.interactive ?? true;
+    const allowForcedAssignment = getAllowForcedAssignmentForEvent(eventId);
 
     return (
       <div className="my-2">
         <p className="text-sm font-medium">Round2 追加リクエスト</p>
         <p className="mt-1 text-sm text-muted-foreground">
-          Round1 の名寄せ済み候補から、自分が Round1 で選んだ曲を除いた曲を 2
-          曲まで選択できます。
+          Round1 の名寄せ済み候補から、自分が Round1 で選んだ曲を除いた曲を複数選択できます。
         </p>
         {options?.showSaveHint ? (
           <p className="mt-1 text-xs text-muted-foreground">
@@ -606,7 +618,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             <p className="text-xs font-medium text-muted-foreground">
               選択可能な候補曲
             </p>
-            <Badge variant="outline">選択中 {selectedSongs.length}/2</Badge>
+            <Badge variant="outline">選択中 {selectedSongs.length}曲</Badge>
           </div>
           {availableSongs.length === 0 ? (
             <p className="mt-2 text-sm text-muted-foreground">
@@ -639,25 +651,42 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                           nextChecked === true,
                         );
                       }}
-                      disabled={
-                        !interactive || (!checked && selectionLimitReached)
-                      }
+                      disabled={!interactive}
                     />
                     <div className="space-y-1">
                       <p className="text-sm font-medium leading-5">
                         {songTitle}
                       </p>
-                      {!checked && selectionLimitReached ? (
-                        <p className="text-xs text-muted-foreground">
-                          2 曲選択中のため追加できません。
-                        </p>
-                      ) : null}
                     </div>
                   </label>
                 );
               })}
             </div>
           )}
+        </div>
+
+        <div className="mt-3 rounded-lg border bg-background/70 p-3">
+          <label className="flex cursor-pointer items-start gap-3">
+            <Checkbox
+              checked={allowForcedAssignment}
+              onCheckedChange={(nextChecked) => {
+                if (!interactive) {
+                  return;
+                }
+
+                handleAllowForcedAssignmentChange(eventId, nextChecked === true);
+              }}
+              disabled={!interactive}
+            />
+            <div className="space-y-1">
+              <p className="text-sm font-medium leading-5">
+                自動生成での強制参加を許可する
+              </p>
+              <p className="text-xs text-muted-foreground">
+                オフにすると、不足パート補完の自動強制追加対象から外れます。管理者による手動割り当ては可能です。
+              </p>
+            </div>
+          </label>
         </div>
       </div>
     );
@@ -848,6 +877,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                               )}{" "}
                               / {event.venue}
                             </p>
+                            <p>ラウンド1募集期間: {event.round1StartAt ? formatEventDate(event.round1StartAt) : ""} ~ {event.round1EndAt ? formatEventDate(event.round1EndAt) : ""}</p>
                             <EventMeta
                               participantLimit={event.participantLimit}
                               attendingEntryCount={event.attendingEntryCount}
@@ -1022,6 +1052,25 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     </Select>
                   </Field>
                 ) : null}
+
+                <div className="rounded-lg border bg-background/70 p-3">
+                  <label className="flex cursor-pointer items-start gap-3">
+                    <Checkbox
+                      checked={memberAllowForcedAssignment}
+                      onCheckedChange={(nextChecked) =>
+                        setMemberAllowForcedAssignment(nextChecked === true)
+                      }
+                    />
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium leading-5">
+                        自動生成での強制参加を許可する
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        オフにすると、このイベントでは不足パート補完の自動強制追加対象から外れます。管理者による手動割り当ては可能です。
+                      </p>
+                    </div>
+                  </label>
+                </div>
 
                 <div
                   className={
@@ -1217,6 +1266,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                       )}{" "}
                       / {event.venue}
                     </p>
+                    <p>ラウンド2募集期間: {event.round2StartAt ? formatEventDate(event.round2StartAt) : ""} ~ {event.round2EndAt ? formatEventDate(event.round2EndAt) : ""}</p>
                     <EventMeta
                       participantLimit={event.participantLimit}
                       attendingEntryCount={event.attendingEntryCount}

@@ -43,12 +43,12 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
   const [memberEventId, setMemberEventId] = useState('');
   const [memberAttendanceStatus, setMemberAttendanceStatus] = useState<AttendanceStatus>('attending');
   const [memberAfterPartyAttendanceStatus, setMemberAfterPartyAttendanceStatus] = useState<AttendanceStatus>('undecided');
+  const [memberAllowForcedAssignment, setMemberAllowForcedAssignment] = useState(true);
   const [memberRound1Song1, setMemberRound1Song1] = useState('');
   const [memberRound1Song2, setMemberRound1Song2] = useState('');
   const [memberRound1Song3, setMemberRound1Song3] = useState('');
   const [memberRound1Song4, setMemberRound1Song4] = useState('');
-  const [memberRound2Song1, setMemberRound2Song1] = useState('');
-  const [memberRound2Song2, setMemberRound2Song2] = useState('');
+  const [memberRound2Songs, setMemberRound2Songs] = useState<string[]>([]);
   const [memberRound1Key1, setMemberRound1Key1] = useState('');
   const [memberRound1Key2, setMemberRound1Key2] = useState('');
   const [memberRound1Key3, setMemberRound1Key3] = useState('');
@@ -167,6 +167,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     if (!currentEntry) {
       setMemberAttendanceStatus('attending');
       setMemberAfterPartyAttendanceStatus('undecided');
+      setMemberAllowForcedAssignment(true);
       setMemberRound1Song1('');
       setMemberRound1Song2('');
       setMemberRound1Song3('');
@@ -175,8 +176,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
       setMemberRound1Key2('');
       setMemberRound1Key3('');
       setMemberRound1Key4('');
-      setMemberRound2Song1('');
-      setMemberRound2Song2('');
+      setMemberRound2Songs([]);
       return;
     }
 
@@ -189,6 +189,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
 
     setMemberAttendanceStatus(currentEntry.attendanceStatus);
     setMemberAfterPartyAttendanceStatus(currentEntry.afterPartyAttendanceStatus ?? 'undecided');
+    setMemberAllowForcedAssignment(currentEntry.allowForcedAssignment ?? true);
     setMemberRound1Song1(round1Requests[0]?.songTitleSnapshot ?? '');
     setMemberRound1Song2(round1Requests[1]?.songTitleSnapshot ?? '');
     setMemberRound1Song3(round1Requests[2]?.songTitleSnapshot ?? '');
@@ -197,8 +198,11 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     setMemberRound1Key2(round1Requests[1]?.keyName ?? '');
     setMemberRound1Key3(round1Requests[2]?.keyName ?? '');
     setMemberRound1Key4(round1Requests[3]?.keyName ?? '');
-    setMemberRound2Song1(formatRoundCandidateSong(round2Requests[0]?.songTitleSnapshot ?? '', round2Requests[0]?.keyName ?? null));
-    setMemberRound2Song2(formatRoundCandidateSong(round2Requests[1]?.songTitleSnapshot ?? '', round2Requests[1]?.keyName ?? null));
+    setMemberRound2Songs(
+      round2Requests
+        .map((request) => formatRoundCandidateSong(request.songTitleSnapshot, request.keyName ?? null))
+        .filter((songTitle) => songTitle.length > 0),
+    );
   }, [memberEventId, sessionEntries]);
 
   useEffect(() => {
@@ -267,8 +271,12 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
             : []),
         ]
       : [
-          { songTitle: memberRound2Song1.trim(), round: 2, priority: 1, keyName: null },
-          { songTitle: memberRound2Song2.trim(), round: 2, priority: 2, keyName: null },
+          ...memberRound2Songs.map((songTitle, index) => ({
+            songTitle: songTitle.trim(),
+            round: 2 as const,
+            priority: index + 1,
+            keyName: null,
+          })),
         ];
 
     const res = await fetch('/api/session-entries', {
@@ -280,6 +288,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
         afterPartyAttendanceStatus: entryState.round === 1 && selectedMemberEvent?.hasAfterParty
           ? memberAfterPartyAttendanceStatus
           : undefined,
+        allowForcedAssignment: memberAllowForcedAssignment,
         requests: requests.filter((item) => item.songTitle),
       }),
     });
@@ -356,6 +365,8 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     setMemberAttendanceStatus,
     memberAfterPartyAttendanceStatus,
     setMemberAfterPartyAttendanceStatus,
+    memberAllowForcedAssignment,
+    setMemberAllowForcedAssignment,
     memberRound1Song1,
     setMemberRound1Song1,
     memberRound1Song2,
@@ -364,10 +375,8 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     setMemberRound1Song3,
     memberRound1Song4,
     setMemberRound1Song4,
-    memberRound2Song1,
-    setMemberRound2Song1,
-    memberRound2Song2,
-    setMemberRound2Song2,
+    memberRound2Songs,
+    setMemberRound2Songs,
     memberRound1Key1,
     setMemberRound1Key1,
     memberRound1Key2,

@@ -18,10 +18,12 @@ export interface Participant {
   /** front のときのみ任意で使用 */
   subInstrument?: string;
   /**
-   * non-vocal: round=1 が2件 + round=2 が2件 → 合計4
-   * vocal:     round=1 が4件、round=2 はなし → 合計4
+   * non-vocal: round=1 は最大2件、round=2 はイベント仕様に応じて追加
+   * vocal:     round=1 が4件、round=2 はなし
    */
   requestedSongs: RequestedSong[];
+  /** 自動生成の強制追加対象に含めてよいか */
+  allowForcedAssignment?: boolean;
 }
 
 // 曲1曲分のセッション構成
