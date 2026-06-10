@@ -1,8 +1,13 @@
 {
-  "exportedAt": "2026-06-10T01:29:45.034Z",
+  "exportedAt": "2026-06-10T08:53:17.103Z",
   "version": 1,
   "data": {
     "participants": [
+      {
+        "id": "012f500a-7e5a-464e-9680-ae4ad74fd3ed",
+        "name": "加藤力",
+        "instrument": "front"
+      },
       {
         "id": "0314d9b4-7d15-4eb4-9476-220fc676862c",
         "name": "久米 聡",
@@ -17,6 +22,16 @@
         "id": "0ab4fb17-df00-4290-9502-ff9e70f19ed7",
         "name": "山田 陽",
         "instrument": "front"
+      },
+      {
+        "id": "127a0ee1-17b6-4fee-905b-e4d078e40f4a",
+        "name": "白井清",
+        "instrument": "front"
+      },
+      {
+        "id": "1ea0d4c8-f2e6-4fe4-9a14-88dea8b001e4",
+        "name": "藤井友",
+        "instrument": "bass"
       },
       {
         "id": "1f4e54ad-676e-4d23-9a14-10b25d4a561f",
@@ -34,9 +49,54 @@
         "instrument": "front"
       },
       {
+        "id": "286ee780-9ee0-48f7-851a-11c56191d9b3",
+        "name": "中川",
+        "instrument": "vocal"
+      },
+      {
+        "id": "29392f48-9160-4aa6-9d85-9b2f4d4f3e9b",
+        "name": "竹本",
+        "instrument": "piano"
+      },
+      {
+        "id": "298e79de-2a6e-4ab1-a6ef-2efbfaa3d59e",
+        "name": "小杉",
+        "instrument": "drum"
+      },
+      {
+        "id": "2f9dbbe9-e352-452c-a27e-5ede48ee0c46",
+        "name": "杉山",
+        "instrument": "front"
+      },
+      {
+        "id": "30aa3210-dd3d-4d06-944d-ba5d79eea1c1",
+        "name": "関",
+        "instrument": "front"
+      },
+      {
+        "id": "3227f04c-90f5-478a-bc24-e26951055390",
+        "name": "木村孝",
+        "instrument": "front"
+      },
+      {
+        "id": "3288a0e8-3569-4732-9549-56c3cd5159da",
+        "name": "内藤",
+        "instrument": "front"
+      },
+      {
         "id": "353a5b34-a63e-4fbb-a8f8-c1b61fe2e19d",
         "name": "田中 恒一",
         "instrument": "drum"
+      },
+      {
+        "id": "3765a394-0901-4671-9f28-cc43261b3754",
+        "name": "篠原",
+        "instrument": "front"
+      },
+      {
+        "id": "3cb9237e-9828-4170-a245-937382457294",
+        "name": "有海",
+        "instrument": "front"
       },
       {
         "id": "3e614d1d-550d-455c-a884-378a9217fac1",
@@ -44,9 +104,29 @@
         "instrument": "front"
       },
       {
+        "id": "4d96f9dd-515c-4d3e-8d13-fa5528b88acc",
+        "name": "山本慎",
+        "instrument": "bass"
+      },
+      {
         "id": "4e7234dc-2d48-44ae-aff1-91622640ab8a",
         "name": "清水 悠成",
         "instrument": "front"
+      },
+      {
+        "id": "4fecbe92-f636-40b4-9693-1dd0093cd001",
+        "name": "阪井",
+        "instrument": "drum"
+      },
+      {
+        "id": "51851cd2-c579-42a0-8e39-9dd050135e09",
+        "name": "イッタ",
+        "instrument": "vocal"
+      },
+      {
+        "id": "57f63cf6-2d92-45d3-b4f4-4afbb9c063e9",
+        "name": "寺野",
+        "instrument": "bass"
       },
       {
         "id": "5fcaa88b-5167-4bb8-8f2c-b1040f1c5770",
@@ -74,14 +154,39 @@
         "instrument": "bass"
       },
       {
+        "id": "79e46d7b-1fc5-470b-bcf6-1f34db2f6c36",
+        "name": "大橋",
+        "instrument": "drum"
+      },
+      {
         "id": "7d26bda5-1a4d-4e87-83d8-f50bb076c7a4",
         "name": "小林 湊",
+        "instrument": "front"
+      },
+      {
+        "id": "7e052976-e002-41c0-ac4a-bfe428183f98",
+        "name": "中尾",
+        "instrument": "vocal"
+      },
+      {
+        "id": "92b78c23-62d3-4847-a592-9c70d1168579",
+        "name": "小川秀",
+        "instrument": "front"
+      },
+      {
+        "id": "9b3ffb12-62c6-4497-b2be-ac5fbb63fb5e",
+        "name": "上田",
         "instrument": "front"
       },
       {
         "id": "9b735712-cb62-45cf-aa1d-4d8ebd7a514d",
         "name": "森 悠太",
         "instrument": "drum"
+      },
+      {
+        "id": "a243e30a-cfac-4e85-a408-efd3ba1a9e8a",
+        "name": "網野",
+        "instrument": "front"
       },
       {
         "id": "a50d9611-d199-4e50-a694-3ce77c7e62a2",
@@ -107,6 +212,16 @@
         "id": "c1890e64-b45f-443b-b915-ade7fedf0cbb",
         "name": "酒井 優希",
         "instrument": "piano"
+      },
+      {
+        "id": "ca32f617-3499-4e9b-9506-3497815e04a9",
+        "name": "藤井",
+        "instrument": "piano"
+      },
+      {
+        "id": "cc7eaf03-a820-486f-9f36-6c4838003fc5",
+        "name": "白浜",
+        "instrument": "bass"
       },
       {
         "id": "cfef8991-238e-4cfb-840e-766e8cb753b6",
@@ -139,9 +254,34 @@
         "instrument": "drum"
       },
       {
+        "id": "f0027b0f-34e0-4e1d-bf5f-525bf251c9b3",
+        "name": "野澤",
+        "instrument": "front"
+      },
+      {
         "id": "f532845e-00b8-476a-9b84-f2152a1b50f6",
         "name": "佐藤 匠",
         "instrument": "drum"
+      },
+      {
+        "id": "f8e62a4c-8992-42c4-a29d-cc65a168d211",
+        "name": "鈴木了",
+        "instrument": "front"
+      },
+      {
+        "id": "f955bbe0-987a-4801-b12c-546aaf1e7fa1",
+        "name": "岡部",
+        "instrument": "piano"
+      },
+      {
+        "id": "f9a1bfc5-b18f-464f-842d-9924c3306a91",
+        "name": "清水",
+        "instrument": "piano"
+      },
+      {
+        "id": "fc68077c-dbf5-4523-b6da-1f40b0192e89",
+        "name": "木村光",
+        "instrument": "front"
       },
       {
         "id": "febdd8fd-0882-467b-b8a9-0dd06df7e990",
@@ -3804,9 +3944,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T07:11:18.394Z",
+        "lastSignedInAt": "2026-06-10T07:23:23.146Z",
         "createdAt": "2026-05-07T08:44:30.129Z",
-        "updatedAt": "2026-06-09T07:11:18.395Z"
+        "updatedAt": "2026-06-10T07:23:23.147Z"
       },
       {
         "id": "275f7e18-668c-43d6-82dd-000434809ea7",
@@ -3815,9 +3955,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T07:09:30.391Z",
+        "lastSignedInAt": "2026-06-10T06:08:59.219Z",
         "createdAt": "2026-05-07T08:44:30.125Z",
-        "updatedAt": "2026-06-09T07:09:30.392Z"
+        "updatedAt": "2026-06-10T06:08:59.219Z"
       },
       {
         "id": "3b0de832-5385-4e33-80c3-e82c30f9e336",
@@ -3837,9 +3977,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T08:09:34.994Z",
+        "lastSignedInAt": "2026-06-10T07:12:19.062Z",
         "createdAt": "2026-05-07T08:44:30.200Z",
-        "updatedAt": "2026-06-09T08:09:34.995Z"
+        "updatedAt": "2026-06-10T07:12:19.063Z"
       },
       {
         "id": "4a5b733f-d798-404c-9b20-8e5add18cb6c",
@@ -3848,9 +3988,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T07:18:49.929Z",
+        "lastSignedInAt": "2026-06-10T06:31:11.945Z",
         "createdAt": "2026-05-07T08:44:30.142Z",
-        "updatedAt": "2026-06-09T07:18:49.930Z"
+        "updatedAt": "2026-06-10T06:31:11.946Z"
       },
       {
         "id": "4e0c8834-195e-4343-bb52-2bda851ff716",
@@ -3859,9 +3999,9 @@
         "emailVerifiedAt": null,
         "role": "admin",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T08:44:11.148Z",
+        "lastSignedInAt": "2026-06-10T07:23:53.566Z",
         "createdAt": "2026-05-07T08:44:30.109Z",
-        "updatedAt": "2026-06-09T08:44:11.149Z"
+        "updatedAt": "2026-06-10T07:23:53.567Z"
       },
       {
         "id": "5229754f-ac5a-45c2-b97c-ce5dfaba3ad5",
@@ -3870,9 +4010,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T08:02:56.133Z",
+        "lastSignedInAt": "2026-06-10T07:06:20.919Z",
         "createdAt": "2026-05-07T08:44:30.191Z",
-        "updatedAt": "2026-06-09T08:02:56.134Z"
+        "updatedAt": "2026-06-10T07:06:20.920Z"
       },
       {
         "id": "57a67c68-0ea9-4113-bcac-02b651e854e9",
@@ -3881,9 +4021,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T07:13:11.779Z",
+        "lastSignedInAt": "2026-06-10T06:19:29.690Z",
         "createdAt": "2026-05-07T08:44:30.132Z",
-        "updatedAt": "2026-06-09T07:13:11.780Z"
+        "updatedAt": "2026-06-10T06:19:29.691Z"
       },
       {
         "id": "6324bd2a-b57b-4eb5-8002-aac5cdef41c2",
@@ -3892,9 +4032,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T07:21:23.931Z",
+        "lastSignedInAt": "2026-06-10T06:37:04.403Z",
         "createdAt": "2026-05-07T08:44:30.148Z",
-        "updatedAt": "2026-06-09T07:21:23.932Z"
+        "updatedAt": "2026-06-10T06:37:04.404Z"
       },
       {
         "id": "697321d4-4d50-4bb3-aa1d-c92eb61bfca8",
@@ -3903,9 +4043,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T07:37:01.505Z",
+        "lastSignedInAt": "2026-06-10T07:15:26.931Z",
         "createdAt": "2026-05-07T08:44:30.175Z",
-        "updatedAt": "2026-06-09T07:37:01.506Z"
+        "updatedAt": "2026-06-10T07:15:26.932Z"
       },
       {
         "id": "6cbdce80-5c3f-48e2-942f-8cda4adc73d8",
@@ -3914,9 +4054,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T07:36:05.773Z",
+        "lastSignedInAt": "2026-06-10T06:51:25.857Z",
         "createdAt": "2026-05-07T08:44:30.172Z",
-        "updatedAt": "2026-06-09T07:36:05.774Z"
+        "updatedAt": "2026-06-10T06:51:25.858Z"
       },
       {
         "id": "6d549ad8-a93d-4e5e-9152-6d9f03d129a7",
@@ -3925,9 +4065,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T08:10:37.231Z",
+        "lastSignedInAt": "2026-06-10T07:13:18.540Z",
         "createdAt": "2026-05-07T08:44:30.203Z",
-        "updatedAt": "2026-06-09T08:10:37.232Z"
+        "updatedAt": "2026-06-10T07:13:18.541Z"
       },
       {
         "id": "6de1ed0f-d1e5-40c1-90e3-9d21ec6c997c",
@@ -3936,9 +4076,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T07:19:55.321Z",
+        "lastSignedInAt": "2026-06-10T06:33:52.457Z",
         "createdAt": "2026-05-07T08:44:30.145Z",
-        "updatedAt": "2026-06-09T07:19:55.321Z"
+        "updatedAt": "2026-06-10T06:33:52.458Z"
       },
       {
         "id": "6eaec50f-99bb-4aa9-834a-4d450a2de26b",
@@ -3947,9 +4087,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T07:30:36.310Z",
+        "lastSignedInAt": "2026-06-10T06:47:41.790Z",
         "createdAt": "2026-05-07T08:44:30.166Z",
-        "updatedAt": "2026-06-09T07:30:36.311Z"
+        "updatedAt": "2026-06-10T06:47:41.791Z"
       },
       {
         "id": "79d89d74-d98e-40d1-9ff7-cb73114da3a9",
@@ -3958,9 +4098,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T07:25:26.972Z",
+        "lastSignedInAt": "2026-06-10T06:44:36.634Z",
         "createdAt": "2026-05-07T08:44:30.157Z",
-        "updatedAt": "2026-06-09T07:25:26.973Z"
+        "updatedAt": "2026-06-10T06:44:36.635Z"
       },
       {
         "id": "7a9713d8-f29a-4e9c-b057-7b462b83adf7",
@@ -3969,9 +4109,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T08:08:32.377Z",
+        "lastSignedInAt": "2026-06-10T07:12:07.476Z",
         "createdAt": "2026-05-07T08:44:30.197Z",
-        "updatedAt": "2026-06-09T08:08:32.378Z"
+        "updatedAt": "2026-06-10T07:12:07.477Z"
       },
       {
         "id": "7c88fdd8-d17b-4a5a-a2a7-604838801f91",
@@ -3980,9 +4120,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T07:26:34.421Z",
+        "lastSignedInAt": "2026-06-10T06:45:42.244Z",
         "createdAt": "2026-05-07T08:44:30.160Z",
-        "updatedAt": "2026-06-09T07:26:34.422Z"
+        "updatedAt": "2026-06-10T06:45:42.245Z"
       },
       {
         "id": "86c28405-f30f-442f-95ec-dd825f098b2f",
@@ -3991,9 +4131,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T08:07:29.093Z",
+        "lastSignedInAt": "2026-06-10T07:08:11.181Z",
         "createdAt": "2026-05-07T08:44:30.194Z",
-        "updatedAt": "2026-06-09T08:07:29.094Z"
+        "updatedAt": "2026-06-10T07:08:11.182Z"
       },
       {
         "id": "8dc8b974-c36d-41b6-af2f-f4fc02b2c977",
@@ -4002,9 +4142,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T07:16:16.100Z",
+        "lastSignedInAt": "2026-06-10T06:29:53.978Z",
         "createdAt": "2026-05-07T08:44:30.139Z",
-        "updatedAt": "2026-06-09T07:16:16.101Z"
+        "updatedAt": "2026-06-10T06:29:53.979Z"
       },
       {
         "id": "8e75dac7-b8e4-4cf2-a75c-08f5d8e613e6",
@@ -4013,9 +4153,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T08:17:27.284Z",
+        "lastSignedInAt": "2026-06-10T06:06:23.504Z",
         "createdAt": "2026-05-07T08:44:30.120Z",
-        "updatedAt": "2026-06-09T08:17:27.285Z"
+        "updatedAt": "2026-06-10T06:06:23.505Z"
       },
       {
         "id": "98bb550d-9b39-4755-a1a3-b992e8c86006",
@@ -4024,9 +4164,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T07:22:35.511Z",
+        "lastSignedInAt": "2026-06-10T07:20:21.435Z",
         "createdAt": "2026-05-07T08:44:30.151Z",
-        "updatedAt": "2026-06-09T07:22:35.512Z"
+        "updatedAt": "2026-06-10T07:20:21.435Z"
       },
       {
         "id": "a16041dc-b6bb-48ab-8cca-69e0364b8ea9",
@@ -4035,9 +4175,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T07:24:00.429Z",
+        "lastSignedInAt": "2026-06-10T06:43:15.480Z",
         "createdAt": "2026-05-07T08:44:30.154Z",
-        "updatedAt": "2026-06-09T07:24:00.430Z"
+        "updatedAt": "2026-06-10T06:43:15.481Z"
       },
       {
         "id": "c45711e4-28d6-48ab-b8c6-ae16148c1e9b",
@@ -4046,9 +4186,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T07:27:51.786Z",
+        "lastSignedInAt": "2026-06-10T06:46:45.903Z",
         "createdAt": "2026-05-07T08:44:30.163Z",
-        "updatedAt": "2026-06-09T07:27:51.787Z"
+        "updatedAt": "2026-06-10T06:46:45.904Z"
       },
       {
         "id": "cedad7da-51f5-4d50-8d36-ee1da36f181e",
@@ -4057,9 +4197,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T07:55:33.243Z",
+        "lastSignedInAt": "2026-06-10T06:59:48.218Z",
         "createdAt": "2026-05-07T08:44:30.184Z",
-        "updatedAt": "2026-06-09T07:55:33.244Z"
+        "updatedAt": "2026-06-10T06:59:48.219Z"
       },
       {
         "id": "cef60681-f8de-433a-bbf9-949661de1bd5",
@@ -4079,9 +4219,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T07:14:43.978Z",
+        "lastSignedInAt": "2026-06-10T06:28:02.907Z",
         "createdAt": "2026-05-07T08:44:30.135Z",
-        "updatedAt": "2026-06-09T07:14:43.979Z"
+        "updatedAt": "2026-06-10T06:28:02.907Z"
       },
       {
         "id": "dcd4d74e-ca53-47bc-ac1f-25d546b4310c",
@@ -4101,9 +4241,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T07:39:24.549Z",
+        "lastSignedInAt": "2026-06-10T06:58:02.089Z",
         "createdAt": "2026-05-07T08:44:30.181Z",
-        "updatedAt": "2026-06-09T07:39:24.550Z"
+        "updatedAt": "2026-06-10T06:58:02.090Z"
       },
       {
         "id": "e0832ddd-1455-45ce-8422-78c70df97be5",
@@ -4112,9 +4252,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T07:34:52.533Z",
+        "lastSignedInAt": "2026-06-10T06:48:41.587Z",
         "createdAt": "2026-05-07T08:44:30.169Z",
-        "updatedAt": "2026-06-09T07:34:52.534Z"
+        "updatedAt": "2026-06-10T06:48:41.588Z"
       },
       {
         "id": "f7ecc33e-fab2-4e93-b1f6-4d51197a4141",
@@ -4123,9 +4263,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T07:56:37.589Z",
+        "lastSignedInAt": "2026-06-10T07:03:14.616Z",
         "createdAt": "2026-05-07T08:44:30.188Z",
-        "updatedAt": "2026-06-09T07:56:37.590Z"
+        "updatedAt": "2026-06-10T07:03:14.617Z"
       },
       {
         "id": "f85cb9a0-469f-4f80-8dfa-8d854eee9a49",
@@ -4134,9 +4274,9 @@
         "emailVerifiedAt": "2026-05-28T02:19:33.128Z",
         "role": "member",
         "status": "active",
-        "lastSignedInAt": "2026-06-09T07:38:06.709Z",
+        "lastSignedInAt": "2026-06-10T06:56:32.060Z",
         "createdAt": "2026-05-07T08:44:30.178Z",
-        "updatedAt": "2026-06-09T07:38:06.710Z"
+        "updatedAt": "2026-06-10T06:56:32.061Z"
       }
     ],
     "memberProfiles": [
@@ -4611,12 +4751,12 @@
         "afterPartyFee": 3000,
         "notes": "懇親会参加は任意です。\n募集は6月8日までです。",
         "round1StartAt": "2026-05-25T07:27:00.000Z",
-        "round1EndAt": "2026-06-08T07:27:00.000Z",
-        "round2StartAt": "2026-06-09T07:27:00.000Z",
-        "round2EndAt": "2026-06-17T07:28:00.000Z",
-        "status": "recruiting_round2",
+        "round1EndAt": "2026-06-05T07:27:00.000Z",
+        "round2StartAt": "2026-06-06T07:27:00.000Z",
+        "round2EndAt": "2026-06-09T07:28:00.000Z",
+        "status": "generating",
         "createdAt": "2026-05-08T07:27:08.211Z",
-        "updatedAt": "2026-06-09T08:45:32.912Z"
+        "updatedAt": "2026-06-10T07:23:02.900Z"
       },
       {
         "id": "9444a23d-9a55-4d26-b12a-224efa5689fd",
@@ -5495,6 +5635,7 @@
         "memberProfileId": "b9196cab-0ac9-48eb-9844-e22d17ec351f",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.835Z",
         "updatedAt": "2026-05-07T08:44:30.835Z"
       },
@@ -5504,8 +5645,9 @@
         "memberProfileId": "f86759b3-8eb8-45cb-be74-373f538d058c",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "attending",
+        "allowForcedAssignment": false,
         "createdAt": "2026-06-09T07:37:45.732Z",
-        "updatedAt": "2026-06-09T07:37:45.732Z"
+        "updatedAt": "2026-06-10T07:15:38.598Z"
       },
       {
         "id": "078bc315-07a4-47ed-9570-21b04b0cc20c",
@@ -5513,8 +5655,9 @@
         "memberProfileId": "f33b54aa-3be9-4b05-b016-5e0017b33f03",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "attending",
+        "allowForcedAssignment": true,
         "createdAt": "2026-06-09T07:26:12.469Z",
-        "updatedAt": "2026-06-09T07:26:12.469Z"
+        "updatedAt": "2026-06-10T06:45:22.586Z"
       },
       {
         "id": "0f379057-7cb5-4031-b5a3-aa9908bd531a",
@@ -5522,8 +5665,9 @@
         "memberProfileId": "d3a1d0d9-9967-4e19-aaf4-031414c028c4",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "attending",
+        "allowForcedAssignment": true,
         "createdAt": "2026-06-09T08:08:13.708Z",
-        "updatedAt": "2026-06-09T08:08:13.708Z"
+        "updatedAt": "2026-06-10T07:10:06.762Z"
       },
       {
         "id": "103115d2-e894-4632-a0f9-e21c20f95077",
@@ -5531,8 +5675,9 @@
         "memberProfileId": "11b6c403-5cfb-485b-a00d-1a02edcc7d57",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "absent",
+        "allowForcedAssignment": false,
         "createdAt": "2026-06-09T07:19:27.427Z",
-        "updatedAt": "2026-06-09T07:19:27.427Z"
+        "updatedAt": "2026-06-10T06:32:19.245Z"
       },
       {
         "id": "1764aaf8-a202-4044-8d5e-e5839a724524",
@@ -5540,6 +5685,7 @@
         "memberProfileId": "d3a1d0d9-9967-4e19-aaf4-031414c028c4",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.927Z",
         "updatedAt": "2026-05-07T08:44:30.927Z"
       },
@@ -5549,6 +5695,7 @@
         "memberProfileId": "c51ec424-54eb-4479-b21e-96c3b0b9d47b",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "attending",
+        "allowForcedAssignment": true,
         "createdAt": "2026-06-09T08:12:36.066Z",
         "updatedAt": "2026-06-09T08:12:36.066Z"
       },
@@ -5558,6 +5705,7 @@
         "memberProfileId": "72c840a7-33b1-4a18-96a4-9c8a7f78a69d",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.874Z",
         "updatedAt": "2026-05-07T08:44:30.874Z"
       },
@@ -5567,8 +5715,9 @@
         "memberProfileId": "94855245-1f8e-484b-99fd-3772b8309d28",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "absent",
+        "allowForcedAssignment": true,
         "createdAt": "2026-06-09T08:02:19.682Z",
-        "updatedAt": "2026-06-09T08:02:19.682Z"
+        "updatedAt": "2026-06-10T07:06:00.259Z"
       },
       {
         "id": "28a20725-2692-493f-955c-85cf999d1223",
@@ -5576,6 +5725,7 @@
         "memberProfileId": "c51ec424-54eb-4479-b21e-96c3b0b9d47b",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.946Z",
         "updatedAt": "2026-05-07T08:44:30.946Z"
       },
@@ -5585,6 +5735,7 @@
         "memberProfileId": "11b6c403-5cfb-485b-a00d-1a02edcc7d57",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.845Z",
         "updatedAt": "2026-05-07T08:44:30.845Z"
       },
@@ -5594,8 +5745,9 @@
         "memberProfileId": "ca475c6b-b544-4da7-9571-3cb9fc9e35bc",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "attending",
+        "allowForcedAssignment": false,
         "createdAt": "2026-06-09T07:56:19.964Z",
-        "updatedAt": "2026-06-09T07:56:19.964Z"
+        "updatedAt": "2026-06-10T07:02:46.213Z"
       },
       {
         "id": "3c526b34-5e9f-44e0-bbb6-c8a6ada5a217",
@@ -5603,6 +5755,7 @@
         "memberProfileId": "96f1304f-e430-4b77-97e7-e44fafc8f593",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.903Z",
         "updatedAt": "2026-05-07T08:44:30.903Z"
       },
@@ -5612,6 +5765,7 @@
         "memberProfileId": "5335c4bc-48d2-4310-9d52-f5631987d4e1",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.937Z",
         "updatedAt": "2026-05-07T08:44:30.937Z"
       },
@@ -5621,8 +5775,9 @@
         "memberProfileId": "c15f6d57-51ee-4552-bc1d-4f4d4da3ca1f",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "absent",
+        "allowForcedAssignment": true,
         "createdAt": "2026-06-09T07:34:31.676Z",
-        "updatedAt": "2026-06-09T07:34:31.676Z"
+        "updatedAt": "2026-06-10T06:48:20.919Z"
       },
       {
         "id": "403bd5b4-06ca-43cb-a957-b3c8b402b9b3",
@@ -5630,6 +5785,7 @@
         "memberProfileId": "f25fd6bf-286f-4052-855b-ae4bd009445b",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.864Z",
         "updatedAt": "2026-05-07T08:44:30.864Z"
       },
@@ -5639,8 +5795,9 @@
         "memberProfileId": "fecf72f3-7dbe-48aa-a29a-2c6dadc21edb",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "attending",
+        "allowForcedAssignment": true,
         "createdAt": "2026-06-09T08:09:11.073Z",
-        "updatedAt": "2026-06-09T08:09:11.073Z"
+        "updatedAt": "2026-06-10T07:11:51.494Z"
       },
       {
         "id": "497b90c5-3d4f-43f8-8e42-e4feea6806fa",
@@ -5648,6 +5805,7 @@
         "memberProfileId": "c15f6d57-51ee-4552-bc1d-4f4d4da3ca1f",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.884Z",
         "updatedAt": "2026-05-07T08:44:30.884Z"
       },
@@ -5657,6 +5815,7 @@
         "memberProfileId": "275c9330-c939-4b89-8dbf-57a377420f02",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "attending",
+        "allowForcedAssignment": true,
         "createdAt": "2026-06-09T06:33:39.412Z",
         "updatedAt": "2026-06-09T06:33:39.412Z"
       },
@@ -5666,6 +5825,7 @@
         "memberProfileId": "fecf72f3-7dbe-48aa-a29a-2c6dadc21edb",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.932Z",
         "updatedAt": "2026-05-07T08:44:30.932Z"
       },
@@ -5675,6 +5835,7 @@
         "memberProfileId": "f56deee6-733e-4d54-85e8-fe8730c2c5a3",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.850Z",
         "updatedAt": "2026-05-07T08:44:30.850Z"
       },
@@ -5684,8 +5845,9 @@
         "memberProfileId": "5335c4bc-48d2-4310-9d52-f5631987d4e1",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "attending",
+        "allowForcedAssignment": true,
         "createdAt": "2026-06-09T08:10:17.666Z",
-        "updatedAt": "2026-06-09T08:10:17.666Z"
+        "updatedAt": "2026-06-10T07:13:02.118Z"
       },
       {
         "id": "5abca729-1181-4518-9589-01e9882995bc",
@@ -5693,6 +5855,7 @@
         "memberProfileId": "ff4136b8-7022-46e2-9384-b730aafbb56d",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.950Z",
         "updatedAt": "2026-05-07T08:44:30.950Z"
       },
@@ -5702,6 +5865,7 @@
         "memberProfileId": "746a9944-256d-4caf-b1ee-4a5651e4ee04",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.854Z",
         "updatedAt": "2026-05-07T08:44:30.854Z"
       },
@@ -5711,6 +5875,7 @@
         "memberProfileId": "03ca1050-cf3e-4c1a-97ec-282ba50d1e35",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.889Z",
         "updatedAt": "2026-05-07T08:44:30.889Z"
       },
@@ -5720,6 +5885,7 @@
         "memberProfileId": "b8412336-89fe-43e1-b882-b57dee50f7bb",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.840Z",
         "updatedAt": "2026-05-07T08:44:30.840Z"
       },
@@ -5729,8 +5895,9 @@
         "memberProfileId": "5dad37a5-b796-47ae-93d1-2d067fa7e461",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "absent",
+        "allowForcedAssignment": true,
         "createdAt": "2026-06-09T07:55:09.633Z",
-        "updatedAt": "2026-06-09T07:55:09.633Z"
+        "updatedAt": "2026-06-10T06:59:30.626Z"
       },
       {
         "id": "74eb7a34-c66f-4dee-81c6-da79705cffbb",
@@ -5738,6 +5905,7 @@
         "memberProfileId": "ca475c6b-b544-4da7-9571-3cb9fc9e35bc",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.913Z",
         "updatedAt": "2026-05-07T08:44:30.913Z"
       },
@@ -5747,8 +5915,9 @@
         "memberProfileId": "72e11a37-0ada-48a5-bc72-0647a2ed9429",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "absent",
+        "allowForcedAssignment": true,
         "createdAt": "2026-06-09T07:36:43.798Z",
-        "updatedAt": "2026-06-09T07:36:43.798Z"
+        "updatedAt": "2026-06-10T06:52:44.850Z"
       },
       {
         "id": "7fe23d56-5548-4339-8ee4-583dc404cb2a",
@@ -5756,8 +5925,9 @@
         "memberProfileId": "f56deee6-733e-4d54-85e8-fe8730c2c5a3",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "attending",
+        "allowForcedAssignment": true,
         "createdAt": "2026-06-09T07:20:34.846Z",
-        "updatedAt": "2026-06-09T07:20:34.846Z"
+        "updatedAt": "2026-06-10T06:36:32.628Z"
       },
       {
         "id": "88cabb25-825f-4f13-9c91-fd2f11993bef",
@@ -5765,6 +5935,7 @@
         "memberProfileId": "72e11a37-0ada-48a5-bc72-0647a2ed9429",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.894Z",
         "updatedAt": "2026-05-07T08:44:30.894Z"
       },
@@ -5774,8 +5945,9 @@
         "memberProfileId": "b8412336-89fe-43e1-b882-b57dee50f7bb",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "absent",
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-29T06:31:47.342Z",
-        "updatedAt": "2026-06-09T07:18:25.564Z"
+        "updatedAt": "2026-06-10T06:30:50.122Z"
       },
       {
         "id": "901389b5-b4dd-4fed-acf7-54be22f59542",
@@ -5783,8 +5955,9 @@
         "memberProfileId": "f25fd6bf-286f-4052-855b-ae4bd009445b",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "attending",
+        "allowForcedAssignment": true,
         "createdAt": "2026-06-09T07:24:50.466Z",
-        "updatedAt": "2026-06-09T07:24:50.466Z"
+        "updatedAt": "2026-06-10T06:44:09.270Z"
       },
       {
         "id": "90fbbb29-dd51-4b83-a564-51749f1a946a",
@@ -5792,8 +5965,9 @@
         "memberProfileId": "959daf7b-e86c-42d3-967e-dca24101be02",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "absent",
+        "allowForcedAssignment": true,
         "createdAt": "2026-06-09T07:23:25.605Z",
-        "updatedAt": "2026-06-09T07:23:25.605Z"
+        "updatedAt": "2026-06-10T06:39:12.590Z"
       },
       {
         "id": "928fdccd-011f-4ebb-8e1f-fd97bed0d24a",
@@ -5801,8 +5975,9 @@
         "memberProfileId": "b9196cab-0ac9-48eb-9844-e22d17ec351f",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "absent",
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-29T05:36:01.831Z",
-        "updatedAt": "2026-06-09T07:15:37.279Z"
+        "updatedAt": "2026-06-10T06:29:21.308Z"
       },
       {
         "id": "9c57dc8b-b12e-4ad2-b057-a9f3909683a9",
@@ -5810,8 +5985,9 @@
         "memberProfileId": "ba9fd6c6-bfee-4e48-9664-c02aa337d429",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "absent",
+        "allowForcedAssignment": true,
         "createdAt": "2026-06-09T07:10:30.824Z",
-        "updatedAt": "2026-06-09T07:10:30.824Z"
+        "updatedAt": "2026-06-10T06:12:49.162Z"
       },
       {
         "id": "9da2db89-14be-4016-b64d-b42c24dc5109",
@@ -5819,8 +5995,9 @@
         "memberProfileId": "4d24136f-3c36-4e6d-a595-be5545c23074",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "attending",
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-29T05:33:15.123Z",
-        "updatedAt": "2026-06-09T07:14:04.187Z"
+        "updatedAt": "2026-06-10T06:27:26.488Z"
       },
       {
         "id": "a06dfb3e-3baa-4165-adc9-fa7646be225b",
@@ -5828,6 +6005,7 @@
         "memberProfileId": "275c9330-c939-4b89-8dbf-57a377420f02",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.941Z",
         "updatedAt": "2026-05-07T08:44:30.941Z"
       },
@@ -5837,8 +6015,9 @@
         "memberProfileId": "98f29d77-a472-4795-bf91-4d4dacf04a6e",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "attending",
+        "allowForcedAssignment": true,
         "createdAt": "2026-06-09T08:07:12.971Z",
-        "updatedAt": "2026-06-09T08:07:12.971Z"
+        "updatedAt": "2026-06-10T07:07:57.907Z"
       },
       {
         "id": "a500b001-d8ed-4a9c-a6ac-e8f26dc00c5b",
@@ -5846,8 +6025,9 @@
         "memberProfileId": "746a9944-256d-4caf-b1ee-4a5651e4ee04",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "attending",
+        "allowForcedAssignment": true,
         "createdAt": "2026-06-09T07:22:11.748Z",
-        "updatedAt": "2026-06-09T07:22:11.748Z"
+        "updatedAt": "2026-06-10T06:37:58.300Z"
       },
       {
         "id": "a92f59eb-a3a0-4f97-91c6-f64aae9575c9",
@@ -5855,6 +6035,7 @@
         "memberProfileId": "5dad37a5-b796-47ae-93d1-2d067fa7e461",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.908Z",
         "updatedAt": "2026-05-07T08:44:30.908Z"
       },
@@ -5864,6 +6045,7 @@
         "memberProfileId": "b63f763a-c938-4213-bb04-1d1d4431beb9",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.954Z",
         "updatedAt": "2026-05-07T08:44:30.954Z"
       },
@@ -5873,6 +6055,7 @@
         "memberProfileId": "feaac6b3-58cd-4458-b83f-f6c2ea9080ff",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.811Z",
         "updatedAt": "2026-05-07T08:44:30.811Z"
       },
@@ -5882,6 +6065,7 @@
         "memberProfileId": "4d24136f-3c36-4e6d-a595-be5545c23074",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.830Z",
         "updatedAt": "2026-05-07T08:44:30.830Z"
       },
@@ -5891,8 +6075,9 @@
         "memberProfileId": "ab02b3b9-f544-4ef9-8f17-f59724e6f0b6",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "attending",
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-29T05:25:56.711Z",
-        "updatedAt": "2026-06-09T07:12:44.868Z"
+        "updatedAt": "2026-06-10T06:18:21.431Z"
       },
       {
         "id": "bf13ee5f-2231-416b-9670-170f8a46de59",
@@ -5900,8 +6085,9 @@
         "memberProfileId": "72c840a7-33b1-4a18-96a4-9c8a7f78a69d",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "attending",
+        "allowForcedAssignment": true,
         "createdAt": "2026-06-09T07:27:31.443Z",
-        "updatedAt": "2026-06-09T07:27:31.443Z"
+        "updatedAt": "2026-06-10T06:46:29.844Z"
       },
       {
         "id": "bf34a0b6-ff78-411c-b591-98d8cefe83f4",
@@ -5909,8 +6095,9 @@
         "memberProfileId": "feaac6b3-58cd-4458-b83f-f6c2ea9080ff",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "absent",
+        "allowForcedAssignment": true,
         "createdAt": "2026-06-09T07:08:58.471Z",
-        "updatedAt": "2026-06-09T07:08:58.471Z"
+        "updatedAt": "2026-06-10T06:07:55.127Z"
       },
       {
         "id": "c9ee9994-e2dd-40f1-adac-cb831a6c8f6b",
@@ -5918,6 +6105,7 @@
         "memberProfileId": "0b290a20-c57f-4a40-9421-02a97f3ce9aa",
         "attendanceStatus": "absent",
         "afterPartyAttendanceStatus": "undecided",
+        "allowForcedAssignment": true,
         "createdAt": "2026-06-09T07:30:08.942Z",
         "updatedAt": "2026-06-09T07:30:08.942Z"
       },
@@ -5927,6 +6115,7 @@
         "memberProfileId": "f33b54aa-3be9-4b05-b016-5e0017b33f03",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.869Z",
         "updatedAt": "2026-05-07T08:44:30.869Z"
       },
@@ -5936,6 +6125,7 @@
         "memberProfileId": "ba9fd6c6-bfee-4e48-9664-c02aa337d429",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.819Z",
         "updatedAt": "2026-05-07T08:44:30.819Z"
       },
@@ -5945,6 +6135,7 @@
         "memberProfileId": "959daf7b-e86c-42d3-967e-dca24101be02",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.859Z",
         "updatedAt": "2026-05-07T08:44:30.859Z"
       },
@@ -5954,6 +6145,7 @@
         "memberProfileId": "0b290a20-c57f-4a40-9421-02a97f3ce9aa",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.879Z",
         "updatedAt": "2026-05-07T08:44:30.879Z"
       },
@@ -5963,6 +6155,7 @@
         "memberProfileId": "94855245-1f8e-484b-99fd-3772b8309d28",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.917Z",
         "updatedAt": "2026-05-07T08:44:30.917Z"
       },
@@ -5972,6 +6165,7 @@
         "memberProfileId": "ab02b3b9-f544-4ef9-8f17-f59724e6f0b6",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.824Z",
         "updatedAt": "2026-05-07T08:44:30.824Z"
       },
@@ -5981,8 +6175,9 @@
         "memberProfileId": "03ca1050-cf3e-4c1a-97ec-282ba50d1e35",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "attending",
+        "allowForcedAssignment": true,
         "createdAt": "2026-06-09T07:35:33.769Z",
-        "updatedAt": "2026-06-09T07:35:33.769Z"
+        "updatedAt": "2026-06-10T06:51:06.665Z"
       },
       {
         "id": "f5e438d5-164c-469b-b927-22ba89b6e301",
@@ -5990,6 +6185,7 @@
         "memberProfileId": "f86759b3-8eb8-45cb-be74-373f538d058c",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.898Z",
         "updatedAt": "2026-05-07T08:44:30.898Z"
       },
@@ -5999,8 +6195,9 @@
         "memberProfileId": "96f1304f-e430-4b77-97e7-e44fafc8f593",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": "attending",
+        "allowForcedAssignment": true,
         "createdAt": "2026-06-09T07:38:59.880Z",
-        "updatedAt": "2026-06-09T07:38:59.880Z"
+        "updatedAt": "2026-06-10T06:57:33.387Z"
       },
       {
         "id": "feaa771a-8b17-4fe0-bd41-2d067f52eeb4",
@@ -6008,6 +6205,7 @@
         "memberProfileId": "98f29d77-a472-4795-bf91-4d4dacf04a6e",
         "attendanceStatus": "attending",
         "afterPartyAttendanceStatus": null,
+        "allowForcedAssignment": true,
         "createdAt": "2026-05-07T08:44:30.922Z",
         "updatedAt": "2026-05-07T08:44:30.922Z"
       }
@@ -6034,6 +6232,28 @@
         "priority": 2,
         "createdAt": "2026-05-07T08:44:30.844Z",
         "updatedAt": "2026-05-07T08:44:30.844Z"
+      },
+      {
+        "id": "02ab133b-c5c1-44ea-9eca-532032b32c2b",
+        "sessionEntryId": "bedbbebb-4328-461e-ac26-a0ece3166d84",
+        "songId": "fb1a575b-c7c3-4c1d-a118-b7e920a91117",
+        "songTitleSnapshot": "LOVE FOR SALE",
+        "keyName": null,
+        "round": 2,
+        "priority": 9,
+        "createdAt": "2026-06-10T06:18:21.444Z",
+        "updatedAt": "2026-06-10T06:18:21.444Z"
+      },
+      {
+        "id": "0304ecf0-e5a8-4eab-a98a-d370383a7b76",
+        "sessionEntryId": "2d95a0bc-d9ff-4947-aafd-ebdff6078814",
+        "songId": "1f889dca-949a-48d7-bacf-24cefafb08af",
+        "songTitleSnapshot": "SOFTLY, AS IN A MORNING SUNRISE",
+        "keyName": null,
+        "round": 2,
+        "priority": 4,
+        "createdAt": "2026-06-10T07:02:46.221Z",
+        "updatedAt": "2026-06-10T07:02:46.221Z"
       },
       {
         "id": "0366ac3c-eeee-4a88-bdfe-614db72b58d5",
@@ -6067,6 +6287,28 @@
         "priority": 2,
         "createdAt": "2026-06-09T08:02:20.281Z",
         "updatedAt": "2026-06-09T08:02:20.281Z"
+      },
+      {
+        "id": "0bae4507-b4f9-416e-bb38-4cc572895ed1",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "7ad90953-f3d5-4ee7-921f-2459fa2added",
+        "songTitleSnapshot": "BUT NOT FOR ME",
+        "keyName": "Bb",
+        "round": 2,
+        "priority": 4,
+        "createdAt": "2026-06-10T06:27:26.496Z",
+        "updatedAt": "2026-06-10T06:27:26.496Z"
+      },
+      {
+        "id": "0cef9ada-fc4f-4b92-ab28-fb47fbc82d68",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "a3e88dae-c2a4-4dc2-aed9-2206643f9af7",
+        "songTitleSnapshot": "IT S ONLY A PAPER MOON",
+        "keyName": null,
+        "round": 2,
+        "priority": 26,
+        "createdAt": "2026-06-10T06:27:26.516Z",
+        "updatedAt": "2026-06-10T06:27:26.516Z"
       },
       {
         "id": "0cf5f281-45f6-4172-b480-7b554e65c027",
@@ -6177,6 +6419,17 @@
         "priority": 1,
         "createdAt": "2026-05-07T08:44:30.930Z",
         "updatedAt": "2026-05-07T08:44:30.930Z"
+      },
+      {
+        "id": "13315d34-c98e-44c1-bc9a-57e08a050cf9",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "b83d33c9-cb61-4dad-bb8a-6f7d484704b7",
+        "songTitleSnapshot": "DOLPHIN DANCE",
+        "keyName": null,
+        "round": 2,
+        "priority": 21,
+        "createdAt": "2026-06-10T06:27:26.512Z",
+        "updatedAt": "2026-06-10T06:27:26.512Z"
       },
       {
         "id": "1350d4f8-5445-451b-8e2e-3796ec2188e2",
@@ -6300,6 +6553,50 @@
         "updatedAt": "2026-05-07T08:44:30.848Z"
       },
       {
+        "id": "206f2daf-328f-4ea0-abc2-d12df408d0c9",
+        "sessionEntryId": "7fe23d56-5548-4339-8ee4-583dc404cb2a",
+        "songId": "c053fdd1-9e63-4272-9af3-74e9879a5e70",
+        "songTitleSnapshot": "GIRL FROM IPANEMA",
+        "keyName": null,
+        "round": 2,
+        "priority": 8,
+        "createdAt": "2026-06-10T06:36:32.640Z",
+        "updatedAt": "2026-06-10T06:36:32.640Z"
+      },
+      {
+        "id": "20d6ccbe-d93b-45ea-86a8-45125c6ea0bc",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "4c1cd8b1-60b3-4efc-bd3f-e9563f2c244e",
+        "songTitleSnapshot": "MY FOOLISH HEART",
+        "keyName": null,
+        "round": 2,
+        "priority": 34,
+        "createdAt": "2026-06-10T06:27:26.522Z",
+        "updatedAt": "2026-06-10T06:27:26.522Z"
+      },
+      {
+        "id": "21d9a221-9ccc-4f58-bcf8-f9b4cb48f082",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "35404bb8-232f-426d-bc58-1801c221779a",
+        "songTitleSnapshot": "ALL OF ME",
+        "keyName": null,
+        "round": 2,
+        "priority": 24,
+        "createdAt": "2026-06-10T06:27:26.514Z",
+        "updatedAt": "2026-06-10T06:27:26.514Z"
+      },
+      {
+        "id": "2269ca5d-5e25-4d85-b92a-dc5403add639",
+        "sessionEntryId": "f304198c-6ddf-4e5b-83ae-dcc8f6d8c3d6",
+        "songId": "1b75236e-4122-4358-95c5-f451e0e92445",
+        "songTitleSnapshot": "HOW HIGH THE MOON",
+        "keyName": null,
+        "round": 2,
+        "priority": 1,
+        "createdAt": "2026-06-10T06:51:06.670Z",
+        "updatedAt": "2026-06-10T06:51:06.670Z"
+      },
+      {
         "id": "2379be81-f8b1-48e8-ab43-ce78761b82a9",
         "sessionEntryId": "9c57dc8b-b12e-4ad2-b057-a9f3909683a9",
         "songId": "466966e4-7781-4bcd-8443-762303d29726",
@@ -6322,6 +6619,39 @@
         "updatedAt": "2026-05-07T08:44:30.897Z"
       },
       {
+        "id": "257a737a-010a-45b0-b8b1-1ba3ae0de1e9",
+        "sessionEntryId": "0f379057-7cb5-4031-b5a3-aa9908bd531a",
+        "songId": "466966e4-7781-4bcd-8443-762303d29726",
+        "songTitleSnapshot": "STAR EYES",
+        "keyName": null,
+        "round": 2,
+        "priority": 1,
+        "createdAt": "2026-06-10T07:10:06.767Z",
+        "updatedAt": "2026-06-10T07:10:06.767Z"
+      },
+      {
+        "id": "25fc876d-6ece-44d7-b2bd-455333ed4eed",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "cc51adc2-987a-457b-b450-cf270a88976b",
+        "songTitleSnapshot": "FIVE SPOT AFTER DARK",
+        "keyName": null,
+        "round": 2,
+        "priority": 14,
+        "createdAt": "2026-06-10T06:27:26.506Z",
+        "updatedAt": "2026-06-10T06:27:26.506Z"
+      },
+      {
+        "id": "269e9e63-1459-4ab5-b549-92608fa96c8d",
+        "sessionEntryId": "f304198c-6ddf-4e5b-83ae-dcc8f6d8c3d6",
+        "songId": "1f889dca-949a-48d7-bacf-24cefafb08af",
+        "songTitleSnapshot": "SOFTLY, AS IN A MORNING SUNRISE",
+        "keyName": null,
+        "round": 2,
+        "priority": 2,
+        "createdAt": "2026-06-10T06:51:06.671Z",
+        "updatedAt": "2026-06-10T06:51:06.671Z"
+      },
+      {
         "id": "27235b69-24fb-414b-bfb2-b64705e49cfd",
         "sessionEntryId": "4b8349e7-faa8-4879-bbc2-32aa475a3745",
         "songId": "232c7b34-4286-4fa2-8df9-24a65d77f1d6",
@@ -6342,6 +6672,39 @@
         "priority": 1,
         "createdAt": "2026-05-07T08:44:30.911Z",
         "updatedAt": "2026-05-07T08:44:30.911Z"
+      },
+      {
+        "id": "2783c1b1-5a56-4452-bcb2-79a8081308f6",
+        "sessionEntryId": "2d95a0bc-d9ff-4947-aafd-ebdff6078814",
+        "songId": "78ea1ed3-26a9-40ae-8bfc-31a35dac9829",
+        "songTitleSnapshot": "SOLAR",
+        "keyName": null,
+        "round": 2,
+        "priority": 9,
+        "createdAt": "2026-06-10T07:02:46.225Z",
+        "updatedAt": "2026-06-10T07:02:46.225Z"
+      },
+      {
+        "id": "27d70f24-faa2-4d6d-8a36-ddfaeedd09f3",
+        "sessionEntryId": "bedbbebb-4328-461e-ac26-a0ece3166d84",
+        "songId": "429b5c64-05fb-4404-80be-990691957975",
+        "songTitleSnapshot": "I REMEMBER YOU",
+        "keyName": null,
+        "round": 2,
+        "priority": 6,
+        "createdAt": "2026-06-10T06:18:21.441Z",
+        "updatedAt": "2026-06-10T06:18:21.441Z"
+      },
+      {
+        "id": "28c175c7-0a2d-45e2-bc14-79a9f2fa748c",
+        "sessionEntryId": "2d95a0bc-d9ff-4947-aafd-ebdff6078814",
+        "songId": "71859ccd-cd7b-47c1-844e-dfef098036f6",
+        "songTitleSnapshot": "WORK SONG",
+        "keyName": null,
+        "round": 2,
+        "priority": 10,
+        "createdAt": "2026-06-10T07:02:46.226Z",
+        "updatedAt": "2026-06-10T07:02:46.226Z"
       },
       {
         "id": "2aaff6fa-ea5b-4fec-ac02-10f5399ec667",
@@ -6465,6 +6828,28 @@
         "updatedAt": "2026-05-07T08:44:30.851Z"
       },
       {
+        "id": "2fcb0e1a-becb-4318-abc6-15b86ad80b11",
+        "sessionEntryId": "bedbbebb-4328-461e-ac26-a0ece3166d84",
+        "songId": "6092b866-6689-498b-8024-cec02f65d31c",
+        "songTitleSnapshot": "LADY BIRD",
+        "keyName": null,
+        "round": 2,
+        "priority": 1,
+        "createdAt": "2026-06-10T06:18:21.436Z",
+        "updatedAt": "2026-06-10T06:18:21.436Z"
+      },
+      {
+        "id": "309dea22-24f8-47b1-8f38-13073746a1a5",
+        "sessionEntryId": "7fc605ee-7c9f-4382-89b5-02edf11abf23",
+        "songId": "b83d33c9-cb61-4dad-bb8a-6f7d484704b7",
+        "songTitleSnapshot": "DOLPHIN DANCE",
+        "keyName": null,
+        "round": 2,
+        "priority": 1,
+        "createdAt": "2026-06-10T06:52:44.854Z",
+        "updatedAt": "2026-06-10T06:52:44.854Z"
+      },
+      {
         "id": "32e74085-437b-4c92-959c-9511396e8d78",
         "sessionEntryId": "1ffffa4f-0af1-4fde-83b5-9a22152ba44f",
         "songId": "d32089c9-78a3-4468-921b-e72b0c60403b",
@@ -6474,6 +6859,28 @@
         "priority": 3,
         "createdAt": "2026-06-09T08:12:36.671Z",
         "updatedAt": "2026-06-09T08:12:36.671Z"
+      },
+      {
+        "id": "33d8435e-1235-4c40-895e-3071bc1a59ca",
+        "sessionEntryId": "0472525a-7f70-44c4-a2c0-a09fac05e733",
+        "songId": "0e4ccdfa-bf0a-45e2-b343-fa239b47a064",
+        "songTitleSnapshot": "SPAIN",
+        "keyName": null,
+        "round": 2,
+        "priority": 9,
+        "createdAt": "2026-06-10T07:15:38.612Z",
+        "updatedAt": "2026-06-10T07:15:38.612Z"
+      },
+      {
+        "id": "3442d027-ea6e-4070-a9df-90e2c20d3467",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "79bebb8b-c969-449e-a67e-ae745463e503",
+        "songTitleSnapshot": "HOW INSENSITIVE",
+        "keyName": null,
+        "round": 2,
+        "priority": 33,
+        "createdAt": "2026-06-10T06:27:26.521Z",
+        "updatedAt": "2026-06-10T06:27:26.521Z"
       },
       {
         "id": "35de0efc-0ce1-41dc-91b8-95a227d30d47",
@@ -6553,6 +6960,28 @@
         "updatedAt": "2026-05-07T08:44:30.860Z"
       },
       {
+        "id": "3c62fef8-4f21-480d-a6e4-b48beaaf6802",
+        "sessionEntryId": "9c57dc8b-b12e-4ad2-b057-a9f3909683a9",
+        "songId": "b79df733-5ba3-4f3b-b9b2-bf828f159574",
+        "songTitleSnapshot": "INVITATION",
+        "keyName": null,
+        "round": 2,
+        "priority": 2,
+        "createdAt": "2026-06-10T06:12:49.169Z",
+        "updatedAt": "2026-06-10T06:12:49.169Z"
+      },
+      {
+        "id": "3d5eaa16-e458-4160-aabe-2068c40b9e73",
+        "sessionEntryId": "9c57dc8b-b12e-4ad2-b057-a9f3909683a9",
+        "songId": "263b6bb5-8b2e-458e-84c1-66326ef6a731",
+        "songTitleSnapshot": "RECORDAME",
+        "keyName": null,
+        "round": 2,
+        "priority": 3,
+        "createdAt": "2026-06-10T06:12:49.169Z",
+        "updatedAt": "2026-06-10T06:12:49.169Z"
+      },
+      {
         "id": "3d7dbef7-5316-487f-a8fe-1cc35caf9fb3",
         "sessionEntryId": "bea5633a-e450-448c-b04b-85ec0f5575da",
         "songId": "8eca6a25-86d8-40b8-855a-1c1d277c858c",
@@ -6573,6 +7002,50 @@
         "priority": 2,
         "createdAt": "2026-05-07T08:44:30.856Z",
         "updatedAt": "2026-05-07T08:44:30.856Z"
+      },
+      {
+        "id": "3e0cacf8-aeb9-4599-ac5a-646c199c8a08",
+        "sessionEntryId": "9c57dc8b-b12e-4ad2-b057-a9f3909683a9",
+        "songId": "955fe793-18fd-48f0-a9c7-4f86a968326d",
+        "songTitleSnapshot": "SPEAK NO EVIL",
+        "keyName": null,
+        "round": 2,
+        "priority": 6,
+        "createdAt": "2026-06-10T06:12:49.172Z",
+        "updatedAt": "2026-06-10T06:12:49.172Z"
+      },
+      {
+        "id": "3e536903-8e2c-46e0-a4c4-74955512ebbd",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "0e66dd60-e1e1-455d-aaed-90caf8f5750f",
+        "songTitleSnapshot": "CUTE",
+        "keyName": null,
+        "round": 2,
+        "priority": 31,
+        "createdAt": "2026-06-10T06:27:26.520Z",
+        "updatedAt": "2026-06-10T06:27:26.520Z"
+      },
+      {
+        "id": "3f4058ca-e736-4a5e-8c4f-14e1240cee31",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "71859ccd-cd7b-47c1-844e-dfef098036f6",
+        "songTitleSnapshot": "WORK SONG",
+        "keyName": null,
+        "round": 2,
+        "priority": 35,
+        "createdAt": "2026-06-10T06:27:26.523Z",
+        "updatedAt": "2026-06-10T06:27:26.523Z"
+      },
+      {
+        "id": "3fc8a950-ef30-47db-8f01-e9bc5ac43620",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "905a9f60-58e2-46a2-af4b-81c248d1674e",
+        "songTitleSnapshot": "SONG FOR MY FATHER",
+        "keyName": null,
+        "round": 2,
+        "priority": 11,
+        "createdAt": "2026-06-10T06:27:26.503Z",
+        "updatedAt": "2026-06-10T06:27:26.503Z"
       },
       {
         "id": "4089aa6b-d2b9-4cd7-b2df-063ece5f9b21",
@@ -6597,6 +7070,17 @@
         "updatedAt": "2026-06-09T08:12:36.593Z"
       },
       {
+        "id": "41ed95c3-eaff-43bb-aaae-23a349ccf923",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "1f889dca-949a-48d7-bacf-24cefafb08af",
+        "songTitleSnapshot": "SOFTLY, AS IN A MORNING SUNRISE",
+        "keyName": null,
+        "round": 2,
+        "priority": 12,
+        "createdAt": "2026-06-10T06:27:26.504Z",
+        "updatedAt": "2026-06-10T06:27:26.504Z"
+      },
+      {
         "id": "4211562b-543e-4751-b7b3-62806031f80a",
         "sessionEntryId": "a92f59eb-a3a0-4f97-91c6-f64aae9575c9",
         "songId": "515e0911-a088-4156-b3e5-0fe62eb0baf3",
@@ -6608,6 +7092,17 @@
         "updatedAt": "2026-05-07T08:44:30.912Z"
       },
       {
+        "id": "4404d7d8-fd6b-4380-b677-9324f65c2b7d",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "429b5c64-05fb-4404-80be-990691957975",
+        "songTitleSnapshot": "I REMEMBER YOU",
+        "keyName": null,
+        "round": 2,
+        "priority": 18,
+        "createdAt": "2026-06-10T06:27:26.509Z",
+        "updatedAt": "2026-06-10T06:27:26.509Z"
+      },
+      {
         "id": "453fd811-97d1-4574-a0c9-a13e2418d8bb",
         "sessionEntryId": "bea5633a-e450-448c-b04b-85ec0f5575da",
         "songId": "f79ed277-2e63-4f75-9b1c-a15abba54e7e",
@@ -6617,6 +7112,17 @@
         "priority": 1,
         "createdAt": "2026-05-07T08:44:30.831Z",
         "updatedAt": "2026-05-07T08:44:30.831Z"
+      },
+      {
+        "id": "45ecc4cf-4a06-4e71-bf45-382d4eeecf0c",
+        "sessionEntryId": "bf34a0b6-ff78-411c-b591-98d8cefe83f4",
+        "songId": "0e4ccdfa-bf0a-45e2-b343-fa239b47a064",
+        "songTitleSnapshot": "SPAIN",
+        "keyName": null,
+        "round": 2,
+        "priority": 2,
+        "createdAt": "2026-06-10T06:07:55.134Z",
+        "updatedAt": "2026-06-10T06:07:55.134Z"
       },
       {
         "id": "46813548-b635-4576-9252-460cff7e062a",
@@ -6650,6 +7156,17 @@
         "priority": 1,
         "createdAt": "2026-05-07T08:44:30.817Z",
         "updatedAt": "2026-05-07T08:44:30.817Z"
+      },
+      {
+        "id": "47942d0d-0ff8-4522-8d8b-84f82b382e12",
+        "sessionEntryId": "0f379057-7cb5-4031-b5a3-aa9908bd531a",
+        "songId": "e630279f-561e-4e32-8fe7-fe7a3199875f",
+        "songTitleSnapshot": "BUD POWELL",
+        "keyName": null,
+        "round": 2,
+        "priority": 2,
+        "createdAt": "2026-06-10T07:10:06.768Z",
+        "updatedAt": "2026-06-10T07:10:06.768Z"
       },
       {
         "id": "4890dc16-6911-4c8d-a0b8-a822a6acb616",
@@ -6707,6 +7224,17 @@
         "updatedAt": "2026-05-07T08:44:30.885Z"
       },
       {
+        "id": "4b4c45f4-6a6e-4ed6-8673-4bfbe84b271f",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "f3a7db74-5fd2-4be3-80ca-97cc0d2f6ac5",
+        "songTitleSnapshot": "I CAN T GIVE YOU ANYTHING BUT LOVE",
+        "keyName": "C",
+        "round": 2,
+        "priority": 8,
+        "createdAt": "2026-06-10T06:27:26.500Z",
+        "updatedAt": "2026-06-10T06:27:26.500Z"
+      },
+      {
         "id": "4c10e00a-a4b1-4f4a-baec-513f31af0d98",
         "sessionEntryId": "bf34a0b6-ff78-411c-b591-98d8cefe83f4",
         "songId": "d71152a3-f026-4788-81a7-0183a2d76672",
@@ -6716,6 +7244,17 @@
         "priority": 2,
         "createdAt": "2026-06-09T07:08:58.993Z",
         "updatedAt": "2026-06-09T07:08:58.993Z"
+      },
+      {
+        "id": "4d4ae541-b3aa-4de3-bd1c-dfb07867be6e",
+        "sessionEntryId": "a2ffbdb7-4755-4a48-ada0-fc1b18c7f71a",
+        "songId": "35404bb8-232f-426d-bc58-1801c221779a",
+        "songTitleSnapshot": "ALL OF ME",
+        "keyName": null,
+        "round": 2,
+        "priority": 1,
+        "createdAt": "2026-06-10T07:07:57.909Z",
+        "updatedAt": "2026-06-10T07:07:57.909Z"
       },
       {
         "id": "4e469135-7501-4f1d-817c-7f13def4d350",
@@ -6729,6 +7268,28 @@
         "updatedAt": "2026-06-09T08:10:17.964Z"
       },
       {
+        "id": "4e665e19-8989-4b02-b8bc-56436566ebb2",
+        "sessionEntryId": "22251191-e67d-4e3a-9e84-c8a9780c6fbc",
+        "songId": "c7009943-b04b-460d-ab52-7531629a1d59",
+        "songTitleSnapshot": "REFLECTIONS",
+        "keyName": "Eb",
+        "round": 2,
+        "priority": 2,
+        "createdAt": "2026-06-10T07:06:00.265Z",
+        "updatedAt": "2026-06-10T07:06:00.265Z"
+      },
+      {
+        "id": "4fcd48f8-d5d5-4e63-a1ab-40e2f338aa98",
+        "sessionEntryId": "a2ffbdb7-4755-4a48-ada0-fc1b18c7f71a",
+        "songId": "71859ccd-cd7b-47c1-844e-dfef098036f6",
+        "songTitleSnapshot": "WORK SONG",
+        "keyName": null,
+        "round": 2,
+        "priority": 2,
+        "createdAt": "2026-06-10T07:07:57.909Z",
+        "updatedAt": "2026-06-10T07:07:57.909Z"
+      },
+      {
         "id": "5151051b-1b4a-4a0e-a9c9-31ea749b4fe9",
         "sessionEntryId": "403bd5b4-06ca-43cb-a957-b3c8b402b9b3",
         "songId": "cbbf066d-b46c-4209-8773-966629c93763",
@@ -6738,6 +7299,17 @@
         "priority": 1,
         "createdAt": "2026-05-07T08:44:30.865Z",
         "updatedAt": "2026-05-07T08:44:30.865Z"
+      },
+      {
+        "id": "515f15f1-f772-46cc-901e-df8535e94a12",
+        "sessionEntryId": "0472525a-7f70-44c4-a2c0-a09fac05e733",
+        "songId": "b8114bf3-1616-4340-ab00-e2c0a3501c8c",
+        "songTitleSnapshot": "THERE WILL NEVER BE ANOTHER YOU",
+        "keyName": null,
+        "round": 2,
+        "priority": 4,
+        "createdAt": "2026-06-10T07:15:38.607Z",
+        "updatedAt": "2026-06-10T07:15:38.607Z"
       },
       {
         "id": "52197cd0-ae56-4b8b-b9f7-010b7206039e",
@@ -6760,6 +7332,17 @@
         "priority": 1,
         "createdAt": "2026-05-07T08:44:30.895Z",
         "updatedAt": "2026-05-07T08:44:30.895Z"
+      },
+      {
+        "id": "5280d1cb-2188-4202-8e33-f658cf892b0d",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "1a0ce149-f1f4-4dd7-abd7-f7d017256d06",
+        "songTitleSnapshot": "DAT DERE",
+        "keyName": null,
+        "round": 2,
+        "priority": 13,
+        "createdAt": "2026-06-10T06:27:26.505Z",
+        "updatedAt": "2026-06-10T06:27:26.505Z"
       },
       {
         "id": "54c0d8f3-752e-495a-a1c6-9bcd4fdd2c98",
@@ -6795,6 +7378,28 @@
         "updatedAt": "2026-06-09T06:33:39.779Z"
       },
       {
+        "id": "579e7b56-1f58-4bca-bbe0-36aa6d87296a",
+        "sessionEntryId": "bedbbebb-4328-461e-ac26-a0ece3166d84",
+        "songId": "263b6bb5-8b2e-458e-84c1-66326ef6a731",
+        "songTitleSnapshot": "RECORDAME",
+        "keyName": null,
+        "round": 2,
+        "priority": 7,
+        "createdAt": "2026-06-10T06:18:21.442Z",
+        "updatedAt": "2026-06-10T06:18:21.442Z"
+      },
+      {
+        "id": "58b89a44-dfce-4672-a9f7-8df0810bcc13",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "e81e65b2-772e-4ffa-a522-8da58c36d831",
+        "songTitleSnapshot": "IN A MELLOW TONE",
+        "keyName": null,
+        "round": 2,
+        "priority": 15,
+        "createdAt": "2026-06-10T06:27:26.507Z",
+        "updatedAt": "2026-06-10T06:27:26.507Z"
+      },
+      {
         "id": "5c2a8e71-c840-4962-86a9-6bcebeeb8fd6",
         "sessionEntryId": "28df94f2-871a-4739-8e3b-ce8906ae57ee",
         "songId": "0fbf01e1-9c66-4280-88e5-bfa3b61f2d14",
@@ -6817,6 +7422,50 @@
         "updatedAt": "2026-05-07T08:44:30.836Z"
       },
       {
+        "id": "5d498a4b-4482-4399-a864-d74732f61ff0",
+        "sessionEntryId": "bedbbebb-4328-461e-ac26-a0ece3166d84",
+        "songId": "0e66dd60-e1e1-455d-aaed-90caf8f5750f",
+        "songTitleSnapshot": "CUTE",
+        "keyName": null,
+        "round": 2,
+        "priority": 14,
+        "createdAt": "2026-06-10T06:18:21.448Z",
+        "updatedAt": "2026-06-10T06:18:21.448Z"
+      },
+      {
+        "id": "5e9b26a7-1af7-4a8a-a027-c404325da351",
+        "sessionEntryId": "7fe23d56-5548-4339-8ee4-583dc404cb2a",
+        "songId": "f3a7db74-5fd2-4be3-80ca-97cc0d2f6ac5",
+        "songTitleSnapshot": "I CAN T GIVE YOU ANYTHING BUT LOVE",
+        "keyName": "C",
+        "round": 2,
+        "priority": 3,
+        "createdAt": "2026-06-10T06:36:32.635Z",
+        "updatedAt": "2026-06-10T06:36:32.635Z"
+      },
+      {
+        "id": "60191f38-0821-4202-b599-0721145b465f",
+        "sessionEntryId": "bedbbebb-4328-461e-ac26-a0ece3166d84",
+        "songId": "1f889dca-949a-48d7-bacf-24cefafb08af",
+        "songTitleSnapshot": "SOFTLY, AS IN A MORNING SUNRISE",
+        "keyName": null,
+        "round": 2,
+        "priority": 3,
+        "createdAt": "2026-06-10T06:18:21.438Z",
+        "updatedAt": "2026-06-10T06:18:21.438Z"
+      },
+      {
+        "id": "607ab2c8-9a36-4baa-917e-17487f3f2cfd",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "4e6ab062-9c8d-4f69-bc96-66cccbc45ca6",
+        "songTitleSnapshot": "IT COULD HAPPEN TO YOU",
+        "keyName": null,
+        "round": 2,
+        "priority": 16,
+        "createdAt": "2026-06-10T06:27:26.508Z",
+        "updatedAt": "2026-06-10T06:27:26.508Z"
+      },
+      {
         "id": "60b8c7ff-7412-402d-927e-307b3e4fad6b",
         "sessionEntryId": "ce402cb0-1f22-4c3a-a901-5d3aa83cab3d",
         "songId": "064e8c68-8ad8-433d-9e99-ce1aa92cd631",
@@ -6826,6 +7475,17 @@
         "priority": 2,
         "createdAt": "2026-05-07T08:44:30.873Z",
         "updatedAt": "2026-05-07T08:44:30.873Z"
+      },
+      {
+        "id": "6121540e-dcd8-471d-ac56-8e7778c0618e",
+        "sessionEntryId": "22251191-e67d-4e3a-9e84-c8a9780c6fbc",
+        "songId": "1a0ce149-f1f4-4dd7-abd7-f7d017256d06",
+        "songTitleSnapshot": "DAT DERE",
+        "keyName": null,
+        "round": 2,
+        "priority": 5,
+        "createdAt": "2026-06-10T07:06:00.267Z",
+        "updatedAt": "2026-06-10T07:06:00.267Z"
       },
       {
         "id": "624a93c0-dd2f-4e87-94bf-d24b66cfeb48",
@@ -6850,6 +7510,28 @@
         "updatedAt": "2026-05-07T08:44:30.939Z"
       },
       {
+        "id": "63941d1d-0ca7-44ca-9aca-af192e64cb07",
+        "sessionEntryId": "7fe23d56-5548-4339-8ee4-583dc404cb2a",
+        "songId": "4e6ab062-9c8d-4f69-bc96-66cccbc45ca6",
+        "songTitleSnapshot": "IT COULD HAPPEN TO YOU",
+        "keyName": null,
+        "round": 2,
+        "priority": 5,
+        "createdAt": "2026-06-10T06:36:32.637Z",
+        "updatedAt": "2026-06-10T06:36:32.637Z"
+      },
+      {
+        "id": "63aa4eca-3d3b-49d6-8820-d71b2caf6d9a",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "d238cacb-1f0f-4624-b789-8ba90fe51eb4",
+        "songTitleSnapshot": "THAT S ALL",
+        "keyName": null,
+        "round": 2,
+        "priority": 32,
+        "createdAt": "2026-06-10T06:27:26.521Z",
+        "updatedAt": "2026-06-10T06:27:26.521Z"
+      },
+      {
         "id": "644c01b5-d2cc-46e4-af2f-0844e6323543",
         "sessionEntryId": "8b587478-5b73-4250-acbd-e64862a4faa5",
         "songId": "801f4902-65bd-42be-aebb-04949eb106ba",
@@ -6859,6 +7541,50 @@
         "priority": 2,
         "createdAt": "2026-06-09T07:18:26.011Z",
         "updatedAt": "2026-06-09T07:18:26.011Z"
+      },
+      {
+        "id": "64a2cc12-ff77-47f6-9b73-15d7410fe3d8",
+        "sessionEntryId": "2d95a0bc-d9ff-4947-aafd-ebdff6078814",
+        "songId": "8b92a977-4615-41b7-b967-9900f47991f3",
+        "songTitleSnapshot": "MOMENT S NOTICE",
+        "keyName": null,
+        "round": 2,
+        "priority": 1,
+        "createdAt": "2026-06-10T07:02:46.218Z",
+        "updatedAt": "2026-06-10T07:02:46.218Z"
+      },
+      {
+        "id": "653082b5-c36d-4a01-b159-318b65ddbe5e",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "b8114bf3-1616-4340-ab00-e2c0a3501c8c",
+        "songTitleSnapshot": "THERE WILL NEVER BE ANOTHER YOU",
+        "keyName": null,
+        "round": 2,
+        "priority": 17,
+        "createdAt": "2026-06-10T06:27:26.508Z",
+        "updatedAt": "2026-06-10T06:27:26.508Z"
+      },
+      {
+        "id": "660e5f7b-ed84-496a-ad67-f24d8a3e0003",
+        "sessionEntryId": "7fe23d56-5548-4339-8ee4-583dc404cb2a",
+        "songId": "c7009943-b04b-460d-ab52-7531629a1d59",
+        "songTitleSnapshot": "REFLECTIONS",
+        "keyName": "Eb",
+        "round": 2,
+        "priority": 1,
+        "createdAt": "2026-06-10T06:36:32.633Z",
+        "updatedAt": "2026-06-10T06:36:32.633Z"
+      },
+      {
+        "id": "66336065-99d0-47ee-b740-41e9e266cee7",
+        "sessionEntryId": "7fe23d56-5548-4339-8ee4-583dc404cb2a",
+        "songId": "b19ffc89-17cc-41d7-a99c-fa41045de7fe",
+        "songTitleSnapshot": "IT NEVER ENTERED MY MIND",
+        "keyName": "Bb",
+        "round": 2,
+        "priority": 2,
+        "createdAt": "2026-06-10T06:36:32.634Z",
+        "updatedAt": "2026-06-10T06:36:32.634Z"
       },
       {
         "id": "6646d4d9-d835-4f8e-bd88-be4b09261208",
@@ -6927,6 +7653,39 @@
         "updatedAt": "2026-05-07T08:44:30.857Z"
       },
       {
+        "id": "6fd1fdd4-c7ff-483b-ab6e-4a4de8255f0b",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "c7009943-b04b-460d-ab52-7531629a1d59",
+        "songTitleSnapshot": "REFLECTIONS",
+        "keyName": "Eb",
+        "round": 2,
+        "priority": 2,
+        "createdAt": "2026-06-10T06:27:26.495Z",
+        "updatedAt": "2026-06-10T06:27:26.495Z"
+      },
+      {
+        "id": "70d6897f-75dc-4a78-9b27-d714e7109421",
+        "sessionEntryId": "0f379057-7cb5-4031-b5a3-aa9908bd531a",
+        "songId": "c75bd7ad-7444-47e9-a361-c4dc41c1827a",
+        "songTitleSnapshot": "ON GREEN DOLPHIN STREET",
+        "keyName": null,
+        "round": 2,
+        "priority": 3,
+        "createdAt": "2026-06-10T07:10:06.769Z",
+        "updatedAt": "2026-06-10T07:10:06.769Z"
+      },
+      {
+        "id": "713803a2-5c2a-4e21-a88d-aeabed37dad7",
+        "sessionEntryId": "22251191-e67d-4e3a-9e84-c8a9780c6fbc",
+        "songId": "6092b866-6689-498b-8024-cec02f65d31c",
+        "songTitleSnapshot": "LADY BIRD",
+        "keyName": null,
+        "round": 2,
+        "priority": 4,
+        "createdAt": "2026-06-10T07:06:00.266Z",
+        "updatedAt": "2026-06-10T07:06:00.266Z"
+      },
+      {
         "id": "7348efe3-9306-4dc4-b3a4-4087fdbbf79e",
         "sessionEntryId": "f5e438d5-164c-469b-b927-22ba89b6e301",
         "songId": "94498034-e0bf-4d3e-8b14-11cf2131c4e3",
@@ -6936,6 +7695,28 @@
         "priority": 2,
         "createdAt": "2026-05-07T08:44:30.902Z",
         "updatedAt": "2026-05-07T08:44:30.902Z"
+      },
+      {
+        "id": "744bacd6-8b9b-4494-b384-4babe00e3261",
+        "sessionEntryId": "0472525a-7f70-44c4-a2c0-a09fac05e733",
+        "songId": "35404bb8-232f-426d-bc58-1801c221779a",
+        "songTitleSnapshot": "ALL OF ME",
+        "keyName": null,
+        "round": 2,
+        "priority": 8,
+        "createdAt": "2026-06-10T07:15:38.611Z",
+        "updatedAt": "2026-06-10T07:15:38.611Z"
+      },
+      {
+        "id": "74eaa128-63cc-4400-9be6-a229422b4414",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "c053fdd1-9e63-4272-9af3-74e9879a5e70",
+        "songTitleSnapshot": "GIRL FROM IPANEMA",
+        "keyName": null,
+        "round": 2,
+        "priority": 20,
+        "createdAt": "2026-06-10T06:27:26.511Z",
+        "updatedAt": "2026-06-10T06:27:26.511Z"
       },
       {
         "id": "750ed3c6-6ce4-4411-aacd-aa959dfa92e8",
@@ -6958,6 +7739,17 @@
         "priority": 1,
         "createdAt": "2026-05-07T08:44:30.942Z",
         "updatedAt": "2026-05-07T08:44:30.942Z"
+      },
+      {
+        "id": "75205353-a042-4f78-9ee4-1e5d739dbdc7",
+        "sessionEntryId": "bedbbebb-4328-461e-ac26-a0ece3166d84",
+        "songId": "5db867f4-d04d-4c10-b099-d5fc57856cf0",
+        "songTitleSnapshot": "APRIL IN PARIS",
+        "keyName": null,
+        "round": 2,
+        "priority": 11,
+        "createdAt": "2026-06-10T06:18:21.446Z",
+        "updatedAt": "2026-06-10T06:18:21.446Z"
       },
       {
         "id": "756b7a6c-6068-4e3f-bf88-3b664db15138",
@@ -6991,6 +7783,28 @@
         "priority": 2,
         "createdAt": "2026-05-07T08:44:30.952Z",
         "updatedAt": "2026-05-07T08:44:30.952Z"
+      },
+      {
+        "id": "7723807d-9ba2-4b0e-9882-9148eb10e5b8",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "2e03d29b-0499-4bcb-8186-885af500dcf4",
+        "songTitleSnapshot": "NEVER LET ME GO",
+        "keyName": "F",
+        "round": 2,
+        "priority": 1,
+        "createdAt": "2026-06-10T06:27:26.493Z",
+        "updatedAt": "2026-06-10T06:27:26.493Z"
+      },
+      {
+        "id": "7bce12d0-6097-4f0a-8537-f9649089722f",
+        "sessionEntryId": "0472525a-7f70-44c4-a2c0-a09fac05e733",
+        "songId": "1f889dca-949a-48d7-bacf-24cefafb08af",
+        "songTitleSnapshot": "SOFTLY, AS IN A MORNING SUNRISE",
+        "keyName": null,
+        "round": 2,
+        "priority": 2,
+        "createdAt": "2026-06-10T07:15:38.605Z",
+        "updatedAt": "2026-06-10T07:15:38.605Z"
       },
       {
         "id": "7c6c1316-5217-46ad-b559-e50966091d5c",
@@ -7037,6 +7851,17 @@
         "updatedAt": "2026-05-07T08:44:30.871Z"
       },
       {
+        "id": "7e8d8015-60f4-48ba-8f66-006e496ea59e",
+        "sessionEntryId": "bedbbebb-4328-461e-ac26-a0ece3166d84",
+        "songId": "795f9199-0d49-4c4d-9bc5-0cfe4b1399fc",
+        "songTitleSnapshot": "BOLIVIA",
+        "keyName": null,
+        "round": 2,
+        "priority": 4,
+        "createdAt": "2026-06-10T06:18:21.439Z",
+        "updatedAt": "2026-06-10T06:18:21.439Z"
+      },
+      {
         "id": "7f1a3e97-7348-4e0e-81ad-0a3c9a456add",
         "sessionEntryId": "2d95a0bc-d9ff-4947-aafd-ebdff6078814",
         "songId": "0e66dd60-e1e1-455d-aaed-90caf8f5750f",
@@ -7070,6 +7895,17 @@
         "updatedAt": "2026-05-07T08:44:30.910Z"
       },
       {
+        "id": "84d7d14c-10e8-4d0e-9e79-c56ebe568790",
+        "sessionEntryId": "0472525a-7f70-44c4-a2c0-a09fac05e733",
+        "songId": "92ead2b2-be25-4373-a55e-8977a74b6a6b",
+        "songTitleSnapshot": "AUTUMN LEAVES",
+        "keyName": null,
+        "round": 2,
+        "priority": 6,
+        "createdAt": "2026-06-10T07:15:38.609Z",
+        "updatedAt": "2026-06-10T07:15:38.609Z"
+      },
+      {
         "id": "86161847-dcfb-43ce-aeda-cb241655f2b3",
         "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
         "songId": "fb1a575b-c7c3-4c1d-a118-b7e920a91117",
@@ -7079,6 +7915,17 @@
         "priority": 2,
         "createdAt": "2026-06-09T07:14:05.083Z",
         "updatedAt": "2026-06-09T07:14:05.083Z"
+      },
+      {
+        "id": "86bd18da-d0cc-4d7d-855c-aa50995f4e26",
+        "sessionEntryId": "f304198c-6ddf-4e5b-83ae-dcc8f6d8c3d6",
+        "songId": "b8114bf3-1616-4340-ab00-e2c0a3501c8c",
+        "songTitleSnapshot": "THERE WILL NEVER BE ANOTHER YOU",
+        "keyName": null,
+        "round": 2,
+        "priority": 4,
+        "createdAt": "2026-06-10T06:51:06.673Z",
+        "updatedAt": "2026-06-10T06:51:06.673Z"
       },
       {
         "id": "86c11df6-55ce-4a59-a557-bf1f3dcb067e",
@@ -7092,6 +7939,28 @@
         "updatedAt": "2026-05-07T08:44:30.891Z"
       },
       {
+        "id": "883205c5-5031-4f87-af3e-4c7caaab9009",
+        "sessionEntryId": "22251191-e67d-4e3a-9e84-c8a9780c6fbc",
+        "songId": "795f9199-0d49-4c4d-9bc5-0cfe4b1399fc",
+        "songTitleSnapshot": "BOLIVIA",
+        "keyName": null,
+        "round": 2,
+        "priority": 6,
+        "createdAt": "2026-06-10T07:06:00.268Z",
+        "updatedAt": "2026-06-10T07:06:00.268Z"
+      },
+      {
+        "id": "8a68876a-ac38-4cae-b9d8-304beb0157e6",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "9c0cd09f-4c50-4e89-b6e9-0ab2f971da65",
+        "songTitleSnapshot": "ALFIE",
+        "keyName": "F",
+        "round": 2,
+        "priority": 6,
+        "createdAt": "2026-06-10T06:27:26.498Z",
+        "updatedAt": "2026-06-10T06:27:26.498Z"
+      },
+      {
         "id": "8c1313a8-69a7-4b93-9c0a-66f36d7527a9",
         "sessionEntryId": "e935a8fe-8c9e-48e8-bc4f-685d2dea8c18",
         "songId": "515e0911-a088-4156-b3e5-0fe62eb0baf3",
@@ -7101,6 +7970,17 @@
         "priority": 2,
         "createdAt": "2026-05-07T08:44:30.826Z",
         "updatedAt": "2026-05-07T08:44:30.826Z"
+      },
+      {
+        "id": "8f654893-ebbd-4f30-9988-661b7b0f2b8c",
+        "sessionEntryId": "f304198c-6ddf-4e5b-83ae-dcc8f6d8c3d6",
+        "songId": "4e6ab062-9c8d-4f69-bc96-66cccbc45ca6",
+        "songTitleSnapshot": "IT COULD HAPPEN TO YOU",
+        "keyName": null,
+        "round": 2,
+        "priority": 3,
+        "createdAt": "2026-06-10T06:51:06.672Z",
+        "updatedAt": "2026-06-10T06:51:06.672Z"
       },
       {
         "id": "8f863c79-d3c2-4081-9ca7-a2910e17a708",
@@ -7134,6 +8014,17 @@
         "priority": 2,
         "createdAt": "2026-05-07T08:44:30.936Z",
         "updatedAt": "2026-05-07T08:44:30.936Z"
+      },
+      {
+        "id": "9348f657-c374-425d-b5e9-1f2b7e30f4c9",
+        "sessionEntryId": "bedbbebb-4328-461e-ac26-a0ece3166d84",
+        "songId": "b83d33c9-cb61-4dad-bb8a-6f7d484704b7",
+        "songTitleSnapshot": "DOLPHIN DANCE",
+        "keyName": null,
+        "round": 2,
+        "priority": 8,
+        "createdAt": "2026-06-10T06:18:21.443Z",
+        "updatedAt": "2026-06-10T06:18:21.443Z"
       },
       {
         "id": "9403f388-188b-4062-8ca5-183d132d1795",
@@ -7202,6 +8093,17 @@
         "updatedAt": "2026-05-07T08:44:30.833Z"
       },
       {
+        "id": "9bd6ffee-24f5-4b23-a86e-0f0fef3a6c7b",
+        "sessionEntryId": "0472525a-7f70-44c4-a2c0-a09fac05e733",
+        "songId": "ce52889d-429f-4cbe-82e2-c0bc6d727608",
+        "songTitleSnapshot": "HAVE YOU MET MISS JONES?",
+        "keyName": null,
+        "round": 2,
+        "priority": 11,
+        "createdAt": "2026-06-10T07:15:38.613Z",
+        "updatedAt": "2026-06-10T07:15:38.613Z"
+      },
+      {
         "id": "9cb51e8c-9fdd-45f0-86c4-652516d3c5b7",
         "sessionEntryId": "7267e37b-d5ee-430d-a50e-332ab05de387",
         "songId": "8974832a-8bce-4b3a-9203-25a7db2489d9",
@@ -7235,6 +8137,28 @@
         "updatedAt": "2026-05-07T08:44:30.818Z"
       },
       {
+        "id": "a0aa1019-80e3-4ef8-bc84-31a5d03aa1ed",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "f371d659-bc8b-407b-9096-b20199e61bcd",
+        "songTitleSnapshot": "SATIN DOLL",
+        "keyName": null,
+        "round": 2,
+        "priority": 28,
+        "createdAt": "2026-06-10T06:27:26.517Z",
+        "updatedAt": "2026-06-10T06:27:26.517Z"
+      },
+      {
+        "id": "a0af7f7b-0e00-4985-bdcc-6024e7beb391",
+        "sessionEntryId": "bedbbebb-4328-461e-ac26-a0ece3166d84",
+        "songId": "a3e88dae-c2a4-4dc2-aed9-2206643f9af7",
+        "songTitleSnapshot": "IT S ONLY A PAPER MOON",
+        "keyName": null,
+        "round": 2,
+        "priority": 12,
+        "createdAt": "2026-06-10T06:18:21.446Z",
+        "updatedAt": "2026-06-10T06:18:21.446Z"
+      },
+      {
         "id": "a13b201e-44d4-4c56-9af4-2f56b8911b2b",
         "sessionEntryId": "feaa771a-8b17-4fe0-bd41-2d067f52eeb4",
         "songId": "2e959cd7-4d60-438d-9fe3-42b4abc5d292",
@@ -7255,6 +8179,17 @@
         "priority": 1,
         "createdAt": "2026-05-07T08:44:30.947Z",
         "updatedAt": "2026-05-07T08:44:30.947Z"
+      },
+      {
+        "id": "a2c66114-b618-419c-894b-ba649d8f5073",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "d32089c9-78a3-4468-921b-e72b0c60403b",
+        "songTitleSnapshot": "SENTIMENTAL JOURNEY",
+        "keyName": "G",
+        "round": 2,
+        "priority": 7,
+        "createdAt": "2026-06-10T06:27:26.499Z",
+        "updatedAt": "2026-06-10T06:27:26.499Z"
       },
       {
         "id": "a3043123-9550-483f-898a-ad087fe0d537",
@@ -7290,6 +8225,17 @@
         "updatedAt": "2026-06-09T07:08:58.833Z"
       },
       {
+        "id": "a6634cde-3bf1-4c7a-ae65-5da99daf9c23",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "b19ffc89-17cc-41d7-a99c-fa41045de7fe",
+        "songTitleSnapshot": "IT NEVER ENTERED MY MIND",
+        "keyName": "Bb",
+        "round": 2,
+        "priority": 3,
+        "createdAt": "2026-06-10T06:27:26.496Z",
+        "updatedAt": "2026-06-10T06:27:26.496Z"
+      },
+      {
         "id": "a6c37b0c-b819-4028-b092-88ee26eddcec",
         "sessionEntryId": "74eb7a34-c66f-4dee-81c6-da79705cffbb",
         "songId": "8eca6a25-86d8-40b8-855a-1c1d277c858c",
@@ -7299,6 +8245,28 @@
         "priority": 2,
         "createdAt": "2026-05-07T08:44:30.916Z",
         "updatedAt": "2026-05-07T08:44:30.916Z"
+      },
+      {
+        "id": "a8d49db6-b9b2-41d5-afda-829e1b8e08fd",
+        "sessionEntryId": "bedbbebb-4328-461e-ac26-a0ece3166d84",
+        "songId": "9fbd4827-7415-453a-aefc-a4fedc204c31",
+        "songTitleSnapshot": "YOU AND THE NIGHT AND THE MUSIC",
+        "keyName": null,
+        "round": 2,
+        "priority": 2,
+        "createdAt": "2026-06-10T06:18:21.438Z",
+        "updatedAt": "2026-06-10T06:18:21.438Z"
+      },
+      {
+        "id": "a95d53f2-2e5f-47bd-b2a7-47a29eb6aa17",
+        "sessionEntryId": "2d95a0bc-d9ff-4947-aafd-ebdff6078814",
+        "songId": "1b75236e-4122-4358-95c5-f451e0e92445",
+        "songTitleSnapshot": "HOW HIGH THE MOON",
+        "keyName": null,
+        "round": 2,
+        "priority": 3,
+        "createdAt": "2026-06-10T07:02:46.220Z",
+        "updatedAt": "2026-06-10T07:02:46.220Z"
       },
       {
         "id": "aaa9f00e-08ec-4208-8d29-a9863311a754",
@@ -7356,6 +8324,50 @@
         "updatedAt": "2026-06-09T07:26:12.840Z"
       },
       {
+        "id": "ac6ef38f-cb34-4ea4-ae7f-398d7bcceafe",
+        "sessionEntryId": "2d95a0bc-d9ff-4947-aafd-ebdff6078814",
+        "songId": "92ead2b2-be25-4373-a55e-8977a74b6a6b",
+        "songTitleSnapshot": "AUTUMN LEAVES",
+        "keyName": null,
+        "round": 2,
+        "priority": 5,
+        "createdAt": "2026-06-10T07:02:46.222Z",
+        "updatedAt": "2026-06-10T07:02:46.222Z"
+      },
+      {
+        "id": "ae1b7457-d4c2-4957-8e7a-630ef9bd9a61",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "9fbd4827-7415-453a-aefc-a4fedc204c31",
+        "songTitleSnapshot": "YOU AND THE NIGHT AND THE MUSIC",
+        "keyName": null,
+        "round": 2,
+        "priority": 10,
+        "createdAt": "2026-06-10T06:27:26.502Z",
+        "updatedAt": "2026-06-10T06:27:26.502Z"
+      },
+      {
+        "id": "aede3313-7183-419b-b62d-53660d6ed23f",
+        "sessionEntryId": "9c57dc8b-b12e-4ad2-b057-a9f3909683a9",
+        "songId": "c75bd7ad-7444-47e9-a361-c4dc41c1827a",
+        "songTitleSnapshot": "ON GREEN DOLPHIN STREET",
+        "keyName": null,
+        "round": 2,
+        "priority": 5,
+        "createdAt": "2026-06-10T06:12:49.171Z",
+        "updatedAt": "2026-06-10T06:12:49.171Z"
+      },
+      {
+        "id": "b30bf65e-e145-428d-ac90-72de901ce94a",
+        "sessionEntryId": "9c57dc8b-b12e-4ad2-b057-a9f3909683a9",
+        "songId": "b83d33c9-cb61-4dad-bb8a-6f7d484704b7",
+        "songTitleSnapshot": "DOLPHIN DANCE",
+        "keyName": null,
+        "round": 2,
+        "priority": 4,
+        "createdAt": "2026-06-10T06:12:49.170Z",
+        "updatedAt": "2026-06-10T06:12:49.170Z"
+      },
+      {
         "id": "b3d401df-63ab-462d-9c80-90c33896e86a",
         "sessionEntryId": "456e3b03-24e5-4970-80b5-dde02f46ad98",
         "songId": "8d396f41-66e0-4b52-9a88-89bdda78231c",
@@ -7365,6 +8377,17 @@
         "priority": 2,
         "createdAt": "2026-06-09T08:09:11.602Z",
         "updatedAt": "2026-06-09T08:09:11.602Z"
+      },
+      {
+        "id": "b47079e9-5dc5-4e16-932c-64dfa3a57969",
+        "sessionEntryId": "0472525a-7f70-44c4-a2c0-a09fac05e733",
+        "songId": "f371d659-bc8b-407b-9096-b20199e61bcd",
+        "songTitleSnapshot": "SATIN DOLL",
+        "keyName": null,
+        "round": 2,
+        "priority": 10,
+        "createdAt": "2026-06-10T07:15:38.612Z",
+        "updatedAt": "2026-06-10T07:15:38.612Z"
       },
       {
         "id": "b503cf36-c874-4b8f-9b53-326799580f97",
@@ -7378,6 +8401,17 @@
         "updatedAt": "2026-05-07T08:44:30.949Z"
       },
       {
+        "id": "b578701f-2ef5-4fe2-9ec7-42a66bdc5f1e",
+        "sessionEntryId": "456e3b03-24e5-4970-80b5-dde02f46ad98",
+        "songId": "905a9f60-58e2-46a2-af4b-81c248d1674e",
+        "songTitleSnapshot": "SONG FOR MY FATHER",
+        "keyName": null,
+        "round": 2,
+        "priority": 1,
+        "createdAt": "2026-06-10T07:11:51.499Z",
+        "updatedAt": "2026-06-10T07:11:51.499Z"
+      },
+      {
         "id": "b70c0fc4-5ed5-4812-84c1-5760aec0e436",
         "sessionEntryId": "e935a8fe-8c9e-48e8-bc4f-685d2dea8c18",
         "songId": "703496d7-1970-4adb-8151-b4122ca66e70",
@@ -7387,6 +8421,17 @@
         "priority": 1,
         "createdAt": "2026-05-07T08:44:30.828Z",
         "updatedAt": "2026-05-07T08:44:30.828Z"
+      },
+      {
+        "id": "b86ac2af-419d-487f-8870-aebe2895f26a",
+        "sessionEntryId": "0472525a-7f70-44c4-a2c0-a09fac05e733",
+        "songId": "c75bd7ad-7444-47e9-a361-c4dc41c1827a",
+        "songTitleSnapshot": "ON GREEN DOLPHIN STREET",
+        "keyName": null,
+        "round": 2,
+        "priority": 7,
+        "createdAt": "2026-06-10T07:15:38.610Z",
+        "updatedAt": "2026-06-10T07:15:38.610Z"
       },
       {
         "id": "b8e61b69-1426-45a0-ab15-c5cfb2ea5c73",
@@ -7409,6 +8454,28 @@
         "priority": 2,
         "createdAt": "2026-05-07T08:44:30.926Z",
         "updatedAt": "2026-05-07T08:44:30.926Z"
+      },
+      {
+        "id": "ba5c233d-ef54-42b1-8ea8-59e1d338050f",
+        "sessionEntryId": "456e3b03-24e5-4970-80b5-dde02f46ad98",
+        "songId": "79bebb8b-c969-449e-a67e-ae745463e503",
+        "songTitleSnapshot": "HOW INSENSITIVE",
+        "keyName": null,
+        "round": 2,
+        "priority": 2,
+        "createdAt": "2026-06-10T07:11:51.500Z",
+        "updatedAt": "2026-06-10T07:11:51.500Z"
+      },
+      {
+        "id": "ba6b6e6b-e7c3-4e3d-8bde-d444759cd260",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "616a0dcc-fd6d-4775-835a-71cbf9358c5c",
+        "songTitleSnapshot": "ON A MISTY NIGHT",
+        "keyName": null,
+        "round": 2,
+        "priority": 29,
+        "createdAt": "2026-06-10T06:27:26.518Z",
+        "updatedAt": "2026-06-10T06:27:26.518Z"
       },
       {
         "id": "bbe718cc-e173-40ad-983b-4a1d3eba750d",
@@ -7466,6 +8533,17 @@
         "updatedAt": "2026-05-07T08:44:30.916Z"
       },
       {
+        "id": "bdbcb903-d041-4b5f-9079-210d9467028b",
+        "sessionEntryId": "2d95a0bc-d9ff-4947-aafd-ebdff6078814",
+        "songId": "c75bd7ad-7444-47e9-a361-c4dc41c1827a",
+        "songTitleSnapshot": "ON GREEN DOLPHIN STREET",
+        "keyName": null,
+        "round": 2,
+        "priority": 6,
+        "createdAt": "2026-06-10T07:02:46.223Z",
+        "updatedAt": "2026-06-10T07:02:46.223Z"
+      },
+      {
         "id": "bf3293e5-286b-4abf-bcf2-1c3a6522104f",
         "sessionEntryId": "3c9b0174-8cc8-4abb-9904-bf022b1f80d8",
         "songId": "e1c59105-e2f0-4eaf-ae92-53dc67c79f07",
@@ -7475,6 +8553,17 @@
         "priority": 1,
         "createdAt": "2026-05-07T08:44:30.937Z",
         "updatedAt": "2026-05-07T08:44:30.937Z"
+      },
+      {
+        "id": "bfc9d8d2-4040-4bc0-ad28-0e71b562a47b",
+        "sessionEntryId": "0472525a-7f70-44c4-a2c0-a09fac05e733",
+        "songId": "4e6ab062-9c8d-4f69-bc96-66cccbc45ca6",
+        "songTitleSnapshot": "IT COULD HAPPEN TO YOU",
+        "keyName": null,
+        "round": 2,
+        "priority": 3,
+        "createdAt": "2026-06-10T07:15:38.606Z",
+        "updatedAt": "2026-06-10T07:15:38.606Z"
       },
       {
         "id": "c0867aea-e7cc-4a5c-80e3-aa959e7340e5",
@@ -7508,6 +8597,50 @@
         "priority": 1,
         "createdAt": "2026-05-07T08:44:30.906Z",
         "updatedAt": "2026-05-07T08:44:30.906Z"
+      },
+      {
+        "id": "c2ed668e-1fe9-43ad-b131-8c67d1f33d51",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "5132bfb8-bf96-4d0a-872b-f785e49e2035",
+        "songTitleSnapshot": "MY FAVORITE THINGS",
+        "keyName": null,
+        "round": 2,
+        "priority": 22,
+        "createdAt": "2026-06-10T06:27:26.513Z",
+        "updatedAt": "2026-06-10T06:27:26.513Z"
+      },
+      {
+        "id": "c33a81e6-d6b3-4c81-9398-6d5c8ecbd098",
+        "sessionEntryId": "7fe23d56-5548-4339-8ee4-583dc404cb2a",
+        "songId": "92ead2b2-be25-4373-a55e-8977a74b6a6b",
+        "songTitleSnapshot": "AUTUMN LEAVES",
+        "keyName": null,
+        "round": 2,
+        "priority": 9,
+        "createdAt": "2026-06-10T06:36:32.641Z",
+        "updatedAt": "2026-06-10T06:36:32.641Z"
+      },
+      {
+        "id": "c354670b-f26d-465d-b6a4-c2b20ca94f65",
+        "sessionEntryId": "7fe23d56-5548-4339-8ee4-583dc404cb2a",
+        "songId": "e81e65b2-772e-4ffa-a522-8da58c36d831",
+        "songTitleSnapshot": "IN A MELLOW TONE",
+        "keyName": null,
+        "round": 2,
+        "priority": 4,
+        "createdAt": "2026-06-10T06:36:32.636Z",
+        "updatedAt": "2026-06-10T06:36:32.636Z"
+      },
+      {
+        "id": "c47ee5d6-4a63-44a6-9571-be060c4558f0",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "ce52889d-429f-4cbe-82e2-c0bc6d727608",
+        "songTitleSnapshot": "HAVE YOU MET MISS JONES?",
+        "keyName": null,
+        "round": 2,
+        "priority": 30,
+        "createdAt": "2026-06-10T06:27:26.519Z",
+        "updatedAt": "2026-06-10T06:27:26.519Z"
       },
       {
         "id": "c522206a-64d9-4d79-b1b8-67ee99a315e6",
@@ -7554,6 +8687,28 @@
         "updatedAt": "2026-05-07T08:44:30.896Z"
       },
       {
+        "id": "c7c3a2d7-08b0-48f0-ae58-c63b547e752f",
+        "sessionEntryId": "bedbbebb-4328-461e-ac26-a0ece3166d84",
+        "songId": "b8114bf3-1616-4340-ab00-e2c0a3501c8c",
+        "songTitleSnapshot": "THERE WILL NEVER BE ANOTHER YOU",
+        "keyName": null,
+        "round": 2,
+        "priority": 5,
+        "createdAt": "2026-06-10T06:18:21.440Z",
+        "updatedAt": "2026-06-10T06:18:21.440Z"
+      },
+      {
+        "id": "c84599e0-01ed-4832-b22e-9929945f6c52",
+        "sessionEntryId": "bf34a0b6-ff78-411c-b591-98d8cefe83f4",
+        "songId": "e630279f-561e-4e32-8fe7-fe7a3199875f",
+        "songTitleSnapshot": "BUD POWELL",
+        "keyName": null,
+        "round": 2,
+        "priority": 1,
+        "createdAt": "2026-06-10T06:07:55.132Z",
+        "updatedAt": "2026-06-10T06:07:55.132Z"
+      },
+      {
         "id": "ca7ad055-11a1-4f3d-bc7b-528fea1b7912",
         "sessionEntryId": "dd341340-44da-41ca-b1e9-bf8f93245b0e",
         "songId": "f79ed277-2e63-4f75-9b1c-a15abba54e7e",
@@ -7576,6 +8731,17 @@
         "updatedAt": "2026-06-09T07:10:31.336Z"
       },
       {
+        "id": "cc0f8c72-acbd-44e0-bd3b-85308c12bcfc",
+        "sessionEntryId": "7fe23d56-5548-4339-8ee4-583dc404cb2a",
+        "songId": "429b5c64-05fb-4404-80be-990691957975",
+        "songTitleSnapshot": "I REMEMBER YOU",
+        "keyName": null,
+        "round": 2,
+        "priority": 6,
+        "createdAt": "2026-06-10T06:36:32.638Z",
+        "updatedAt": "2026-06-10T06:36:32.638Z"
+      },
+      {
         "id": "cc950f56-fae9-4426-b386-d0950feadba6",
         "sessionEntryId": "0f379057-7cb5-4031-b5a3-aa9908bd531a",
         "songId": "263b6bb5-8b2e-458e-84c1-66326ef6a731",
@@ -7585,6 +8751,17 @@
         "priority": 1,
         "createdAt": "2026-06-09T08:08:14.081Z",
         "updatedAt": "2026-06-09T08:08:14.081Z"
+      },
+      {
+        "id": "ce1a7934-fcc1-4ccc-a331-49cf14b1c505",
+        "sessionEntryId": "0472525a-7f70-44c4-a2c0-a09fac05e733",
+        "songId": "9fbd4827-7415-453a-aefc-a4fedc204c31",
+        "songTitleSnapshot": "YOU AND THE NIGHT AND THE MUSIC",
+        "keyName": null,
+        "round": 2,
+        "priority": 1,
+        "createdAt": "2026-06-10T07:15:38.604Z",
+        "updatedAt": "2026-06-10T07:15:38.604Z"
       },
       {
         "id": "ce2ff15a-2e1c-408f-87cb-e4393c1f380e",
@@ -7620,6 +8797,28 @@
         "updatedAt": "2026-05-07T08:44:30.867Z"
       },
       {
+        "id": "d2905115-db23-450a-9060-fce545744abd",
+        "sessionEntryId": "9c57dc8b-b12e-4ad2-b057-a9f3909683a9",
+        "songId": "9fbd4827-7415-453a-aefc-a4fedc204c31",
+        "songTitleSnapshot": "YOU AND THE NIGHT AND THE MUSIC",
+        "keyName": null,
+        "round": 2,
+        "priority": 1,
+        "createdAt": "2026-06-10T06:12:49.167Z",
+        "updatedAt": "2026-06-10T06:12:49.167Z"
+      },
+      {
+        "id": "d448b36e-22c8-4b5d-a267-0450d9b8b521",
+        "sessionEntryId": "2d95a0bc-d9ff-4947-aafd-ebdff6078814",
+        "songId": "35404bb8-232f-426d-bc58-1801c221779a",
+        "songTitleSnapshot": "ALL OF ME",
+        "keyName": null,
+        "round": 2,
+        "priority": 8,
+        "createdAt": "2026-06-10T07:02:46.224Z",
+        "updatedAt": "2026-06-10T07:02:46.224Z"
+      },
+      {
         "id": "d44ec1c8-6ddc-472c-abab-52395da98f25",
         "sessionEntryId": "3ccd934a-cafb-4a39-bb70-b220dfe3ca7c",
         "songId": "795f9199-0d49-4c4d-9bc5-0cfe4b1399fc",
@@ -7653,6 +8852,17 @@
         "updatedAt": "2026-05-07T08:44:30.823Z"
       },
       {
+        "id": "d5db4f47-8d02-4029-ab73-585b2f336c2a",
+        "sessionEntryId": "bedbbebb-4328-461e-ac26-a0ece3166d84",
+        "songId": "c75bd7ad-7444-47e9-a361-c4dc41c1827a",
+        "songTitleSnapshot": "ON GREEN DOLPHIN STREET",
+        "keyName": null,
+        "round": 2,
+        "priority": 10,
+        "createdAt": "2026-06-10T06:18:21.445Z",
+        "updatedAt": "2026-06-10T06:18:21.445Z"
+      },
+      {
         "id": "d6b1b3c1-50d8-4205-b6b0-293b8d854f7c",
         "sessionEntryId": "5abca729-1181-4518-9589-01e9882995bc",
         "songId": "82031da6-19f5-4aa8-914b-00ea432d46d7",
@@ -7664,6 +8874,17 @@
         "updatedAt": "2026-05-07T08:44:30.953Z"
       },
       {
+        "id": "d6b48210-f079-4936-aa71-26480b5fc81d",
+        "sessionEntryId": "7fe23d56-5548-4339-8ee4-583dc404cb2a",
+        "songId": "7c25efbc-ec67-43fd-ae98-c066b39df375",
+        "songTitleSnapshot": "I SHOULD CARE",
+        "keyName": null,
+        "round": 2,
+        "priority": 10,
+        "createdAt": "2026-06-10T06:36:32.642Z",
+        "updatedAt": "2026-06-10T06:36:32.642Z"
+      },
+      {
         "id": "d7879ece-b74e-4ffd-b097-b8ede3f9cd5d",
         "sessionEntryId": "723deeeb-c213-43a1-bc2e-fb1d155c67d6",
         "songId": "e1c59105-e2f0-4eaf-ae92-53dc67c79f07",
@@ -7673,6 +8894,28 @@
         "priority": 1,
         "createdAt": "2026-05-07T08:44:30.841Z",
         "updatedAt": "2026-05-07T08:44:30.841Z"
+      },
+      {
+        "id": "d88b3f7a-7dea-462e-8ee5-d475050cb2f7",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "263b6bb5-8b2e-458e-84c1-66326ef6a731",
+        "songTitleSnapshot": "RECORDAME",
+        "keyName": null,
+        "round": 2,
+        "priority": 19,
+        "createdAt": "2026-06-10T06:27:26.510Z",
+        "updatedAt": "2026-06-10T06:27:26.510Z"
+      },
+      {
+        "id": "d96c7a17-2268-4e87-b2a4-f6337867d431",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "8b92a977-4615-41b7-b967-9900f47991f3",
+        "songTitleSnapshot": "MOMENT S NOTICE",
+        "keyName": null,
+        "round": 2,
+        "priority": 9,
+        "createdAt": "2026-06-10T06:27:26.501Z",
+        "updatedAt": "2026-06-10T06:27:26.501Z"
       },
       {
         "id": "da00cd87-b241-4dfa-9672-c6fb2ff69f46",
@@ -7730,6 +8973,17 @@
         "updatedAt": "2026-05-07T08:44:30.901Z"
       },
       {
+        "id": "defaea2e-f40a-4f7b-93cf-bde326163308",
+        "sessionEntryId": "f304198c-6ddf-4e5b-83ae-dcc8f6d8c3d6",
+        "songId": "c75bd7ad-7444-47e9-a361-c4dc41c1827a",
+        "songTitleSnapshot": "ON GREEN DOLPHIN STREET",
+        "keyName": null,
+        "round": 2,
+        "priority": 5,
+        "createdAt": "2026-06-10T06:51:06.674Z",
+        "updatedAt": "2026-06-10T06:51:06.674Z"
+      },
+      {
         "id": "df3374b0-ef39-4915-908b-743c0c9470ec",
         "sessionEntryId": "bf13ee5f-2231-416b-9670-170f8a46de59",
         "songId": "01ba577f-65aa-48c8-a019-53a814a17000",
@@ -7774,6 +9028,17 @@
         "updatedAt": "2026-05-07T08:44:30.875Z"
       },
       {
+        "id": "e489a862-03a9-440a-8bdf-c8e4af1808b4",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "5db867f4-d04d-4c10-b099-d5fc57856cf0",
+        "songTitleSnapshot": "APRIL IN PARIS",
+        "keyName": null,
+        "round": 2,
+        "priority": 23,
+        "createdAt": "2026-06-10T06:27:26.513Z",
+        "updatedAt": "2026-06-10T06:27:26.513Z"
+      },
+      {
         "id": "e71488ad-fac8-44ea-97fd-e6ed651aa15f",
         "sessionEntryId": "456e3b03-24e5-4970-80b5-dde02f46ad98",
         "songId": "c053fdd1-9e63-4272-9af3-74e9879a5e70",
@@ -7783,6 +9048,17 @@
         "priority": 1,
         "createdAt": "2026-06-09T08:09:11.371Z",
         "updatedAt": "2026-06-09T08:09:11.371Z"
+      },
+      {
+        "id": "e9e88146-e95a-4c69-9317-9bcdea5a7c87",
+        "sessionEntryId": "7fe23d56-5548-4339-8ee4-583dc404cb2a",
+        "songId": "263b6bb5-8b2e-458e-84c1-66326ef6a731",
+        "songTitleSnapshot": "RECORDAME",
+        "keyName": null,
+        "round": 2,
+        "priority": 7,
+        "createdAt": "2026-06-10T06:36:32.639Z",
+        "updatedAt": "2026-06-10T06:36:32.639Z"
       },
       {
         "id": "ea7c1ebe-e007-4eef-a6c0-b1bbb4c1b1a6",
@@ -7818,6 +9094,28 @@
         "updatedAt": "2026-05-07T08:44:30.909Z"
       },
       {
+        "id": "eedaeaa3-9a8f-49d6-9b02-4fe098895cdb",
+        "sessionEntryId": "22251191-e67d-4e3a-9e84-c8a9780c6fbc",
+        "songId": "e630279f-561e-4e32-8fe7-fe7a3199875f",
+        "songTitleSnapshot": "BUD POWELL",
+        "keyName": null,
+        "round": 2,
+        "priority": 3,
+        "createdAt": "2026-06-10T07:06:00.266Z",
+        "updatedAt": "2026-06-10T07:06:00.266Z"
+      },
+      {
+        "id": "ef3af97c-b840-4355-9d1d-98ecae4f0e80",
+        "sessionEntryId": "2d95a0bc-d9ff-4947-aafd-ebdff6078814",
+        "songId": "5db867f4-d04d-4c10-b099-d5fc57856cf0",
+        "songTitleSnapshot": "APRIL IN PARIS",
+        "keyName": null,
+        "round": 2,
+        "priority": 7,
+        "createdAt": "2026-06-10T07:02:46.224Z",
+        "updatedAt": "2026-06-10T07:02:46.224Z"
+      },
+      {
         "id": "ef48f5d1-d7fd-4c44-8edd-2b89164147df",
         "sessionEntryId": "28df94f2-871a-4739-8e3b-ce8906ae57ee",
         "songId": "b5737c9d-dac0-4c56-972a-14edb6863e21",
@@ -7829,6 +9127,39 @@
         "updatedAt": "2026-05-07T08:44:30.846Z"
       },
       {
+        "id": "ef5d9a54-8e90-4860-a93e-99ac7fb9326f",
+        "sessionEntryId": "2d95a0bc-d9ff-4947-aafd-ebdff6078814",
+        "songId": "466966e4-7781-4bcd-8443-762303d29726",
+        "songTitleSnapshot": "STAR EYES",
+        "keyName": null,
+        "round": 2,
+        "priority": 2,
+        "createdAt": "2026-06-10T07:02:46.219Z",
+        "updatedAt": "2026-06-10T07:02:46.219Z"
+      },
+      {
+        "id": "efd14522-204a-43f1-a2fb-1968cdb343be",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "8d396f41-66e0-4b52-9a88-89bdda78231c",
+        "songTitleSnapshot": "SUMMERTIME",
+        "keyName": "C",
+        "round": 2,
+        "priority": 5,
+        "createdAt": "2026-06-10T06:27:26.497Z",
+        "updatedAt": "2026-06-10T06:27:26.497Z"
+      },
+      {
+        "id": "f13b7125-6f9a-4b4f-a13b-715d1f7e6889",
+        "sessionEntryId": "22251191-e67d-4e3a-9e84-c8a9780c6fbc",
+        "songId": "801f4902-65bd-42be-aebb-04949eb106ba",
+        "songTitleSnapshot": "ARMANDO S RHUMBA",
+        "keyName": null,
+        "round": 2,
+        "priority": 7,
+        "createdAt": "2026-06-10T07:06:00.269Z",
+        "updatedAt": "2026-06-10T07:06:00.269Z"
+      },
+      {
         "id": "f20331bd-3188-42c5-8bb3-3bc41edbaa3c",
         "sessionEntryId": "50cd8d54-4fc0-4fc2-a35c-ebbe3fd049dc",
         "songId": "cbbf066d-b46c-4209-8773-966629c93763",
@@ -7838,6 +9169,17 @@
         "priority": 1,
         "createdAt": "2026-05-07T08:44:30.852Z",
         "updatedAt": "2026-05-07T08:44:30.852Z"
+      },
+      {
+        "id": "f2147084-983a-49b0-994b-03d6b1ae2294",
+        "sessionEntryId": "0472525a-7f70-44c4-a2c0-a09fac05e733",
+        "songId": "c053fdd1-9e63-4272-9af3-74e9879a5e70",
+        "songTitleSnapshot": "GIRL FROM IPANEMA",
+        "keyName": null,
+        "round": 2,
+        "priority": 5,
+        "createdAt": "2026-06-10T07:15:38.608Z",
+        "updatedAt": "2026-06-10T07:15:38.608Z"
       },
       {
         "id": "f38eb590-75d2-4d4b-8312-4765f1075bfd",
@@ -7884,6 +9226,50 @@
         "updatedAt": "2026-05-07T08:44:30.853Z"
       },
       {
+        "id": "f98a5f77-40b9-4fa8-b01e-4458ea0215ad",
+        "sessionEntryId": "bedbbebb-4328-461e-ac26-a0ece3166d84",
+        "songId": "78ea1ed3-26a9-40ae-8bfc-31a35dac9829",
+        "songTitleSnapshot": "SOLAR",
+        "keyName": null,
+        "round": 2,
+        "priority": 13,
+        "createdAt": "2026-06-10T06:18:21.447Z",
+        "updatedAt": "2026-06-10T06:18:21.447Z"
+      },
+      {
+        "id": "f9958bb0-ac80-49d2-bac1-5f0ac3dd4b4d",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "7c25efbc-ec67-43fd-ae98-c066b39df375",
+        "songTitleSnapshot": "I SHOULD CARE",
+        "keyName": null,
+        "round": 2,
+        "priority": 27,
+        "createdAt": "2026-06-10T06:27:26.516Z",
+        "updatedAt": "2026-06-10T06:27:26.516Z"
+      },
+      {
+        "id": "f9d09387-4dfd-4e6c-958a-00994db8c000",
+        "sessionEntryId": "9da2db89-14be-4016-b64d-b42c24dc5109",
+        "songId": "955fe793-18fd-48f0-a9c7-4f86a968326d",
+        "songTitleSnapshot": "SPEAK NO EVIL",
+        "keyName": null,
+        "round": 2,
+        "priority": 25,
+        "createdAt": "2026-06-10T06:27:26.515Z",
+        "updatedAt": "2026-06-10T06:27:26.515Z"
+      },
+      {
+        "id": "f9f2f55c-83ec-461b-836f-0efe369582ac",
+        "sessionEntryId": "22251191-e67d-4e3a-9e84-c8a9780c6fbc",
+        "songId": "2e03d29b-0499-4bcb-8186-885af500dcf4",
+        "songTitleSnapshot": "NEVER LET ME GO",
+        "keyName": "F",
+        "round": 2,
+        "priority": 1,
+        "createdAt": "2026-06-10T07:06:00.263Z",
+        "updatedAt": "2026-06-10T07:06:00.263Z"
+      },
+      {
         "id": "faa9d0ed-dc67-4c1c-a7fd-5f20c078f7f6",
         "sessionEntryId": "bc017621-ff92-4cab-bf90-98941d561616",
         "songId": "cbbf066d-b46c-4209-8773-966629c93763",
@@ -7915,9 +9301,34 @@
         "priority": 1,
         "createdAt": "2026-06-09T07:23:25.756Z",
         "updatedAt": "2026-06-09T07:23:25.756Z"
+      },
+      {
+        "id": "fec43a69-3bfc-426f-b4e7-680df08bd91b",
+        "sessionEntryId": "22251191-e67d-4e3a-9e84-c8a9780c6fbc",
+        "songId": "5db867f4-d04d-4c10-b099-d5fc57856cf0",
+        "songTitleSnapshot": "APRIL IN PARIS",
+        "keyName": null,
+        "round": 2,
+        "priority": 8,
+        "createdAt": "2026-06-10T07:06:00.270Z",
+        "updatedAt": "2026-06-10T07:06:00.270Z"
       }
     ],
     "sessionSets": [
+      {
+        "id": "001e8fa4-a2de-460f-a918-95fd98634ee5",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "APRIL IN PARIS",
+        "songId": "5db867f4-d04d-4c10-b099-d5fc57856cf0",
+        "setOrder": 2,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "4fecbe92-f636-40b4-9693-1dd0093cd001",
+        "bassId": "4d96f9dd-515c-4d3e-8d13-fa5528b88acc",
+        "pianoId": "29392f48-9160-4aa6-9d85-9b2f4d4f3e9b",
+        "keyName": null
+      },
       {
         "id": "00ea0026-3a8d-4bf2-b0bd-7385cef2b330",
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
@@ -7947,6 +9358,34 @@
         "keyName": null
       },
       {
+        "id": "0494827f-e1ba-4b48-a292-99bfd1b8c8f7",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "WORK SONG",
+        "songId": "71859ccd-cd7b-47c1-844e-dfef098036f6",
+        "setOrder": 15,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "4fecbe92-f636-40b4-9693-1dd0093cd001",
+        "bassId": "4d96f9dd-515c-4d3e-8d13-fa5528b88acc",
+        "pianoId": "ca32f617-3499-4e9b-9506-3497815e04a9",
+        "keyName": null
+      },
+      {
+        "id": "0a39d4f0-2fa9-43d2-b9d5-356ffe57bbd1",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "DAT DERE",
+        "songId": "1a0ce149-f1f4-4dd7-abd7-f7d017256d06",
+        "setOrder": 18,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "79e46d7b-1fc5-470b-bcf6-1f34db2f6c36",
+        "bassId": "cc7eaf03-a820-486f-9f36-6c4838003fc5",
+        "pianoId": "ca32f617-3499-4e9b-9506-3497815e04a9",
+        "keyName": null
+      },
+      {
         "id": "10d63b2b-ee51-4584-9ab4-d8827a8efcfb",
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "title": "Fly Me To The Moon",
@@ -7958,6 +9397,76 @@
         "drumId": "353a5b34-a63e-4fbb-a8f8-c1b61fe2e19d",
         "bassId": "74b313fa-3068-433c-ab33-faae84e505ca",
         "pianoId": "c1890e64-b45f-443b-b915-ade7fedf0cbb",
+        "keyName": null
+      },
+      {
+        "id": "11f2a692-417c-4ba8-936f-ca333b7a2df7",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "SPAIN",
+        "songId": "0e4ccdfa-bf0a-45e2-b343-fa239b47a064",
+        "setOrder": 33,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "79e46d7b-1fc5-470b-bcf6-1f34db2f6c36",
+        "bassId": "cc7eaf03-a820-486f-9f36-6c4838003fc5",
+        "pianoId": "ca32f617-3499-4e9b-9506-3497815e04a9",
+        "keyName": null
+      },
+      {
+        "id": "1739dd7f-6190-46a0-8bc9-1bee9ab70507",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "BOLIVIA",
+        "songId": "795f9199-0d49-4c4d-9bc5-0cfe4b1399fc",
+        "setOrder": 16,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "4fecbe92-f636-40b4-9693-1dd0093cd001",
+        "bassId": "cc7eaf03-a820-486f-9f36-6c4838003fc5",
+        "pianoId": "29392f48-9160-4aa6-9d85-9b2f4d4f3e9b",
+        "keyName": null
+      },
+      {
+        "id": "22a08d6c-027c-4bfa-be1c-3f3e2b7ae565",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "MOMENT S NOTICE",
+        "songId": "8b92a977-4615-41b7-b967-9900f47991f3",
+        "setOrder": 28,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "79e46d7b-1fc5-470b-bcf6-1f34db2f6c36",
+        "bassId": "57f63cf6-2d92-45d3-b4f4-4afbb9c063e9",
+        "pianoId": "f9a1bfc5-b18f-464f-842d-9924c3306a91",
+        "keyName": null
+      },
+      {
+        "id": "22a403a0-06d3-4d72-9f1b-27e68dbaf311",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "LADY BIRD",
+        "songId": "6092b866-6689-498b-8024-cec02f65d31c",
+        "setOrder": 27,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "4fecbe92-f636-40b4-9693-1dd0093cd001",
+        "bassId": "1ea0d4c8-f2e6-4fe4-9a14-88dea8b001e4",
+        "pianoId": "29392f48-9160-4aa6-9d85-9b2f4d4f3e9b",
+        "keyName": null
+      },
+      {
+        "id": "2bc3313c-6116-42fd-8e58-dfc5d6a8f6a1",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "IT COULD HAPPEN TO YOU",
+        "songId": "4e6ab062-9c8d-4f69-bc96-66cccbc45ca6",
+        "setOrder": 9,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "79e46d7b-1fc5-470b-bcf6-1f34db2f6c36",
+        "bassId": "4d96f9dd-515c-4d3e-8d13-fa5528b88acc",
+        "pianoId": "f955bbe0-987a-4801-b12c-546aaf1e7fa1",
         "keyName": null
       },
       {
@@ -7975,6 +9484,20 @@
         "keyName": "Eb"
       },
       {
+        "id": "3177ce28-4a90-4e09-a138-b9bc535f2e31",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "ARMANDO S RHUMBA",
+        "songId": "801f4902-65bd-42be-aebb-04949eb106ba",
+        "setOrder": 37,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "4fecbe92-f636-40b4-9693-1dd0093cd001",
+        "bassId": "57f63cf6-2d92-45d3-b4f4-4afbb9c063e9",
+        "pianoId": "f9a1bfc5-b18f-464f-842d-9924c3306a91",
+        "keyName": null
+      },
+      {
         "id": "319ebaac-7706-4836-9d7a-b300519a76a8",
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "title": "On Green Dolphin Street",
@@ -7986,6 +9509,48 @@
         "drumId": "353a5b34-a63e-4fbb-a8f8-c1b61fe2e19d",
         "bassId": "74b313fa-3068-433c-ab33-faae84e505ca",
         "pianoId": "a50d9611-d199-4e50-a694-3ce77c7e62a2",
+        "keyName": null
+      },
+      {
+        "id": "3360a925-5858-41e8-ad6f-6a7262cef05f",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "ALFIE",
+        "songId": "9c0cd09f-4c50-4e89-b6e9-0ab2f971da65",
+        "setOrder": 36,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "79e46d7b-1fc5-470b-bcf6-1f34db2f6c36",
+        "bassId": "cc7eaf03-a820-486f-9f36-6c4838003fc5",
+        "pianoId": "f9a1bfc5-b18f-464f-842d-9924c3306a91",
+        "keyName": "F"
+      },
+      {
+        "id": "35daf021-5212-4391-b123-b73a7677a491",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "HOW HIGH THE MOON",
+        "songId": "1b75236e-4122-4358-95c5-f451e0e92445",
+        "setOrder": 20,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "79e46d7b-1fc5-470b-bcf6-1f34db2f6c36",
+        "bassId": "57f63cf6-2d92-45d3-b4f4-4afbb9c063e9",
+        "pianoId": "f9a1bfc5-b18f-464f-842d-9924c3306a91",
+        "keyName": null
+      },
+      {
+        "id": "37492105-eb16-4c8e-a51a-3133904c9c3a",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "HAVE YOU MET MISS JONES?",
+        "songId": "ce52889d-429f-4cbe-82e2-c0bc6d727608",
+        "setOrder": 19,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "298e79de-2a6e-4ab1-a6ef-2efbfaa3d59e",
+        "bassId": "57f63cf6-2d92-45d3-b4f4-4afbb9c063e9",
+        "pianoId": "29392f48-9160-4aa6-9d85-9b2f4d4f3e9b",
         "keyName": null
       },
       {
@@ -8003,6 +9568,34 @@
         "keyName": null
       },
       {
+        "id": "3e1c486f-44e3-4d77-a1e2-c0bc868f5462",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "IN A MELLOW TONE",
+        "songId": "e81e65b2-772e-4ffa-a522-8da58c36d831",
+        "setOrder": 24,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "79e46d7b-1fc5-470b-bcf6-1f34db2f6c36",
+        "bassId": "cc7eaf03-a820-486f-9f36-6c4838003fc5",
+        "pianoId": "f955bbe0-987a-4801-b12c-546aaf1e7fa1",
+        "keyName": null
+      },
+      {
+        "id": "3ee1e45a-c536-4d91-bf39-7cae5a34ead2",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "ALL OF ME",
+        "songId": "35404bb8-232f-426d-bc58-1801c221779a",
+        "setOrder": 7,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "79e46d7b-1fc5-470b-bcf6-1f34db2f6c36",
+        "bassId": "4d96f9dd-515c-4d3e-8d13-fa5528b88acc",
+        "pianoId": "f9a1bfc5-b18f-464f-842d-9924c3306a91",
+        "keyName": null
+      },
+      {
         "id": "50e44668-6223-4c5f-9aab-9e5118b34572",
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "title": "Stella By Starlight",
@@ -8017,6 +9610,20 @@
         "keyName": "G"
       },
       {
+        "id": "5aee7b2c-cb9f-4143-9b87-3dd2593d6b7b",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "SOFTLY, AS IN A MORNING SUNRISE",
+        "songId": "1f889dca-949a-48d7-bacf-24cefafb08af",
+        "setOrder": 3,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "4fecbe92-f636-40b4-9693-1dd0093cd001",
+        "bassId": "4d96f9dd-515c-4d3e-8d13-fa5528b88acc",
+        "pianoId": "f9a1bfc5-b18f-464f-842d-9924c3306a91",
+        "keyName": null
+      },
+      {
         "id": "6396cbe9-63d8-4623-8f6d-07598934c2c5",
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "title": "Softly, As In A Morning Sunrise",
@@ -8028,6 +9635,34 @@
         "drumId": "1fe14848-e9c3-4947-a966-ab11814f621a",
         "bassId": "b89a6218-5dd3-4676-aba0-bf71b194dd1e",
         "pianoId": "086ab819-571b-4c5c-9315-6282f2f0c9b9",
+        "keyName": null
+      },
+      {
+        "id": "68ef416b-b09a-4139-89db-7a0713f2dbe0",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "IT S ONLY A PAPER MOON",
+        "songId": "a3e88dae-c2a4-4dc2-aed9-2206643f9af7",
+        "setOrder": 26,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "4fecbe92-f636-40b4-9693-1dd0093cd001",
+        "bassId": "cc7eaf03-a820-486f-9f36-6c4838003fc5",
+        "pianoId": "f9a1bfc5-b18f-464f-842d-9924c3306a91",
+        "keyName": null
+      },
+      {
+        "id": "6acf33a4-2240-4e48-9a44-b25d52b4ed9d",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "STAR EYES",
+        "songId": "466966e4-7781-4bcd-8443-762303d29726",
+        "setOrder": 34,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "298e79de-2a6e-4ab1-a6ef-2efbfaa3d59e",
+        "bassId": "57f63cf6-2d92-45d3-b4f4-4afbb9c063e9",
+        "pianoId": "f9a1bfc5-b18f-464f-842d-9924c3306a91",
         "keyName": null
       },
       {
@@ -8101,6 +9736,34 @@
         "keyName": null
       },
       {
+        "id": "83771c5d-252d-4434-bc1a-832de81e32e1",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "THERE WILL NEVER BE ANOTHER YOU",
+        "songId": "b8114bf3-1616-4340-ab00-e2c0a3501c8c",
+        "setOrder": 10,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "4fecbe92-f636-40b4-9693-1dd0093cd001",
+        "bassId": "4d96f9dd-515c-4d3e-8d13-fa5528b88acc",
+        "pianoId": "ca32f617-3499-4e9b-9506-3497815e04a9",
+        "keyName": null
+      },
+      {
+        "id": "87402bed-6b8c-47a8-a062-ae95b3054682",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "IT NEVER ENTERED MY MIND",
+        "songId": "b19ffc89-17cc-41d7-a99c-fa41045de7fe",
+        "setOrder": 25,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "298e79de-2a6e-4ab1-a6ef-2efbfaa3d59e",
+        "bassId": "57f63cf6-2d92-45d3-b4f4-4afbb9c063e9",
+        "pianoId": "f955bbe0-987a-4801-b12c-546aaf1e7fa1",
+        "keyName": "Bb"
+      },
+      {
         "id": "8b147fa9-b582-4bf7-a3fc-7e268b0a8461",
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "title": "All The Things You Are",
@@ -8112,6 +9775,62 @@
         "drumId": "9b735712-cb62-45cf-aa1d-4d8ebd7a514d",
         "bassId": "cfef8991-238e-4cfb-840e-766e8cb753b6",
         "pianoId": "0314d9b4-7d15-4eb4-9476-220fc676862c",
+        "keyName": null
+      },
+      {
+        "id": "91a285b0-227d-497c-a80b-e6eba272b62b",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "HOW INSENSITIVE",
+        "songId": "79bebb8b-c969-449e-a67e-ae745463e503",
+        "setOrder": 21,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "298e79de-2a6e-4ab1-a6ef-2efbfaa3d59e",
+        "bassId": "cc7eaf03-a820-486f-9f36-6c4838003fc5",
+        "pianoId": "ca32f617-3499-4e9b-9506-3497815e04a9",
+        "keyName": null
+      },
+      {
+        "id": "9cb2a66e-e904-4195-97c5-3cc5ae4035d8",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "I REMEMBER YOU",
+        "songId": "429b5c64-05fb-4404-80be-990691957975",
+        "setOrder": 4,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "4fecbe92-f636-40b4-9693-1dd0093cd001",
+        "bassId": "4d96f9dd-515c-4d3e-8d13-fa5528b88acc",
+        "pianoId": "f955bbe0-987a-4801-b12c-546aaf1e7fa1",
+        "keyName": null
+      },
+      {
+        "id": "a220c89d-2f8a-4295-87c3-a4ab921ce9d9",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "SUMMERTIME",
+        "songId": "8d396f41-66e0-4b52-9a88-89bdda78231c",
+        "setOrder": 35,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "4fecbe92-f636-40b4-9693-1dd0093cd001",
+        "bassId": "57f63cf6-2d92-45d3-b4f4-4afbb9c063e9",
+        "pianoId": "ca32f617-3499-4e9b-9506-3497815e04a9",
+        "keyName": "C"
+      },
+      {
+        "id": "a5c5d152-10f5-46e4-b9ab-673e55583fa4",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "ON GREEN DOLPHIN STREET",
+        "songId": "c75bd7ad-7444-47e9-a361-c4dc41c1827a",
+        "setOrder": 6,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "298e79de-2a6e-4ab1-a6ef-2efbfaa3d59e",
+        "bassId": "57f63cf6-2d92-45d3-b4f4-4afbb9c063e9",
+        "pianoId": "f955bbe0-987a-4801-b12c-546aaf1e7fa1",
         "keyName": null
       },
       {
@@ -8129,6 +9848,90 @@
         "keyName": null
       },
       {
+        "id": "ae2669ab-a1e6-4a8b-bed8-7adbca03868f",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "CUTE",
+        "songId": "0e66dd60-e1e1-455d-aaed-90caf8f5750f",
+        "setOrder": 17,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "4fecbe92-f636-40b4-9693-1dd0093cd001",
+        "bassId": "cc7eaf03-a820-486f-9f36-6c4838003fc5",
+        "pianoId": "f9a1bfc5-b18f-464f-842d-9924c3306a91",
+        "keyName": null
+      },
+      {
+        "id": "b4e3763d-bcf8-46ed-acbd-8d88cf2432ed",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "RECORDAME",
+        "songId": "263b6bb5-8b2e-458e-84c1-66326ef6a731",
+        "setOrder": 5,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "298e79de-2a6e-4ab1-a6ef-2efbfaa3d59e",
+        "bassId": "4d96f9dd-515c-4d3e-8d13-fa5528b88acc",
+        "pianoId": "f955bbe0-987a-4801-b12c-546aaf1e7fa1",
+        "keyName": null
+      },
+      {
+        "id": "b61cca21-11e6-4c94-b613-023e01064a5d",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "BUT NOT FOR ME",
+        "songId": "7ad90953-f3d5-4ee7-921f-2459fa2added",
+        "setOrder": 38,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "79e46d7b-1fc5-470b-bcf6-1f34db2f6c36",
+        "bassId": "cc7eaf03-a820-486f-9f36-6c4838003fc5",
+        "pianoId": "ca32f617-3499-4e9b-9506-3497815e04a9",
+        "keyName": "Bb"
+      },
+      {
+        "id": "bb27e5e3-8713-46dd-b698-e859c7665be0",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "I SHOULD CARE",
+        "songId": "7c25efbc-ec67-43fd-ae98-c066b39df375",
+        "setOrder": 23,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "298e79de-2a6e-4ab1-a6ef-2efbfaa3d59e",
+        "bassId": "cc7eaf03-a820-486f-9f36-6c4838003fc5",
+        "pianoId": "f955bbe0-987a-4801-b12c-546aaf1e7fa1",
+        "keyName": null
+      },
+      {
+        "id": "c1b04d21-eb5a-4a00-8ff1-10e3e322297a",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "YOU AND THE NIGHT AND THE MUSIC",
+        "songId": "9fbd4827-7415-453a-aefc-a4fedc204c31",
+        "setOrder": 1,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "298e79de-2a6e-4ab1-a6ef-2efbfaa3d59e",
+        "bassId": "4d96f9dd-515c-4d3e-8d13-fa5528b88acc",
+        "pianoId": "f955bbe0-987a-4801-b12c-546aaf1e7fa1",
+        "keyName": null
+      },
+      {
+        "id": "c1c5f073-e2d0-4110-9219-a4f7831e0695",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "DOLPHIN DANCE",
+        "songId": "b83d33c9-cb61-4dad-bb8a-6f7d484704b7",
+        "setOrder": 8,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "298e79de-2a6e-4ab1-a6ef-2efbfaa3d59e",
+        "bassId": "4d96f9dd-515c-4d3e-8d13-fa5528b88acc",
+        "pianoId": "ca32f617-3499-4e9b-9506-3497815e04a9",
+        "keyName": null
+      },
+      {
         "id": "c60038fe-2aa0-43a6-b9f1-877a41c49e96",
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "title": "Beautiful Love",
@@ -8140,6 +9943,34 @@
         "drumId": "dd005693-bf89-4723-9f30-931291eac938",
         "bassId": "1f4e54ad-676e-4d23-9a14-10b25d4a561f",
         "pianoId": "a50d9611-d199-4e50-a694-3ce77c7e62a2",
+        "keyName": null
+      },
+      {
+        "id": "d1325846-02cd-4426-b645-13dc9fef8c71",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "REFLECTIONS",
+        "songId": "c7009943-b04b-460d-ab52-7531629a1d59",
+        "setOrder": 14,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "79e46d7b-1fc5-470b-bcf6-1f34db2f6c36",
+        "bassId": "4d96f9dd-515c-4d3e-8d13-fa5528b88acc",
+        "pianoId": "f955bbe0-987a-4801-b12c-546aaf1e7fa1",
+        "keyName": "Eb"
+      },
+      {
+        "id": "d42e1e2b-a831-4ccf-8e72-ec8e651e003f",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "BUD POWELL",
+        "songId": "e630279f-561e-4e32-8fe7-fe7a3199875f",
+        "setOrder": 12,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "79e46d7b-1fc5-470b-bcf6-1f34db2f6c36",
+        "bassId": "57f63cf6-2d92-45d3-b4f4-4afbb9c063e9",
+        "pianoId": "29392f48-9160-4aa6-9d85-9b2f4d4f3e9b",
         "keyName": null
       },
       {
@@ -8157,6 +9988,20 @@
         "keyName": null
       },
       {
+        "id": "d833b980-6793-4931-a8c4-41fd028592e3",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "I CAN T GIVE YOU ANYTHING BUT LOVE",
+        "songId": "f3a7db74-5fd2-4be3-80ca-97cc0d2f6ac5",
+        "setOrder": 22,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "4fecbe92-f636-40b4-9693-1dd0093cd001",
+        "bassId": "57f63cf6-2d92-45d3-b4f4-4afbb9c063e9",
+        "pianoId": "f955bbe0-987a-4801-b12c-546aaf1e7fa1",
+        "keyName": "C"
+      },
+      {
         "id": "dfd2c877-4a4b-4f62-bd4d-f8cfc7a94ada",
         "sessionEventId": "12288c72-61b1-4b6c-b368-3b91d9e03a16",
         "title": "Misty",
@@ -8168,6 +10013,76 @@
         "drumId": "dd005693-bf89-4723-9f30-931291eac938",
         "bassId": "b89a6218-5dd3-4676-aba0-bf71b194dd1e",
         "pianoId": "febdd8fd-0882-467b-b8a9-0dd06df7e990",
+        "keyName": null
+      },
+      {
+        "id": "e29ce218-938f-4cdf-8255-1250533afec8",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "AUTUMN LEAVES",
+        "songId": "92ead2b2-be25-4373-a55e-8977a74b6a6b",
+        "setOrder": 11,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "79e46d7b-1fc5-470b-bcf6-1f34db2f6c36",
+        "bassId": "1ea0d4c8-f2e6-4fe4-9a14-88dea8b001e4",
+        "pianoId": "f955bbe0-987a-4801-b12c-546aaf1e7fa1",
+        "keyName": null
+      },
+      {
+        "id": "e573d83e-52bd-4bfe-9554-64d22bdc1903",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "SONG FOR MY FATHER",
+        "songId": "905a9f60-58e2-46a2-af4b-81c248d1674e",
+        "setOrder": 32,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "298e79de-2a6e-4ab1-a6ef-2efbfaa3d59e",
+        "bassId": "57f63cf6-2d92-45d3-b4f4-4afbb9c063e9",
+        "pianoId": "29392f48-9160-4aa6-9d85-9b2f4d4f3e9b",
+        "keyName": null
+      },
+      {
+        "id": "e98c983d-5a80-41e5-aa31-f4f0716c3255",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "NEVER LET ME GO",
+        "songId": "2e03d29b-0499-4bcb-8186-885af500dcf4",
+        "setOrder": 29,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "298e79de-2a6e-4ab1-a6ef-2efbfaa3d59e",
+        "bassId": "57f63cf6-2d92-45d3-b4f4-4afbb9c063e9",
+        "pianoId": "29392f48-9160-4aa6-9d85-9b2f4d4f3e9b",
+        "keyName": "F"
+      },
+      {
+        "id": "ebf99095-b423-4dd1-a0da-a8cc0c985f5b",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "GIRL FROM IPANEMA",
+        "songId": "c053fdd1-9e63-4272-9af3-74e9879a5e70",
+        "setOrder": 13,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "298e79de-2a6e-4ab1-a6ef-2efbfaa3d59e",
+        "bassId": "4d96f9dd-515c-4d3e-8d13-fa5528b88acc",
+        "pianoId": "f955bbe0-987a-4801-b12c-546aaf1e7fa1",
+        "keyName": null
+      },
+      {
+        "id": "f3020118-c3dd-40c4-8b1e-d64472135ae6",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "SATIN DOLL",
+        "songId": "f371d659-bc8b-407b-9096-b20199e61bcd",
+        "setOrder": 30,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "79e46d7b-1fc5-470b-bcf6-1f34db2f6c36",
+        "bassId": "cc7eaf03-a820-486f-9f36-6c4838003fc5",
+        "pianoId": "ca32f617-3499-4e9b-9506-3497815e04a9",
         "keyName": null
       },
       {
@@ -8197,9 +10112,53 @@
         "bassId": "1f4e54ad-676e-4d23-9a14-10b25d4a561f",
         "pianoId": "a50d9611-d199-4e50-a694-3ce77c7e62a2",
         "keyName": null
+      },
+      {
+        "id": "ffd6aa9a-f897-4951-b988-8ed4b17b3507",
+        "sessionEventId": "79272389-ee6b-4452-8a15-5d0fc905b9c0",
+        "title": "SOLAR",
+        "songId": "78ea1ed3-26a9-40ae-8bfc-31a35dac9829",
+        "setOrder": 31,
+        "isPublished": false,
+        "createdAt": "2026-06-10T08:48:21.804Z",
+        "updatedAt": "2026-06-10T08:48:21.804Z",
+        "drumId": "4fecbe92-f636-40b4-9693-1dd0093cd001",
+        "bassId": "cc7eaf03-a820-486f-9f36-6c4838003fc5",
+        "pianoId": "29392f48-9160-4aa6-9d85-9b2f4d4f3e9b",
+        "keyName": null
       }
     ],
     "sessionSetMembers": [
+      {
+        "id": "07e16d76-cbb5-4b58-a8d9-5f2d820660f3",
+        "sessionSetId": "b4e3763d-bcf8-46ed-acbd-8d88cf2432ed",
+        "participantId": "f0027b0f-34e0-4e1d-bf5f-525bf251c9b3",
+        "role": "front"
+      },
+      {
+        "id": "08d92d8e-c3c0-4874-955e-9d709cd10445",
+        "sessionSetId": "f3020118-c3dd-40c4-8b1e-d64472135ae6",
+        "participantId": "9b3ffb12-62c6-4497-b2be-ac5fbb63fb5e",
+        "role": "front"
+      },
+      {
+        "id": "0b2e67cf-20c7-4519-8f51-0d1a208f90a9",
+        "sessionSetId": "c1c5f073-e2d0-4110-9219-a4f7831e0695",
+        "participantId": "f8e62a4c-8992-42c4-a29d-cc65a168d211",
+        "role": "front"
+      },
+      {
+        "id": "0bf0a9b4-9f1b-44e9-9a8b-6ddf2ea59aed",
+        "sessionSetId": "2bc3313c-6116-42fd-8e58-dfc5d6a8f6a1",
+        "participantId": "2f9dbbe9-e352-452c-a27e-5ede48ee0c46",
+        "role": "front"
+      },
+      {
+        "id": "0e36e8b6-c58b-42c6-ad42-88044ede7791",
+        "sessionSetId": "a220c89d-2f8a-4295-87c3-a4ab921ce9d9",
+        "participantId": "286ee780-9ee0-48f7-851a-11c56191d9b3",
+        "role": "vocal"
+      },
       {
         "id": "0f956759-8176-4d18-b1ce-4bb19dbc9a49",
         "sessionSetId": "50e44668-6223-4c5f-9aab-9e5118b34572",
@@ -8225,9 +10184,21 @@
         "role": "front"
       },
       {
+        "id": "1b58cfab-0b25-4e3f-908d-980c873eab09",
+        "sessionSetId": "91a285b0-227d-497c-a80b-e6eba272b62b",
+        "participantId": "30aa3210-dd3d-4d06-944d-ba5d79eea1c1",
+        "role": "front"
+      },
+      {
         "id": "26985da3-1221-441d-8005-88c56f9e374b",
         "sessionSetId": "c60038fe-2aa0-43a6-b9f1-877a41c49e96",
         "participantId": "227b7eb2-256c-4279-9b74-f981b4737efe",
+        "role": "front"
+      },
+      {
+        "id": "27cd2d8f-4ca6-4b8e-840c-5b041459503a",
+        "sessionSetId": "6acf33a4-2240-4e48-9a44-b25d52b4ed9d",
+        "participantId": "3cb9237e-9828-4170-a245-937382457294",
         "role": "front"
       },
       {
@@ -8237,9 +10208,45 @@
         "role": "front"
       },
       {
+        "id": "2bbaa8d7-f74e-48eb-9a64-812a04d3e3f2",
+        "sessionSetId": "11f2a692-417c-4ba8-936f-ca333b7a2df7",
+        "participantId": "3765a394-0901-4671-9f28-cc43261b3754",
+        "role": "front"
+      },
+      {
+        "id": "2ceef57b-d023-45ce-a74d-ae7a69b127c1",
+        "sessionSetId": "0494827f-e1ba-4b48-a292-99bfd1b8c8f7",
+        "participantId": "30aa3210-dd3d-4d06-944d-ba5d79eea1c1",
+        "role": "front"
+      },
+      {
+        "id": "2e0c6236-b0fd-45f3-89a5-b6f0a034a32a",
+        "sessionSetId": "6acf33a4-2240-4e48-9a44-b25d52b4ed9d",
+        "participantId": "f0027b0f-34e0-4e1d-bf5f-525bf251c9b3",
+        "role": "front"
+      },
+      {
+        "id": "2e60f060-a4a5-477f-bf67-271ca87e199c",
+        "sessionSetId": "ffd6aa9a-f897-4951-b988-8ed4b17b3507",
+        "participantId": "3cb9237e-9828-4170-a245-937382457294",
+        "role": "front"
+      },
+      {
+        "id": "307e98ae-0068-47de-b2d1-2fc80167b0dc",
+        "sessionSetId": "ffd6aa9a-f897-4951-b988-8ed4b17b3507",
+        "participantId": "f8e62a4c-8992-42c4-a29d-cc65a168d211",
+        "role": "front"
+      },
+      {
         "id": "31ac383c-ff1b-4196-b044-b52ede34c921",
         "sessionSetId": "d6a89013-655a-4c26-99b6-ab54c4d57413",
         "participantId": "b46f4d2b-295d-435d-99e8-a7072718f550",
+        "role": "front"
+      },
+      {
+        "id": "35503e38-394e-4bdf-9726-233d5306072a",
+        "sessionSetId": "22a08d6c-027c-4bfa-be1c-3f3e2b7ae565",
+        "participantId": "3cb9237e-9828-4170-a245-937382457294",
         "role": "front"
       },
       {
@@ -8249,9 +10256,39 @@
         "role": "front"
       },
       {
+        "id": "376d81e1-88a7-4e98-a35b-5bf47b3c89d5",
+        "sessionSetId": "d42e1e2b-a831-4ccf-8e72-ec8e651e003f",
+        "participantId": "f0027b0f-34e0-4e1d-bf5f-525bf251c9b3",
+        "role": "front"
+      },
+      {
+        "id": "377e7c51-087e-4398-966a-22a0aed713fe",
+        "sessionSetId": "3360a925-5858-41e8-ad6f-6a7262cef05f",
+        "participantId": "286ee780-9ee0-48f7-851a-11c56191d9b3",
+        "role": "vocal"
+      },
+      {
+        "id": "39a42a19-ecf5-44be-89ad-2b526fa20f55",
+        "sessionSetId": "3ee1e45a-c536-4d91-bf39-7cae5a34ead2",
+        "participantId": "30aa3210-dd3d-4d06-944d-ba5d79eea1c1",
+        "role": "front"
+      },
+      {
+        "id": "3a293a89-86aa-4142-9763-0a57d906ed1c",
+        "sessionSetId": "d1325846-02cd-4426-b645-13dc9fef8c71",
+        "participantId": "7e052976-e002-41c0-ac4a-bfe428183f98",
+        "role": "vocal"
+      },
+      {
         "id": "3fb2b905-fe1e-4d42-beb7-10685bf3451c",
         "sessionSetId": "50e44668-6223-4c5f-9aab-9e5118b34572",
         "participantId": "fee69e61-f2a7-4dac-8bdc-f6b30d4b079d",
+        "role": "vocal"
+      },
+      {
+        "id": "47566cd6-6536-463e-95a5-997edefdc256",
+        "sessionSetId": "87402bed-6b8c-47a8-a062-ae95b3054682",
+        "participantId": "7e052976-e002-41c0-ac4a-bfe428183f98",
         "role": "vocal"
       },
       {
@@ -8273,9 +10310,39 @@
         "role": "front"
       },
       {
+        "id": "5403e19f-d99a-4ee4-8d0a-84c86dabfff4",
+        "sessionSetId": "e29ce218-938f-4cdf-8255-1250533afec8",
+        "participantId": "012f500a-7e5a-464e-9680-ae4ad74fd3ed",
+        "role": "front"
+      },
+      {
+        "id": "55047d9a-18fa-4762-a6d1-210666067c11",
+        "sessionSetId": "3ee1e45a-c536-4d91-bf39-7cae5a34ead2",
+        "participantId": "012f500a-7e5a-464e-9680-ae4ad74fd3ed",
+        "role": "front"
+      },
+      {
+        "id": "59ce8e18-6670-409e-b9b2-e51cebbc786c",
+        "sessionSetId": "35daf021-5212-4391-b123-b73a7677a491",
+        "participantId": "3cb9237e-9828-4170-a245-937382457294",
+        "role": "front"
+      },
+      {
         "id": "5e23f577-853d-4855-a43d-bb6213681295",
         "sessionSetId": "00ea0026-3a8d-4bf2-b0bd-7385cef2b330",
         "participantId": "d3537a06-a425-4afe-800a-bf72f6d13c00",
+        "role": "front"
+      },
+      {
+        "id": "5ebbc7ee-137b-4ce3-8754-dc4bb9134edd",
+        "sessionSetId": "1739dd7f-6190-46a0-8bc9-1bee9ab70507",
+        "participantId": "92b78c23-62d3-4847-a592-9c70d1168579",
+        "role": "front"
+      },
+      {
+        "id": "5f4bcf76-4179-48d8-a8d9-2b31bf3ca166",
+        "sessionSetId": "ae2669ab-a1e6-4a8b-bed8-7adbca03868f",
+        "participantId": "3cb9237e-9828-4170-a245-937382457294",
         "role": "front"
       },
       {
@@ -8285,9 +10352,51 @@
         "role": "front"
       },
       {
+        "id": "61b3fcd2-40eb-4932-a66b-a4d420905c63",
+        "sessionSetId": "001e8fa4-a2de-460f-a918-95fd98634ee5",
+        "participantId": "92b78c23-62d3-4847-a592-9c70d1168579",
+        "role": "front"
+      },
+      {
+        "id": "61ebcce3-5c61-4082-b276-103fb37bc0bc",
+        "sessionSetId": "1739dd7f-6190-46a0-8bc9-1bee9ab70507",
+        "participantId": "3765a394-0901-4671-9f28-cc43261b3754",
+        "role": "front"
+      },
+      {
+        "id": "64c285b1-c06b-4d19-b311-ceca0af3d250",
+        "sessionSetId": "3e1c486f-44e3-4d77-a1e2-c0bc868f5462",
+        "participantId": "9b3ffb12-62c6-4497-b2be-ac5fbb63fb5e",
+        "role": "front"
+      },
+      {
+        "id": "6603290e-129b-498f-b523-30949d8ddf92",
+        "sessionSetId": "83771c5d-252d-4434-bc1a-832de81e32e1",
+        "participantId": "9b3ffb12-62c6-4497-b2be-ac5fbb63fb5e",
+        "role": "front"
+      },
+      {
+        "id": "6abccd74-161d-42e8-af1f-4493e42a1111",
+        "sessionSetId": "5aee7b2c-cb9f-4143-9b87-3dd2593d6b7b",
+        "participantId": "9b3ffb12-62c6-4497-b2be-ac5fbb63fb5e",
+        "role": "front"
+      },
+      {
+        "id": "6db2377c-b82c-4dcb-93d9-dc699a8298aa",
+        "sessionSetId": "a5c5d152-10f5-46e4-b9ab-673e55583fa4",
+        "participantId": "012f500a-7e5a-464e-9680-ae4ad74fd3ed",
+        "role": "front"
+      },
+      {
         "id": "6e66c363-e272-468b-854c-8ee2a12884b2",
         "sessionSetId": "f4c715a5-ded6-43a3-b4ef-db5106a1ee5c",
         "participantId": "3e614d1d-550d-455c-a884-378a9217fac1",
+        "role": "front"
+      },
+      {
+        "id": "7354969b-e035-4cc6-85fd-cdc101d22836",
+        "sessionSetId": "5aee7b2c-cb9f-4143-9b87-3dd2593d6b7b",
+        "participantId": "3cb9237e-9828-4170-a245-937382457294",
         "role": "front"
       },
       {
@@ -8315,9 +10424,33 @@
         "role": "front"
       },
       {
+        "id": "79b294f5-b7ec-47f7-9c61-8fe09a3abc88",
+        "sessionSetId": "37492105-eb16-4c8e-a51a-3133904c9c3a",
+        "participantId": "012f500a-7e5a-464e-9680-ae4ad74fd3ed",
+        "role": "front"
+      },
+      {
         "id": "7f421b1e-961b-41ff-b99b-cb40eb1a1612",
         "sessionSetId": "10d63b2b-ee51-4584-9ab4-d8827a8efcfb",
         "participantId": "b46f4d2b-295d-435d-99e8-a7072718f550",
+        "role": "front"
+      },
+      {
+        "id": "824e9c0d-0c2f-44b9-ad26-4cc285cf3eb8",
+        "sessionSetId": "d42e1e2b-a831-4ccf-8e72-ec8e651e003f",
+        "participantId": "92b78c23-62d3-4847-a592-9c70d1168579",
+        "role": "front"
+      },
+      {
+        "id": "8453804a-2ba2-44f7-9a6c-6728cba58fbb",
+        "sessionSetId": "a5c5d152-10f5-46e4-b9ab-673e55583fa4",
+        "participantId": "f0027b0f-34e0-4e1d-bf5f-525bf251c9b3",
+        "role": "front"
+      },
+      {
+        "id": "87eb57c9-59f4-481b-b5eb-ecbe608feb02",
+        "sessionSetId": "a220c89d-2f8a-4295-87c3-a4ab921ce9d9",
+        "participantId": "3227f04c-90f5-478a-bc24-e26951055390",
         "role": "front"
       },
       {
@@ -8345,10 +10478,52 @@
         "role": "front"
       },
       {
+        "id": "8ee45696-791d-4ace-a067-340e19f130f0",
+        "sessionSetId": "d833b980-6793-4931-a8c4-41fd028592e3",
+        "participantId": "286ee780-9ee0-48f7-851a-11c56191d9b3",
+        "role": "vocal"
+      },
+      {
+        "id": "93619422-9acf-44e8-b240-e9a857802518",
+        "sessionSetId": "11f2a692-417c-4ba8-936f-ca333b7a2df7",
+        "participantId": "012f500a-7e5a-464e-9680-ae4ad74fd3ed",
+        "role": "front"
+      },
+      {
         "id": "94f7a4b7-b503-4c76-b2b3-fe40dafe50c5",
         "sessionSetId": "021069ae-510f-4f86-8b97-3cf4c0d9eef4",
         "participantId": "4e7234dc-2d48-44ae-aff1-91622640ab8a",
         "role": "front"
+      },
+      {
+        "id": "9b944649-f1dd-443b-bd7e-5b4ca781f50d",
+        "sessionSetId": "0494827f-e1ba-4b48-a292-99bfd1b8c8f7",
+        "participantId": "fc68077c-dbf5-4523-b6da-1f40b0192e89",
+        "role": "front"
+      },
+      {
+        "id": "9cabdcd7-8d2b-4bd9-a939-7fbd610c0796",
+        "sessionSetId": "e98c983d-5a80-41e5-aa31-f4f0716c3255",
+        "participantId": "92b78c23-62d3-4847-a592-9c70d1168579",
+        "role": "front"
+      },
+      {
+        "id": "9d0ad35a-61d2-4986-b533-601196d83901",
+        "sessionSetId": "ebf99095-b423-4dd1-a0da-a8cc0c985f5b",
+        "participantId": "012f500a-7e5a-464e-9680-ae4ad74fd3ed",
+        "role": "front"
+      },
+      {
+        "id": "9eda4980-4bbb-4fd4-965f-e49ac0d6254a",
+        "sessionSetId": "e29ce218-938f-4cdf-8255-1250533afec8",
+        "participantId": "3cb9237e-9828-4170-a245-937382457294",
+        "role": "front"
+      },
+      {
+        "id": "a25b5a03-d09a-495c-bde5-f03b8710de61",
+        "sessionSetId": "b61cca21-11e6-4c94-b613-023e01064a5d",
+        "participantId": "7e052976-e002-41c0-ac4a-bfe428183f98",
+        "role": "vocal"
       },
       {
         "id": "a39cbc70-0cd8-43ec-9be0-47da8c20f12e",
@@ -8375,9 +10550,39 @@
         "role": "front"
       },
       {
+        "id": "a899871b-e051-4f69-b2b5-bbdbd6f9ea8b",
+        "sessionSetId": "83771c5d-252d-4434-bc1a-832de81e32e1",
+        "participantId": "3cb9237e-9828-4170-a245-937382457294",
+        "role": "front"
+      },
+      {
+        "id": "aaef9bd9-2bf9-495f-a3a5-0ab51c2708b7",
+        "sessionSetId": "bb27e5e3-8713-46dd-b698-e859c7665be0",
+        "participantId": "a243e30a-cfac-4e85-a408-efd3ba1a9e8a",
+        "role": "front"
+      },
+      {
+        "id": "ab480025-b15d-4ee7-a473-4a6ad4656c81",
+        "sessionSetId": "91a285b0-227d-497c-a80b-e6eba272b62b",
+        "participantId": "3227f04c-90f5-478a-bc24-e26951055390",
+        "role": "front"
+      },
+      {
         "id": "b07f8a2c-fb56-4363-a444-aeb4e5b12082",
         "sessionSetId": "319ebaac-7706-4836-9d7a-b300519a76a8",
         "participantId": "b46f4d2b-295d-435d-99e8-a7072718f550",
+        "role": "front"
+      },
+      {
+        "id": "b3650cb8-5b48-42be-8188-44b770d57f13",
+        "sessionSetId": "c1b04d21-eb5a-4a00-8ff1-10e3e322297a",
+        "participantId": "012f500a-7e5a-464e-9680-ae4ad74fd3ed",
+        "role": "front"
+      },
+      {
+        "id": "b49f85b5-a103-413a-bda2-ec7d6229f31e",
+        "sessionSetId": "22a403a0-06d3-4d72-9f1b-27e68dbaf311",
+        "participantId": "92b78c23-62d3-4847-a592-9c70d1168579",
         "role": "front"
       },
       {
@@ -8387,9 +10592,27 @@
         "role": "front"
       },
       {
+        "id": "bd59adbd-ea12-441f-acd4-565e7264b20e",
+        "sessionSetId": "d1325846-02cd-4426-b645-13dc9fef8c71",
+        "participantId": "92b78c23-62d3-4847-a592-9c70d1168579",
+        "role": "front"
+      },
+      {
         "id": "c04a1d75-1aaf-4963-befa-ae8be3c397a0",
         "sessionSetId": "8b147fa9-b582-4bf7-a3fc-7e268b0a8461",
         "participantId": "d3537a06-a425-4afe-800a-bf72f6d13c00",
+        "role": "front"
+      },
+      {
+        "id": "c2d73fc2-c9ca-4564-8247-642364266a43",
+        "sessionSetId": "37492105-eb16-4c8e-a51a-3133904c9c3a",
+        "participantId": "2f9dbbe9-e352-452c-a27e-5ede48ee0c46",
+        "role": "front"
+      },
+      {
+        "id": "c35e7f81-127d-4d1b-93a3-8b9f09ca6d0a",
+        "sessionSetId": "68ef416b-b09a-4139-89db-7a0713f2dbe0",
+        "participantId": "3288a0e8-3569-4732-9549-56c3cd5159da",
         "role": "front"
       },
       {
@@ -8411,9 +10634,57 @@
         "role": "front"
       },
       {
+        "id": "cf212adb-7c06-4df7-a4ac-98480f298141",
+        "sessionSetId": "2bc3313c-6116-42fd-8e58-dfc5d6a8f6a1",
+        "participantId": "9b3ffb12-62c6-4497-b2be-ac5fbb63fb5e",
+        "role": "front"
+      },
+      {
         "id": "da8602a6-e4ff-46df-8d42-b6709d0bd3ec",
         "sessionSetId": "7b57bae5-e3a3-4579-8ac9-0ef87e70b80c",
         "participantId": "d8dd1379-6616-4c07-868a-7cfc9db3b727",
+        "role": "front"
+      },
+      {
+        "id": "dcb7127b-c022-46c9-89e4-e2a1d7dfa7c5",
+        "sessionSetId": "9cb2a66e-e904-4195-97c5-3cc5ae4035d8",
+        "participantId": "30aa3210-dd3d-4d06-944d-ba5d79eea1c1",
+        "role": "front"
+      },
+      {
+        "id": "dea1d497-4616-405b-99e5-f0670b2aa680",
+        "sessionSetId": "0a39d4f0-2fa9-43d2-b9d5-356ffe57bbd1",
+        "participantId": "92b78c23-62d3-4847-a592-9c70d1168579",
+        "role": "front"
+      },
+      {
+        "id": "dfa4f51f-436c-42ae-8c1c-6e56a70aacaa",
+        "sessionSetId": "c1c5f073-e2d0-4110-9219-a4f7831e0695",
+        "participantId": "fc68077c-dbf5-4523-b6da-1f40b0192e89",
+        "role": "front"
+      },
+      {
+        "id": "e1e59b4e-f932-472b-b200-5e3782cef96a",
+        "sessionSetId": "001e8fa4-a2de-460f-a918-95fd98634ee5",
+        "participantId": "3cb9237e-9828-4170-a245-937382457294",
+        "role": "front"
+      },
+      {
+        "id": "e3302bb5-40c5-41d5-9372-058b549a479c",
+        "sessionSetId": "e98c983d-5a80-41e5-aa31-f4f0716c3255",
+        "participantId": "7e052976-e002-41c0-ac4a-bfe428183f98",
+        "role": "vocal"
+      },
+      {
+        "id": "e4b2f1fa-b79b-4e42-ac71-eed437cd383d",
+        "sessionSetId": "35daf021-5212-4391-b123-b73a7677a491",
+        "participantId": "9b3ffb12-62c6-4497-b2be-ac5fbb63fb5e",
+        "role": "front"
+      },
+      {
+        "id": "eb005ea6-d275-412a-9c46-942d63489bc9",
+        "sessionSetId": "f3020118-c3dd-40c4-8b1e-d64472135ae6",
+        "participantId": "012f500a-7e5a-464e-9680-ae4ad74fd3ed",
         "role": "front"
       },
       {
@@ -8439,6 +10710,24 @@
         "sessionSetId": "771d2735-fc08-4821-ad41-c7899858d47c",
         "participantId": "71c191db-ade2-4cee-8aa8-d147ab07102b",
         "role": "vocal"
+      },
+      {
+        "id": "f7a60b63-5d69-433d-b60f-f9585ea8e017",
+        "sessionSetId": "ebf99095-b423-4dd1-a0da-a8cc0c985f5b",
+        "participantId": "3227f04c-90f5-478a-bc24-e26951055390",
+        "role": "front"
+      },
+      {
+        "id": "f867351b-4a3d-4c7c-b72d-15fd50c7e19f",
+        "sessionSetId": "e573d83e-52bd-4bfe-9554-64d22bdc1903",
+        "participantId": "3227f04c-90f5-478a-bc24-e26951055390",
+        "role": "front"
+      },
+      {
+        "id": "f986fb42-778d-4a6d-88d0-577303cbbec6",
+        "sessionSetId": "3177ce28-4a90-4e09-a138-b9bc535f2e31",
+        "participantId": "92b78c23-62d3-4847-a592-9c70d1168579",
+        "role": "front"
       }
     ],
     "sessionSetRatings": [],
@@ -9305,6 +11594,14 @@
         "expiresAt": "2026-06-04T01:50:12.677Z",
         "lastAccessedAt": "2026-05-28T05:57:06.498Z",
         "createdAt": "2026-05-28T01:50:12.678Z"
+      },
+      {
+        "id": "491dacda-fcd6-4213-95af-8261649230da",
+        "userAccountId": "4e0c8834-195e-4343-bb52-2bda851ff716",
+        "sessionTokenHash": "d147f4bd0301870b6269a36d9273c5e3293b2690f1cdadf6c9dcc43120dad66b",
+        "expiresAt": "2026-06-17T07:23:53.568Z",
+        "lastAccessedAt": "2026-06-10T08:48:22.409Z",
+        "createdAt": "2026-06-10T07:23:53.569Z"
       },
       {
         "id": "c04d2121-3989-4fa5-911a-4f5fb80b5ee3",
