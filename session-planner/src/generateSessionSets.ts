@@ -1,5 +1,9 @@
 import type { Instrument, Participant, SessionGenerationResult, SessionSet, SkippedSong } from './domain';
 
+const DRUM_MAX_ASSIGNMENTS = 20;
+const CORE_PART_MAX_ASSIGNMENTS = 12;
+const VOCAL_MAX_ASSIGNMENTS = 4;
+
 // 各参加者の「何曲アサインされたか」を管理するマップ
 type ParticipationCount = Record<string, number>;
 
@@ -103,6 +107,29 @@ const getMissingForcedPartReason = (
   return `${partLabel} の強制参加候補を確保できません`;
 };
 
+const getMissingFrontlineReason = (
+  frontCandidates: Participant[],
+  vocalCandidates: Participant[],
+  participationCount: ParticipationCount,
+): string => {
+  const availableFront = frontCandidates.some(
+    (candidate) => participationCount[candidate.id] < CORE_PART_MAX_ASSIGNMENTS,
+  );
+  const availableVocal = vocalCandidates.some(
+    (candidate) => participationCount[candidate.id] < VOCAL_MAX_ASSIGNMENTS,
+  );
+
+  if (availableFront || availableVocal) {
+    return 'Front/Vocal の候補者を確保できません';
+  }
+
+  if (frontCandidates.length === 0 && vocalCandidates.length === 0) {
+    return 'Front/Vocal の希望者がいません';
+  }
+
+  return 'Front/Vocal の候補者が割り当て上限に達しています';
+};
+
 const buildSkippedSong = (
   songTitle: string,
   drum: Participant | undefined,
@@ -117,9 +144,9 @@ const buildSkippedSong = (
 ): SkippedSong => ({
   songTitle,
   reasons: [
-    !drum ? getMissingRequiredPartReason(byInstrument.drum, songTitle, 4, participationCount, 'Drum') : undefined,
-    !bass ? getMissingRequiredPartReason(byInstrument.bass, songTitle, 4, participationCount, 'Bass') : undefined,
-    !piano ? getMissingRequiredPartReason(byInstrument.piano, songTitle, 4, participationCount, 'Piano') : undefined,
+    !drum ? getMissingRequiredPartReason(byInstrument.drum, songTitle, DRUM_MAX_ASSIGNMENTS, participationCount, 'Drum') : undefined,
+    !bass ? getMissingRequiredPartReason(byInstrument.bass, songTitle, CORE_PART_MAX_ASSIGNMENTS, participationCount, 'Bass') : undefined,
+    !piano ? getMissingRequiredPartReason(byInstrument.piano, songTitle, CORE_PART_MAX_ASSIGNMENTS, participationCount, 'Piano') : undefined,
   ].filter((reason): reason is string => Boolean(reason)),
 });
 
@@ -158,7 +185,7 @@ const chooseFrontWithPriority = (
 
       const available = candidates.filter((candidate) =>
         !alreadyPickedIds.has(candidate.id)
-        && participationCount[candidate.id] < 4
+        && participationCount[candidate.id] < CORE_PART_MAX_ASSIGNMENTS
         && candidate.requestedSongs.some((request) => request.title === songTitle && request.round === round),
       );
 
@@ -193,7 +220,7 @@ const chooseFrontWithPriority = (
  * 参加者一覧から sessionSet の配列を生成するメイン関数
  * - 曲リストは「round=1 の希望曲のユニークリスト」
  * - 各曲・各パートで round=1 を優先、足りなければ round=2 から補充
- * - vocal: round=1 で希望した曲のみ参加・最大3曲
+ * - vocal: round=1 で希望した曲のみ参加・最大4曲
  */
 export function generateSessionSets(participants: Participant[]): SessionGenerationResult {
   const participationCount: ParticipationCount = {};
@@ -236,9 +263,9 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
       ),
     } as const;
 
-    const drum = chooseOneWithPriority(byInstrument.drum, songTitle, 4, participationCount);
-    const bass = chooseOneWithPriority(byInstrument.bass, songTitle, 4, participationCount);
-    const piano = chooseOneWithPriority(byInstrument.piano, songTitle, 4, participationCount);
+    const drum = chooseOneWithPriority(byInstrument.drum, songTitle, DRUM_MAX_ASSIGNMENTS, participationCount);
+    const bass = chooseOneWithPriority(byInstrument.bass, songTitle, CORE_PART_MAX_ASSIGNMENTS, participationCount);
+    const piano = chooseOneWithPriority(byInstrument.piano, songTitle, CORE_PART_MAX_ASSIGNMENTS, participationCount);
 
     // Drum, Bass, Piano が揃わない曲は sessionSet を作らない
     if (!drum || !bass || !piano) {
@@ -250,8 +277,8 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
       continue;
     }
 
-    // vocal: round=1 の希望曲のみ参加 (最大3曲)
-    const vocalCandidates = byInstrument.vocal.filter(v => participationCount[v.id] < 3);
+    // vocal: round=1 の希望曲のみ参加 (最大4曲)
+    const vocalCandidates = byInstrument.vocal.filter(v => participationCount[v.id] < VOCAL_MAX_ASSIGNMENTS);
     let vocal: Participant | undefined;
 
     if (vocalCandidates.length > 0) {
@@ -271,6 +298,15 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
       ...frontMembers.map(f => f.id),
       ...(vocal ? [vocal.id] : []),
     ];
+
+    if (frontIds.length === 0) {
+      initialSkippedSongs.push({
+        songTitle,
+        requesterCount: songParticipants.length,
+        reasons: [getMissingFrontlineReason(byInstrument.front, byInstrument.vocal, participationCount)],
+      });
+      continue;
+    }
 
     // key は round=1 の vocal 希望から取得する
     let key: string | undefined;
@@ -324,25 +360,25 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
 
     const forcedInstruments: Instrument[] = [];
 
-    let drum = chooseOneWithPriority(byInstrument.drum, songTitle, 4, participationCount);
+    let drum = chooseOneWithPriority(byInstrument.drum, songTitle, DRUM_MAX_ASSIGNMENTS, participationCount);
     if (!drum) {
-      drum = chooseRandomForcedParticipant(allByInstrument.drum, 4, participationCount);
+      drum = chooseRandomForcedParticipant(allByInstrument.drum, DRUM_MAX_ASSIGNMENTS, participationCount);
       if (drum) {
         forcedInstruments.push('drum');
       }
     }
 
-    let bass = chooseOneWithPriority(byInstrument.bass, songTitle, 4, participationCount);
+    let bass = chooseOneWithPriority(byInstrument.bass, songTitle, CORE_PART_MAX_ASSIGNMENTS, participationCount);
     if (!bass) {
-      bass = chooseRandomForcedParticipant(allByInstrument.bass, 4, participationCount);
+      bass = chooseRandomForcedParticipant(allByInstrument.bass, CORE_PART_MAX_ASSIGNMENTS, participationCount);
       if (bass) {
         forcedInstruments.push('bass');
       }
     }
 
-    let piano = chooseOneWithPriority(byInstrument.piano, songTitle, 4, participationCount);
+    let piano = chooseOneWithPriority(byInstrument.piano, songTitle, CORE_PART_MAX_ASSIGNMENTS, participationCount);
     if (!piano) {
-      piano = chooseRandomForcedParticipant(allByInstrument.piano, 4, participationCount);
+      piano = chooseRandomForcedParticipant(allByInstrument.piano, CORE_PART_MAX_ASSIGNMENTS, participationCount);
       if (piano) {
         forcedInstruments.push('piano');
       }
@@ -352,15 +388,15 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
       remainingSkippedSongs.push({
         songTitle,
         reasons: [
-          !drum ? getMissingForcedPartReason(allByInstrument.drum, 4, participationCount, 'Drum') : undefined,
-          !bass ? getMissingForcedPartReason(allByInstrument.bass, 4, participationCount, 'Bass') : undefined,
-          !piano ? getMissingForcedPartReason(allByInstrument.piano, 4, participationCount, 'Piano') : undefined,
+          !drum ? getMissingForcedPartReason(allByInstrument.drum, DRUM_MAX_ASSIGNMENTS, participationCount, 'Drum') : undefined,
+          !bass ? getMissingForcedPartReason(allByInstrument.bass, CORE_PART_MAX_ASSIGNMENTS, participationCount, 'Bass') : undefined,
+          !piano ? getMissingForcedPartReason(allByInstrument.piano, CORE_PART_MAX_ASSIGNMENTS, participationCount, 'Piano') : undefined,
         ].filter((reason): reason is string => Boolean(reason)),
       });
       continue;
     }
 
-    const vocalCandidates = byInstrument.vocal.filter((participant) => participationCount[participant.id] < 3);
+    const vocalCandidates = byInstrument.vocal.filter((participant) => participationCount[participant.id] < VOCAL_MAX_ASSIGNMENTS);
     let vocal: Participant | undefined;
 
     if (vocalCandidates.length > 0) {
@@ -380,6 +416,14 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
       ...frontMembers.map((participant) => participant.id),
       ...(vocal ? [vocal.id] : []),
     ];
+
+    if (frontIds.length === 0) {
+      remainingSkippedSongs.push({
+        songTitle,
+        reasons: [getMissingFrontlineReason(byInstrument.front, byInstrument.vocal, participationCount)],
+      });
+      continue;
+    }
 
     let key: string | undefined;
     if (vocal) {
