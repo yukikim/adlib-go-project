@@ -145,11 +145,11 @@ export type SessionSetView = {
   songTitle: string;
   key?: string | null;
   isPublished?: boolean;
-  drum: { id: string; name: string; isForced?: boolean; forcedCount?: number } | null;
-  bass: { id: string; name: string; isForced?: boolean; forcedCount?: number } | null;
-  piano: { id: string; name: string; isForced?: boolean; forcedCount?: number } | null;
-  front?: { id: string; name: string; subInstrument?: string | null; isForced?: boolean; forcedCount?: number }[];
-  vocal?: { id: string; name: string; isForced?: boolean; forcedCount?: number }[];
+  drum: { id: string; name: string; isForced?: boolean; forcedCount?: number; requestedInRound1?: boolean } | null;
+  bass: { id: string; name: string; isForced?: boolean; forcedCount?: number; requestedInRound1?: boolean } | null;
+  piano: { id: string; name: string; isForced?: boolean; forcedCount?: number; requestedInRound1?: boolean } | null;
+  front?: { id: string; name: string; subInstrument?: string | null; isForced?: boolean; forcedCount?: number; requestedInRound1?: boolean }[];
+  vocal?: { id: string; name: string; isForced?: boolean; forcedCount?: number; requestedInRound1?: boolean }[];
 };
 
 export type MemberDetailView = {

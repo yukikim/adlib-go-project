@@ -12,6 +12,7 @@ import {
   Music4,
   Users,
   MessageCircleQuestionMark,
+  Star,
 } from 'lucide-react';
 import {
   Dialog,
@@ -73,6 +74,18 @@ function formatSessionMemberName(name: string, isForced?: boolean, forcedCount?:
   }
 
   return `${name} (強制追加${forcedCount && forcedCount > 0 ? forcedCount : ''})`;
+}
+
+function renderSessionMemberName(
+  name: string,
+  options?: { isForced?: boolean; forcedCount?: number; requestedInRound1?: boolean },
+) {
+  return (
+    <span className="inline-flex items-center gap-1">
+      {options?.requestedInRound1 ? <Star className="size-3.5 fill-amber-400 text-amber-500" /> : null}
+      <span>{formatSessionMemberName(name, options?.isForced, options?.forcedCount)}</span>
+    </span>
+  );
 }
 
 function buildSessionMemberOptionValue(instrument: Instrument, name: string) {
@@ -1324,6 +1337,34 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                   })}
                 </ul>
               </div>
+                            <Separator className={cn('my-4', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden', 'bg-secondary')} />
+              <div className="rounded-xl border p-4 lg:col-span-2">
+                <h3 className="font-medium">保存済み sessionSet</h3>
+                {savedSessionSetDrafts.length === 0 ? (
+                  <p className="mt-3 text-sm text-muted-foreground">保存済み sessionSet はありません。</p>
+                ) : (
+                  <ul className="mt-3 space-y-3">
+                    {savedSessionSetDrafts.map((draft) => (
+                      <li key={draft.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-card/80 p-4">
+                        <div className="space-y-1">
+                          <p className="font-medium">{draft.title}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {draft.sessionSetCount} 件 / 更新 {new Date(draft.updatedAt).toLocaleString('ja-JP')}
+                          </p>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          <Button type="button" variant="outline" size="sm" disabled={loading} onClick={() => onShowSavedSessionSetDraft(draft)}>
+                            表示
+                          </Button>
+                          <Button type="button" size="sm" disabled={loading} onClick={() => onRegenerateSavedSessionSetDraft(draft)}>
+                            再生成
+                          </Button>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             </Section>
 
             <Section sectionId="admin-session-sets" title="sessionSet 管理" description="生成、公開、結果確認をまとめて行います。" className={cn(!isGroupVisible('admin-session-sets') && 'hidden')}>
@@ -1389,7 +1430,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                   </ul>
                 )}
               </div>
-              <Separator className={cn('my-4', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden', 'bg-secondary')} />
+              {/* <Separator className={cn('my-4', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden', 'bg-secondary')} />
               <div className="rounded-xl border p-4 lg:col-span-2">
                 <h3 className="font-medium">保存済み sessionSet</h3>
                 {savedSessionSetDrafts.length === 0 ? (
@@ -1416,7 +1457,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                     ))}
                   </ul>
                 )}
-              </div>
+              </div> */}
 
 
 
@@ -1442,23 +1483,29 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                         </div>
                       </div>
                       <div className="mt-3 grid gap-2 text-sm text-muted-foreground">
-                        <p>drum {sessionSet.drum ? formatSessionMemberName(sessionSet.drum.name, sessionSet.drum.isForced, sessionSet.drum.forcedCount) : '-'}</p>
-                        <p>bass {sessionSet.bass ? formatSessionMemberName(sessionSet.bass.name, sessionSet.bass.isForced, sessionSet.bass.forcedCount) : '-'}</p>
-                        <p>piano {sessionSet.piano ? formatSessionMemberName(sessionSet.piano.name, sessionSet.piano.isForced, sessionSet.piano.forcedCount) : '-'}</p>
+                        <p>drum {sessionSet.drum ? renderSessionMemberName(sessionSet.drum.name, sessionSet.drum) : '-'}</p>
+                        <p>bass {sessionSet.bass ? renderSessionMemberName(sessionSet.bass.name, sessionSet.bass) : '-'}</p>
+                        <p>piano {sessionSet.piano ? renderSessionMemberName(sessionSet.piano.name, sessionSet.piano) : '-'}</p>
                         <p>
                           front {sessionSet.front?.length
-                            ? sessionSet.front.map((member) => {
-                              const baseName = formatSessionMemberName(member.name, member.isForced, member.forcedCount);
-                              return member.subInstrument ? `${baseName} (${member.subInstrument})` : baseName;
-                            }).join(', ')
+                            ? sessionSet.front.map((member, index) => (
+                              <span key={`${member.id}-${index}`}>
+                                {index > 0 ? ', ' : null}
+                                {renderSessionMemberName(member.name, member)}
+                                {member.subInstrument ? ` (${member.subInstrument})` : null}
+                              </span>
+                            ))
                             : '-'}
                         </p>
                         <p>
                           vocal {sessionSet.vocal?.length
-                            ? sessionSet.vocal.map((member) => {
-                              const baseName = formatSessionMemberName(member.name, member.isForced, member.forcedCount);
-                              return sessionSet.key ? `${baseName} (key ${sessionSet.key})` : baseName;
-                            }).join(', ')
+                            ? sessionSet.vocal.map((member, index) => (
+                              <span key={`${member.id}-${index}`}>
+                                {index > 0 ? ', ' : null}
+                                {renderSessionMemberName(member.name, member)}
+                                {sessionSet.key ? ` (key ${sessionSet.key})` : null}
+                              </span>
+                            ))
                             : '-'}
                         </p>
                       </div>

@@ -13,6 +13,7 @@ const editableSessionSetMemberSchema = z.object({
   subInstrument: z.union([z.string(), z.null()]).optional(),
   isForced: z.boolean().optional(),
   forcedCount: z.number().int().min(0).optional(),
+  requestedInRound1: z.boolean().optional(),
 }).strict();
 
 const editableSessionSetSchema = z.object({
