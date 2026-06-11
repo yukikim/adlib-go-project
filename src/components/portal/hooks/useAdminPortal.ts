@@ -22,6 +22,10 @@ import {
   parseJson,
   type RunPortalAction,
 } from '../utils';
+import {
+  DEFAULT_DRUM_FORCED_ASSIGNMENT_MAX,
+  DEFAULT_FORCED_ASSIGNMENT_MAX,
+} from '@/lib/sessionSetGenerationConfig';
 
 type ArchivePreview = { participantCount: number; setCount: number; ratingSummaryIncluded: boolean } | null;
 
@@ -84,6 +88,8 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
   const [archiveNote, setArchiveNote] = useState('');
   const [archivePreview, setArchivePreview] = useState<ArchivePreview>(null);
   const [generatedResult, setGeneratedResult] = useState<GeneratedResult>({ sessionSets: [], skippedSongs: [], forcedSessionSets: [] });
+  const [generateDrumForcedAssignmentMax, setGenerateDrumForcedAssignmentMax] = useState(String(DEFAULT_DRUM_FORCED_ASSIGNMENT_MAX));
+  const [generateForcedAssignmentMax, setGenerateForcedAssignmentMax] = useState(String(DEFAULT_FORCED_ASSIGNMENT_MAX));
   const [savedSessionSetDrafts, setSavedSessionSetDrafts] = useState<SavedSessionSetDraftView[]>([]);
   const [draftOverwriteReadyEventIds, setDraftOverwriteReadyEventIds] = useState<string[]>([]);
   const [activityLogs, setActivityLogs] = useState<ActivityLogView[]>([]);
@@ -366,7 +372,11 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     const res = await fetch('/api/session-sets/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionEventId: targetEventId }),
+      body: JSON.stringify({
+        sessionEventId: targetEventId,
+        drumForcedAssignmentMax: parseOptionalInteger(generateDrumForcedAssignmentMax),
+        forcedAssignmentMax: parseOptionalInteger(generateForcedAssignmentMax),
+      }),
     });
     const json = await parseJson(res);
     if (!res.ok) throw new Error(json.error ?? 'sessionSet 生成に失敗しました');
@@ -658,6 +668,10 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     setArchiveNote,
     archivePreview,
     generatedResult,
+    generateDrumForcedAssignmentMax,
+    setGenerateDrumForcedAssignmentMax,
+    generateForcedAssignmentMax,
+    setGenerateForcedAssignmentMax,
     savedSessionSetDrafts,
     canOverwriteSavedSessionSetDraft,
     activityLogs,

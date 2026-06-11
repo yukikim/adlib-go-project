@@ -12,6 +12,7 @@ const editableSessionSetMemberSchema = z.object({
   name: z.string().trim().min(1, 'Invalid member name'),
   subInstrument: z.union([z.string(), z.null()]).optional(),
   isForced: z.boolean().optional(),
+  forcedCount: z.number().int().min(0).optional(),
 }).strict();
 
 const editableSessionSetSchema = z.object({

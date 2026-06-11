@@ -1,11 +1,27 @@
 import type { Instrument, Participant, SessionGenerationResult, SessionSet, SkippedSong } from './domain';
-
-const DRUM_MAX_ASSIGNMENTS = 20;
-const CORE_PART_MAX_ASSIGNMENTS = 12;
+import {
+  DEFAULT_DRUM_FORCED_ASSIGNMENT_MAX,
+  DEFAULT_FORCED_ASSIGNMENT_MAX,
+} from '../../src/lib/sessionSetGenerationConfig';
+// drum 用の総割当上限
+const DRUM_MAX_ASSIGNMENTS = 10;
+// bass、piano、front 用の総割当上限
+const CORE_PART_MAX_ASSIGNMENTS = 10;
+// Drum 強制参加の上限数
+const DRUM_FORCED_ASSIGNMENT_MAX = DEFAULT_DRUM_FORCED_ASSIGNMENT_MAX;
+// それ以外のパートの強制参加の上限数
+const FORCED_ASSIGNMENT_MAX = DEFAULT_FORCED_ASSIGNMENT_MAX;
+// vocal は曲ごとに最大4回まで参加可能とする
 const VOCAL_MAX_ASSIGNMENTS = 4;
 
 // 各参加者の「何曲アサインされたか」を管理するマップ
 type ParticipationCount = Record<string, number>;
+type ForcedParticipationCount = Record<string, number>;
+
+type GenerationConfig = {
+  drumForcedAssignmentMax?: number | null;
+  forcedAssignmentMax?: number | null;
+};
 
 /**
  * round=1 を優先しつつ、最大曲数制限を考慮して 1人選ぶ
@@ -64,11 +80,11 @@ const getMissingRequiredPartReason = (
 
 const chooseRandomForcedParticipant = (
   candidates: Participant[],
-  maxCount: number,
-  participationCount: ParticipationCount,
+  maxForcedCount: number,
+  forcedParticipationCount: ForcedParticipationCount,
 ): Participant | undefined => {
   const available = candidates.filter(
-    (candidate) => candidate.allowForcedAssignment !== false && participationCount[candidate.id] < maxCount,
+    (candidate) => candidate.allowForcedAssignment !== false && forcedParticipationCount[candidate.id] < maxForcedCount,
   );
 
   if (available.length === 0) {
@@ -76,20 +92,59 @@ const chooseRandomForcedParticipant = (
   }
 
   const minParticipationCount = Math.min(
-    ...available.map((candidate) => participationCount[candidate.id] ?? 0),
+    ...available.map((candidate) => forcedParticipationCount[candidate.id] ?? 0),
   );
 
   const prioritized = available.filter(
-    (candidate) => (participationCount[candidate.id] ?? 0) === minParticipationCount,
+    (candidate) => (forcedParticipationCount[candidate.id] ?? 0) === minParticipationCount,
   );
 
   const randomIndex = Math.floor(Math.random() * prioritized.length);
   return prioritized[randomIndex];
 };
 
+const chooseOverflowRequestedParticipant = (
+  candidates: Participant[],
+  songTitle: string,
+  participationCount: ParticipationCount,
+): Participant | undefined => {
+  const requesters = candidates.filter((candidate) =>
+    candidate.requestedSongs.some((request) => request.title === songTitle),
+  );
+
+  if (requesters.length === 0) {
+    return undefined;
+  }
+
+  requesters.sort((left, right) => {
+    const leftRound = left.requestedSongs.some((request) => request.title === songTitle && request.round === 1) ? 1 : 2;
+    const rightRound = right.requestedSongs.some((request) => request.title === songTitle && request.round === 1) ? 1 : 2;
+
+    if (leftRound !== rightRound) {
+      return leftRound - rightRound;
+    }
+
+    return (participationCount[left.id] ?? 0) - (participationCount[right.id] ?? 0);
+  });
+
+  return requesters[0];
+};
+
+const hasOverflowRequestedCandidate = (
+  candidates: Participant[],
+  songTitle: string,
+  maxCount: number,
+  participationCount: ParticipationCount,
+) => candidates.some(
+  (candidate) => participationCount[candidate.id] >= maxCount
+    && candidate.requestedSongs.some((request) => request.title === songTitle),
+);
+
 const chooseForcedFrontParticipants = (
   candidates: Participant[],
   participationCount: ParticipationCount,
+  forcedParticipationCount: ForcedParticipationCount,
+  maxForcedCount: number,
   existingParticipants: Participant[],
   additionalCount: number,
 ): Participant[] => {
@@ -109,7 +164,7 @@ const chooseForcedFrontParticipants = (
     const available = candidates.filter((candidate) =>
       candidate.allowForcedAssignment !== false
       && !excludedIds.has(candidate.id)
-      && participationCount[candidate.id] < CORE_PART_MAX_ASSIGNMENTS,
+      && forcedParticipationCount[candidate.id] < maxForcedCount,
     );
 
     if (available.length === 0) {
@@ -117,10 +172,10 @@ const chooseForcedFrontParticipants = (
     }
 
     const minParticipationCount = Math.min(
-      ...available.map((candidate) => participationCount[candidate.id] ?? 0),
+      ...available.map((candidate) => forcedParticipationCount[candidate.id] ?? 0),
     );
     const prioritized = available.filter(
-      (candidate) => (participationCount[candidate.id] ?? 0) === minParticipationCount,
+      (candidate) => (forcedParticipationCount[candidate.id] ?? 0) === minParticipationCount,
     );
     const distinctSubInstrumentCandidates = prioritized.filter((candidate) => {
       const subInstrument = normalizeFrontSubInstrument(candidate.subInstrument);
@@ -139,8 +194,8 @@ const chooseForcedFrontParticipants = (
 
 const getMissingForcedPartReason = (
   candidates: Participant[],
-  maxCount: number,
-  participationCount: ParticipationCount,
+  maxForcedCount: number,
+  forcedParticipationCount: ForcedParticipationCount,
   partLabel: string,
 ): string => {
   const forceAllowed = candidates.filter((candidate) => candidate.allowForcedAssignment !== false);
@@ -149,12 +204,41 @@ const getMissingForcedPartReason = (
     return `${partLabel} の強制参加許可者がいません`;
   }
 
-  const available = forceAllowed.filter((candidate) => participationCount[candidate.id] < maxCount);
+  const available = forceAllowed.filter((candidate) => forcedParticipationCount[candidate.id] < maxForcedCount);
   if (available.length === 0) {
     return `${partLabel} の強制参加許可者が割り当て上限に達しています`;
   }
 
   return `${partLabel} の強制参加候補を確保できません`;
+};
+
+const isForceEligibleReason = (
+  reason: string,
+  songTitle: string,
+  byInstrument: {
+    drum: Participant[];
+    bass: Participant[];
+    piano: Participant[];
+  },
+  participationCount: ParticipationCount,
+) => {
+  if (reason.includes('希望者がいません')) {
+    return true;
+  }
+
+  if (reason === 'Drum の候補者が割り当て上限に達しています') {
+    return hasOverflowRequestedCandidate(byInstrument.drum, songTitle, DRUM_MAX_ASSIGNMENTS, participationCount);
+  }
+
+  if (reason === 'Bass の候補者が割り当て上限に達しています') {
+    return hasOverflowRequestedCandidate(byInstrument.bass, songTitle, CORE_PART_MAX_ASSIGNMENTS, participationCount);
+  }
+
+  if (reason === 'Piano の候補者が割り当て上限に達しています') {
+    return hasOverflowRequestedCandidate(byInstrument.piano, songTitle, CORE_PART_MAX_ASSIGNMENTS, participationCount);
+  }
+
+  return false;
 };
 
 const getMissingFrontlineReason = (
@@ -186,6 +270,8 @@ const fillFrontline = (
   vocalCandidates: Participant[],
   allFrontCandidates: Participant[],
   participationCount: ParticipationCount,
+  forcedParticipationCount: ForcedParticipationCount,
+  forcedAssignmentMax: number,
 ) => {
   const availableVocalCandidates = vocalCandidates.filter(
     (participant) => participationCount[participant.id] < VOCAL_MAX_ASSIGNMENTS,
@@ -210,6 +296,8 @@ const fillFrontline = (
   const forcedFrontMembers = chooseForcedFrontParticipants(
     allFrontCandidates,
     participationCount,
+    forcedParticipationCount,
+    forcedAssignmentMax,
     requestedFrontMembers,
     Math.max(targetFrontCount - requestedFrontMembers.length, 0),
   );
@@ -218,6 +306,7 @@ const fillFrontline = (
   return {
     vocal,
     frontMembers,
+    forcedFrontMembers,
     forcedFrontAdded: forcedFrontMembers.length > 0,
   };
 };
@@ -314,10 +403,14 @@ const chooseFrontWithPriority = (
  * - 各曲・各パートで round=1 を優先、足りなければ round=2 から補充
  * - vocal: round=1 で希望した曲のみ参加・最大4曲
  */
-export function generateSessionSets(participants: Participant[]): SessionGenerationResult {
+export function generateSessionSets(participants: Participant[], config?: GenerationConfig): SessionGenerationResult {
+  const drumForcedAssignmentMax = config?.drumForcedAssignmentMax ?? DRUM_FORCED_ASSIGNMENT_MAX;
+  const forcedAssignmentMax = config?.forcedAssignmentMax ?? FORCED_ASSIGNMENT_MAX;
   const participationCount: ParticipationCount = {};
+  const forcedParticipationCount: ForcedParticipationCount = {};
   participants.forEach(p => {
     participationCount[p.id] = 0;
+    forcedParticipationCount[p.id] = 0;
   });
 
   // round=1 の希望からユニークな曲名リストを作成
@@ -373,6 +466,7 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
     const {
       vocal,
       frontMembers,
+      forcedFrontMembers,
       forcedFrontAdded,
     } = fillFrontline(
       songTitle,
@@ -380,6 +474,8 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
       byInstrument.vocal,
       allByInstrument.front,
       participationCount,
+      forcedParticipationCount,
+      forcedAssignmentMax,
     );
 
     const frontIds = [
@@ -408,6 +504,9 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
       if (!p) return;
       participationCount[p.id] = (participationCount[p.id] ?? 0) + 1;
     });
+    forcedFrontMembers.forEach((participant) => {
+      forcedParticipationCount[participant.id] = (forcedParticipationCount[participant.id] ?? 0) + 1;
+    });
 
     sessionSets.push({
       songTitle,
@@ -429,12 +528,27 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
 
   const remainingSkippedSongs: SessionGenerationResult['skippedSongs'] = [];
 
+  const isForceEligibleSong = (song: SkippedCandidate) => {
+    const songParticipants = participants.filter((participant) =>
+      participant.requestedSongs.some((request) => request.title === song.songTitle),
+    );
+    const byInstrument = {
+      drum: songParticipants.filter((participant) => participant.instrument === 'drum'),
+      bass: songParticipants.filter((participant) => participant.instrument === 'bass'),
+      piano: songParticipants.filter((participant) => participant.instrument === 'piano'),
+    } as const;
+
+    return song.reasons.length > 0 && song.reasons.every((reason) =>
+      isForceEligibleReason(reason, song.songTitle, byInstrument, participationCount),
+    );
+  };
+
   const forceEligibleSongs = [...initialSkippedSongs]
-    .filter((song) => song.reasons.length > 0 && song.reasons.every((reason) => reason.includes('希望者がいません')))
+    .filter((song) => isForceEligibleSong(song))
     .sort((a, b) => b.requesterCount - a.requesterCount || a.songTitle.localeCompare(b.songTitle));
 
   const forceIneligibleSongs = initialSkippedSongs.filter(
-    (song) => !song.reasons.every((reason) => reason.includes('希望者がいません')),
+    (song) => !isForceEligibleSong(song),
   );
 
   for (const skippedSong of forceEligibleSongs) {
@@ -458,7 +572,10 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
 
     let drum = chooseOneWithPriority(byInstrument.drum, songTitle, DRUM_MAX_ASSIGNMENTS, participationCount);
     if (!drum) {
-      drum = chooseRandomForcedParticipant(allByInstrument.drum, DRUM_MAX_ASSIGNMENTS, participationCount);
+      drum = chooseOverflowRequestedParticipant(byInstrument.drum, songTitle, participationCount);
+    }
+    if (!drum) {
+      drum = chooseRandomForcedParticipant(allByInstrument.drum, drumForcedAssignmentMax, forcedParticipationCount);
       if (drum) {
         forcedInstruments.push('drum');
       }
@@ -466,7 +583,10 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
 
     let bass = chooseOneWithPriority(byInstrument.bass, songTitle, CORE_PART_MAX_ASSIGNMENTS, participationCount);
     if (!bass) {
-      bass = chooseRandomForcedParticipant(allByInstrument.bass, CORE_PART_MAX_ASSIGNMENTS, participationCount);
+      bass = chooseOverflowRequestedParticipant(byInstrument.bass, songTitle, participationCount);
+    }
+    if (!bass) {
+      bass = chooseRandomForcedParticipant(allByInstrument.bass, forcedAssignmentMax, forcedParticipationCount);
       if (bass) {
         forcedInstruments.push('bass');
       }
@@ -474,7 +594,10 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
 
     let piano = chooseOneWithPriority(byInstrument.piano, songTitle, CORE_PART_MAX_ASSIGNMENTS, participationCount);
     if (!piano) {
-      piano = chooseRandomForcedParticipant(allByInstrument.piano, CORE_PART_MAX_ASSIGNMENTS, participationCount);
+      piano = chooseOverflowRequestedParticipant(byInstrument.piano, songTitle, participationCount);
+    }
+    if (!piano) {
+      piano = chooseRandomForcedParticipant(allByInstrument.piano, forcedAssignmentMax, forcedParticipationCount);
       if (piano) {
         forcedInstruments.push('piano');
       }
@@ -484,9 +607,9 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
       remainingSkippedSongs.push({
         songTitle,
         reasons: [
-          !drum ? getMissingForcedPartReason(allByInstrument.drum, DRUM_MAX_ASSIGNMENTS, participationCount, 'Drum') : undefined,
-          !bass ? getMissingForcedPartReason(allByInstrument.bass, CORE_PART_MAX_ASSIGNMENTS, participationCount, 'Bass') : undefined,
-          !piano ? getMissingForcedPartReason(allByInstrument.piano, CORE_PART_MAX_ASSIGNMENTS, participationCount, 'Piano') : undefined,
+          !drum ? getMissingForcedPartReason(allByInstrument.drum, drumForcedAssignmentMax, forcedParticipationCount, 'Drum') : undefined,
+          !bass ? getMissingForcedPartReason(allByInstrument.bass, forcedAssignmentMax, forcedParticipationCount, 'Bass') : undefined,
+          !piano ? getMissingForcedPartReason(allByInstrument.piano, forcedAssignmentMax, forcedParticipationCount, 'Piano') : undefined,
         ].filter((reason): reason is string => Boolean(reason)),
       });
       continue;
@@ -495,6 +618,7 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
     const {
       vocal,
       frontMembers,
+      forcedFrontMembers,
       forcedFrontAdded,
     } = fillFrontline(
       songTitle,
@@ -502,6 +626,8 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
       byInstrument.vocal,
       allByInstrument.front,
       participationCount,
+      forcedParticipationCount,
+      forcedAssignmentMax,
     );
 
     const frontIds = [
@@ -528,6 +654,18 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
         return;
       }
       participationCount[participant.id] = (participationCount[participant.id] ?? 0) + 1;
+    });
+    if (forcedInstruments.includes('drum') && drum) {
+      forcedParticipationCount[drum.id] = (forcedParticipationCount[drum.id] ?? 0) + 1;
+    }
+    if (forcedInstruments.includes('bass') && bass) {
+      forcedParticipationCount[bass.id] = (forcedParticipationCount[bass.id] ?? 0) + 1;
+    }
+    if (forcedInstruments.includes('piano') && piano) {
+      forcedParticipationCount[piano.id] = (forcedParticipationCount[piano.id] ?? 0) + 1;
+    }
+    forcedFrontMembers.forEach((participant) => {
+      forcedParticipationCount[participant.id] = (forcedParticipationCount[participant.id] ?? 0) + 1;
     });
 
     sessionSets.push({

@@ -304,6 +304,10 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           archiveNote={admin.archiveNote}
           archivePreview={admin.archivePreview}
           generatedResult={admin.generatedResult}
+          generateDrumForcedAssignmentMax={admin.generateDrumForcedAssignmentMax}
+          setGenerateDrumForcedAssignmentMax={admin.setGenerateDrumForcedAssignmentMax}
+          generateForcedAssignmentMax={admin.generateForcedAssignmentMax}
+          setGenerateForcedAssignmentMax={admin.setGenerateForcedAssignmentMax}
           savedSessionSetDrafts={admin.savedSessionSetDrafts}
           canOverwriteSavedSessionSetDraft={admin.canOverwriteSavedSessionSetDraft}
           activityLogs={admin.activityLogs}

@@ -103,7 +103,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'No participating members could be mapped to planner participants' }, { status: 400 });
   }
 
-  const { sessionSets, skippedSongs, forcedSessionSets } = generateSessionSets(domainParticipants);
+  const { sessionSets, skippedSongs, forcedSessionSets } = generateSessionSets(domainParticipants, {
+    drumForcedAssignmentMax: body.drumForcedAssignmentMax,
+    forcedAssignmentMax: body.forcedAssignmentMax,
+  });
 
   const generatedSongTitles = [...new Set(sessionSets.map((sessionSet) => sessionSet.songTitle))];
   const songs = generatedSongTitles.length === 0

@@ -67,8 +67,12 @@ function splitPreviewBody(body: string) {
   return body.split(/\n{2,}/).map((paragraph) => paragraph.trim()).filter(Boolean);
 }
 
-function formatSessionMemberName(name: string, isForced?: boolean) {
-  return isForced ? `${name} (強制追加)` : name;
+function formatSessionMemberName(name: string, isForced?: boolean, forcedCount?: number) {
+  if (!isForced) {
+    return name;
+  }
+
+  return `${name} (強制追加${forcedCount && forcedCount > 0 ? forcedCount : ''})`;
 }
 
 function buildSessionMemberOptionValue(instrument: Instrument, name: string) {
@@ -220,6 +224,10 @@ type AdminPortalSectionProps = {
   archiveNote: string;
   archivePreview: ArchivePreview | null;
   generatedResult: GeneratedResult;
+  generateDrumForcedAssignmentMax: string;
+  setGenerateDrumForcedAssignmentMax: (value: string) => void;
+  generateForcedAssignmentMax: string;
+  setGenerateForcedAssignmentMax: (value: string) => void;
   savedSessionSetDrafts: SavedSessionSetDraftView[];
   canOverwriteSavedSessionSetDraft: boolean;
   activityLogs: ActivityLogView[];
@@ -366,6 +374,10 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     archiveNote,
     archivePreview,
     generatedResult,
+    generateDrumForcedAssignmentMax,
+    setGenerateDrumForcedAssignmentMax,
+    generateForcedAssignmentMax,
+    setGenerateForcedAssignmentMax,
     savedSessionSetDrafts,
     canOverwriteSavedSessionSetDraft,
     activityLogs,
@@ -1315,7 +1327,29 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
             </Section>
 
             <Section sectionId="admin-session-sets" title="sessionSet 管理" description="生成、公開、結果確認をまとめて行います。" className={cn(!isGroupVisible('admin-session-sets') && 'hidden')}>
-              <div id="admin-session-sets-actions" className={cn('flex scroll-mt-24 flex-wrap gap-3', !isChildVisible('admin-session-sets', 'admin-session-sets-actions') && 'hidden')}>
+              <div id="admin-session-sets-actions" className={cn('flex scroll-mt-24 flex-wrap items-end gap-3', !isChildVisible('admin-session-sets', 'admin-session-sets-actions') && 'hidden')}>
+                <Field htmlFor="admin-generate-drum-forced-max" label="drum の強制追加数" description="未入力時は現在の既定値を使います。">
+                  <Input
+                    id="admin-generate-drum-forced-max"
+                    type="number"
+                    min={0}
+                    inputMode="numeric"
+                    className="w-40"
+                    value={generateDrumForcedAssignmentMax}
+                    onChange={(event) => setGenerateDrumForcedAssignmentMax(event.target.value)}
+                  />
+                </Field>
+                <Field htmlFor="admin-generate-forced-max" label="その他楽器の強制追加数" description="bass、piano、front に適用します。">
+                  <Input
+                    id="admin-generate-forced-max"
+                    type="number"
+                    min={0}
+                    inputMode="numeric"
+                    className="w-40"
+                    value={generateForcedAssignmentMax}
+                    onChange={(event) => setGenerateForcedAssignmentMax(event.target.value)}
+                  />
+                </Field>
                 <Button type="button" onClick={() => onGenerateSets()} disabled={loading || !selectedAdminEventId}>
                   sessionSet 生成
                 </Button>
@@ -1408,13 +1442,13 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                         </div>
                       </div>
                       <div className="mt-3 grid gap-2 text-sm text-muted-foreground">
-                        <p>drum {sessionSet.drum ? formatSessionMemberName(sessionSet.drum.name, sessionSet.drum.isForced) : '-'}</p>
-                        <p>bass {sessionSet.bass ? formatSessionMemberName(sessionSet.bass.name, sessionSet.bass.isForced) : '-'}</p>
-                        <p>piano {sessionSet.piano ? formatSessionMemberName(sessionSet.piano.name, sessionSet.piano.isForced) : '-'}</p>
+                        <p>drum {sessionSet.drum ? formatSessionMemberName(sessionSet.drum.name, sessionSet.drum.isForced, sessionSet.drum.forcedCount) : '-'}</p>
+                        <p>bass {sessionSet.bass ? formatSessionMemberName(sessionSet.bass.name, sessionSet.bass.isForced, sessionSet.bass.forcedCount) : '-'}</p>
+                        <p>piano {sessionSet.piano ? formatSessionMemberName(sessionSet.piano.name, sessionSet.piano.isForced, sessionSet.piano.forcedCount) : '-'}</p>
                         <p>
                           front {sessionSet.front?.length
                             ? sessionSet.front.map((member) => {
-                              const baseName = formatSessionMemberName(member.name, member.isForced);
+                              const baseName = formatSessionMemberName(member.name, member.isForced, member.forcedCount);
                               return member.subInstrument ? `${baseName} (${member.subInstrument})` : baseName;
                             }).join(', ')
                             : '-'}
@@ -1422,7 +1456,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                         <p>
                           vocal {sessionSet.vocal?.length
                             ? sessionSet.vocal.map((member) => {
-                              const baseName = formatSessionMemberName(member.name, member.isForced);
+                              const baseName = formatSessionMemberName(member.name, member.isForced, member.forcedCount);
                               return sessionSet.key ? `${baseName} (key ${sessionSet.key})` : baseName;
                             }).join(', ')
                             : '-'}

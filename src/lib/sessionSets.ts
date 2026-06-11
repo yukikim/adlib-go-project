@@ -104,6 +104,48 @@ export async function serializeSessionSets(sessionSets: SessionSetWithRelations[
     return !requestedSongs?.has(normalizeSongTitle(songTitle));
   };
 
+  const forcedCountByMember = new Map<string, number>();
+  const countForcedAssignment = (
+    sessionEventId: string | null,
+    participantName: string,
+    instrument: string,
+    songTitle: string,
+  ) => {
+    if (!sessionEventId || !participantName) {
+      return;
+    }
+
+    if (!isForcedAssignment(sessionEventId, participantName, instrument, songTitle)) {
+      return;
+    }
+
+    const lookupKey = buildRequestLookupKey(sessionEventId, participantName, instrument);
+    forcedCountByMember.set(lookupKey, (forcedCountByMember.get(lookupKey) ?? 0) + 1);
+  };
+
+  for (const sessionSet of sessionSets) {
+    countForcedAssignment(sessionSet.sessionEventId, sessionSet.drum?.name ?? '', 'drum', sessionSet.song.title);
+    countForcedAssignment(sessionSet.sessionEventId, sessionSet.bass?.name ?? '', 'bass', sessionSet.song.title);
+    countForcedAssignment(sessionSet.sessionEventId, sessionSet.piano?.name ?? '', 'piano', sessionSet.song.title);
+
+    for (const member of sessionSet.members) {
+      countForcedAssignment(
+        sessionSet.sessionEventId,
+        member.participant.name,
+        member.role === 'vocal' ? 'vocal' : 'front',
+        sessionSet.song.title,
+      );
+    }
+  }
+
+  const getForcedCount = (sessionEventId: string | null, participantName: string, instrument: string) => {
+    if (!sessionEventId) {
+      return 0;
+    }
+
+    return forcedCountByMember.get(buildRequestLookupKey(sessionEventId, participantName, instrument)) ?? 0;
+  };
+
   const subInstrumentByFrontName = new Map(
     frontProfiles.map((profile) => [profile.displayName, profile.subInstrument ?? null]),
   );
@@ -119,16 +161,19 @@ export async function serializeSessionSets(sessionSets: SessionSetWithRelations[
       id: sessionSet.drum.id,
       name: sessionSet.drum.name,
       isForced: isForcedAssignment(sessionSet.sessionEventId, sessionSet.drum.name, 'drum', sessionSet.song.title),
+      forcedCount: getForcedCount(sessionSet.sessionEventId, sessionSet.drum.name, 'drum'),
     } : null,
     bass: sessionSet.bass ? {
       id: sessionSet.bass.id,
       name: sessionSet.bass.name,
       isForced: isForcedAssignment(sessionSet.sessionEventId, sessionSet.bass.name, 'bass', sessionSet.song.title),
+      forcedCount: getForcedCount(sessionSet.sessionEventId, sessionSet.bass.name, 'bass'),
     } : null,
     piano: sessionSet.piano ? {
       id: sessionSet.piano.id,
       name: sessionSet.piano.name,
       isForced: isForcedAssignment(sessionSet.sessionEventId, sessionSet.piano.name, 'piano', sessionSet.song.title),
+      forcedCount: getForcedCount(sessionSet.sessionEventId, sessionSet.piano.name, 'piano'),
     } : null,
     front: sessionSet.members
       .filter((member) => member.role === 'front')
@@ -137,6 +182,7 @@ export async function serializeSessionSets(sessionSets: SessionSetWithRelations[
         name: member.participant.name,
         subInstrument: subInstrumentByFrontName.get(member.participant.name) ?? null,
         isForced: isForcedAssignment(sessionSet.sessionEventId, member.participant.name, 'front', sessionSet.song.title),
+        forcedCount: getForcedCount(sessionSet.sessionEventId, member.participant.name, 'front'),
       })),
     vocal: sessionSet.members
       .filter((member) => member.role === 'vocal')
@@ -144,6 +190,7 @@ export async function serializeSessionSets(sessionSets: SessionSetWithRelations[
         id: member.participant.id,
         name: member.participant.name,
         isForced: isForcedAssignment(sessionSet.sessionEventId, member.participant.name, 'vocal', sessionSet.song.title),
+        forcedCount: getForcedCount(sessionSet.sessionEventId, member.participant.name, 'vocal'),
       })),
   }));
 }

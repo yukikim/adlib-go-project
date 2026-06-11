@@ -60,8 +60,12 @@ type EntryState = {
 
 const NONE_VALUE = "__none__";
 
-function formatSessionMemberName(name: string, isForced?: boolean) {
-  return isForced ? `${name} (強制追加)` : name;
+function formatSessionMemberName(name: string, isForced?: boolean, forcedCount?: number) {
+  if (!isForced) {
+    return name;
+  }
+
+  return `${name} (強制追加${forcedCount && forcedCount > 0 ? forcedCount : ''})`;
 }
 
 function EventMeta({
@@ -1821,6 +1825,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                       ? formatSessionMemberName(
                         sessionSet.drum.name,
                         sessionSet.drum.isForced,
+                        sessionSet.drum.forcedCount,
                       )
                       : "-"}
                   </p>
@@ -1830,6 +1835,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                       ? formatSessionMemberName(
                         sessionSet.bass.name,
                         sessionSet.bass.isForced,
+                        sessionSet.bass.forcedCount,
                       )
                       : "-"}
                   </p>
@@ -1839,6 +1845,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                       ? formatSessionMemberName(
                         sessionSet.piano.name,
                         sessionSet.piano.isForced,
+                        sessionSet.piano.forcedCount,
                       )
                       : "-"}
                   </p>
@@ -1850,6 +1857,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                           const baseName = formatSessionMemberName(
                             member.name,
                             member.isForced,
+                            member.forcedCount,
                           );
                           return member.subInstrument
                             ? `${baseName} (${member.subInstrument})`
@@ -1866,6 +1874,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                           const baseName = formatSessionMemberName(
                             member.name,
                             member.isForced,
+                            member.forcedCount,
                           );
                           return sessionSet.key
                             ? `${baseName} (key ${sessionSet.key})`

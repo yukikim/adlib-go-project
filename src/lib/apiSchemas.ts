@@ -135,4 +135,6 @@ export const sessionArchiveCreateRequestSchema = z.object({
 
 export const sessionSetGenerateRequestSchema = z.object({
   sessionEventId: nonEmptyTrimmedStringSchema,
+  drumForcedAssignmentMax: optionalNonNegativeIntegerSchema,
+  forcedAssignmentMax: optionalNonNegativeIntegerSchema,
 }).strict();
