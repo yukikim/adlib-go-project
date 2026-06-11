@@ -1421,6 +1421,19 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                           <p className="font-medium">{sessionSet.songTitle}</p>
                           <p className="text-sm text-muted-foreground">key {sessionSet.key ?? '-'}</p>
                         </div>
+                        <div className="flex items-start gap-3">
+                          <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <Checkbox
+                              checked={sessionSet.isPublished === true}
+                              disabled={loading}
+                              onCheckedChange={(checked) => onUpdateSessionSet({
+                                ...sessionSet,
+                                isPublished: checked === true,
+                              })}
+                            />
+                            <span>{sessionSet.isPublished ? '公開中' : '非公開'}</span>
+                          </label>
+                        </div>
                         <div className="flex items-center gap-2">
                           {sessionSet.isPublished ? <Badge>公開中</Badge> : <Badge variant="outline">下書き</Badge>}
                           <Button type="button" variant="outline" size="sm" disabled={loading} onClick={() => openSessionSetEditor(sessionSet)}>
@@ -1496,6 +1509,18 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                           value={editingSessionSet.key ?? ''}
                           onChange={(event) => setEditingSessionSet((current) => current ? ({ ...current, key: event.target.value || null }) : current)}
                         />
+                      </Field>
+                      <Field label="公開設定" className="sm:col-span-2">
+                        <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Checkbox
+                            checked={editingSessionSet.isPublished === true}
+                            onCheckedChange={(checked) => setEditingSessionSet((current) => current ? ({
+                              ...current,
+                              isPublished: checked === true,
+                            }) : current)}
+                          />
+                          <span>{editingSessionSet.isPublished ? '公開中' : '非公開'}</span>
+                        </label>
                       </Field>
                       <Field label="drum">
                         <Select value={editingSessionSet.drum ? buildSessionMemberOptionValue('drum', editingSessionSet.drum.name) : NONE_VALUE} onValueChange={(value) => updateEditingSessionSetMember('drum', 'drum', value)}>

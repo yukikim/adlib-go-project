@@ -195,14 +195,13 @@ export async function PATCH(request: NextRequest) {
     }, { status: 400 });
   }
 
-  const keepPublished = sessionEvent.sessionSets.some((sessionSet) => sessionSet.isPublished);
   const sessionSetRows = normalizedSessionSets.map(({ sessionSet, drum, bass, piano }, index) => ({
     id: randomUUID(),
     sessionEventId: body.sessionEventId,
     title: sessionSet.songTitle,
     songId: songByTitle.get(sessionSet.songTitle)?.id,
     setOrder: sessionSet.setOrder ?? index + 1,
-    isPublished: keepPublished,
+    isPublished: sessionSet.isPublished ?? false,
     drumId: drum?.id ?? null,
     bassId: bass?.id ?? null,
     pianoId: piano?.id ?? null,
