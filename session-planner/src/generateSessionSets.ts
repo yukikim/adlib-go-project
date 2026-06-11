@@ -87,6 +87,56 @@ const chooseRandomForcedParticipant = (
   return prioritized[randomIndex];
 };
 
+const chooseForcedFrontParticipants = (
+  candidates: Participant[],
+  participationCount: ParticipationCount,
+  existingParticipants: Participant[],
+  additionalCount: number,
+): Participant[] => {
+  const picked: Participant[] = [];
+
+  while (picked.length < additionalCount) {
+    const excludedIds = new Set([
+      ...existingParticipants.map((participant) => participant.id),
+      ...picked.map((participant) => participant.id),
+    ]);
+    const usedSubInstruments = new Set(
+      [...existingParticipants, ...picked]
+        .map((participant) => normalizeFrontSubInstrument(participant.subInstrument))
+        .filter((value): value is string => Boolean(value)),
+    );
+
+    const available = candidates.filter((candidate) =>
+      candidate.allowForcedAssignment !== false
+      && !excludedIds.has(candidate.id)
+      && participationCount[candidate.id] < CORE_PART_MAX_ASSIGNMENTS,
+    );
+
+    if (available.length === 0) {
+      break;
+    }
+
+    const minParticipationCount = Math.min(
+      ...available.map((candidate) => participationCount[candidate.id] ?? 0),
+    );
+    const prioritized = available.filter(
+      (candidate) => (participationCount[candidate.id] ?? 0) === minParticipationCount,
+    );
+    const distinctSubInstrumentCandidates = prioritized.filter((candidate) => {
+      const subInstrument = normalizeFrontSubInstrument(candidate.subInstrument);
+      return subInstrument && !usedSubInstruments.has(subInstrument);
+    });
+    const pool = distinctSubInstrumentCandidates.length > 0
+      ? distinctSubInstrumentCandidates
+      : prioritized;
+    const randomIndex = Math.floor(Math.random() * pool.length);
+
+    picked.push(pool[randomIndex]);
+  }
+
+  return picked;
+};
+
 const getMissingForcedPartReason = (
   candidates: Participant[],
   maxCount: number,
@@ -128,6 +178,48 @@ const getMissingFrontlineReason = (
   }
 
   return 'Front/Vocal の候補者が割り当て上限に達しています';
+};
+
+const fillFrontline = (
+  songTitle: string,
+  frontCandidates: Participant[],
+  vocalCandidates: Participant[],
+  allFrontCandidates: Participant[],
+  participationCount: ParticipationCount,
+) => {
+  const availableVocalCandidates = vocalCandidates.filter(
+    (participant) => participationCount[participant.id] < VOCAL_MAX_ASSIGNMENTS,
+  );
+  let vocal: Participant | undefined;
+
+  if (availableVocalCandidates.length > 0) {
+    const pool = [...availableVocalCandidates].sort(
+      (a, b) => participationCount[a.id] - participationCount[b.id],
+    );
+    vocal = pool[0];
+  }
+
+  const requestedFrontMembers = chooseFrontWithPriority(
+    frontCandidates,
+    songTitle,
+    participationCount,
+    0,
+    vocal ? 1 : 2,
+  );
+  const targetFrontCount = vocal ? 1 : 2;
+  const forcedFrontMembers = chooseForcedFrontParticipants(
+    allFrontCandidates,
+    participationCount,
+    requestedFrontMembers,
+    Math.max(targetFrontCount - requestedFrontMembers.length, 0),
+  );
+  const frontMembers = [...requestedFrontMembers, ...forcedFrontMembers];
+
+  return {
+    vocal,
+    frontMembers,
+    forcedFrontAdded: forcedFrontMembers.length > 0,
+  };
 };
 
 const buildSkippedSong = (
@@ -245,6 +337,7 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
     drum: participants.filter((participant) => participant.instrument === 'drum'),
     bass: participants.filter((participant) => participant.instrument === 'bass'),
     piano: participants.filter((participant) => participant.instrument === 'piano'),
+    front: participants.filter((participant) => participant.instrument === 'front'),
   } as const;
 
   for (const songTitle of uniqueSongTitles) {
@@ -277,21 +370,16 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
       continue;
     }
 
-    // vocal: round=1 の希望曲のみ参加 (最大4曲)
-    const vocalCandidates = byInstrument.vocal.filter(v => participationCount[v.id] < VOCAL_MAX_ASSIGNMENTS);
-    let vocal: Participant | undefined;
-
-    if (vocalCandidates.length > 0) {
-      const pool = [...vocalCandidates].sort((a, b) => participationCount[a.id] - participationCount[b.id]);
-      vocal = pool[0];
-    }
-
-    const frontMembers = chooseFrontWithPriority(
-      byInstrument.front,
+    const {
+      vocal,
+      frontMembers,
+      forcedFrontAdded,
+    } = fillFrontline(
       songTitle,
+      byInstrument.front,
+      byInstrument.vocal,
+      allByInstrument.front,
       participationCount,
-      0,
-      vocal ? 1 : 2,
     );
 
     const frontIds = [
@@ -329,6 +417,14 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
       front: frontIds,
       key,
     });
+
+    if (forcedFrontAdded) {
+      forcedSessionSets.push({
+        songTitle,
+        forcedInstruments: ['front'],
+        requesterCount: songParticipants.length,
+      });
+    }
   }
 
   const remainingSkippedSongs: SessionGenerationResult['skippedSongs'] = [];
@@ -396,20 +492,16 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
       continue;
     }
 
-    const vocalCandidates = byInstrument.vocal.filter((participant) => participationCount[participant.id] < VOCAL_MAX_ASSIGNMENTS);
-    let vocal: Participant | undefined;
-
-    if (vocalCandidates.length > 0) {
-      const pool = [...vocalCandidates].sort((a, b) => participationCount[a.id] - participationCount[b.id]);
-      vocal = pool[0];
-    }
-
-    const frontMembers = chooseFrontWithPriority(
-      byInstrument.front,
+    const {
+      vocal,
+      frontMembers,
+      forcedFrontAdded,
+    } = fillFrontline(
       songTitle,
+      byInstrument.front,
+      byInstrument.vocal,
+      allByInstrument.front,
       participationCount,
-      0,
-      vocal ? 1 : 2,
     );
 
     const frontIds = [
@@ -449,7 +541,9 @@ export function generateSessionSets(participants: Participant[]): SessionGenerat
 
     forcedSessionSets.push({
       songTitle,
-      forcedInstruments,
+      forcedInstruments: forcedFrontAdded && !forcedInstruments.includes('front')
+        ? [...forcedInstruments, 'front']
+        : forcedInstruments,
       requesterCount: skippedSong.requesterCount,
     });
   }

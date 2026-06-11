@@ -796,7 +796,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
   // console.log('selectedAdminEventId', selectedAdminEventId)
   // console.log('isChildVisible', isChildVisible)
   // console.log('savedSessionSetDrafts', savedSessionSetDrafts)
-  console.log('sessionEvents', sessionEvents)
+  // console.log('sessionEvents', sessionEvents)
   // console.log('filteredMembers', filteredMembers)
   // console.log(memberSubInstrument("f86759b3-8eb8-45cb-be74-373f538d058c"))
 
