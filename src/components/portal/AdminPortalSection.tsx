@@ -1363,15 +1363,6 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                     onChange={(event) => setGenerateForcedAssignmentMax(event.target.value)}
                   />
                 </Field>
-                {/* <Button type="button" onClick={() => onGenerateSets()} disabled={loading || !selectedAdminEventId}>
-                  sessionSet 生成
-                </Button>
-                <Button type="button" variant="secondary" onClick={onPublishSets} disabled={loading || !selectedAdminEventId || sessionSets.length === 0}>
-                  sessionSet 公開
-                </Button>
-                <Button type="button" variant="outline" onClick={onSignOut} disabled={loading}>
-                  サインアウト
-                </Button> */}
               </div>
               <div className={cn('mt-4 rounded-xl border p-4', !isChildVisible('admin-session-sets', 'admin-session-sets-actions') && 'hidden')}>
                 <div className="space-y-1">
@@ -1409,6 +1400,35 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
               </div>
 
               <Separator className={cn('my-4', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden', 'bg-secondary')} />
+              <div className="rounded-xl border p-4 lg:col-span-2 bg-gray-200">
+                <h3 className="font-medium">保存済み sessionSet</h3>
+                {savedSessionSetDrafts.length === 0 ? (
+                  <p className="mt-3 text-sm text-muted-foreground">保存済み sessionSet はありません。</p>
+                ) : (
+                  <ul className="mt-3 space-y-3">
+                    {savedSessionSetDrafts.map((draft) => (
+                      <li key={draft.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-card/80 p-4">
+                        <div className="space-y-1">
+                          <p className="font-medium">{draft.title}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {draft.sessionSetCount} 件 / 更新 {new Date(draft.updatedAt).toLocaleString('ja-JP')}
+                          </p>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          <Button type="button" variant="outline" size="sm" disabled={loading} onClick={() => onShowSavedSessionSetDraft(draft)}>
+                            表示
+                          </Button>
+                          <Button type="button" size="sm" disabled={loading} onClick={() => onRegenerateSavedSessionSetDraft(draft)}>
+                            再生成
+                          </Button>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+              <Separator className={cn('my-4', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden', 'bg-secondary')} />
+              <div id="session-set" className="bg-slate-900 p-2 rounded-2xl text-white">
               <h3 className={cn('font-medium my-2', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>
                 {selectedAdminEvent ? `${selectedAdminEvent.title} の sessionSet` : 'この sessionSetを書き出したイベント名'}
               </h3>
@@ -1421,22 +1441,22 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                           <p className="font-medium">{sessionSet.songTitle}</p>
                           <p className="text-sm text-muted-foreground">key {sessionSet.key ?? '-'}</p>
                         </div>
-                        <div className="flex items-start gap-3">
-                          <label className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <Checkbox
-                              checked={sessionSet.isPublished === true}
-                              disabled={loading}
-                              onCheckedChange={(checked) => onUpdateSessionSet({
-                                ...sessionSet,
-                                isPublished: checked === true,
-                              })}
-                            />
-                            <span>{sessionSet.isPublished ? '公開中' : '非公開'}</span>
-                          </label>
-                        </div>
                         <div className="flex items-center gap-2">
-                          {sessionSet.isPublished ? <Badge>公開中</Badge> : <Badge variant="outline">下書き</Badge>}
-                          <Button type="button" variant="outline" size="sm" disabled={loading} onClick={() => openSessionSetEditor(sessionSet)}>
+                          <div className="flex items-start gap-3">
+                            <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                              <Checkbox
+                                checked={sessionSet.isPublished === true}
+                                disabled={loading}
+                                onCheckedChange={(checked) => onUpdateSessionSet({
+                                  ...sessionSet,
+                                  isPublished: checked === true,
+                                })}
+                              />
+                              <span>{sessionSet.isPublished ? '公開中' : '非公開'}</span>
+                            </label>
+                          </div>
+                          {sessionSet.isPublished ? <Badge>公開中</Badge> : <Badge variant="destructive">下書き</Badge>}
+                          <Button type="button" variant="default" size="sm" disabled={loading} onClick={() => openSessionSetEditor(sessionSet)}>
                             編集
                           </Button>
                         </div>
@@ -1633,7 +1653,8 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
 
                 </div>
               )}
-              <Separator className={cn('my-4', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden', 'bg-secondary')} />
+              </div>
+              {/* <Separator className={cn('my-4', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden', 'bg-secondary')} />
               <div className="rounded-xl border p-4 lg:col-span-2 bg-gray-200">
                 <h3 className="font-medium">保存済み sessionSet</h3>
                 {savedSessionSetDrafts.length === 0 ? (
@@ -1660,7 +1681,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                     ))}
                   </ul>
                 )}
-              </div>
+              </div> */}
             </Section>
 
             <Section sectionId="admin-archives" title="レイティング / アーカイブ" description="評価集計の確認とアーカイブ作成を行います。" className={cn(!isGroupVisible('admin-archives') && 'hidden')}>
