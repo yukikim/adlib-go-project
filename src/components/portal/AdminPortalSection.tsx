@@ -504,6 +504,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
   const [openSessionEventIds, setOpenSessionEventIds] = useState<string[]>([]);
   const [hasRestoredSelection, setHasRestoredSelection] = useState(false);
   const [editingSessionSet, setEditingSessionSet] = useState<SessionSetView | null>(null);
+  const [showSessionSetContainer, setShowSessionSetContainer] = useState(false);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -638,6 +639,9 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     setActiveGroupId(groupId);
     setActiveChildId(childId);
     setOpenMobileGroupId(groupId);
+    if (groupId === 'admin-session-sets' && (childId === 'admin-session-sets-list' || childId === 'admin-session-sets-results')) {
+      setShowSessionSetContainer(true);
+    }
   };
 
   const toggleSessionEventOpen = (sessionEventId: string) => {
@@ -772,6 +776,21 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
 
     onUpdateSessionSet(editingSessionSet);
     setEditingSessionSet(null);
+  };
+
+  const handleGenerateSets = (eventId?: string) => {
+    setShowSessionSetContainer(true);
+    onGenerateSets(eventId);
+  };
+
+  const handleShowSavedSessionSetDraft = (draft: SavedSessionSetDraftView) => {
+    setShowSessionSetContainer(true);
+    onShowSavedSessionSetDraft(draft);
+  };
+
+  const handleRegenerateSavedSessionSetDraft = (draft: SavedSessionSetDraftView) => {
+    setShowSessionSetContainer(true);
+    onRegenerateSavedSessionSetDraft(draft);
   };
 
   const getGroupLinkClassName = (groupId: string) => cn(
@@ -1386,7 +1405,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                         </div>
                         <div>
                           <Badge>{savedDraftEventIdSet.has(sessionEvent.id) ? '保存済み' : '未保存'}</Badge>
-                          <Button type="button" size="sm" disabled={loading || savedDraftEventIdSet.has(sessionEvent.id)} onClick={() => onGenerateSets(sessionEvent.id)}>
+                          <Button type="button" size="sm" disabled={loading || savedDraftEventIdSet.has(sessionEvent.id)} onClick={() => handleGenerateSets(sessionEvent.id)}>
                             sessionSet 生成
                           </Button>
                           <Button type="button" variant="secondary" onClick={onPublishSets} disabled={loading || !selectedAdminEventId || sessionSets.length === 0}>
@@ -1415,10 +1434,10 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                           </p>
                         </div>
                         <div className="flex flex-wrap gap-2">
-                          <Button type="button" variant="outline" size="sm" disabled={loading} onClick={() => onShowSavedSessionSetDraft(draft)}>
+                          <Button type="button" variant="outline" size="sm" disabled={loading} onClick={() => handleShowSavedSessionSetDraft(draft)}>
                             表示
                           </Button>
-                          <Button type="button" size="sm" disabled={loading} onClick={() => onRegenerateSavedSessionSetDraft(draft)}>
+                          <Button type="button" size="sm" disabled={loading} onClick={() => handleRegenerateSavedSessionSetDraft(draft)}>
                             再生成
                           </Button>
                         </div>
@@ -1428,231 +1447,239 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                 )}
               </div>
               <Separator className={cn('my-4', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden', 'bg-secondary')} />
-              <div id="session-set" className="bg-slate-900 p-2 rounded-2xl text-white">
-              <h3 className={cn('font-medium my-2', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>
-                {selectedAdminEvent ? `${selectedAdminEvent.title} の sessionSet` : 'この sessionSetを書き出したイベント名'}
-              </h3>
-              {sessionSets.length === 0 ? <p className={cn('text-sm text-muted-foreground', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>まだ sessionSet はありません。</p> : (
-                <ul id="admin-session-sets-list" className={cn('grid scroll-mt-24 gap-3 md:grid-cols-2', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>
-                  {sessionSets.map((sessionSet) => (
-                    <li key={sessionSet.id} className="rounded-xl border p-4">
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <p className="font-medium">{sessionSet.songTitle}</p>
-                          <p className="text-sm text-muted-foreground">key {sessionSet.key ?? '-'}</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="flex items-start gap-3">
-                            <label className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <Checkbox
-                                checked={sessionSet.isPublished === true}
-                                disabled={loading}
-                                onCheckedChange={(checked) => onUpdateSessionSet({
-                                  ...sessionSet,
-                                  isPublished: checked === true,
-                                })}
-                              />
-                              <span>{sessionSet.isPublished ? '公開中' : '非公開'}</span>
-                            </label>
-                          </div>
-                          {sessionSet.isPublished ? <Badge>公開中</Badge> : <Badge variant="destructive">下書き</Badge>}
-                          <Button type="button" variant="default" size="sm" disabled={loading} onClick={() => openSessionSetEditor(sessionSet)}>
-                            編集
-                          </Button>
-                        </div>
-                      </div>
-                      <div className="mt-3 grid gap-2 text-sm text-muted-foreground">
-                        <p>drum {sessionSet.drum ? renderSessionMemberName(sessionSet.drum.name, sessionSet.drum) : '-'}</p>
-                        <p>bass {sessionSet.bass ? renderSessionMemberName(sessionSet.bass.name, sessionSet.bass) : '-'}</p>
-                        <p>piano {sessionSet.piano ? renderSessionMemberName(sessionSet.piano.name, sessionSet.piano) : '-'}</p>
-                        <p>
-                          front {sessionSet.front?.length
-                            ? sessionSet.front.map((member, index) => (
-                              <span key={`${member.id}-${index}`}>
-                                {index > 0 ? ', ' : null}
-                                {renderSessionMemberName(member.name, member)}
-                                {member.subInstrument ? ` (${member.subInstrument})` : null}
-                              </span>
-                            ))
-                            : '-'}
-                        </p>
-                        <p>
-                          vocal {sessionSet.vocal?.length
-                            ? sessionSet.vocal.map((member, index) => (
-                              <span key={`${member.id}-${index}`}>
-                                {index > 0 ? ', ' : null}
-                                {renderSessionMemberName(member.name, member)}
-                                {sessionSet.key ? ` (key ${sessionSet.key})` : null}
-                              </span>
-                            ))
-                            : '-'}
-                        </p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
-              <div className={cn('mt-4 flex flex-wrap gap-2', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>
-                <Button type="button" onClick={onSaveEditedSessionSets} disabled={loading || !selectedAdminEventId || sessionSets.length === 0}>
-                  編集内容を sessionSet に保存
-                </Button>
-                <Button type="button" onClick={onSaveGeneratedSessionSets} disabled={isGeneratedSessionSetSaveDisabled}>
-                  {selectedAdminEvent
-                    ? hasSavedDraftForSelectedEvent && canOverwriteSavedSessionSetDraft
-                      ? `「${selectedAdminEvent.title} sessionSet」を上書き保存`
-                      : `「${selectedAdminEvent.title} sessionSet」として保存`
-                    : hasSavedDraftForSelectedEvent && canOverwriteSavedSessionSetDraft
-                      ? 'sessionSet を上書き保存'
-                      : 'sessionSet を保存'}
-                </Button>
-              </div>
-              <Dialog open={Boolean(editingSessionSet)} onOpenChange={(open) => { if (!open) setEditingSessionSet(null); }}>
-                <DialogContent className="sm:max-w-2xl">
-                  <DialogHeader>
-                    <DialogTitle>sessionSet を編集</DialogTitle>
-                    <DialogDescription>各セッションの曲名、key、担当メンバーを個別に調整できます。</DialogDescription>
-                  </DialogHeader>
-                  {editingSessionSet ? (
-                    <div className="grid gap-4 py-2 sm:grid-cols-2">
-                      <Field htmlFor="admin-edit-session-set-song-title" label="曲名" className="sm:col-span-2">
-                        <Input
-                          id="admin-edit-session-set-song-title"
-                          type="text"
-                          value={editingSessionSet.songTitle}
-                          onChange={(event) => setEditingSessionSet((current) => current ? ({ ...current, songTitle: event.target.value }) : current)}
-                        />
-                      </Field>
-                      <Field htmlFor="admin-edit-session-set-key" label="key">
-                        <Input
-                          id="admin-edit-session-set-key"
-                          type="text"
-                          value={editingSessionSet.key ?? ''}
-                          onChange={(event) => setEditingSessionSet((current) => current ? ({ ...current, key: event.target.value || null }) : current)}
-                        />
-                      </Field>
-                      <Field label="公開設定" className="sm:col-span-2">
-                        <label className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <Checkbox
-                            checked={editingSessionSet.isPublished === true}
-                            onCheckedChange={(checked) => setEditingSessionSet((current) => current ? ({
-                              ...current,
-                              isPublished: checked === true,
-                            }) : current)}
-                          />
-                          <span>{editingSessionSet.isPublished ? '公開中' : '非公開'}</span>
-                        </label>
-                      </Field>
-                      <Field label="drum">
-                        <Select value={editingSessionSet.drum ? buildSessionMemberOptionValue('drum', editingSessionSet.drum.name) : NONE_VALUE} onValueChange={(value) => updateEditingSessionSetMember('drum', 'drum', value)}>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="drum を選択" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value={NONE_VALUE}>未設定</SelectItem>
-                            {getOptionListWithCurrentMember(instrumentOptions.drum, editingSessionSet.drum, 'drum').map((option) => (
-                              <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </Field>
-                      <Field label="bass">
-                        <Select value={editingSessionSet.bass ? buildSessionMemberOptionValue('bass', editingSessionSet.bass.name) : NONE_VALUE} onValueChange={(value) => updateEditingSessionSetMember('bass', 'bass', value)}>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="bass を選択" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value={NONE_VALUE}>未設定</SelectItem>
-                            {getOptionListWithCurrentMember(instrumentOptions.bass, editingSessionSet.bass, 'bass').map((option) => (
-                              <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </Field>
-                      <Field label="piano">
-                        <Select value={editingSessionSet.piano ? buildSessionMemberOptionValue('piano', editingSessionSet.piano.name) : NONE_VALUE} onValueChange={(value) => updateEditingSessionSetMember('piano', 'piano', value)}>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="piano を選択" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value={NONE_VALUE}>未設定</SelectItem>
-                            {getOptionListWithCurrentMember(instrumentOptions.piano, editingSessionSet.piano, 'piano').map((option) => (
-                              <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </Field>
-                      <Field label="front 1">
-                        <Select value={editingSessionSet.front?.[0] ? buildSessionMemberOptionValue('front', editingSessionSet.front[0].name) : NONE_VALUE} onValueChange={(value) => updateEditingSessionSetArrayMember('front', 0, 'front', value)}>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="front 1 を選択" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value={NONE_VALUE}>未設定</SelectItem>
-                            {getOptionListWithCurrentMember(instrumentOptions.front, editingSessionSet.front?.[0], 'front').map((option) => (
-                              <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </Field>
-                      <Field label="front 2">
-                        <Select value={editingSessionSet.front?.[1] ? buildSessionMemberOptionValue('front', editingSessionSet.front[1].name) : NONE_VALUE} onValueChange={(value) => updateEditingSessionSetArrayMember('front', 1, 'front', value)}>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="front 2 を選択" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value={NONE_VALUE}>未設定</SelectItem>
-                            {getOptionListWithCurrentMember(instrumentOptions.front, editingSessionSet.front?.[1], 'front').map((option) => (
-                              <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </Field>
-                      <Field label="vocal">
-                        <Select value={editingSessionSet.vocal?.[0] ? buildSessionMemberOptionValue('vocal', editingSessionSet.vocal[0].name) : NONE_VALUE} onValueChange={(value) => updateEditingSessionSetArrayMember('vocal', 0, 'vocal', value)}>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="vocal を選択" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value={NONE_VALUE}>未設定</SelectItem>
-                            {getOptionListWithCurrentMember(instrumentOptions.vocal, editingSessionSet.vocal?.[0], 'vocal').map((option) => (
-                              <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </Field>
-                    </div>
-                  ) : null}
-                  <DialogFooter>
-                    <Button type="button" variant="outline" onClick={() => setEditingSessionSet(null)}>キャンセル</Button>
-                    <Button type="button" onClick={applyEditingSessionSet} disabled={loading || !editingSessionSet}>一覧に反映</Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-              {(generatedResult.forcedSessionSets.length > 0 || generatedResult.skippedSongs.length > 0 || savedSessionSetDrafts.length > 0) && (
-                <div id="admin-session-sets-results" className={cn('mt-4 grid scroll-mt-24 gap-4 lg:grid-cols-2', !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden')}>
-                  {generatedResult.forcedSessionSets.length > 0 && (
-                    <div className="rounded-xl border p-4">
-                      <h3 className="font-medium border-b">強制追加</h3>
-                      <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-                        {generatedResult.forcedSessionSets.map((item) => (
-                          <li key={item.songTitle}>{item.songTitle} / {item.forcedInstruments.join(', ')}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                  {generatedResult.skippedSongs.length > 0 && (
-                    <div className="rounded-xl border p-4">
-                      <h3 className="font-medium border-b">未生成理由</h3>
-                      <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-                        {generatedResult.skippedSongs.map((item) => (
-                          <li key={item.songTitle}>{item.songTitle} / {item.reasons.join(' / ')}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
+              {/* <div id="session-set-container" className="bg-slate-900 p-2 rounded-2xl text-white"> */}
+              <div id="session-set-container" className={cn('bg-slate-900 p-2 rounded-2xl text-white', (!showSessionSetContainer || !isChildVisible('admin-session-sets', 'admin-session-sets-results')) && 'hidden')}>
+                {/* <h3 className={cn('font-medium my-2', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}> */}
+                <div className="mb-2 flex items-start justify-between gap-3">
+                  <h3 className="font-medium">
+                    {selectedAdminEvent ? `${selectedAdminEvent.title} の sessionSet` : 'この sessionSetを書き出したイベント名'}
+                  </h3>
+                  <Button type="button" variant="secondary" size="sm" onClick={() => setShowSessionSetContainer(false)}>
+                    閉じる
+                  </Button>
                 </div>
-              )}
+                {sessionSets.length === 0 ? <p className={cn('text-sm text-muted-foreground', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>まだ sessionSet はありません。</p> : (
+                  // <ul id="admin-session-sets-list" className={cn('grid scroll-mt-24 gap-3 md:grid-cols-2', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>
+                  <ul id="admin-session-sets-list" className="grid scroll-mt-24 gap-3 md:grid-cols-2">
+                    {sessionSets.map((sessionSet) => (
+                      <li key={sessionSet.id} className="rounded-xl border p-4">
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <p className="font-medium">{sessionSet.songTitle}</p>
+                            <p className="text-sm text-muted-foreground">key {sessionSet.key ?? '-'}</p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="flex items-start gap-3">
+                              <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                                <Checkbox
+                                  checked={sessionSet.isPublished === true}
+                                  disabled={loading}
+                                  onCheckedChange={(checked) => onUpdateSessionSet({
+                                    ...sessionSet,
+                                    isPublished: checked === true,
+                                  })}
+                                />
+                                <span>{sessionSet.isPublished ? '公開中' : '非公開'}</span>
+                              </label>
+                            </div>
+                            {sessionSet.isPublished ? <Badge>公開中</Badge> : <Badge variant="destructive">下書き</Badge>}
+                            <Button type="button" variant="default" size="sm" disabled={loading} onClick={() => openSessionSetEditor(sessionSet)}>
+                              編集
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="mt-3 grid gap-2 text-sm text-muted-foreground">
+                          <p>drum {sessionSet.drum ? renderSessionMemberName(sessionSet.drum.name, sessionSet.drum) : '-'}</p>
+                          <p>bass {sessionSet.bass ? renderSessionMemberName(sessionSet.bass.name, sessionSet.bass) : '-'}</p>
+                          <p>piano {sessionSet.piano ? renderSessionMemberName(sessionSet.piano.name, sessionSet.piano) : '-'}</p>
+                          <p>
+                            front {sessionSet.front?.length
+                              ? sessionSet.front.map((member, index) => (
+                                <span key={`${member.id}-${index}`}>
+                                  {index > 0 ? ', ' : null}
+                                  {renderSessionMemberName(member.name, member)}
+                                  {member.subInstrument ? ` (${member.subInstrument})` : null}
+                                </span>
+                              ))
+                              : '-'}
+                          </p>
+                          <p>
+                            vocal {sessionSet.vocal?.length
+                              ? sessionSet.vocal.map((member, index) => (
+                                <span key={`${member.id}-${index}`}>
+                                  {index > 0 ? ', ' : null}
+                                  {renderSessionMemberName(member.name, member)}
+                                  {sessionSet.key ? ` (key ${sessionSet.key})` : null}
+                                </span>
+                              ))
+                              : '-'}
+                          </p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <div className={cn('mt-4 flex flex-wrap gap-2', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>
+                  <Button type="button" onClick={onSaveEditedSessionSets} disabled={loading || !selectedAdminEventId || sessionSets.length === 0}>
+                    編集内容を sessionSet に保存
+                  </Button>
+                  <Button type="button" onClick={onSaveGeneratedSessionSets} disabled={isGeneratedSessionSetSaveDisabled}>
+                    {selectedAdminEvent
+                      ? hasSavedDraftForSelectedEvent && canOverwriteSavedSessionSetDraft
+                        ? `「${selectedAdminEvent.title} sessionSet」を上書き保存`
+                        : `「${selectedAdminEvent.title} sessionSet」として保存`
+                      : hasSavedDraftForSelectedEvent && canOverwriteSavedSessionSetDraft
+                        ? 'sessionSet を上書き保存'
+                        : 'sessionSet を保存'}
+                  </Button>
+                </div>
+                <Dialog open={Boolean(editingSessionSet)} onOpenChange={(open) => { if (!open) setEditingSessionSet(null); }}>
+                  <DialogContent className="sm:max-w-2xl">
+                    <DialogHeader>
+                      <DialogTitle>sessionSet を編集</DialogTitle>
+                      <DialogDescription>各セッションの曲名、key、担当メンバーを個別に調整できます。</DialogDescription>
+                    </DialogHeader>
+                    {editingSessionSet ? (
+                      <div className="grid gap-4 py-2 sm:grid-cols-2">
+                        <Field htmlFor="admin-edit-session-set-song-title" label="曲名" className="sm:col-span-2">
+                          <Input
+                            id="admin-edit-session-set-song-title"
+                            type="text"
+                            value={editingSessionSet.songTitle}
+                            onChange={(event) => setEditingSessionSet((current) => current ? ({ ...current, songTitle: event.target.value }) : current)}
+                          />
+                        </Field>
+                        <Field htmlFor="admin-edit-session-set-key" label="key">
+                          <Input
+                            id="admin-edit-session-set-key"
+                            type="text"
+                            value={editingSessionSet.key ?? ''}
+                            onChange={(event) => setEditingSessionSet((current) => current ? ({ ...current, key: event.target.value || null }) : current)}
+                          />
+                        </Field>
+                        <Field label="公開設定" className="sm:col-span-2">
+                          <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <Checkbox
+                              checked={editingSessionSet.isPublished === true}
+                              onCheckedChange={(checked) => setEditingSessionSet((current) => current ? ({
+                                ...current,
+                                isPublished: checked === true,
+                              }) : current)}
+                            />
+                            <span>{editingSessionSet.isPublished ? '公開中' : '非公開'}</span>
+                          </label>
+                        </Field>
+                        <Field label="drum">
+                          <Select value={editingSessionSet.drum ? buildSessionMemberOptionValue('drum', editingSessionSet.drum.name) : NONE_VALUE} onValueChange={(value) => updateEditingSessionSetMember('drum', 'drum', value)}>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="drum を選択" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value={NONE_VALUE}>未設定</SelectItem>
+                              {getOptionListWithCurrentMember(instrumentOptions.drum, editingSessionSet.drum, 'drum').map((option) => (
+                                <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </Field>
+                        <Field label="bass">
+                          <Select value={editingSessionSet.bass ? buildSessionMemberOptionValue('bass', editingSessionSet.bass.name) : NONE_VALUE} onValueChange={(value) => updateEditingSessionSetMember('bass', 'bass', value)}>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="bass を選択" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value={NONE_VALUE}>未設定</SelectItem>
+                              {getOptionListWithCurrentMember(instrumentOptions.bass, editingSessionSet.bass, 'bass').map((option) => (
+                                <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </Field>
+                        <Field label="piano">
+                          <Select value={editingSessionSet.piano ? buildSessionMemberOptionValue('piano', editingSessionSet.piano.name) : NONE_VALUE} onValueChange={(value) => updateEditingSessionSetMember('piano', 'piano', value)}>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="piano を選択" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value={NONE_VALUE}>未設定</SelectItem>
+                              {getOptionListWithCurrentMember(instrumentOptions.piano, editingSessionSet.piano, 'piano').map((option) => (
+                                <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </Field>
+                        <Field label="front 1">
+                          <Select value={editingSessionSet.front?.[0] ? buildSessionMemberOptionValue('front', editingSessionSet.front[0].name) : NONE_VALUE} onValueChange={(value) => updateEditingSessionSetArrayMember('front', 0, 'front', value)}>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="front 1 を選択" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value={NONE_VALUE}>未設定</SelectItem>
+                              {getOptionListWithCurrentMember(instrumentOptions.front, editingSessionSet.front?.[0], 'front').map((option) => (
+                                <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </Field>
+                        <Field label="front 2">
+                          <Select value={editingSessionSet.front?.[1] ? buildSessionMemberOptionValue('front', editingSessionSet.front[1].name) : NONE_VALUE} onValueChange={(value) => updateEditingSessionSetArrayMember('front', 1, 'front', value)}>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="front 2 を選択" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value={NONE_VALUE}>未設定</SelectItem>
+                              {getOptionListWithCurrentMember(instrumentOptions.front, editingSessionSet.front?.[1], 'front').map((option) => (
+                                <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </Field>
+                        <Field label="vocal">
+                          <Select value={editingSessionSet.vocal?.[0] ? buildSessionMemberOptionValue('vocal', editingSessionSet.vocal[0].name) : NONE_VALUE} onValueChange={(value) => updateEditingSessionSetArrayMember('vocal', 0, 'vocal', value)}>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="vocal を選択" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value={NONE_VALUE}>未設定</SelectItem>
+                              {getOptionListWithCurrentMember(instrumentOptions.vocal, editingSessionSet.vocal?.[0], 'vocal').map((option) => (
+                                <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </Field>
+                      </div>
+                    ) : null}
+                    <DialogFooter>
+                      <Button type="button" variant="outline" onClick={() => setEditingSessionSet(null)}>キャンセル</Button>
+                      <Button type="button" onClick={applyEditingSessionSet} disabled={loading || !editingSessionSet}>一覧に反映</Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+                {(generatedResult.forcedSessionSets.length > 0 || generatedResult.skippedSongs.length > 0 || savedSessionSetDrafts.length > 0) && (
+                  <div id="admin-session-sets-results" className={cn('mt-4 grid scroll-mt-24 gap-4 lg:grid-cols-2', !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden')}>
+                    {generatedResult.forcedSessionSets.length > 0 && (
+                      <div className="rounded-xl border p-4">
+                        <h3 className="font-medium border-b">強制追加</h3>
+                        <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+                          {generatedResult.forcedSessionSets.map((item) => (
+                            <li key={item.songTitle}>{item.songTitle} / {item.forcedInstruments.join(', ')}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {generatedResult.skippedSongs.length > 0 && (
+                      <div className="rounded-xl border p-4">
+                        <h3 className="font-medium border-b">未生成理由</h3>
+                        <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+                          {generatedResult.skippedSongs.map((item) => (
+                            <li key={item.songTitle}>{item.songTitle} / {item.reasons.join(' / ')}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                  </div>
+                )}
               </div>
               {/* <Separator className={cn('my-4', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && !isChildVisible('admin-session-sets', 'admin-session-sets-results') && 'hidden', 'bg-secondary')} />
               <div className="rounded-xl border p-4 lg:col-span-2 bg-gray-200">
