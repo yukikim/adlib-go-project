@@ -310,7 +310,6 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           generateForcedAssignmentMax={admin.generateForcedAssignmentMax}
           setGenerateForcedAssignmentMax={admin.setGenerateForcedAssignmentMax}
           savedSessionSetDrafts={admin.savedSessionSetDrafts}
-          canOverwriteSavedSessionSetDraft={admin.canOverwriteSavedSessionSetDraft}
           activityLogs={admin.activityLogs}
           mailLogs={admin.mailLogs}
           members={members}

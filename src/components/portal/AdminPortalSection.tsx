@@ -8,6 +8,7 @@ import {
   BookOpenText,
   CalendarDays,
   ChevronDown,
+  FileDown,
   FileArchive,
   Music4,
   Users,
@@ -37,6 +38,7 @@ import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
 import { cn, formatEventDateTime, formatEventSchedule, formatYen } from '@/lib/utils';
 import { Section } from './Section';
+import { downloadSessionSetPdf } from './sessionSetPdf';
 import { AGE_RANGE_OPTIONS, GENDER_OPTIONS, PREFECTURE_OPTIONS } from '@/lib/memberProfile';
 import { getSessionEventStatusLabel } from '@/lib/sessionEventStatus';
 import type {
@@ -242,7 +244,6 @@ type AdminPortalSectionProps = {
   generateForcedAssignmentMax: string;
   setGenerateForcedAssignmentMax: (value: string) => void;
   savedSessionSetDrafts: SavedSessionSetDraftView[];
-  canOverwriteSavedSessionSetDraft: boolean;
   activityLogs: ActivityLogView[];
   mailLogs: MailLogView[];
   members: MemberListView[];
@@ -392,7 +393,6 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     generateForcedAssignmentMax,
     setGenerateForcedAssignmentMax,
     savedSessionSetDrafts,
-    canOverwriteSavedSessionSetDraft,
     activityLogs,
     mailLogs,
     members,
@@ -576,10 +576,12 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
   const generatableSessionEvents = sessionEvents.filter((sessionEvent) => sessionEvent.canGenerateSessionSets);
   const savedDraftEventIdSet = new Set(savedSessionSetDrafts.map((draft) => draft.sessionEventId));
   const hasSavedDraftForSelectedEvent = selectedAdminEventId ? savedDraftEventIdSet.has(selectedAdminEventId) : false;
-  const isGeneratedSessionSetSaveDisabled = loading
+  const isSessionSetSaveDisabled = loading
     || !selectedAdminEventId
-    || sessionSets.length === 0
-    || (hasSavedDraftForSelectedEvent && !canOverwriteSavedSessionSetDraft);
+    || sessionSets.length === 0;
+  const handleSaveSessionSets = hasSavedDraftForSelectedEvent
+    ? onSaveEditedSessionSets
+    : onSaveGeneratedSessionSets;
   const frontMemberByName = new Map(
     members
       .filter((member) => member.mainInstrument === 'front')
@@ -1454,9 +1456,21 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                   <h3 className="font-medium">
                     {selectedAdminEvent ? `${selectedAdminEvent.title} の sessionSet` : 'この sessionSetを書き出したイベント名'}
                   </h3>
-                  <Button type="button" variant="secondary" size="sm" onClick={() => setShowSessionSetContainer(false)}>
-                    閉じる
-                  </Button>
+                  <div className="flex flex-wrap justify-end gap-2">
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      disabled={sessionSets.length === 0}
+                      onClick={() => downloadSessionSetPdf({ sessionEvent: selectedAdminEvent, sessionSets })}
+                    >
+                      <FileDown className="size-4" />
+                      PDF
+                    </Button>
+                    <Button type="button" variant="secondary" size="sm" onClick={() => setShowSessionSetContainer(false)}>
+                      閉じる
+                    </Button>
+                  </div>
                 </div>
                 {sessionSets.length === 0 ? <p className={cn('text-sm text-muted-foreground', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>まだ sessionSet はありません。</p> : (
                   // <ul id="admin-session-sets-list" className={cn('grid scroll-mt-24 gap-3 md:grid-cols-2', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>
@@ -1520,15 +1534,12 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                   </ul>
                 )}
                 <div className={cn('mt-4 flex flex-wrap gap-2', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>
-                  <Button type="button" onClick={onSaveEditedSessionSets} disabled={loading || !selectedAdminEventId || sessionSets.length === 0}>
-                    編集内容を sessionSet に保存
-                  </Button>
-                  <Button type="button" onClick={onSaveGeneratedSessionSets} disabled={isGeneratedSessionSetSaveDisabled}>
+                  <Button type="button" onClick={handleSaveSessionSets} disabled={isSessionSetSaveDisabled}>
                     {selectedAdminEvent
-                      ? hasSavedDraftForSelectedEvent && canOverwriteSavedSessionSetDraft
+                      ? hasSavedDraftForSelectedEvent
                         ? `「${selectedAdminEvent.title} sessionSet」を上書き保存`
                         : `「${selectedAdminEvent.title} sessionSet」として保存`
-                      : hasSavedDraftForSelectedEvent && canOverwriteSavedSessionSetDraft
+                      : hasSavedDraftForSelectedEvent
                         ? 'sessionSet を上書き保存'
                         : 'sessionSet を保存'}
                   </Button>

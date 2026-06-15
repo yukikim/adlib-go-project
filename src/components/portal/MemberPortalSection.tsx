@@ -37,7 +37,7 @@ import {
 } from "@/lib/sessionEventStatus";
 import { formatRoundCandidateSong } from "@/lib/sessionEventWindow";
 import { formatEventDate, formatEventSchedule, formatYen } from "@/lib/utils";
-import { ChevronDown, Star } from 'lucide-react';
+import { ChevronDown, FileDown, Star } from 'lucide-react';
 import type {
   AnnouncementView,
   AttendanceStatus,
@@ -51,6 +51,7 @@ import type {
   SessionSetView,
 } from "./types";
 import type { RunPortalActionOptions } from "./utils";
+import { downloadSessionSetPdf } from "./sessionSetPdf";
 
 type EntryState = {
   canSubmit: boolean;
@@ -1558,9 +1559,20 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     {eventSessionSets.length > 0 ? (
                       <>
                         <Separator className="my-3 bg-sky-200" />
-                        <p className="text-sm font-medium text-sky-700">
-                          保存済み sessionSet
-                        </p>
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <p className="text-sm font-medium text-sky-700">
+                            保存済み sessionSet
+                          </p>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => downloadSessionSetPdf({ sessionEvent: event, sessionSets: eventSessionSets })}
+                          >
+                            <FileDown className="size-4" />
+                            PDF
+                          </Button>
+                        </div>
                         {renderPublishedSessionSets(eventSessionSets)}
                       </>
                     ) : (
@@ -1878,7 +1890,19 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
           </ul>
         )}
         <Separator className="my-4" />
-        <h3 className="font-medium">選択中イベントの公開済み sessionSet</h3>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h3 className="font-medium">選択中イベントの公開済み sessionSet</h3>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={!selectedMemberEvent || memberSessionSets.length === 0}
+            onClick={() => downloadSessionSetPdf({ sessionEvent: selectedMemberEvent, sessionSets: memberSessionSets })}
+          >
+            <FileDown className="size-4" />
+            PDF
+          </Button>
+        </div>
         {selectedMemberEvent ? (
           <div className="mt-3 rounded-xl border bg-background/60 p-4 text-sm">
             <div className="flex flex-wrap items-center gap-2">
