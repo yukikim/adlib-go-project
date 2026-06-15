@@ -37,7 +37,7 @@ import {
 } from "@/lib/sessionEventStatus";
 import { formatRoundCandidateSong } from "@/lib/sessionEventWindow";
 import { formatEventDate, formatEventSchedule, formatYen } from "@/lib/utils";
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Star } from 'lucide-react';
 import type {
   AnnouncementView,
   AttendanceStatus,
@@ -66,6 +66,20 @@ function formatSessionMemberName(name: string, isForced?: boolean, forcedCount?:
   }
 
   return `${name} (強制追加${forcedCount && forcedCount > 0 ? forcedCount : ''})`;
+}
+
+function renderSessionMemberName(
+  name: string,
+  options?: { isForced?: boolean; forcedCount?: number; requestedInRound1?: boolean },
+) {
+  return (
+    <span className="inline-flex items-center gap-1">
+      {options?.requestedInRound1 ? (
+        <Star className="size-3.5 fill-amber-400 text-amber-500" />
+      ) : null}
+      <span>{formatSessionMemberName(name, options?.isForced, options?.forcedCount)}</span>
+    </span>
+  );
 }
 
 function EventMeta({
@@ -291,6 +305,7 @@ type MemberPortalSectionProps = {
   sessionEvents: SessionEventView[];
   sessionEntries: SessionEntryView[];
   memberSessionSets: SessionSetView[];
+  publishedSessionSets: SessionSetView[];
   memberEventId: string;
   memberAttendanceStatus: AttendanceStatus;
   memberAfterPartyAttendanceStatus: AttendanceStatus;
@@ -374,6 +389,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     sessionEvents,
     sessionEntries,
     memberSessionSets,
+    publishedSessionSets,
     memberEventId,
     memberAttendanceStatus,
     memberAfterPartyAttendanceStatus,
@@ -493,6 +509,82 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
 
   const getSessionEntryForEvent = (eventId: string) =>
     sessionEntries.find((entry) => entry.sessionEventId === eventId) ?? null;
+
+  const getPublishedSessionSetsForEvent = (eventId: string) =>
+    publishedSessionSets
+      .filter((sessionSet) => sessionSet.sessionEventId === eventId)
+      .sort((left, right) => {
+        const leftOrder = left.setOrder ?? Number.MAX_SAFE_INTEGER;
+        const rightOrder = right.setOrder ?? Number.MAX_SAFE_INTEGER;
+        if (leftOrder !== rightOrder) {
+          return leftOrder - rightOrder;
+        }
+        return left.songTitle.localeCompare(right.songTitle, "ja-JP");
+      });
+
+  const renderPublishedSessionSets = (sessionSets: SessionSetView[]) => (
+    <ul className="mt-3 space-y-2">
+      {sessionSets.map((sessionSet) => (
+        <li
+          key={sessionSet.id}
+          className="rounded-lg border bg-background/50 p-3"
+        >
+          <div className="flex flex-wrap items-center gap-2">
+            <strong className="text-sm text-foreground">
+              {sessionSet.songTitle}
+            </strong>
+            {sessionSet.key ? (
+              <Badge variant="outline">key {sessionSet.key}</Badge>
+            ) : null}
+          </div>
+          <div className="mt-2 grid gap-1 text-sm text-muted-foreground">
+            <p>
+              drum{" "}
+              {sessionSet.drum
+                ? renderSessionMemberName(sessionSet.drum.name, sessionSet.drum)
+                : "-"}
+            </p>
+            <p>
+              bass{" "}
+              {sessionSet.bass
+                ? renderSessionMemberName(sessionSet.bass.name, sessionSet.bass)
+                : "-"}
+            </p>
+            <p>
+              piano{" "}
+              {sessionSet.piano
+                ? renderSessionMemberName(sessionSet.piano.name, sessionSet.piano)
+                : "-"}
+            </p>
+            <p>
+              front{" "}
+              {sessionSet.front?.length
+                ? sessionSet.front.map((member, index) => (
+                  <span key={`${member.id}-${index}`}>
+                    {index > 0 ? ", " : null}
+                    {renderSessionMemberName(member.name, member)}
+                    {member.subInstrument ? ` (${member.subInstrument})` : null}
+                  </span>
+                ))
+                : "-"}
+            </p>
+            <p>
+              vocal{" "}
+              {sessionSet.vocal?.length
+                ? sessionSet.vocal.map((member, index) => (
+                  <span key={`${member.id}-${index}`}>
+                    {index > 0 ? ", " : null}
+                    {renderSessionMemberName(member.name, member)}
+                    {sessionSet.key ? ` (key ${sessionSet.key})` : null}
+                  </span>
+                ))
+                : "-"}
+            </p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
 
   const getRound1RequestsForEvent = (eventId: string) =>
     getSessionEntryForEvent(eventId)
@@ -1423,45 +1515,62 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             </p>
           ) : (
             <ul className="space-y-3">
-              {publishedEvents.map((event) => (
-                <li
-                  key={event.id}
-                  className="rounded-xl border bg-background/20 p-4"
-                >
-                  <div className="flex flex-wrap items-center gap-2">
-                    <strong className="text-sm text-sky-600">
-                      {event.title}
-                    </strong>
-                    <Badge variant="outline">
-                      {getSessionEventStatusLabel(event.status)}
-                    </Badge>
-                  </div>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    {formatEventSchedule(
-                      event.eventDate,
-                      event.startTime,
-                      event.endTime,
-                    )}{" "}
-                    / {event.venue}
-                  </p>
-                  <EventMeta
-                    participantLimit={event.participantLimit}
-                    attendingEntryCount={event.attendingEntryCount}
-                    remainingEntryCapacity={event.remainingEntryCapacity}
-                    isEntryCapacityFull={event.isEntryCapacityFull}
-                    participationFee={event.participationFee}
-                    hasAfterParty={event.hasAfterParty}
-                    afterPartyFee={event.afterPartyFee}
-                    sessionEntries={event.sessionEntries}
-                    notes={event.notes}
-                  />
-                  {event.entryReason ? (
+              {publishedEvents.map((event) => {
+                const eventSessionSets = getPublishedSessionSetsForEvent(event.id);
+
+                return (
+                  <li
+                    key={event.id}
+                    className="rounded-xl border bg-background/20 p-4"
+                  >
+                    <div className="flex flex-wrap items-center gap-2">
+                      <strong className="text-sm text-sky-600">
+                        {event.title}
+                      </strong>
+                      <Badge variant="outline">
+                        {getSessionEventStatusLabel(event.status)}
+                      </Badge>
+                    </div>
                     <p className="mt-2 text-sm text-muted-foreground">
-                      {event.entryReason}
+                      {formatEventSchedule(
+                        event.eventDate,
+                        event.startTime,
+                        event.endTime,
+                      )}{" "}
+                      / {event.venue}
                     </p>
-                  ) : null}
-                </li>
-              ))}
+                    <EventMeta
+                      participantLimit={event.participantLimit}
+                      attendingEntryCount={event.attendingEntryCount}
+                      remainingEntryCapacity={event.remainingEntryCapacity}
+                      isEntryCapacityFull={event.isEntryCapacityFull}
+                      participationFee={event.participationFee}
+                      hasAfterParty={event.hasAfterParty}
+                      afterPartyFee={event.afterPartyFee}
+                      sessionEntries={event.sessionEntries}
+                      notes={event.notes}
+                    />
+                    {event.entryReason ? (
+                      <p className="mt-2 text-sm text-muted-foreground">
+                        {event.entryReason}
+                      </p>
+                    ) : null}
+                    {eventSessionSets.length > 0 ? (
+                      <>
+                        <Separator className="my-3 bg-sky-200" />
+                        <p className="text-sm font-medium text-sky-700">
+                          保存済み sessionSet
+                        </p>
+                        {renderPublishedSessionSets(eventSessionSets)}
+                      </>
+                    ) : (
+                      <p className="mt-3 text-sm text-muted-foreground">
+                        保存済み sessionSet はありません。
+                      </p>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           )}
         </Card>
@@ -1822,65 +1931,43 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                   <p>
                     drum{" "}
                     {sessionSet.drum
-                      ? formatSessionMemberName(
-                        sessionSet.drum.name,
-                        sessionSet.drum.isForced,
-                        sessionSet.drum.forcedCount,
-                      )
+                      ? renderSessionMemberName(sessionSet.drum.name, sessionSet.drum)
                       : "-"}
                   </p>
                   <p>
                     bass{" "}
                     {sessionSet.bass
-                      ? formatSessionMemberName(
-                        sessionSet.bass.name,
-                        sessionSet.bass.isForced,
-                        sessionSet.bass.forcedCount,
-                      )
+                      ? renderSessionMemberName(sessionSet.bass.name, sessionSet.bass)
                       : "-"}
                   </p>
                   <p>
                     piano{" "}
                     {sessionSet.piano
-                      ? formatSessionMemberName(
-                        sessionSet.piano.name,
-                        sessionSet.piano.isForced,
-                        sessionSet.piano.forcedCount,
-                      )
+                      ? renderSessionMemberName(sessionSet.piano.name, sessionSet.piano)
                       : "-"}
                   </p>
                   <p>
                     front{" "}
                     {sessionSet.front?.length
-                      ? sessionSet.front
-                        .map((member) => {
-                          const baseName = formatSessionMemberName(
-                            member.name,
-                            member.isForced,
-                            member.forcedCount,
-                          );
-                          return member.subInstrument
-                            ? `${baseName} (${member.subInstrument})`
-                            : baseName;
-                        })
-                        .join(", ")
+                      ? sessionSet.front.map((member, index) => (
+                        <span key={`${member.id}-${index}`}>
+                          {index > 0 ? ", " : null}
+                          {renderSessionMemberName(member.name, member)}
+                          {member.subInstrument ? ` (${member.subInstrument})` : null}
+                        </span>
+                      ))
                       : "-"}
                   </p>
                   <p>
                     vocal{" "}
                     {sessionSet.vocal?.length
-                      ? sessionSet.vocal
-                        .map((member) => {
-                          const baseName = formatSessionMemberName(
-                            member.name,
-                            member.isForced,
-                            member.forcedCount,
-                          );
-                          return sessionSet.key
-                            ? `${baseName} (key ${sessionSet.key})`
-                            : baseName;
-                        })
-                        .join(", ")
+                      ? sessionSet.vocal.map((member, index) => (
+                        <span key={`${member.id}-${index}`}>
+                          {index > 0 ? ", " : null}
+                          {renderSessionMemberName(member.name, member)}
+                          {sessionSet.key ? ` (key ${sessionSet.key})` : null}
+                        </span>
+                      ))
                       : "-"}
                   </p>
                 </div>

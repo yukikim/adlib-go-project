@@ -201,6 +201,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           sessionEvents={sessionEvents}
           sessionEntries={member.sessionEntries}
           memberSessionSets={member.memberSessionSets}
+          publishedSessionSets={member.publishedSessionSets}
           memberEventId={member.memberEventId}
           memberAttendanceStatus={member.memberAttendanceStatus}
           memberAfterPartyAttendanceStatus={member.memberAfterPartyAttendanceStatus}

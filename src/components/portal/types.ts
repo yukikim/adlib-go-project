@@ -142,7 +142,9 @@ export type SessionEntryView = {
 
 export type SessionSetView = {
   id: string;
+  sessionEventId?: string | null;
   songTitle: string;
+  setOrder?: number | null;
   key?: string | null;
   isPublished?: boolean;
   drum: { id: string; name: string; isForced?: boolean; forcedCount?: number; requestedInRound1?: boolean } | null;

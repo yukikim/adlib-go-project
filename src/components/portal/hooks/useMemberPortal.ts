@@ -40,6 +40,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
   const [selectedMemberRatings, setSelectedMemberRatings] = useState<MemberRatingHistoryView[]>([]);
   const [sessionEntries, setSessionEntries] = useState<SessionEntryView[]>([]);
   const [memberSessionSets, setMemberSessionSets] = useState<SessionSetView[]>([]);
+  const [publishedSessionSets, setPublishedSessionSets] = useState<SessionSetView[]>([]);
   const [memberEventId, setMemberEventId] = useState('');
   const [memberAttendanceStatus, setMemberAttendanceStatus] = useState<AttendanceStatus>('attending');
   const [memberAfterPartyAttendanceStatus, setMemberAfterPartyAttendanceStatus] = useState<AttendanceStatus>('undecided');
@@ -68,12 +69,22 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     if (currentUser?.role !== 'member') {
       setSessionEntries([]);
       setMemberSessionSets([]);
+      setPublishedSessionSets([]);
       return;
     }
 
-    const [entryRes, setRes] = await Promise.all([
+    const publishedEventIds = sessionEvents
+      .filter((event) => event.status === 'published')
+      .map((event) => event.id);
+
+    const [entryRes, setRes, publishedSetResponses] = await Promise.all([
       fetch('/api/session-entries'),
       memberEventId ? fetch(`/api/session-sets?sessionEventId=${memberEventId}`) : Promise.resolve(null),
+      Promise.all(
+        publishedEventIds.map((eventId) =>
+          fetch(`/api/session-sets?sessionEventId=${encodeURIComponent(eventId)}`),
+        ),
+      ),
     ]);
     const entryJson = await parseJson(entryRes);
     setSessionEntries(entryJson.entries ?? []);
@@ -83,7 +94,16 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     } else {
       setMemberSessionSets([]);
     }
-  }, [currentUser?.role, memberEventId]);
+
+    const publishedSetJsonList = await Promise.all(
+      publishedSetResponses.map((response) => parseJson(response)),
+    );
+    setPublishedSessionSets(
+      publishedSetJsonList.flatMap((json) =>
+        (json.sessionSets ?? []).filter((item: SessionSetView) => item.isPublished),
+      ),
+    );
+  }, [currentUser?.role, memberEventId, sessionEvents]);
 
   useEffect(() => {
     if (currentUser?.memberProfile) {
@@ -398,6 +418,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     selectedMemberRatings,
     sessionEntries,
     memberSessionSets,
+    publishedSessionSets,
     memberEventId,
     setMemberEventId,
     memberAttendanceStatus,
