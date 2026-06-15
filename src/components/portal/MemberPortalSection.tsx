@@ -61,12 +61,12 @@ type EntryState = {
 
 const NONE_VALUE = "__none__";
 
-function formatSessionMemberName(name: string, isForced?: boolean, forcedCount?: number) {
+function formatSessionMemberName(name: string, isForced?: boolean) {
   if (!isForced) {
     return name;
   }
 
-  return `${name} (強制追加${forcedCount && forcedCount > 0 ? forcedCount : ''})`;
+  return `${name} (NR)`;
 }
 
 function renderSessionMemberName(
@@ -78,7 +78,7 @@ function renderSessionMemberName(
       {options?.requestedInRound1 ? (
         <Star className="size-3.5 fill-amber-400 text-amber-500" />
       ) : null}
-      <span>{formatSessionMemberName(name, options?.isForced, options?.forcedCount)}</span>
+      <span>{formatSessionMemberName(name, options?.isForced)}</span>
     </span>
   );
 }

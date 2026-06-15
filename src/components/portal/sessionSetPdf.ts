@@ -25,7 +25,7 @@ function formatPdfMemberName(member: SessionSetMember | null | undefined, option
 
   const markers = [
     member.requestedInRound1 ? '★' : null,
-    member.isForced ? `強制追加${member.forcedCount && member.forcedCount > 0 ? member.forcedCount : ''}` : null,
+    member.isForced ? 'NR' : null,
   ].filter(Boolean);
   const markerText = markers.length > 0 ? ` (${markers.join(' / ')})` : '';
   const subInstrumentText = options?.subInstrument ? ` (${options.subInstrument})` : '';
@@ -58,7 +58,7 @@ function buildSessionSetPrintHtml({ sessionEvent, sessionSets }: DownloadSession
     ? `${formatEventSchedule(sessionEvent.eventDate, sessionEvent.startTime, sessionEvent.endTime)} / ${sessionEvent.venue}`
     : '';
   const statusLabel = sessionEvent ? getSessionEventStatusLabel(sessionEvent.status) : '';
-  const sortedSessionSets = sortSessionSets(sessionSets);
+  const sortedSessionSets = sortSessionSets(sessionSets.filter((sessionSet) => sessionSet.isPublished === true));
 
   return `<!doctype html>
 <html lang="ja">
@@ -66,79 +66,77 @@ function buildSessionSetPrintHtml({ sessionEvent, sessionSets }: DownloadSession
   <meta charset="utf-8" />
   <title>${escapeHtml(eventTitle)} sessionSet</title>
   <style>
-    @page { size: A4; margin: 14mm; }
+    @page { size: A4 landscape; margin: 8mm; }
     * { box-sizing: border-box; }
     body {
       color: #111827;
       font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "YuGothic", "Noto Sans JP", "Segoe UI", sans-serif;
-      font-size: 12px;
-      line-height: 1.55;
+      font-size: 9.2px;
+      line-height: 1.28;
       margin: 0;
     }
     header {
       border-bottom: 2px solid #0f172a;
-      margin-bottom: 14px;
-      padding-bottom: 10px;
+      margin-bottom: 6px;
+      padding-bottom: 5px;
     }
     h1 {
-      font-size: 22px;
+      font-size: 15px;
       line-height: 1.25;
       margin: 0;
     }
     .meta {
       color: #4b5563;
-      margin-top: 6px;
+      margin-top: 2px;
     }
     .badge {
       border: 1px solid #94a3b8;
       border-radius: 999px;
       display: inline-block;
-      font-size: 11px;
+      font-size: 8.5px;
       margin-left: 8px;
-      padding: 1px 8px;
-      vertical-align: 2px;
+      padding: 0 6px;
+      vertical-align: 1px;
     }
-    ol {
-      display: grid;
-      gap: 8px;
-      list-style: none;
+    table {
+      border-collapse: collapse;
       margin: 0;
-      padding: 0;
+      table-layout: fixed;
+      width: 100%;
     }
-    li {
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
+    thead {
+      display: table-header-group;
+    }
+    tr {
       page-break-inside: avoid;
-      padding: 10px 12px;
     }
-    .song {
-      align-items: baseline;
-      display: flex;
-      gap: 8px;
-      justify-content: space-between;
-      margin-bottom: 6px;
+    th,
+    td {
+      border: 1px solid #cbd5e1;
+      padding: 3px 4px;
+      text-align: left;
+      vertical-align: top;
+      word-break: break-word;
+    }
+    th {
+      background: #e2e8f0;
+      color: #334155;
+      font-weight: 700;
+    }
+    tbody tr:nth-child(even) {
+      background: #f8fafc;
+    }
+    .order {
+      text-align: right;
+      width: 24px;
     }
     .song-title {
-      font-size: 14px;
       font-weight: 700;
+      width: 25%;
     }
     .key {
       color: #475569;
-      white-space: nowrap;
-    }
-    .members {
-      display: grid;
-      gap: 3px;
-    }
-    .row {
-      display: grid;
-      grid-template-columns: 54px 1fr;
-      gap: 8px;
-    }
-    .role {
-      color: #475569;
-      font-weight: 700;
-      text-transform: lowercase;
+      width: 36px;
     }
     .empty {
       color: #64748b;
@@ -153,20 +151,33 @@ function buildSessionSetPrintHtml({ sessionEvent, sessionSets }: DownloadSession
   </header>
   ${sortedSessionSets.length === 0
     ? '<p class="empty">公開済み sessionSet はありません。</p>'
-    : `<ol>${sortedSessionSets.map((sessionSet) => `
-      <li>
-        <div class="song">
-          <div class="song-title">${escapeHtml(sessionSet.songTitle)}</div>
-          <div class="key">key ${escapeHtml(sessionSet.key ?? '-')}</div>
-        </div>
-        <div class="members">
-          <div class="row"><div class="role">drum</div><div>${escapeHtml(formatPdfMemberName(sessionSet.drum))}</div></div>
-          <div class="row"><div class="role">bass</div><div>${escapeHtml(formatPdfMemberName(sessionSet.bass))}</div></div>
-          <div class="row"><div class="role">piano</div><div>${escapeHtml(formatPdfMemberName(sessionSet.piano))}</div></div>
-          <div class="row"><div class="role">front</div><div>${escapeHtml(formatPdfMemberList(sessionSet.front, (member) => formatPdfMemberName(member, { subInstrument: 'subInstrument' in member ? member.subInstrument : null })))}</div></div>
-          <div class="row"><div class="role">vocal</div><div>${escapeHtml(formatPdfMemberList(sessionSet.vocal, (member) => formatPdfMemberName(member, { keyName: sessionSet.key })))}</div></div>
-        </div>
-      </li>`).join('')}</ol>`}
+    : `<table>
+      <thead>
+        <tr>
+          <th class="order">#</th>
+          <th class="song-title">曲</th>
+          <th class="key">key</th>
+          <th>drum</th>
+          <th>bass</th>
+          <th>piano</th>
+          <th>front</th>
+          <th>vocal</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${sortedSessionSets.map((sessionSet, index) => `
+          <tr>
+            <td class="order">${escapeHtml(String(sessionSet.setOrder ?? index + 1))}</td>
+            <td class="song-title">${escapeHtml(sessionSet.songTitle)}</td>
+            <td class="key">${escapeHtml(sessionSet.key ?? '-')}</td>
+            <td>${escapeHtml(formatPdfMemberName(sessionSet.drum))}</td>
+            <td>${escapeHtml(formatPdfMemberName(sessionSet.bass))}</td>
+            <td>${escapeHtml(formatPdfMemberName(sessionSet.piano))}</td>
+            <td>${escapeHtml(formatPdfMemberList(sessionSet.front, (member) => formatPdfMemberName(member, { subInstrument: 'subInstrument' in member ? member.subInstrument : null })))}</td>
+            <td>${escapeHtml(formatPdfMemberList(sessionSet.vocal, (member) => formatPdfMemberName(member, { keyName: sessionSet.key })))}</td>
+          </tr>`).join('')}
+      </tbody>
+    </table>`}
   <script>
     window.addEventListener('load', () => {
       window.focus();
