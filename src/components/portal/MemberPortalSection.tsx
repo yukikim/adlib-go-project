@@ -2016,6 +2016,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     {sessionSet.drum
                       ? renderSessionMemberName(
                           sessionSet.drum.name,
+                          profileDisplayName,
                           sessionSet.drum,
                         )
                       : "-"}
@@ -2025,6 +2026,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     {sessionSet.bass
                       ? renderSessionMemberName(
                           sessionSet.bass.name,
+                          profileDisplayName,
                           sessionSet.bass,
                         )
                       : "-"}
@@ -2034,6 +2036,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     {sessionSet.piano
                       ? renderSessionMemberName(
                           sessionSet.piano.name,
+                          profileDisplayName,
                           sessionSet.piano,
                         )
                       : "-"}
@@ -2044,7 +2047,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                       ? sessionSet.front.map((member, index) => (
                           <span key={`${member.id}-${index}`}>
                             {index > 0 ? ", " : null}
-                            {renderSessionMemberName(member.name, member)}
+                            {renderSessionMemberName(member.name, profileDisplayName, member)}
                             {member.subInstrument
                               ? ` (${member.subInstrument})`
                               : null}
@@ -2058,7 +2061,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                       ? sessionSet.vocal.map((member, index) => (
                           <span key={`${member.id}-${index}`}>
                             {index > 0 ? ", " : null}
-                            {renderSessionMemberName(member.name, member)}
+                            {renderSessionMemberName(member.name, profileDisplayName, member)}
                             {sessionSet.key ? ` (key ${sessionSet.key})` : null}
                           </span>
                         ))
