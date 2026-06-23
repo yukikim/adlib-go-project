@@ -71,6 +71,7 @@ function formatSessionMemberName(name: string, isForced?: boolean) {
 
 function renderSessionMemberName(
   name: string,
+  displayName: string,
   options?: {
     isForced?: boolean;
     forcedCount?: number;
@@ -82,7 +83,7 @@ function renderSessionMemberName(
       {options?.requestedInRound1 ? (
         <Star className="size-3.5 fill-amber-400 text-amber-500" />
       ) : null}
-      <span>{formatSessionMemberName(name, options?.isForced)}</span>
+      <span className={ name === displayName ? "text-red-400 font-bold" : "" }>{formatSessionMemberName(name, options?.isForced)}</span>
     </span>
   );
 }
@@ -554,13 +555,13 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             <p>
               drum{" "}
               {sessionSet.drum
-                ? renderSessionMemberName(sessionSet.drum.name, sessionSet.drum)
+                ? renderSessionMemberName(sessionSet.drum.name, profileDisplayName, sessionSet.drum)
                 : "-"}
             </p>
             <p>
               bass{" "}
               {sessionSet.bass
-                ? renderSessionMemberName(sessionSet.bass.name, sessionSet.bass)
+                ? renderSessionMemberName(sessionSet.bass.name, profileDisplayName, sessionSet.bass)
                 : "-"}
             </p>
             <p>
@@ -568,6 +569,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
               {sessionSet.piano
                 ? renderSessionMemberName(
                     sessionSet.piano.name,
+                    profileDisplayName,
                     sessionSet.piano,
                   )
                 : "-"}
@@ -578,7 +580,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                 ? sessionSet.front.map((member, index) => (
                     <span key={`${member.id}-${index}`}>
                       {index > 0 ? ", " : null}
-                      {renderSessionMemberName(member.name, member)}
+                      {renderSessionMemberName(member.name, profileDisplayName, member)}
                       {member.subInstrument
                         ? ` (${member.subInstrument})`
                         : null}
@@ -592,7 +594,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                 ? sessionSet.vocal.map((member, index) => (
                     <span key={`${member.id}-${index}`}>
                       {index > 0 ? ", " : null}
-                      {renderSessionMemberName(member.name, member)}
+                      {renderSessionMemberName(member.name, profileDisplayName, member)}
                       {sessionSet.key ? ` (key ${sessionSet.key})` : null}
                     </span>
                   ))
