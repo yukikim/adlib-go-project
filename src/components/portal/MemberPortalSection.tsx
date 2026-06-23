@@ -37,7 +37,7 @@ import {
 } from "@/lib/sessionEventStatus";
 import { formatRoundCandidateSong } from "@/lib/sessionEventWindow";
 import { formatEventDate, formatEventSchedule, formatYen } from "@/lib/utils";
-import { ChevronDown, FileDown, Star } from 'lucide-react';
+import { ChevronDown, FileDown, Star } from "lucide-react";
 import type {
   AnnouncementView,
   AttendanceStatus,
@@ -71,7 +71,11 @@ function formatSessionMemberName(name: string, isForced?: boolean) {
 
 function renderSessionMemberName(
   name: string,
-  options?: { isForced?: boolean; forcedCount?: number; requestedInRound1?: boolean },
+  options?: {
+    isForced?: boolean;
+    forcedCount?: number;
+    requestedInRound1?: boolean;
+  },
 ) {
   return (
     <span className="inline-flex items-center gap-1">
@@ -125,7 +129,10 @@ function EventMeta({
       ).length,
     }))
     .filter((item) => item.count > 0);
-  const requestSongMap = new Map<string, { label: string; instruments: string[] }>();
+  const requestSongMap = new Map<
+    string,
+    { label: string; instruments: string[] }
+  >();
 
   for (const entry of eventEntries) {
     if (entry.attendanceStatus === "absent") {
@@ -196,7 +203,8 @@ function EventMeta({
             <div className="flex flex-wrap items-center justify-between gap-2 bg-primary p-2 rounded-lg">
               <span>【参加状況】</span>
               <span className="text-xs text-muted-foreground">
-                参加 {attendingEntries.length} 人 / エントリー {eventEntries.length} 件
+                参加 {attendingEntries.length} 人 / エントリー{" "}
+                {eventEntries.length} 件
               </span>
               <ChevronDown className="mt-0.5 size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" />
             </div>
@@ -228,7 +236,8 @@ function EventMeta({
                 <ul className="mt-1 space-y-1 text-muted-foreground pl-8 list-disc">
                   {requestSongs.map((requestSummary) => (
                     <li key={requestSummary.label}>
-                      {requestSummary.label}({requestSummary.instruments.join(",")})
+                      {requestSummary.label}(
+                      {requestSummary.instruments.join(",")})
                     </li>
                   ))}
                 </ul>
@@ -508,6 +517,9 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
   const selectedRound1Event =
     round1RecruitingEvents.find((event) => event.id === memberEventId) ?? null;
 
+  const isCurrentMemberAttendingEvent = (eventId: string) =>
+    getSessionEntryForEvent(eventId)?.attendanceStatus === "attending";
+
   const getSessionEntryForEvent = (eventId: string) =>
     sessionEntries.find((entry) => entry.sessionEventId === eventId) ?? null;
 
@@ -554,31 +566,36 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             <p>
               piano{" "}
               {sessionSet.piano
-                ? renderSessionMemberName(sessionSet.piano.name, sessionSet.piano)
+                ? renderSessionMemberName(
+                    sessionSet.piano.name,
+                    sessionSet.piano,
+                  )
                 : "-"}
             </p>
             <p>
               front{" "}
               {sessionSet.front?.length
                 ? sessionSet.front.map((member, index) => (
-                  <span key={`${member.id}-${index}`}>
-                    {index > 0 ? ", " : null}
-                    {renderSessionMemberName(member.name, member)}
-                    {member.subInstrument ? ` (${member.subInstrument})` : null}
-                  </span>
-                ))
+                    <span key={`${member.id}-${index}`}>
+                      {index > 0 ? ", " : null}
+                      {renderSessionMemberName(member.name, member)}
+                      {member.subInstrument
+                        ? ` (${member.subInstrument})`
+                        : null}
+                    </span>
+                  ))
                 : "-"}
             </p>
             <p>
               vocal{" "}
               {sessionSet.vocal?.length
                 ? sessionSet.vocal.map((member, index) => (
-                  <span key={`${member.id}-${index}`}>
-                    {index > 0 ? ", " : null}
-                    {renderSessionMemberName(member.name, member)}
-                    {sessionSet.key ? ` (key ${sessionSet.key})` : null}
-                  </span>
-                ))
+                    <span key={`${member.id}-${index}`}>
+                      {index > 0 ? ", " : null}
+                      {renderSessionMemberName(member.name, member)}
+                      {sessionSet.key ? ` (key ${sessionSet.key})` : null}
+                    </span>
+                  ))
                 : "-"}
             </p>
           </div>
@@ -594,7 +611,9 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
 
   const getSelectedRound2SongsForEvent = (eventId: string) => {
     if (memberEventId === eventId) {
-      return memberRound2Songs.filter((songTitle) => songTitle.trim().length > 0);
+      return memberRound2Songs.filter(
+        (songTitle) => songTitle.trim().length > 0,
+      );
     }
 
     return (
@@ -692,7 +711,8 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
       <div className="my-2">
         <p className="text-sm font-medium">Round2 追加リクエスト</p>
         <p className="mt-1 text-sm text-muted-foreground">
-          Round1 の名寄せ済み候補から、自分が Round1 で選んだ曲を除いた曲を複数選択できます。
+          Round1 の名寄せ済み候補から、自分が Round1
+          で選んだ曲を除いた曲を複数選択できます。
         </p>
         {options?.showSaveHint ? (
           <p className="mt-1 text-xs text-muted-foreground">
@@ -783,7 +803,10 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                   return;
                 }
 
-                handleAllowForcedAssignmentChange(eventId, nextChecked === true);
+                handleAllowForcedAssignmentChange(
+                  eventId,
+                  nextChecked === true,
+                );
               }}
               disabled={!interactive}
             />
@@ -986,7 +1009,16 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                               )}{" "}
                               / {event.venue}
                             </p>
-                            <p>ラウンド1募集期間: {event.round1StartAt ? formatEventDate(event.round1StartAt) : ""} ~ {event.round1EndAt ? formatEventDate(event.round1EndAt) : ""}</p>
+                            <p>
+                              ラウンド1募集期間:{" "}
+                              {event.round1StartAt
+                                ? formatEventDate(event.round1StartAt)
+                                : ""}{" "}
+                              ~{" "}
+                              {event.round1EndAt
+                                ? formatEventDate(event.round1EndAt)
+                                : ""}
+                            </p>
                             <EventMeta
                               participantLimit={event.participantLimit}
                               attendingEntryCount={event.attendingEntryCount}
@@ -1007,7 +1039,9 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                             ) : null}
                             {eventEntry ? (
                               <div className="rounded-lg border bg-primary p-3 text-sm">
-                                <h4 className="text-md font-semibold mb-2">あなたのエントリー情報</h4>
+                                <h4 className="text-md font-semibold mb-2">
+                                  あなたのエントリー情報
+                                </h4>
                                 <p className="font-medium text-foreground">
                                   参加可否:{" "}
                                   {formatAttendanceStatusLabel(
@@ -1378,7 +1412,16 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                         )}{" "}
                         / {event.venue}
                       </p>
-                      <p>ラウンド2募集期間: {event.round2StartAt ? formatEventDate(event.round2StartAt) : ""} ~ {event.round2EndAt ? formatEventDate(event.round2EndAt) : ""}</p>
+                      <p>
+                        ラウンド2募集期間:{" "}
+                        {event.round2StartAt
+                          ? formatEventDate(event.round2StartAt)
+                          : ""}{" "}
+                        ~{" "}
+                        {event.round2EndAt
+                          ? formatEventDate(event.round2EndAt)
+                          : ""}
+                      </p>
                       <EventMeta
                         participantLimit={event.participantLimit}
                         attendingEntryCount={event.attendingEntryCount}
@@ -1517,7 +1560,10 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
           ) : (
             <ul className="space-y-3">
               {publishedEvents.map((event) => {
-                const eventSessionSets = getPublishedSessionSetsForEvent(event.id);
+                const isAttending = isCurrentMemberAttendingEvent(event.id);
+                const eventSessionSets = getPublishedSessionSetsForEvent(
+                  event.id,
+                );
 
                 return (
                   <li
@@ -1531,6 +1577,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                       <Badge variant="outline">
                         {getSessionEventStatusLabel(event.status)}
                       </Badge>
+                      {isAttending ? null : <strong className="text-red-400">参加していません</strong>}
                     </div>
                     <p className="mt-2 text-sm text-muted-foreground">
                       {formatEventSchedule(
@@ -1567,7 +1614,12 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                             type="button"
                             variant="outline"
                             size="sm"
-                            onClick={() => downloadSessionSetPdf({ sessionEvent: event, sessionSets: eventSessionSets })}
+                            onClick={() =>
+                              downloadSessionSetPdf({
+                                sessionEvent: event,
+                                sessionSets: eventSessionSets,
+                              })
+                            }
                           >
                             <FileDown className="size-4" />
                             PDF
@@ -1747,7 +1799,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                   </div>
                   <p className="mt-2 text-sm text-muted-foreground">
                     {selectedMemberDetail.mainInstrument === "front" &&
-                      selectedMemberDetail.subInstrument
+                    selectedMemberDetail.subInstrument
                       ? `演奏楽器 ${selectedMemberDetail.subInstrument}`
                       : "サブ楽器未設定"}
                   </p>
@@ -1897,7 +1949,12 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             variant="outline"
             size="sm"
             disabled={!selectedMemberEvent || memberSessionSets.length === 0}
-            onClick={() => downloadSessionSetPdf({ sessionEvent: selectedMemberEvent, sessionSets: memberSessionSets })}
+            onClick={() =>
+              downloadSessionSetPdf({
+                sessionEvent: selectedMemberEvent,
+                sessionSets: memberSessionSets,
+              })
+            }
           >
             <FileDown className="size-4" />
             PDF
@@ -1955,43 +2012,54 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                   <p>
                     drum{" "}
                     {sessionSet.drum
-                      ? renderSessionMemberName(sessionSet.drum.name, sessionSet.drum)
+                      ? renderSessionMemberName(
+                          sessionSet.drum.name,
+                          sessionSet.drum,
+                        )
                       : "-"}
                   </p>
                   <p>
                     bass{" "}
                     {sessionSet.bass
-                      ? renderSessionMemberName(sessionSet.bass.name, sessionSet.bass)
+                      ? renderSessionMemberName(
+                          sessionSet.bass.name,
+                          sessionSet.bass,
+                        )
                       : "-"}
                   </p>
                   <p>
                     piano{" "}
                     {sessionSet.piano
-                      ? renderSessionMemberName(sessionSet.piano.name, sessionSet.piano)
+                      ? renderSessionMemberName(
+                          sessionSet.piano.name,
+                          sessionSet.piano,
+                        )
                       : "-"}
                   </p>
                   <p>
                     front{" "}
                     {sessionSet.front?.length
                       ? sessionSet.front.map((member, index) => (
-                        <span key={`${member.id}-${index}`}>
-                          {index > 0 ? ", " : null}
-                          {renderSessionMemberName(member.name, member)}
-                          {member.subInstrument ? ` (${member.subInstrument})` : null}
-                        </span>
-                      ))
+                          <span key={`${member.id}-${index}`}>
+                            {index > 0 ? ", " : null}
+                            {renderSessionMemberName(member.name, member)}
+                            {member.subInstrument
+                              ? ` (${member.subInstrument})`
+                              : null}
+                          </span>
+                        ))
                       : "-"}
                   </p>
                   <p>
                     vocal{" "}
                     {sessionSet.vocal?.length
                       ? sessionSet.vocal.map((member, index) => (
-                        <span key={`${member.id}-${index}`}>
-                          {index > 0 ? ", " : null}
-                          {renderSessionMemberName(member.name, member)}
-                          {sessionSet.key ? ` (key ${sessionSet.key})` : null}
-                        </span>
-                      ))
+                          <span key={`${member.id}-${index}`}>
+                            {index > 0 ? ", " : null}
+                            {renderSessionMemberName(member.name, member)}
+                            {sessionSet.key ? ` (key ${sessionSet.key})` : null}
+                          </span>
+                        ))
                       : "-"}
                   </p>
                 </div>
