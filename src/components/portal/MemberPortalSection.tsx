@@ -849,7 +849,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
   return (
     <>
       <div className="text-lg font-semibold text-secondary mb-4 px-4">
-        {profileDisplayName}
+        ようこそ、{profileDisplayName}さん
       </div>
       <Card className="rounded-xl border bg-secondary/80 p-4 border-none">
         <CardTitle className="text-2xl font-semibold text-on-secondary">
