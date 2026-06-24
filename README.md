@@ -996,5 +996,5 @@ node -e 'fetch("http://localhost:3000/api/session-sets/generate",{method:"POST"}
 
 要マイグレーション
 
-		npx prisma nigrate deploy
+		npx prisma migrate deploy
 
