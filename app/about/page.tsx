@@ -60,7 +60,7 @@ export default function AboutPage() {
           </CardHeader>
           <CardContent>
             <p className="text-sm leading-7 text-muted-foreground">
-              参加希望者はサインアップ後、メンバーページからプロフィール設定とセッションエントリーを行います。募集期間中は Round ごとの希望曲入力が可能です。
+              参加希望者は既存メンバー、他からの紹介により登録案内メールが送信されます。サインアップ後、メンバーページからプロフィール設定とセッションエントリーを行います。募集期間中は Round ごとの希望曲入力が可能です。
             </p>
           </CardContent>
         </Card>
