@@ -1,15 +1,18 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState, type DragEvent, type ReactNode } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Bell,
+  ArrowDown,
+  ArrowUp,
   BookOpenText,
   CalendarDays,
   ChevronDown,
   FileDown,
   FileArchive,
+  GripVertical,
   Music4,
   Users,
   MessageCircleQuestionMark,
@@ -337,6 +340,7 @@ type AdminPortalSectionProps = {
   onGenerateSets: (eventId?: string) => void;
   onPublishSets: () => void;
   onUpdateSessionSet: (sessionSet: SessionSetView) => void;
+  onReorderSessionSets: (sourceSessionSetId: string, destinationSessionSetId: string) => void;
   onSaveEditedSessionSets: () => void;
   onSaveGeneratedSessionSets: () => void;
   onShowSavedSessionSetDraft: (draft: SavedSessionSetDraftView) => void;
@@ -489,6 +493,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     onGenerateSets,
     onPublishSets,
     onUpdateSessionSet,
+    onReorderSessionSets,
     onSaveEditedSessionSets,
     onSaveGeneratedSessionSets,
     onShowSavedSessionSetDraft,
@@ -512,6 +517,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
   const [hasRestoredSelection, setHasRestoredSelection] = useState(false);
   const [editingSessionSet, setEditingSessionSet] = useState<SessionSetView | null>(null);
   const [showSessionSetContainer, setShowSessionSetContainer] = useState(false);
+  const [draggingSessionSetId, setDraggingSessionSetId] = useState<string | null>(null);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -785,6 +791,24 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
 
     onUpdateSessionSet(editingSessionSet);
     setEditingSessionSet(null);
+  };
+
+  const handleSessionSetDragStart = (event: DragEvent<HTMLLIElement>, sessionSetId: string) => {
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/plain', sessionSetId);
+    setDraggingSessionSetId(sessionSetId);
+  };
+
+  const handleSessionSetDrop = (event: DragEvent<HTMLLIElement>, destinationSessionSetId: string) => {
+    event.preventDefault();
+    const sourceSessionSetId = event.dataTransfer.getData('text/plain') || draggingSessionSetId;
+    setDraggingSessionSetId(null);
+
+    if (!sourceSessionSetId || sourceSessionSetId === destinationSessionSetId) {
+      return;
+    }
+
+    onReorderSessionSets(sourceSessionSetId, destinationSessionSetId);
   };
 
   const handleGenerateSets = (eventId?: string) => {
@@ -1463,6 +1487,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                   <h3 className="font-medium">
                     {selectedAdminEvent ? `${selectedAdminEvent.title} の sessionSet` : 'この sessionSetを書き出したイベント名'}
                   </h3>
+                  <p>演奏順はPDF書き出し時に「非公開」の曲を除外して番号が振られます。</p>
                   <div className="flex flex-wrap justify-end gap-2">
                     <Button
                       type="button"
@@ -1483,11 +1508,27 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                   // <ul id="admin-session-sets-list" className={cn('grid scroll-mt-24 gap-3 md:grid-cols-2', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>
                   <ul id="admin-session-sets-list" className="grid scroll-mt-24 gap-3 md:grid-cols-2">
                     {sessionSets.map((sessionSet, index) => (
-                      <li key={sessionSet.id} className="rounded-xl border p-4">
+                      <li
+                        key={sessionSet.id}
+                        draggable={!loading}
+                        onDragStart={(event) => handleSessionSetDragStart(event, sessionSet.id)}
+                        onDragOver={(event) => event.preventDefault()}
+                        onDrop={(event) => handleSessionSetDrop(event, sessionSet.id)}
+                        onDragEnd={() => setDraggingSessionSetId(null)}
+                        className={cn(
+                          'rounded-xl p-4 transition-opacity',
+                          !loading && 'cursor-grab active:cursor-grabbing',
+                          draggingSessionSetId === sessionSet.id && 'opacity-50',
+                          sessionSet.isPublished ? 'bg-sky-800' : 'bg-gray-400',
+                        )}
+                      >
                         <div className="flex items-start justify-between gap-3">
-                          <div>
-                            <p className="font-bold"><Badge>{index+1}</Badge> {sessionSet.songTitle}</p>
-                            <p className="text-sm text-muted-foreground">key {sessionSet.key ?? '-'}</p>
+                          <div className="flex items-start gap-2">
+                            <GripVertical className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+                            <div>
+                              <p className="font-bold"><Badge>{sessionSet.setOrder ?? index + 1}</Badge> {sessionSet.songTitle}</p>
+                              <p className="text-sm text-muted-foreground">key {sessionSet.key ?? '-'}</p>
+                            </div>
                           </div>
                           <div className="flex items-center gap-2">
                             <div className="flex items-start gap-3">
@@ -1508,6 +1549,29 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                               編集
                             </Button>
                           </div>
+                        </div>
+                        <div className="mt-3 flex items-center gap-1">
+                          <span className="mr-1 text-xs text-muted-foreground">演奏順</span>
+                          <Button
+                            type="button"
+                            variant="secondary"
+                            size="icon-sm"
+                            disabled={loading || index === 0}
+                            onClick={() => onReorderSessionSets(sessionSet.id, sessionSets[index - 1].id)}
+                            aria-label={`${sessionSet.songTitle} を1曲上へ移動`}
+                          >
+                            <ArrowUp className="size-4" />
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="secondary"
+                            size="icon-sm"
+                            disabled={loading || index === sessionSets.length - 1}
+                            onClick={() => onReorderSessionSets(sessionSet.id, sessionSets[index + 1].id)}
+                            aria-label={`${sessionSet.songTitle} を1曲下へ移動`}
+                          >
+                            <ArrowDown className="size-4" />
+                          </Button>
                         </div>
                         <div className="mt-3 grid gap-2 text-sm text-muted-foreground">
                           <div className="flex items-start gap-4">

@@ -422,6 +422,28 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     }));
   };
 
+  const handleReorderSessionSets = (sourceSessionSetId: string, destinationSessionSetId: string) => {
+    const reorder = (current: SessionSetView[]) => {
+      const sourceIndex = current.findIndex((sessionSet) => sessionSet.id === sourceSessionSetId);
+      const destinationIndex = current.findIndex((sessionSet) => sessionSet.id === destinationSessionSetId);
+
+      if (sourceIndex < 0 || destinationIndex < 0 || sourceIndex === destinationIndex) {
+        return current;
+      }
+
+      const next = [...current];
+      const [movedSessionSet] = next.splice(sourceIndex, 1);
+      next.splice(destinationIndex, 0, movedSessionSet);
+      return next.map((sessionSet, index) => ({ ...sessionSet, setOrder: index + 1 }));
+    };
+
+    setSessionSets(reorder);
+    setGeneratedResult((current) => ({
+      ...current,
+      sessionSets: reorder(current.sessionSets),
+    }));
+  };
+
   const handleSaveEditedSessionSets = async () => runAction(async () => {
     if (!selectedAdminEventId) throw new Error('イベントを選択してください');
     if (sessionSets.length === 0) throw new Error('保存する sessionSet がありません');
@@ -738,6 +760,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     handleGenerateSets,
     handlePublishSets,
     handleUpdateSessionSet,
+    handleReorderSessionSets,
     handleSaveEditedSessionSets,
     handleSaveGeneratedSessionSets,
     handleShowSavedSessionSetDraft,

@@ -167,7 +167,7 @@ function buildSessionSetPrintHtml({ sessionEvent, sessionSets }: DownloadSession
       <tbody>
         ${sortedSessionSets.map((sessionSet, index) => `
           <tr>
-            <td class="order">${escapeHtml(String(sessionSet.setOrder ?? index + 1))}</td>
+            <td class="order">${escapeHtml(String(index + 1))}</td>
             <td class="song-title">${escapeHtml(sessionSet.songTitle)}</td>
             <td class="key">${escapeHtml(sessionSet.key ?? '-')}</td>
             <td>${escapeHtml(formatPdfMemberName(sessionSet.drum))}</td>
