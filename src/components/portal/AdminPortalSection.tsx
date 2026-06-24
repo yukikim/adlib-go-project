@@ -1482,11 +1482,11 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                 {sessionSets.length === 0 ? <p className={cn('text-sm text-muted-foreground', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>まだ sessionSet はありません。</p> : (
                   // <ul id="admin-session-sets-list" className={cn('grid scroll-mt-24 gap-3 md:grid-cols-2', !isChildVisible('admin-session-sets', 'admin-session-sets-list') && 'hidden')}>
                   <ul id="admin-session-sets-list" className="grid scroll-mt-24 gap-3 md:grid-cols-2">
-                    {sessionSets.map((sessionSet) => (
+                    {sessionSets.map((sessionSet, index) => (
                       <li key={sessionSet.id} className="rounded-xl border p-4">
                         <div className="flex items-start justify-between gap-3">
                           <div>
-                            <p className="font-medium">{sessionSet.songTitle}</p>
+                            <p className="font-bold"><Badge>{index+1}</Badge> {sessionSet.songTitle}</p>
                             <p className="text-sm text-muted-foreground">key {sessionSet.key ?? '-'}</p>
                           </div>
                           <div className="flex items-center gap-2">
@@ -1510,9 +1510,11 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                           </div>
                         </div>
                         <div className="mt-3 grid gap-2 text-sm text-muted-foreground">
+                          <div className="flex items-start gap-4">
                           <p>drum {sessionSet.drum ? renderSessionMemberName(sessionSet.drum.name, sessionSet.drum) : '-'}</p>
                           <p>bass {sessionSet.bass ? renderSessionMemberName(sessionSet.bass.name, sessionSet.bass) : '-'}</p>
                           <p>piano {sessionSet.piano ? renderSessionMemberName(sessionSet.piano.name, sessionSet.piano) : '-'}</p>
+                          </div>
                           <p>
                             front {sessionSet.front?.length
                               ? sessionSet.front.map((member, index) => (
