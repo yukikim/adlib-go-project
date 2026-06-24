@@ -26,7 +26,7 @@ type FieldProps = {
 function Field({ htmlFor, label, children, description, className }: FieldProps) {
   return (
     <div className={className ?? 'grid gap-2'}>
-      <Label htmlFor={htmlFor}>{label}</Label>
+      <Label className="mb-1" htmlFor={htmlFor}>{label}</Label>
       {children}
       {description ? <p className="text-sm text-muted-foreground">{description}</p> : null}
     </div>
@@ -221,7 +221,7 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
               </Field>
             </>
           )}
-          <div className="md:col-span-2">
+          <div className="md:col-span-2 text-right">
             <Button type="submit" disabled={loading || (view === 'signup' && !signupInvitationToken)}>
               {view === 'signup' ? 'サインアップ' : 'サインイン'}
             </Button>
