@@ -150,6 +150,8 @@
   --brand-main: #4a608c;
   --brand-base: #a3bad9;
   --background: #0b0f13;
+  --font-m-plus: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", YuGothic, Meiryo, sans-serif;
+  --font-racing-sans-one: "Arial Narrow", Arial, sans-serif;
 }
 
 /* .dark {
