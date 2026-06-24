@@ -20,6 +20,7 @@ export function useAuthPortal({ runAction, setCurrentUser, reloadShared, onSignI
 
   const [authEmail, setAuthEmail] = useState(defaultAuthEmail);
   const [authPassword, setAuthPassword] = useState(defaultAuthPassword);
+  const [signupPasswordConfirmation, setSignupPasswordConfirmation] = useState('');
   const [signupDisplayName, setSignupDisplayName] = useState('');
   const [signupInstrument, setSignupInstrument] = useState<Instrument>('front');
   const [signupSubInstrument, setSignupSubInstrument] = useState('');
@@ -58,6 +59,9 @@ export function useAuthPortal({ runAction, setCurrentUser, reloadShared, onSignI
   }, 'サインインしました');
 
   const handleSignUp = async (invitationToken: string) => runAction(async () => {
+    if (authPassword !== signupPasswordConfirmation) {
+      throw new Error('パスワードと確認用パスワードが一致しません');
+    }
     const res = await fetch('/api/auth/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -75,6 +79,7 @@ export function useAuthPortal({ runAction, setCurrentUser, reloadShared, onSignI
     });
     const json = await parseJson(res);
     if (!res.ok) throw new Error(json.error ?? 'サインアップに失敗しました');
+    setSignupPasswordConfirmation('');
   }, '確認メールを送信しました。メール内のリンクから認証してください。');
 
   const handleSignOut = async () => runAction(async () => {
@@ -113,6 +118,8 @@ export function useAuthPortal({ runAction, setCurrentUser, reloadShared, onSignI
     setAuthEmail,
     authPassword,
     setAuthPassword,
+    signupPasswordConfirmation,
+    setSignupPasswordConfirmation,
     signupDisplayName,
     setSignupDisplayName,
     signupInstrument,

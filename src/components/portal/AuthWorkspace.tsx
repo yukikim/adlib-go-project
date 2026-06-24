@@ -106,6 +106,7 @@ export default function AuthWorkspace({ view }: AuthWorkspaceProps) {
         loading={loading}
         authEmail={auth.authEmail}
         authPassword={auth.authPassword}
+        signupPasswordConfirmation={auth.signupPasswordConfirmation}
         signupInvitationToken={signupInvitationToken}
         signupDisplayName={auth.signupDisplayName}
         signupInstrument={auth.signupInstrument}
@@ -119,6 +120,7 @@ export default function AuthWorkspace({ view }: AuthWorkspaceProps) {
         issuedResetToken={auth.issuedResetToken}
         setAuthEmail={auth.setAuthEmail}
         setAuthPassword={auth.setAuthPassword}
+        setSignupPasswordConfirmation={auth.setSignupPasswordConfirmation}
         setSignupDisplayName={auth.setSignupDisplayName}
         setSignupInstrument={auth.setSignupInstrument}
         setSignupSubInstrument={auth.setSignupSubInstrument}

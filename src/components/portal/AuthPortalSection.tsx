@@ -39,6 +39,7 @@ type AuthPortalSectionProps = {
   loading: boolean;
   authEmail: string;
   authPassword: string;
+  signupPasswordConfirmation: string;
   signupInvitationToken: string;
   signupDisplayName: string;
   signupInstrument: Instrument;
@@ -52,6 +53,7 @@ type AuthPortalSectionProps = {
   issuedResetToken: string | null;
   setAuthEmail: (value: string) => void;
   setAuthPassword: (value: string) => void;
+  setSignupPasswordConfirmation: (value: string) => void;
   setSignupDisplayName: (value: string) => void;
   setSignupInstrument: (value: Instrument) => void;
   setSignupSubInstrument: (value: string) => void;
@@ -74,6 +76,7 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
     loading,
     authEmail,
     authPassword,
+    signupPasswordConfirmation,
     signupInvitationToken,
     signupDisplayName,
     signupInstrument,
@@ -87,6 +90,7 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
     issuedResetToken,
     setAuthEmail,
     setAuthPassword,
+    setSignupPasswordConfirmation,
     setSignupDisplayName,
     setSignupInstrument,
     setSignupSubInstrument,
@@ -153,10 +157,13 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
             <Input id="auth-email" type="email" autoComplete="username" value={authEmail} onChange={(event) => setAuthEmail(event.target.value)} placeholder="メールアドレスを入力" />
           </Field>
           <Field htmlFor="auth-password" label="パスワード" className="md:col-span-2">
-            <Input id="auth-password" type="password" autoComplete="current-password" value={authPassword} onChange={(event) => setAuthPassword(event.target.value)} placeholder="パスワードを入力" />
+            <Input id="auth-password" type="password" autoComplete={view === 'signup' ? 'new-password' : 'current-password'} value={authPassword} onChange={(event) => setAuthPassword(event.target.value)} placeholder="パスワードを入力" />
           </Field>
           {view === 'signup' && (
             <>
+              <Field htmlFor="signup-password-confirmation" label="パスワード（確認）" className="md:col-span-2">
+                <Input id="signup-password-confirmation" type="password" autoComplete="new-password" value={signupPasswordConfirmation} onChange={(event) => setSignupPasswordConfirmation(event.target.value)} placeholder="確認のためもう一度入力" />
+              </Field>
               <Field htmlFor="signup-display-name" label="表示名" className="md:col-span-2">
                 <Input id="signup-display-name" type="text" value={signupDisplayName} onChange={(event) => setSignupDisplayName(event.target.value)} />
               </Field>

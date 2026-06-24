@@ -161,6 +161,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           loading={loading}
           authEmail={auth.authEmail}
           authPassword={auth.authPassword}
+          signupPasswordConfirmation={auth.signupPasswordConfirmation}
           signupInvitationToken=""
           signupDisplayName={auth.signupDisplayName}
           signupInstrument={auth.signupInstrument}
@@ -174,6 +175,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           issuedResetToken={auth.issuedResetToken}
           setAuthEmail={auth.setAuthEmail}
           setAuthPassword={auth.setAuthPassword}
+          setSignupPasswordConfirmation={auth.setSignupPasswordConfirmation}
           setSignupDisplayName={auth.setSignupDisplayName}
           setSignupInstrument={auth.setSignupInstrument}
           setSignupSubInstrument={auth.setSignupSubInstrument}
