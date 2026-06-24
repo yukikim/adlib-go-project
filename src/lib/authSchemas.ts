@@ -22,6 +22,7 @@ export const resetPasswordRequestSchema = z.object({
 }).strict();
 
 export const signUpRequestSchema = z.object({
+  invitationToken: nonEmptyTrimmedStringSchema,
   email: normalizedEmailSchema,
   password: trimmedPasswordSchema,
   displayName: z.string().trim().min(1, 'displayName is required'),
@@ -30,6 +31,10 @@ export const signUpRequestSchema = z.object({
   gender: z.union([z.string(), z.null()]).optional(),
   ageRange: z.union([z.string(), z.null()]).optional(),
   area: z.union([z.string(), z.null()]).optional(),
+}).strict();
+
+export const createMemberInvitationRequestSchema = z.object({
+  email: normalizedEmailSchema,
 }).strict();
 
 export const verifyEmailRequestSchema = z.object({

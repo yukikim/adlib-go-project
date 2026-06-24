@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { AuthPortalSection } from '@/components/portal/AuthPortalSection';
@@ -15,6 +15,8 @@ type AuthWorkspaceProps = {
 
 export default function AuthWorkspace({ view }: AuthWorkspaceProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const signupInvitationToken = searchParams.get('token') ?? '';
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [, setCurrentUser] = useState<AuthUser | null>(null);
@@ -104,6 +106,7 @@ export default function AuthWorkspace({ view }: AuthWorkspaceProps) {
         loading={loading}
         authEmail={auth.authEmail}
         authPassword={auth.authPassword}
+        signupInvitationToken={signupInvitationToken}
         signupDisplayName={auth.signupDisplayName}
         signupInstrument={auth.signupInstrument}
         signupSubInstrument={auth.signupSubInstrument}

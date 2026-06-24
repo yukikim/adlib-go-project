@@ -5,6 +5,7 @@ import { buildMemberDuplicateFingerprint, validateMemberProfileInput } from '@/l
 import { getZodErrorMessage, signUpRequestSchema } from '@/lib/authSchemas';
 import { sendEmailVerificationMail } from '@/lib/emailVerification';
 import { syncParticipantForMemberProfile } from '@/lib/participantSync';
+import { hashMemberInvitationToken } from '@/lib/memberInvitation';
 
 export async function POST(request: NextRequest) {
   const parsed = signUpRequestSchema.safeParse(await request.json().catch(() => null));
@@ -12,6 +13,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: getZodErrorMessage(parsed.error) }, { status: 400 });
   }
   const body = parsed.data;
+
+  const invitation = await prisma.memberInvitationToken.findUnique({
+    where: { tokenHash: hashMemberInvitationToken(body.invitationToken) },
+  });
+  if (!invitation || invitation.usedAt || invitation.expiresAt <= new Date() || invitation.email !== body.email) {
+    return NextResponse.json({ error: '招待リンクが無効、期限切れ、またはメールアドレスが一致しません。' }, { status: 403 });
+  }
 
   const profileValidation = validateMemberProfileInput(body, {
     requireDisplayName: true,
@@ -83,6 +91,11 @@ export async function POST(request: NextRequest) {
 
   const passwordHash = await hashPassword(body.password);
   const user = await prisma.$transaction(async (tx) => {
+    const consumedInvitation = await tx.memberInvitationToken.updateMany({
+      where: { id: invitation.id, usedAt: null, expiresAt: { gt: new Date() } },
+      data: { usedAt: new Date() },
+    });
+    if (consumedInvitation.count !== 1) throw new Error('招待リンクは既に使用済みまたは期限切れです。');
     const createdUser = await tx.userAccount.create({
       data: {
         email: body.email,

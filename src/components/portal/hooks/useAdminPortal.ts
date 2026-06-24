@@ -99,6 +99,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
   const [memberUpdateMessage, setMemberUpdateMessage] = useState<string | null>(null);
   const [memberUpdateMessageTone, setMemberUpdateMessageTone] = useState<'success' | 'error' | null>(null);
   const [memberSearchQuery, setMemberSearchQuery] = useState('');
+  const [memberInvitationEmail, setMemberInvitationEmail] = useState('');
   const [adminMemberDisplayName, setAdminMemberDisplayName] = useState('');
   const [adminMemberNickname, setAdminMemberNickname] = useState('');
   const [adminMemberMainInstrument, setAdminMemberMainInstrument] = useState<Instrument>('front');
@@ -524,6 +525,17 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     await reloadShared();
   }, 'メンバーを削除しました');
 
+  const handleCreateMemberInvitation = async () => runAction(async () => {
+    const res = await fetch('/api/admin/member-invitations', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: memberInvitationEmail }),
+    });
+    const json = await parseJson(res);
+    if (!res.ok) throw new Error(json.error ?? 'メンバー仮登録に失敗しました');
+    setMemberInvitationEmail('');
+  }, 'メンバー登録のご案内メールを送信しました');
+
   const handleCreateAnnouncement = async () => runAction(async () => {
     const res = await fetch('/api/announcements', {
       method: 'POST',
@@ -673,6 +685,8 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     memberUpdateMessageTone,
     memberSearchQuery,
     setMemberSearchQuery,
+    memberInvitationEmail,
+    setMemberInvitationEmail,
     adminMemberDisplayName,
     setAdminMemberDisplayName,
     adminMemberNickname,
@@ -732,6 +746,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     handleDeleteArchive,
     handleUpdateMember,
     handleDeleteMember,
+    handleCreateMemberInvitation,
     handleCreateAnnouncement,
     handleCreateColumn,
     handleUpdateColumn,

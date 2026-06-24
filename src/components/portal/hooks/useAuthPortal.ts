@@ -57,11 +57,12 @@ export function useAuthPortal({ runAction, setCurrentUser, reloadShared, onSignI
     onSignInSuccess?.(roleTarget);
   }, 'サインインしました');
 
-  const handleSignUp = async () => runAction(async () => {
+  const handleSignUp = async (invitationToken: string) => runAction(async () => {
     const res = await fetch('/api/auth/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
+        invitationToken,
         email: authEmail,
         password: authPassword,
         displayName: signupDisplayName,

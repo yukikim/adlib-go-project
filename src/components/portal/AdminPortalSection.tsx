@@ -171,6 +171,7 @@ const adminNavGroups: AdminNavGroup[] = [
     children: [
       { id: 'admin-members-search', label: 'メンバー検索' },
       { id: 'admin-members-editor', label: 'プロフィール編集' },
+      { id: 'admin-members-invitation', label: '新規メンバー仮登録' },
     ],
   },
   {
@@ -252,6 +253,7 @@ type AdminPortalSectionProps = {
   memberUpdateMessage: string | null;
   memberUpdateMessageTone: 'success' | 'error' | null;
   memberSearchQuery: string;
+  memberInvitationEmail: string;
   adminMemberDisplayName: string;
   adminMemberNickname: string;
   adminMemberMainInstrument: string;
@@ -304,6 +306,7 @@ type AdminPortalSectionProps = {
   setEditRound2EndAt: (value: string) => void;
   setSelectedManagedMemberId: (value: string) => void;
   setMemberSearchQuery: (value: string) => void;
+  setMemberInvitationEmail: (value: string) => void;
   setAdminMemberDisplayName: (value: string) => void;
   setAdminMemberNickname: (value: string) => void;
   setAdminMemberMainInstrument: (value: Instrument) => void;
@@ -343,6 +346,7 @@ type AdminPortalSectionProps = {
   onDeleteArchive: (archiveId: string) => void;
   onUpdateMember: () => void;
   onDeleteMember: () => void;
+  onCreateMemberInvitation: () => void;
   onCreateAnnouncement: () => void;
   onCreateColumn: () => void;
   onUpdateColumn: () => void;
@@ -401,6 +405,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     memberUpdateMessage,
     memberUpdateMessageTone,
     memberSearchQuery,
+    memberInvitationEmail,
     adminMemberDisplayName,
     adminMemberNickname,
     adminMemberMainInstrument,
@@ -453,6 +458,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     setEditRound2EndAt,
     setSelectedManagedMemberId,
     setMemberSearchQuery,
+    setMemberInvitationEmail,
     setAdminMemberDisplayName,
     setAdminMemberNickname,
     setAdminMemberMainInstrument,
@@ -492,6 +498,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     onDeleteArchive,
     onUpdateMember,
     onDeleteMember,
+    onCreateMemberInvitation,
     onCreateAnnouncement,
     onCreateColumn,
     onUpdateColumn,
@@ -1800,6 +1807,16 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
 
             <Section sectionId="admin-members" title="メンバー / 管理者管理" description="プロフィール、権限、状態をこの画面で更新できます。" className={cn(!isGroupVisible('admin-members') && 'hidden')}>
               <div className={cn('grid gap-4 xl:grid-cols-[320px_1fr]', activeGroupId === 'admin-members' && activeChildId && 'xl:grid-cols-1')}>
+                <div id="admin-members-invitation" className={cn('rounded-xl border p-4 scroll-mt-24', !isChildVisible('admin-members', 'admin-members-invitation') && 'hidden')}>
+                  <h3 className="font-medium">新規メンバー仮登録</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">紹介を受けた方のメールアドレスへ、1か月間有効な登録リンクを送信します。</p>
+                  <div className="mt-4 flex flex-wrap items-end gap-3">
+                    <Field htmlFor="member-invitation-email" label="登録希望者のメールアドレス" className="min-w-72 flex-1">
+                      <Input id="member-invitation-email" type="email" value={memberInvitationEmail} onChange={(event) => setMemberInvitationEmail(event.target.value)} placeholder="member@example.com" />
+                    </Field>
+                    <Button type="button" onClick={onCreateMemberInvitation} disabled={loading}>新規メンバー仮登録</Button>
+                  </div>
+                </div>
                 <div id="admin-members-search" className={cn('rounded-xl border p-4 scroll-mt-24', !isChildVisible('admin-members', 'admin-members-search') && 'hidden')}>
                   <Field htmlFor="admin-member-search" label="メンバー検索">
                     <Input

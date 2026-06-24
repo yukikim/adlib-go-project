@@ -991,3 +991,10 @@ node -e 'fetch("http://localhost:3000/api/session-sets/generate",{method:"POST"}
 	- 新規登録者へトークン付きの/signup URL を記載した「メンバー登録のご案内」メールを自動送信する
 
 - /signup へのアクセスはトークンパラメータを必要とする
+
+**上記、新規メンバー追加機能を実装済み**
+
+要マイグレーション
+
+		npx prisma nigrate deploy
+

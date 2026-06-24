@@ -161,6 +161,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           loading={loading}
           authEmail={auth.authEmail}
           authPassword={auth.authPassword}
+          signupInvitationToken=""
           signupDisplayName={auth.signupDisplayName}
           signupInstrument={auth.signupInstrument}
           signupSubInstrument={auth.signupSubInstrument}
@@ -318,6 +319,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           memberUpdateMessage={admin.memberUpdateMessage}
           memberUpdateMessageTone={admin.memberUpdateMessageTone}
           memberSearchQuery={admin.memberSearchQuery}
+          memberInvitationEmail={admin.memberInvitationEmail}
           adminMemberDisplayName={admin.adminMemberDisplayName}
           adminMemberNickname={admin.adminMemberNickname}
           adminMemberMainInstrument={admin.adminMemberMainInstrument}
@@ -370,6 +372,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           setEditRound2EndAt={admin.setEditRound2EndAt}
           setSelectedManagedMemberId={admin.setSelectedManagedMemberId}
           setMemberSearchQuery={admin.setMemberSearchQuery}
+          setMemberInvitationEmail={admin.setMemberInvitationEmail}
           setAdminMemberDisplayName={admin.setAdminMemberDisplayName}
           setAdminMemberNickname={admin.setAdminMemberNickname}
           setAdminMemberMainInstrument={admin.setAdminMemberMainInstrument}
@@ -409,6 +412,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           onDeleteArchive={admin.handleDeleteArchive}
           onUpdateMember={admin.handleUpdateMember}
           onDeleteMember={admin.handleDeleteMember}
+          onCreateMemberInvitation={admin.handleCreateMemberInvitation}
           onCreateAnnouncement={admin.handleCreateAnnouncement}
           onCreateColumn={admin.handleCreateColumn}
           onUpdateColumn={admin.handleUpdateColumn}

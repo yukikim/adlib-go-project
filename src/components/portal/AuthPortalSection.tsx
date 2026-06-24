@@ -39,6 +39,7 @@ type AuthPortalSectionProps = {
   loading: boolean;
   authEmail: string;
   authPassword: string;
+  signupInvitationToken: string;
   signupDisplayName: string;
   signupInstrument: Instrument;
   signupSubInstrument: string;
@@ -61,7 +62,7 @@ type AuthPortalSectionProps = {
   setResetToken: (value: string) => void;
   setResetPassword: (value: string) => void;
   onSignIn: () => void;
-  onSignUp: () => void;
+  onSignUp: (invitationToken: string) => void;
   onForgotPassword: () => void;
   onResetPassword: () => void;
 };
@@ -73,6 +74,7 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
     loading,
     authEmail,
     authPassword,
+    signupInvitationToken,
     signupDisplayName,
     signupInstrument,
     signupSubInstrument,
@@ -107,7 +109,7 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
     }
 
     if (view === 'signup') {
-      onSignUp();
+      onSignUp(signupInvitationToken);
       return;
     }
 
@@ -141,6 +143,12 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
           : 'メンバー専用です。'}
       >
         <form className="grid max-w-2xl gap-4 md:grid-cols-2" onSubmit={handleAuthSubmit}>
+          {view === 'signup' && !signupInvitationToken && (
+            <Alert className="md:col-span-2" variant="destructive">
+              <AlertTitle>招待リンクが必要です</AlertTitle>
+              <AlertDescription>メンバー登録は紹介制です。管理者から届いた招待メールのリンクを開いてください。</AlertDescription>
+            </Alert>
+          )}
           <Field htmlFor="auth-email" label="メールアドレス" className="md:col-span-2">
             <Input id="auth-email" type="email" autoComplete="username" value={authEmail} onChange={(event) => setAuthEmail(event.target.value)} placeholder="メールアドレスを入力" />
           </Field>
@@ -207,7 +215,7 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
             </>
           )}
           <div className="md:col-span-2">
-            <Button type="submit" disabled={loading}>
+            <Button type="submit" disabled={loading || (view === 'signup' && !signupInvitationToken)}>
               {view === 'signup' ? 'サインアップ' : 'サインイン'}
             </Button>
           </div>
