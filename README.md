@@ -981,7 +981,7 @@ node -e 'fetch("http://localhost:3000/api/session-sets/generate",{method:"POST"}
 - **以下の項目を入力する**
 	- 登録希望者のメールアドレス
 	- 名前
-	- 演奏楽器
+	- 演奏楽器(drum/bass/piano/vocal/front<担当楽器を入力>)
 
 - **「新規メンバー仮登録」ボタンを押す**
 
