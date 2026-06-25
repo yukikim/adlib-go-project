@@ -266,6 +266,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           onSignOut={auth.handleSignOut}
           onSubmitEntry={member.handleSubmitEntry}
           onSaveRating={member.handleSaveRating}
+          onSaveEventRatings={member.handleSaveEventRatings}
           onSaveEventComment={member.handleSaveEventComment}
         />
       )}

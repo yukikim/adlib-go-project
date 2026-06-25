@@ -387,6 +387,7 @@ type MemberPortalSectionProps = {
     options?: RunPortalActionOptions,
   ) => Promise<void>;
   onSaveRating: (sessionSetId: string) => void;
+  onSaveEventRatings: (sessionEventId: string) => void;
   onSaveEventComment: () => void;
 };
 
@@ -464,6 +465,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     onSignOut,
     onSubmitEntry,
     onSaveRating,
+    onSaveEventRatings,
     onSaveEventComment,
   } = props;
   const [isRound1EntryDialogOpen, setIsRound1EntryDialogOpen] = useState(false);
@@ -516,7 +518,6 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
   // console.log('completedEvents:', completedEvents);
   // console.log('selectedMemberEvent:', selectedMemberEvent);
   // console.log('round2CandidateSongs:', round2CandidateSongs);
-
   const selectedRound1Event =
     round1RecruitingEvents.find((event) => event.id === memberEventId) ?? null;
 
@@ -538,6 +539,167 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
         return left.songTitle.localeCompare(right.songTitle, "ja-JP");
       });
 
+  const renderRatingStars = (sessionSetId: string) => {
+    const currentRating = memberRatings[sessionSetId] ?? 0;
+
+    return (
+      <div className="flex flex-wrap items-center gap-1">
+        {[1, 2, 3, 4, 5].map((rating) => {
+          const isActive = currentRating >= rating;
+          return (
+            <Button
+              key={rating}
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="size-8 rounded-full"
+              aria-label={`${rating} 星`}
+              onClick={() =>
+                setMemberRatings((current) => ({
+                  ...current,
+                  [sessionSetId]: rating,
+                }))
+              }
+            >
+              <Star
+                className={
+                  isActive
+                    ? "size-5 fill-amber-400 text-amber-500"
+                    : "size-5 text-muted-foreground"
+                }
+              />
+            </Button>
+          );
+        })}
+        <Button
+          type="button"
+          variant={currentRating ? "outline" : "secondary"}
+          size="sm"
+          onClick={() =>
+            setMemberRatings((current) => ({
+              ...current,
+              [sessionSetId]: 0,
+            }))
+          }
+        >
+          なし
+        </Button>
+      </div>
+    );
+  };
+
+  const getCurrentMemberAssignmentRoles = (sessionSet: SessionSetView) => {
+    const memberProfile = currentUser?.memberProfile;
+    if (!memberProfile) {
+      return [] as string[];
+    }
+
+    const roles: string[] = [];
+    const isCurrentMember = (member: { name: string } | null | undefined) =>
+      member?.name === memberProfile.displayName;
+
+    if (memberProfile.mainInstrument === "drum" && isCurrentMember(sessionSet.drum)) {
+      roles.push("drum");
+    }
+    if (memberProfile.mainInstrument === "bass" && isCurrentMember(sessionSet.bass)) {
+      roles.push("bass");
+    }
+    if (memberProfile.mainInstrument === "piano" && isCurrentMember(sessionSet.piano)) {
+      roles.push("piano");
+    }
+    if (
+      memberProfile.mainInstrument === "front" &&
+      sessionSet.front?.some((member) => isCurrentMember(member))
+    ) {
+      roles.push(memberProfile.subInstrument?.trim() || "front");
+    }
+    if (
+      memberProfile.mainInstrument === "vocal" &&
+      sessionSet.vocal?.some((member) => isCurrentMember(member))
+    ) {
+      roles.push("vocal");
+    }
+
+    return roles;
+  };
+
+  const getCurrentMemberPlayedSessionSetsForEvent = (eventId: string) =>
+    getPublishedSessionSetsForEvent(eventId)
+      .map((sessionSet) => ({
+        sessionSet,
+        roles: getCurrentMemberAssignmentRoles(sessionSet),
+      }))
+      .filter((item) => item.roles.length > 0);
+
+  const renderSessionSetPerformers = (sessionSet: SessionSetView) => (
+    <div className="mt-2 grid gap-1 text-sm text-muted-foreground">
+      <div className="flex flex-wrap items-start gap-2">
+        <p>
+          drum{" "}
+          {sessionSet.drum
+            ? renderSessionMemberName(
+                sessionSet.drum.name,
+                profileDisplayName,
+                sessionSet.drum,
+              )
+            : "-"}
+        </p>
+        <p>
+          bass{" "}
+          {sessionSet.bass
+            ? renderSessionMemberName(
+                sessionSet.bass.name,
+                profileDisplayName,
+                sessionSet.bass,
+              )
+            : "-"}
+        </p>
+        <p>
+          piano{" "}
+          {sessionSet.piano
+            ? renderSessionMemberName(
+                sessionSet.piano.name,
+                profileDisplayName,
+                sessionSet.piano,
+              )
+            : "-"}
+        </p>
+      </div>
+      <p>
+        front{" "}
+        {sessionSet.front?.length
+          ? sessionSet.front.map((member, index) => (
+              <span key={`${member.id}-${index}`}>
+                {index > 0 ? ", " : null}
+                {renderSessionMemberName(
+                  member.name,
+                  profileDisplayName,
+                  member,
+                )}
+                {member.subInstrument ? ` (${member.subInstrument})` : null}
+              </span>
+            ))
+          : "-"}
+      </p>
+      <p>
+        vocal{" "}
+        {sessionSet.vocal?.length
+          ? sessionSet.vocal.map((member, index) => (
+              <span key={`${member.id}-${index}`}>
+                {index > 0 ? ", " : null}
+                {renderSessionMemberName(
+                  member.name,
+                  profileDisplayName,
+                  member,
+                )}
+                {sessionSet.key ? ` (key ${sessionSet.key})` : null}
+              </span>
+            ))
+          : "-"}
+      </p>
+    </div>
+  );
+
   const renderPublishedSessionSets = (sessionSets: SessionSetView[]) => (
     <ul className="mt-3 space-y-2">
       {sessionSets.map((sessionSet) => (
@@ -553,74 +715,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
               <Badge variant="outline">key {sessionSet.key}</Badge>
             ) : null}
           </div>
-          <div className="mt-2 grid gap-1 text-sm text-muted-foreground">
-            <div className="flex flex-wrap items-start gap-2">
-              <p>
-                drum{" "}
-                {sessionSet.drum
-                  ? renderSessionMemberName(
-                      sessionSet.drum.name,
-                      profileDisplayName,
-                      sessionSet.drum,
-                    )
-                  : "-"}
-              </p>
-              <p>
-                bass{" "}
-                {sessionSet.bass
-                  ? renderSessionMemberName(
-                      sessionSet.bass.name,
-                      profileDisplayName,
-                      sessionSet.bass,
-                    )
-                  : "-"}
-              </p>
-              <p>
-                piano{" "}
-                {sessionSet.piano
-                  ? renderSessionMemberName(
-                      sessionSet.piano.name,
-                      profileDisplayName,
-                      sessionSet.piano,
-                    )
-                  : "-"}
-              </p>
-            </div>
-            <p>
-              front{" "}
-              {sessionSet.front?.length
-                ? sessionSet.front.map((member, index) => (
-                    <span key={`${member.id}-${index}`}>
-                      {index > 0 ? ", " : null}
-                      {renderSessionMemberName(
-                        member.name,
-                        profileDisplayName,
-                        member,
-                      )}
-                      {member.subInstrument
-                        ? ` (${member.subInstrument})`
-                        : null}
-                    </span>
-                  ))
-                : "-"}
-            </p>
-            <p>
-              vocal{" "}
-              {sessionSet.vocal?.length
-                ? sessionSet.vocal.map((member, index) => (
-                    <span key={`${member.id}-${index}`}>
-                      {index > 0 ? ", " : null}
-                      {renderSessionMemberName(
-                        member.name,
-                        profileDisplayName,
-                        member,
-                      )}
-                      {sessionSet.key ? ` (key ${sessionSet.key})` : null}
-                    </span>
-                  ))
-                : "-"}
-            </p>
-          </div>
+          {renderSessionSetPerformers(sessionSet)}
         </li>
       ))}
     </ul>
@@ -1680,45 +1775,132 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             </p>
           ) : (
             <ul className="space-y-3">
-              {ratingEvents.map((event) => (
-                <li
-                  key={event.id}
-                  className="rounded-xl border bg-background/20 p-4"
-                >
-                  <div className="flex flex-wrap items-center gap-2">
-                    <strong className="text-sm text-emerald-600">
-                      {event.title}
-                    </strong>
-                    <Badge variant="outline">
-                      {getSessionEventStatusLabel(event.status)}
-                    </Badge>
-                  </div>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    {formatEventSchedule(
-                      event.eventDate,
-                      event.startTime,
-                      event.endTime,
-                    )}{" "}
-                    / {event.venue}
-                  </p>
-                  <EventMeta
-                    participantLimit={event.participantLimit}
-                    attendingEntryCount={event.attendingEntryCount}
-                    remainingEntryCapacity={event.remainingEntryCapacity}
-                    isEntryCapacityFull={event.isEntryCapacityFull}
-                    participationFee={event.participationFee}
-                    hasAfterParty={event.hasAfterParty}
-                    afterPartyFee={event.afterPartyFee}
-                    sessionEntries={event.sessionEntries}
-                    notes={event.notes}
-                  />
-                  {event.entryReason ? (
+              {ratingEvents.map((event) => {
+                const eventSessionSets = getPublishedSessionSetsForEvent(event.id);
+                const ratingSummaryBySessionSetId = new Map(
+                  (event.ratingSummaries ?? []).map((summary) => [
+                    summary.sessionSetId,
+                    summary,
+                  ]),
+                );
+                const hasRatingInput = eventSessionSets.some((sessionSet) => {
+                  const rating = memberRatings[sessionSet.id];
+                  return Number.isInteger(rating) && rating >= 1 && rating <= 5;
+                });
+
+                return (
+                  <li
+                    key={event.id}
+                    className="rounded-xl border bg-background/20 p-4"
+                  >
+                    <div className="flex flex-wrap items-center gap-2">
+                      <strong className="text-sm text-emerald-600">
+                        {event.title}
+                      </strong>
+                      <Badge variant="outline">
+                        {getSessionEventStatusLabel(event.status)}
+                      </Badge>
+                    </div>
                     <p className="mt-2 text-sm text-muted-foreground">
-                      {event.entryReason}
+                      {formatEventSchedule(
+                        event.eventDate,
+                        event.startTime,
+                        event.endTime,
+                      )}{" "}
+                      / {event.venue}
                     </p>
-                  ) : null}
-                </li>
-              ))}
+                    <EventMeta
+                      participantLimit={event.participantLimit}
+                      attendingEntryCount={event.attendingEntryCount}
+                      remainingEntryCapacity={event.remainingEntryCapacity}
+                      isEntryCapacityFull={event.isEntryCapacityFull}
+                      participationFee={event.participationFee}
+                      hasAfterParty={event.hasAfterParty}
+                      afterPartyFee={event.afterPartyFee}
+                      sessionEntries={event.sessionEntries}
+                      notes={event.notes}
+                    />
+                    {event.entryReason ? (
+                      <p className="mt-2 text-sm text-muted-foreground">
+                        {event.entryReason}
+                      </p>
+                    ) : null}
+                    <Separator className="my-4 bg-emerald-100" />
+                    {eventSessionSets.length === 0 ? (
+                      <p className="text-sm text-muted-foreground">
+                        評価対象の公開済み sessionSet はありません。
+                      </p>
+                    ) : (
+                      <div className="space-y-3">
+                        <ul className="space-y-3">
+                          {eventSessionSets.map((sessionSet) => {
+                            const summary = ratingSummaryBySessionSetId.get(sessionSet.id);
+                            return (
+                              <li
+                                key={sessionSet.id}
+                                className="rounded-lg border bg-background/70 p-3"
+                              >
+                                <div className="flex flex-wrap items-start justify-between gap-3">
+                                  <div>
+                                    <div className="flex flex-wrap items-center gap-2">
+                                      <span className="font-medium">
+                                        {sessionSet.songTitle}
+                                      </span>
+                                      {sessionSet.key ? (
+                                        <Badge variant="outline">
+                                          key {sessionSet.key}
+                                        </Badge>
+                                      ) : null}
+                                    </div>
+                                    <p className="mt-1 text-xs text-muted-foreground">
+                                      集計 {summary?.ratingCount ?? 0} 件 / 平均{" "}
+                                      {summary?.averageRating
+                                        ? summary.averageRating.toFixed(1)
+                                        : "-"}
+                                    </p>
+                                    {renderSessionSetPerformers(sessionSet)}
+                                  </div>
+                                  {renderRatingStars(sessionSet.id)}
+                                </div>
+                                <Field
+                                  label="コメント"
+                                  htmlFor={`rating-event-comment-${sessionSet.id}`}
+                                  className="mt-3 grid gap-2"
+                                >
+                                  <Textarea
+                                    id={`rating-event-comment-${sessionSet.id}`}
+                                    rows={2}
+                                    placeholder="任意でコメント"
+                                    value={memberRatingComments[sessionSet.id] ?? ""}
+                                    onChange={(event) =>
+                                      setMemberRatingComments((current) => ({
+                                        ...current,
+                                        [sessionSet.id]: event.target.value,
+                                      }))
+                                    }
+                                  />
+                                </Field>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                        <div className="flex flex-wrap items-center justify-between gap-3">
+                          <p className="text-xs text-muted-foreground">
+                            星なしの曲は未評価として送信対象から外れます。
+                          </p>
+                          <Button
+                            type="button"
+                            onClick={() => onSaveEventRatings(event.id)}
+                            disabled={loading || !hasRatingInput}
+                          >
+                            結果を送信
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           )}
         </Card>
@@ -1934,37 +2116,65 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
           </p>
         ) : (
           <ul className="mt-3 space-y-3">
-            {sessionEntries.map((entry) => (
-              <li
-                key={entry.id}
-                className="rounded-xl border bg-background/60 p-4 text-sm"
-              >
-                <div className="flex flex-wrap items-center gap-2">
-                  <Badge variant="outline">
-                    参加 {formatAttendanceStatusLabel(entry.attendanceStatus)}
-                  </Badge>
-                  {entry.sessionEvent.hasAfterParty ? (
+            {sessionEntries.map((entry) => {
+              const playedSessionSets =
+                getCurrentMemberPlayedSessionSetsForEvent(entry.sessionEventId);
+
+              return (
+                <li
+                  key={entry.id}
+                  className="rounded-xl border bg-background/60 p-4 text-sm"
+                >
+                  <div className="flex flex-wrap items-center gap-2">
                     <Badge variant="outline">
-                      懇親会{" "}
-                      {formatOptionalAttendanceStatusLabel(
-                        entry.afterPartyAttendanceStatus,
-                      )}
+                      参加 {formatAttendanceStatusLabel(entry.attendanceStatus)}
                     </Badge>
+                    {entry.sessionEvent.hasAfterParty ? (
+                      <Badge variant="outline">
+                        懇親会{" "}
+                        {formatOptionalAttendanceStatusLabel(
+                          entry.afterPartyAttendanceStatus,
+                        )}
+                      </Badge>
+                    ) : null}
+                    <span className="font-medium">
+                      {entry.sessionEvent.title}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-muted-foreground">
+                    {entry.requests.length} 曲 /{" "}
+                    {formatEventSchedule(
+                      entry.sessionEvent.eventDate,
+                      entry.sessionEvent.startTime,
+                      entry.sessionEvent.endTime,
+                    )}
+                  </p>
+                  {playedSessionSets.length > 0 ? (
+                    <div className="mt-3 rounded-lg border bg-background/70 p-3">
+                      <p className="font-medium text-foreground">演奏曲</p>
+                      <ul className="mt-2 space-y-2 text-muted-foreground">
+                        {playedSessionSets.map(({ sessionSet, roles }) => (
+                          <li
+                            key={sessionSet.id}
+                            className="flex flex-wrap items-center gap-2"
+                          >
+                            <span>{sessionSet.songTitle}</span>
+                            {sessionSet.key ? (
+                              <Badge variant="outline">key {sessionSet.key}</Badge>
+                            ) : null}
+                            {roles.map((role) => (
+                              <Badge key={role} variant="secondary">
+                                {role}
+                              </Badge>
+                            ))}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   ) : null}
-                  <span className="font-medium">
-                    {entry.sessionEvent.title}
-                  </span>
-                </div>
-                <p className="mt-2 text-muted-foreground">
-                  {entry.requests.length} 曲 /{" "}
-                  {formatEventSchedule(
-                    entry.sessionEvent.eventDate,
-                    entry.sessionEvent.startTime,
-                    entry.sessionEvent.endTime,
-                  )}
-                </p>
-              </li>
-            ))}
+                </li>
+              );
+            })}
           </ul>
         )}
         <Separator className="my-4" />
@@ -2017,12 +2227,14 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             />
           </div>
         ) : null}
+        {/* {memberSessionSets.length === 0 ? ( */}
         {memberSessionSets.length === 0 ? (
           <p className="mt-3 text-sm text-muted-foreground">
             評価対象の公開済み sessionSet はありません。
           </p>
         ) : (
           <ul className="mt-3 space-y-4">
+            {/* {memberSessionSets.map((sessionSet) => ( */}
             {memberSessionSets.map((sessionSet) => (
               <li
                 key={sessionSet.id}

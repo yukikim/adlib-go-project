@@ -73,21 +73,13 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
       return;
     }
 
-    const publishedEventIds = sessionEvents
-      .filter((event) => event.status === 'published')
-      .map((event) => event.id);
-
-    const [entryRes, setRes, publishedSetResponses] = await Promise.all([
+    const [entryRes, setRes] = await Promise.all([
       fetch('/api/session-entries'),
       memberEventId ? fetch(`/api/session-sets?sessionEventId=${memberEventId}`) : Promise.resolve(null),
-      Promise.all(
-        publishedEventIds.map((eventId) =>
-          fetch(`/api/session-sets?sessionEventId=${encodeURIComponent(eventId)}`),
-        ),
-      ),
     ]);
     const entryJson = await parseJson(entryRes);
-    setSessionEntries(entryJson.entries ?? []);
+    const entries = (entryJson.entries ?? []) as SessionEntryView[];
+    setSessionEntries(entries);
     if (setRes) {
       const setJson = await parseJson(setRes);
       setMemberSessionSets((setJson.sessionSets ?? []).filter((item: SessionSetView) => item.isPublished));
@@ -95,14 +87,48 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
       setMemberSessionSets([]);
     }
 
+    const publishedEventIds = sessionEvents
+      .filter((event) => event.status === 'published' || event.status === 'rating')
+      .map((event) => event.id);
+    const historyEventIds = [
+      ...new Set(
+        [
+          ...publishedEventIds,
+          ...entries.map((entry) => entry.sessionEventId),
+        ]
+          .filter((eventId) => eventId.length > 0),
+      ),
+    ];
+    const publishedSetResponses = await Promise.all(
+      historyEventIds.map((eventId) =>
+        fetch(`/api/session-sets?sessionEventId=${encodeURIComponent(eventId)}`),
+      ),
+    );
     const publishedSetJsonList = await Promise.all(
       publishedSetResponses.map((response) => parseJson(response)),
     );
-    setPublishedSessionSets(
-      publishedSetJsonList.flatMap((json) =>
-        (json.sessionSets ?? []).filter((item: SessionSetView) => item.isPublished),
-      ),
+    const publishedSets = publishedSetJsonList.flatMap((json) =>
+      (json.sessionSets ?? []).filter((item: SessionSetView) => item.isPublished),
     );
+    setPublishedSessionSets(publishedSets);
+    setMemberRatings((current) => ({
+      ...publishedSets.reduce<Record<string, number>>((ratings, sessionSet) => {
+        if (sessionSet.myRating) {
+          ratings[sessionSet.id] = sessionSet.myRating.rating;
+        }
+        return ratings;
+      }, {}),
+      ...current,
+    }));
+    setMemberRatingComments((current) => ({
+      ...publishedSets.reduce<Record<string, string>>((comments, sessionSet) => {
+        if (sessionSet.myRating?.comment) {
+          comments[sessionSet.id] = sessionSet.myRating.comment;
+        }
+        return comments;
+      }, {}),
+      ...current,
+    }));
   }, [currentUser?.role, memberEventId, sessionEvents]);
 
   useEffect(() => {
@@ -368,7 +394,42 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     const json = await parseJson(res);
     if (!res.ok) throw new Error(json.error ?? '評価保存に失敗しました');
     await loadMemberData();
+    await reloadShared();
   }, '評価を保存しました');
+
+  const handleSaveEventRatings = async (sessionEventId: string) => runAction(async () => {
+    const targetSessionSets = publishedSessionSets.filter(
+      (sessionSet) => sessionSet.sessionEventId === sessionEventId && sessionSet.isPublished,
+    );
+    const ratingTargets = targetSessionSets.filter((sessionSet) => {
+      const rating = memberRatings[sessionSet.id];
+      return Number.isInteger(rating) && rating >= 1 && rating <= 5;
+    });
+
+    if (ratingTargets.length === 0) {
+      throw new Error('1曲以上に星を付けてください');
+    }
+
+    await Promise.all(
+      ratingTargets.map(async (sessionSet) => {
+        const res = await fetch(`/api/session-sets/${sessionSet.id}/ratings`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            rating: memberRatings[sessionSet.id],
+            comment: memberRatingComments[sessionSet.id] ?? '',
+          }),
+        });
+        const json = await parseJson(res);
+        if (!res.ok) {
+          throw new Error(json.error ?? `${sessionSet.songTitle} の評価保存に失敗しました`);
+        }
+      }),
+    );
+
+    await loadMemberData();
+    await reloadShared();
+  }, 'レイティング結果を送信しました');
 
   const handleSaveEventComment = async () => runAction(async () => {
     if (!memberEventId) {
@@ -456,6 +517,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     handleProfileUpdate,
     handleSubmitEntry,
     handleSaveRating,
+    handleSaveEventRatings,
     handleSaveEventComment,
   };
 }

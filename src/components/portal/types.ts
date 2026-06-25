@@ -147,6 +147,10 @@ export type SessionSetView = {
   setOrder?: number | null;
   key?: string | null;
   isPublished?: boolean;
+  myRating?: {
+    rating: number;
+    comment?: string | null;
+  } | null;
   drum: { id: string; name: string; isForced?: boolean; forcedCount?: number; requestedInRound1?: boolean } | null;
   bass: { id: string; name: string; isForced?: boolean; forcedCount?: number; requestedInRound1?: boolean } | null;
   piano: { id: string; name: string; isForced?: boolean; forcedCount?: number; requestedInRound1?: boolean } | null;

@@ -4,6 +4,7 @@ import { requireAdmin } from '@/lib/adminApi';
 import { getZodErrorMessage } from '@/lib/authSchemas';
 import { sessionEventUpdateRequestSchema } from '@/lib/apiSchemas';
 import { sendSessionEventStatusNotification } from '@/lib/sessionEventNotifications';
+import { createSessionArchive } from '@/lib/sessionArchive';
 
 export async function PATCH(request: NextRequest) {
   const { admin, response } = await requireAdmin(request);
@@ -70,5 +71,47 @@ export async function PATCH(request: NextRequest) {
     });
   }
 
-  return NextResponse.json({ sessionEvent, mailSummary });
+  let archiveSummary = undefined;
+  if (body.status === 'closed' && currentSessionEvent.status !== 'closed' && admin?.userId) {
+    const existingArchive = await prisma.sessionArchive.findFirst({
+      where: {
+        sessionEventId: sessionEvent.id,
+        deletedAt: null,
+      },
+      orderBy: { version: 'desc' },
+      select: {
+        id: true,
+        version: true,
+      },
+    });
+
+    if (existingArchive) {
+      archiveSummary = {
+        status: 'already_exists',
+        archiveId: existingArchive.id,
+        version: existingArchive.version,
+      };
+    } else {
+      try {
+        const archive = await createSessionArchive({
+          sessionEventId: sessionEvent.id,
+          title: `${sessionEvent.title} アーカイブ`,
+          note: 'イベント終了時に自動作成',
+          createdById: admin.userId,
+        });
+        archiveSummary = {
+          status: 'created',
+          archiveId: archive.id,
+          version: archive.version,
+        };
+      } catch (error) {
+        archiveSummary = {
+          status: 'failed',
+          error: error instanceof Error ? error.message : 'Failed to create archive',
+        };
+      }
+    }
+  }
+
+  return NextResponse.json({ sessionEvent, mailSummary, archiveSummary });
 }

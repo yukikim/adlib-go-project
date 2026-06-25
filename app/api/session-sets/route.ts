@@ -4,6 +4,7 @@ import { Prisma, type MemberRole } from '@prisma/client';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/adminApi';
+import { getAuthenticatedUser } from '@/lib/auth';
 import { getZodErrorMessage } from '@/lib/authSchemas';
 import { serializeSessionSets } from '@/lib/sessionSets';
 
@@ -41,6 +42,7 @@ function buildParticipantKey(name: string, instrument: string) {
 
 // GET /api/session-sets
 export async function GET(request: NextRequest) {
+  const authenticatedUser = await getAuthenticatedUser(request);
   const sessionEventId = request.nextUrl.searchParams.get('sessionEventId');
 
   const sessionSets = await prisma.sessionSet.findMany({
@@ -58,8 +60,36 @@ export async function GET(request: NextRequest) {
   });
 
   const data = await serializeSessionSets(sessionSets);
+  const currentUserRatings = authenticatedUser
+    ? await prisma.sessionSetRating.findMany({
+        where: {
+          userAccountId: authenticatedUser.id,
+          sessionSetId: { in: sessionSets.map((sessionSet) => sessionSet.id) },
+        },
+        select: {
+          sessionSetId: true,
+          rating: true,
+          comment: true,
+        },
+      })
+    : [];
+  const ratingBySessionSetId = new Map(
+    currentUserRatings.map((rating) => [rating.sessionSetId, rating]),
+  );
+  const sessionSetsWithMyRatings = data.map((sessionSet) => {
+    const rating = ratingBySessionSetId.get(sessionSet.id);
+    return {
+      ...sessionSet,
+      myRating: rating
+        ? {
+          rating: rating.rating,
+          comment: rating.comment,
+        }
+        : null,
+    };
+  });
 
-  return NextResponse.json({ sessionSets: data, sessionEventId });
+  return NextResponse.json({ sessionSets: sessionSetsWithMyRatings, sessionEventId });
 }
 
 export async function PATCH(request: NextRequest) {
