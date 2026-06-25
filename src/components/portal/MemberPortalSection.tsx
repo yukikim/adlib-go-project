@@ -83,7 +83,9 @@ function renderSessionMemberName(
       {options?.requestedInRound1 ? (
         <Star className="size-3.5 fill-amber-400 text-amber-500" />
       ) : null}
-      <span className={ name === displayName ? "text-red-400 font-bold" : "" }>{formatSessionMemberName(name, options?.isForced)}</span>
+      <span className={name === displayName ? "text-red-400 font-bold" : ""}>
+        {formatSessionMemberName(name, options?.isForced)}
+      </span>
     </span>
   );
 }
@@ -552,35 +554,49 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             ) : null}
           </div>
           <div className="mt-2 grid gap-1 text-sm text-muted-foreground">
-            <p>
-              drum{" "}
-              {sessionSet.drum
-                ? renderSessionMemberName(sessionSet.drum.name, profileDisplayName, sessionSet.drum)
-                : "-"}
-            </p>
-            <p>
-              bass{" "}
-              {sessionSet.bass
-                ? renderSessionMemberName(sessionSet.bass.name, profileDisplayName, sessionSet.bass)
-                : "-"}
-            </p>
-            <p>
-              piano{" "}
-              {sessionSet.piano
-                ? renderSessionMemberName(
-                    sessionSet.piano.name,
-                    profileDisplayName,
-                    sessionSet.piano,
-                  )
-                : "-"}
-            </p>
+            <div className="flex flex-wrap items-start gap-2">
+              <p>
+                drum{" "}
+                {sessionSet.drum
+                  ? renderSessionMemberName(
+                      sessionSet.drum.name,
+                      profileDisplayName,
+                      sessionSet.drum,
+                    )
+                  : "-"}
+              </p>
+              <p>
+                bass{" "}
+                {sessionSet.bass
+                  ? renderSessionMemberName(
+                      sessionSet.bass.name,
+                      profileDisplayName,
+                      sessionSet.bass,
+                    )
+                  : "-"}
+              </p>
+              <p>
+                piano{" "}
+                {sessionSet.piano
+                  ? renderSessionMemberName(
+                      sessionSet.piano.name,
+                      profileDisplayName,
+                      sessionSet.piano,
+                    )
+                  : "-"}
+              </p>
+            </div>
             <p>
               front{" "}
               {sessionSet.front?.length
                 ? sessionSet.front.map((member, index) => (
                     <span key={`${member.id}-${index}`}>
                       {index > 0 ? ", " : null}
-                      {renderSessionMemberName(member.name, profileDisplayName, member)}
+                      {renderSessionMemberName(
+                        member.name,
+                        profileDisplayName,
+                        member,
+                      )}
                       {member.subInstrument
                         ? ` (${member.subInstrument})`
                         : null}
@@ -594,7 +610,11 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                 ? sessionSet.vocal.map((member, index) => (
                     <span key={`${member.id}-${index}`}>
                       {index > 0 ? ", " : null}
-                      {renderSessionMemberName(member.name, profileDisplayName, member)}
+                      {renderSessionMemberName(
+                        member.name,
+                        profileDisplayName,
+                        member,
+                      )}
                       {sessionSet.key ? ` (key ${sessionSet.key})` : null}
                     </span>
                   ))
@@ -1579,7 +1599,11 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                       <Badge variant="outline">
                         {getSessionEventStatusLabel(event.status)}
                       </Badge>
-                      {isAttending ? null : <strong className="text-red-400">参加していません</strong>}
+                      {isAttending ? null : (
+                        <strong className="text-red-400">
+                          参加していません
+                        </strong>
+                      )}
                     </div>
                     <p className="mt-2 text-sm text-muted-foreground">
                       {formatEventSchedule(
@@ -2047,7 +2071,11 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                       ? sessionSet.front.map((member, index) => (
                           <span key={`${member.id}-${index}`}>
                             {index > 0 ? ", " : null}
-                            {renderSessionMemberName(member.name, profileDisplayName, member)}
+                            {renderSessionMemberName(
+                              member.name,
+                              profileDisplayName,
+                              member,
+                            )}
                             {member.subInstrument
                               ? ` (${member.subInstrument})`
                               : null}
@@ -2061,7 +2089,11 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                       ? sessionSet.vocal.map((member, index) => (
                           <span key={`${member.id}-${index}`}>
                             {index > 0 ? ", " : null}
-                            {renderSessionMemberName(member.name, profileDisplayName, member)}
+                            {renderSessionMemberName(
+                              member.name,
+                              profileDisplayName,
+                              member,
+                            )}
                             {sessionSet.key ? ` (key ${sessionSet.key})` : null}
                           </span>
                         ))
