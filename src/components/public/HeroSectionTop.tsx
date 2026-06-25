@@ -18,7 +18,7 @@ export default function HeroSectionTop({ pageName }: PageNameProps) {
             {/* <h1 className="text-primary text-4xl font-bold lg:text-9xl mb-6">Adlib Go</h1> */}
             <div className="w-auto h-48 bg-[url('/images/main_logo.svg')] bg-center bg-no-repeat"></div>
             <h2 className="text-secondary text-balance text-5xl">
-              Website for groups that enjoy<span className="text-accent"> jazz sessions.</span>
+              Test Website for groups that enjoy<span className="text-accent"> jazz sessions.</span>
             </h2>
           </div>
             <p className="mt-8 text-2xl text-background">ジャズの世界にどっぷり浸かる体験にぜひご参加ください。</p>

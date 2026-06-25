@@ -29,10 +29,17 @@ export function AppHeaderNav({ isSignedIn, isMember, isAdmin, children }: AppHea
       className="absolute group z-10 w-full"
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12">
-        <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 md:gap-0 md:py-3">
+        <div id="header-nav" className="relative flex flex-wrap items-center justify-between gap-6 md:gap-0">
           <div className="relative z-20 flex w-full justify-between md:px-0 lg:w-fit">
             <Link href="/" aria-label="logo" className="flex items-center space-x-2" onClick={closeMenu}>
-              <Image src="/images/main_logo.svg" alt="Hero Image" width={140} height={60} loading="eager" />
+              <Image
+                src="/images/main_logo.svg"
+                alt="Hero Image"
+                width={140}
+                height={60}
+                loading="eager"
+                style={{ height: '60px', width: '140px' }}
+              />
             </Link>
 
             <div className="relative flex max-h-10 items-center lg:hidden">

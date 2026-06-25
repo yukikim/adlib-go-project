@@ -18,7 +18,7 @@ export function HeroSection() {
                         height={200}
                         loading="eager"
                         className="opacity-100 w-[340px] lg:w-[600px]"
-                        style={{ height: 'auto' }}
+                        style={{ height: 'auto', width: 'auto' }}
                     />
                 </div>
             </div>

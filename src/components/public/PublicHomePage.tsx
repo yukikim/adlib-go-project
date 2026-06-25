@@ -8,6 +8,7 @@ import { formatEventSchedule, formatYen } from '@/lib/utils';
 // import Image from 'next/image';
 // import { HeroSection } from "./HeroSection";
 import HeroSectionTop from "./HeroSectionTop";
+// import { HeroSection } from "./HeroSection";
 // import 'animate.css'
 import Container from './Container';
 
