@@ -150,8 +150,6 @@
   --brand-main: #4a608c;
   --brand-base: #a3bad9;
   --background: #0b0f13;
-  --font-m-plus: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", YuGothic, Meiryo, sans-serif;
-  --font-racing-sans-one: "Arial Narrow", Arial, sans-serif;
 }
 
 /* .dark {
@@ -166,12 +164,12 @@
   }
 
 body {
-  font-family: var(--font-m-plus), sans-serif;
+  font-family: var(--font-m-plus, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", YuGothic, Meiryo, sans-serif);
   color: #4f4f4f;
 }
 
 .font-racing-sans-one {
-  font-family: var(--font-racing-sans-one), sans-serif;
+  font-family: var(--font-racing-sans-one, "Arial Narrow", Arial, sans-serif);
 }
 
 }
