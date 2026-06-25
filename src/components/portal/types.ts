@@ -188,10 +188,17 @@ export type MemberRatingHistoryView = {
 };
 
 export type RatingSummaryView = {
+  sessionEventId?: string;
+  sessionEventTitle?: string;
   sessionSetId: string;
   songTitle: string;
   ratingCount: number;
   averageRating: number | null;
+  comments?: {
+    id: string;
+    rating: number;
+    comment: string;
+  }[];
 };
 
 export type ArchiveView = {

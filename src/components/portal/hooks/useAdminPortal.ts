@@ -175,14 +175,20 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
       return;
     }
 
-    const [archiveRes, activityRes, mailLogRes, columnRes, setRes, summaryRes, previewRes, draftRes] = await Promise.all([
+    const targetAdminEventId = selectedAdminEventId || sessionEvents[0]?.id || '';
+    const ratingEvents = sessionEvents.filter((event) => event.status === 'rating');
+    const [archiveRes, activityRes, mailLogRes, columnRes, setRes, ratingSummaryResponses, previewRes, draftRes] = await Promise.all([
       fetch('/api/session-archives'),
       fetch('/api/admin/activity'),
       fetch('/api/admin/mail-logs'),
       fetch('/api/columns?includeDrafts=1'),
-      selectedAdminEventId ? fetch(`/api/session-sets?sessionEventId=${selectedAdminEventId}`) : Promise.resolve(null),
-      selectedAdminEventId ? fetch(`/api/session-events/${selectedAdminEventId}/ratings-summary`) : Promise.resolve(null),
-      selectedAdminEventId ? fetch(`/api/session-events/${selectedAdminEventId}/archive-preview`) : Promise.resolve(null),
+      targetAdminEventId ? fetch(`/api/session-sets?sessionEventId=${targetAdminEventId}`) : Promise.resolve(null),
+      Promise.all(
+        ratingEvents.map((event) =>
+          fetch(`/api/session-events/${event.id}/ratings-summary`),
+        ),
+      ),
+      targetAdminEventId ? fetch(`/api/session-events/${targetAdminEventId}/archive-preview`) : Promise.resolve(null),
       fetch('/api/session-set-drafts'),
     ]);
 
@@ -201,12 +207,19 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     } else {
       setSessionSets([]);
     }
-    if (summaryRes) {
-      const summaryJson = await parseJson(summaryRes);
-      setRatingSummaries(summaryJson.summaries ?? []);
-    } else {
-      setRatingSummaries([]);
-    }
+    const ratingSummaryJsonList = await Promise.all(
+      ratingSummaryResponses.map((response) => parseJson(response)),
+    );
+    setRatingSummaries(
+      ratingSummaryJsonList.flatMap((json, index) => {
+        const ratingEvent = ratingEvents[index];
+        return (json.summaries ?? []).map((summary: RatingSummaryView) => ({
+          ...summary,
+          sessionEventId: ratingEvent.id,
+          sessionEventTitle: ratingEvent.title,
+        }));
+      }),
+    );
     if (previewRes) {
       const previewJson = await parseJson(previewRes);
       setArchivePreview(previewJson.preview ?? null);
@@ -214,7 +227,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
       setArchivePreview(null);
     }
     setSavedSessionSetDrafts(draftJson.drafts ?? []);
-  }, [isAdmin, selectedAdminEventId]);
+  }, [isAdmin, selectedAdminEventId, sessionEvents]);
 
   useEffect(() => {
     if (!selectedAdminEventId && sessionEvents.length > 0) {

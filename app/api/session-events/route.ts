@@ -142,29 +142,95 @@ export async function GET(request: NextRequest) {
           id: true,
           sessionEventId: true,
           title: true,
-          ratings: {
-            select: {
-              rating: true,
-            },
-          },
+          setOrder: true,
         },
         orderBy: [{ setOrder: 'asc' }, { title: 'asc' }],
       });
+  const ratingRows = sessionEventIds.length === 0
+    ? []
+    : await prisma.sessionSetRating.findMany({
+        where: {
+          sessionEventId: { in: sessionEventIds },
+        },
+        select: {
+          id: true,
+          sessionEventId: true,
+          sessionSetId: true,
+          rating: true,
+          comment: true,
+          sessionSet: {
+            select: {
+              id: true,
+              sessionEventId: true,
+              title: true,
+              setOrder: true,
+            },
+          },
+        },
+        orderBy: [{ ratedAt: 'desc' }],
+      });
+  const ratingsBySessionSetId = new Map<string, typeof ratingRows>();
+  for (const rating of ratingRows) {
+    const ratings = ratingsBySessionSetId.get(rating.sessionSetId) ?? [];
+    ratings.push(rating);
+    ratingsBySessionSetId.set(rating.sessionSetId, ratings);
+  }
 
-  const ratingSummaryMap = new Map<string, Array<{ sessionSetId: string; songTitle: string; ratingCount: number; averageRating: number | null }>>();
+  const ratingSummaryMap = new Map<string, Array<{
+    sessionSetId: string;
+    songTitle: string;
+    ratingCount: number;
+    averageRating: number | null;
+    comments: Array<{ id: string; rating: number; comment: string }>;
+  }>>();
   for (const sessionEventId of sessionEventIds) {
     ratingSummaryMap.set(
       sessionEventId,
-      ratingSummarySourceSets
-        .filter((sessionSet) => sessionSet.sessionEventId === sessionEventId)
-        .map((sessionSet) => ({
-          sessionSetId: sessionSet.id,
-          songTitle: sessionSet.title,
-          ratingCount: sessionSet.ratings.length,
-          averageRating: sessionSet.ratings.length === 0
-            ? null
-            : sessionSet.ratings.reduce((sum, rating) => sum + rating.rating, 0) / sessionSet.ratings.length,
-        })),
+      (() => {
+        const summarySourceSetMap = new Map(
+          ratingSummarySourceSets
+            .filter((sessionSet) => sessionSet.sessionEventId === sessionEventId)
+            .map((sessionSet) => [sessionSet.id, sessionSet]),
+        );
+        for (const rating of ratingRows.filter((item) => item.sessionEventId === sessionEventId)) {
+          if (!summarySourceSetMap.has(rating.sessionSetId)) {
+            summarySourceSetMap.set(rating.sessionSetId, {
+              id: rating.sessionSet.id,
+              sessionEventId: rating.sessionEventId,
+              title: rating.sessionSet.title,
+              setOrder: rating.sessionSet.setOrder,
+            });
+          }
+        }
+
+        return [...summarySourceSetMap.values()]
+          .sort((left, right) => {
+            const leftOrder = left.setOrder ?? Number.MAX_SAFE_INTEGER;
+            const rightOrder = right.setOrder ?? Number.MAX_SAFE_INTEGER;
+            if (leftOrder !== rightOrder) {
+              return leftOrder - rightOrder;
+            }
+            return left.title.localeCompare(right.title, 'ja-JP');
+          })
+          .map((sessionSet) => {
+            const ratings = ratingsBySessionSetId.get(sessionSet.id) ?? [];
+            return {
+              sessionSetId: sessionSet.id,
+              songTitle: sessionSet.title,
+              ratingCount: ratings.length,
+              averageRating: ratings.length === 0
+                ? null
+                : ratings.reduce((sum, rating) => sum + rating.rating, 0) / ratings.length,
+              comments: ratings
+                .map((rating) => ({
+                  id: rating.id,
+                  rating: rating.rating,
+                  comment: rating.comment?.trim() ?? '',
+                }))
+                .filter((rating) => rating.comment.length > 0),
+            };
+          });
+      })(),
     );
   }
 

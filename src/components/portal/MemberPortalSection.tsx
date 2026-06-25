@@ -25,6 +25,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { Section } from "./Section";
+import { RatingSummaryList } from "./RatingSummaryList";
 import { getEventEntryState } from "./utils";
 import {
   AGE_RANGE_OPTIONS,
@@ -2471,32 +2472,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     sessionEntries={event.sessionEntries}
                     notes={event.notes}
                   />
-                  {!event.ratingSummaries?.length ? (
-                    <p className="text-muted-foreground">
-                      レイティング結果はまだありません。
-                    </p>
-                  ) : (
-                    <ul className="space-y-2">
-                      {event.ratingSummaries.map((summary) => (
-                        <li
-                          key={summary.sessionSetId}
-                          className="rounded-lg border bg-background/70 p-3"
-                        >
-                          <div className="flex flex-wrap items-center justify-between gap-2">
-                            <span className="font-medium">
-                              {summary.songTitle}
-                            </span>
-                            <span className="text-muted-foreground">
-                              {summary.ratingCount} 件 / 平均{" "}
-                              {summary.averageRating
-                                ? summary.averageRating.toFixed(1)
-                                : "-"}
-                            </span>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                  <RatingSummaryList summaries={event.ratingSummaries ?? []} />
                 </div>
               </details>
             ))}

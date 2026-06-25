@@ -42,6 +42,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { cn, formatEventDateTime, formatEventSchedule, formatYen } from '@/lib/utils';
 import { Section } from './Section';
 import { downloadSessionSetPdf } from './sessionSetPdf';
+import { RatingSummaryList } from './RatingSummaryList';
 import { AGE_RANGE_OPTIONS, GENDER_OPTIONS, PREFECTURE_OPTIONS } from '@/lib/memberProfile';
 import { getSessionEventStatusLabel } from '@/lib/sessionEventStatus';
 import type {
@@ -1801,13 +1802,9 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                 <div className={cn('space-y-4')}>
                   <div id="admin-archives-summary" className="rounded-xl border p-4 scroll-mt-24">
                     <h3 className="font-medium">レイティング集計</h3>
-                    {ratingSummaries.length === 0 ? <p className="mt-3 text-sm text-muted-foreground">まだ評価集計はありません。</p> : (
-                      <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-                        {ratingSummaries.map((summary) => (
-                          <li key={summary.sessionSetId}>{summary.songTitle} / 件数 {summary.ratingCount} / 平均 {summary.averageRating?.toFixed(2) ?? '-'}</li>
-                        ))}
-                      </ul>
-                    )}
+                    <div className="mt-3">
+                      <RatingSummaryList summaries={ratingSummaries} emptyMessage="まだ評価集計はありません。" />
+                    </div>
                   </div>
                   <Alert>
                     <AlertTitle>アーカイブ preview</AlertTitle>

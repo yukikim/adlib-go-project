@@ -23,14 +23,57 @@ export async function GET(request: NextRequest) {
 
   const sessionSets = await prisma.sessionSet.findMany({
     where: { sessionEventId },
-    include: {
-      ratings: true,
+    select: {
+      id: true,
+      title: true,
+      setOrder: true,
     },
     orderBy: [{ setOrder: 'asc' }, { title: 'asc' }],
   });
+  const ratings = await prisma.sessionSetRating.findMany({
+    where: { sessionEventId },
+    select: {
+      id: true,
+      sessionSetId: true,
+      userAccountId: true,
+      rating: true,
+      comment: true,
+      sessionSet: {
+        select: {
+          id: true,
+          title: true,
+          setOrder: true,
+        },
+      },
+    },
+    orderBy: [{ ratedAt: 'desc' }],
+  });
+  const ratingsBySessionSetId = new Map<string, typeof ratings>();
+  for (const rating of ratings) {
+    const currentRatings = ratingsBySessionSetId.get(rating.sessionSetId) ?? [];
+    currentRatings.push(rating);
+    ratingsBySessionSetId.set(rating.sessionSetId, currentRatings);
+  }
+  const summarySourceSetMap = new Map(
+    sessionSets.map((sessionSet) => [sessionSet.id, sessionSet]),
+  );
+  for (const rating of ratings) {
+    if (!summarySourceSetMap.has(rating.sessionSetId)) {
+      summarySourceSetMap.set(rating.sessionSetId, rating.sessionSet);
+    }
+  }
+  const summarySourceSets = [...summarySourceSetMap.values()].sort((left, right) => {
+    const leftOrder = left.setOrder ?? Number.MAX_SAFE_INTEGER;
+    const rightOrder = right.setOrder ?? Number.MAX_SAFE_INTEGER;
+    if (leftOrder !== rightOrder) {
+      return leftOrder - rightOrder;
+    }
+    return left.title.localeCompare(right.title, 'ja-JP');
+  });
 
-  const summaries = sessionSets.map((sessionSet) => {
-    const values = sessionSet.ratings.map((rating) => rating.rating);
+  const summaries = summarySourceSets.map((sessionSet) => {
+    const sessionSetRatings = ratingsBySessionSetId.get(sessionSet.id) ?? [];
+    const values = sessionSetRatings.map((rating) => rating.rating);
     const ratingCount = values.length;
     return {
       sessionSetId: sessionSet.id,
@@ -40,7 +83,14 @@ export async function GET(request: NextRequest) {
       minRating: ratingCount === 0 ? null : Math.min(...values),
       maxRating: ratingCount === 0 ? null : Math.max(...values),
       distribution: distribution(values),
-      ratedMemberCount: new Set(sessionSet.ratings.map((rating) => rating.userAccountId)).size,
+      ratedMemberCount: new Set(sessionSetRatings.map((rating) => rating.userAccountId)).size,
+      comments: sessionSetRatings
+        .map((rating) => ({
+          id: rating.id,
+          rating: rating.rating,
+          comment: rating.comment?.trim() ?? '',
+        }))
+        .filter((rating) => rating.comment.length > 0),
     };
   });
 
