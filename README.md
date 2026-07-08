@@ -1,7 +1,5 @@
 # Jazz Session Planner
 
-![](https://komarev.com/ghpvc/?username=yukikim)
-
 Adlib-go KICK-OFF 向けの public site、member site、admin site をまとめた Next.js + Prisma + PostgreSQL アプリです。
 
 このリポジトリには以下が含まれます。
