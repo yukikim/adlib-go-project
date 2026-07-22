@@ -54,6 +54,11 @@ export async function createSessionArchive(params: {
 }) {
   const preview = await buildArchivePreview(params.sessionEventId);
 
+  // UIを経由しない直接API呼び出しでも、運用ルールと同じく終了イベントだけを保存対象にする。
+  if (preview.sessionEvent.status !== 'closed') {
+    throw new Error('Only closed session events can be archived');
+  }
+
   if (preview.setCount === 0) {
     throw new Error('No published session sets found for this event');
   }

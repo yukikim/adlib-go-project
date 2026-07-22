@@ -211,6 +211,7 @@ type AdminPortalSectionProps = {
   loading: boolean;
   sessionEvents: SessionEventView[];
   selectedAdminEventId: string;
+  selectedArchiveEventId: string;
   selectedAdminEvent: SessionEventView | null;
   eventTitle: string;
   eventVenue: string;
@@ -283,6 +284,7 @@ type AdminPortalSectionProps = {
   columnPublishAt: string;
   columnPublished: boolean;
   setSelectedAdminEventId: (value: string) => void;
+  setSelectedArchiveEventId: (value: string) => void;
   setEventTitle: (value: string) => void;
   setEventVenue: (value: string) => void;
   setEventDate: (value: string) => void;
@@ -364,6 +366,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     loading,
     sessionEvents,
     selectedAdminEventId,
+    selectedArchiveEventId,
     selectedAdminEvent,
     eventTitle,
     eventVenue,
@@ -436,6 +439,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     columnPublishAt,
     columnPublished,
     setSelectedAdminEventId,
+    setSelectedArchiveEventId,
     setEventTitle,
     setEventVenue,
     setEventDate,
@@ -499,7 +503,6 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     onSaveGeneratedSessionSets,
     onShowSavedSessionSetDraft,
     onRegenerateSavedSessionSetDraft,
-    onSignOut,
     onCreateArchive,
     onDeleteArchive,
     onUpdateMember,
@@ -588,6 +591,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     ].some((value) => value.toLowerCase().includes(query));
   });
   const generatableSessionEvents = sessionEvents.filter((sessionEvent) => sessionEvent.canGenerateSessionSets);
+  const closedSessionEvents = sessionEvents.filter((sessionEvent) => sessionEvent.status === 'closed');
   const savedDraftEventIdSet = new Set(savedSessionSetDrafts.map((draft) => draft.sessionEventId));
   const hasSavedDraftForSelectedEvent = selectedAdminEventId ? savedDraftEventIdSet.has(selectedAdminEventId) : false;
   const isSessionSetSaveDisabled = loading
@@ -1824,18 +1828,35 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                   </Alert>
                 </div>
 
-                <div id="admin-archives-create" className={cn('grid scroll-mt-24 gap-4 rounded-xl border p-4', !isChildVisible('admin-archives', 'admin-archives-create') && 'hidden')}>
+                <div id="admin-archives-create" className={cn('flex flex-col scroll-mt-24 gap-4 rounded-xl border p-4', !isChildVisible('admin-archives', 'admin-archives-create') && 'hidden')}>
                   <div className="space-y-1">
                     <h3 className="font-medium">アーカイブ作成</h3>
-                    <p className="text-sm text-muted-foreground">選択中のイベント状態をスナップショット保存します。</p>
+                    <p className="text-sm text-muted-foreground">終了したイベントの状態をスナップショット保存します。</p>
                   </div>
+                  <Field htmlFor="admin-archive-event" label="対象イベント">
+                    <Select value={selectedArchiveEventId} onValueChange={setSelectedArchiveEventId} disabled={closedSessionEvents.length === 0}>
+                      <SelectTrigger id="admin-archive-event" className="w-full">
+                        <SelectValue placeholder="終了したイベントを選択" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {closedSessionEvents.map((sessionEvent) => (
+                          <SelectItem key={sessionEvent.id} value={sessionEvent.id}>
+                            {sessionEvent.title} / {formatEventSchedule(sessionEvent.eventDate, sessionEvent.startTime, sessionEvent.endTime)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {closedSessionEvents.length === 0 ? (
+                      <p className="text-sm text-muted-foreground">ステータスが「終了」のイベントはありません。</p>
+                    ) : null}
+                  </Field>
                   <Field htmlFor="admin-archive-title" label="アーカイブ名">
                     <Input id="admin-archive-title" type="text" placeholder="アーカイブ名" value={archiveTitle} onChange={(event) => setArchiveTitle(event.target.value)} />
                   </Field>
                   <Field htmlFor="admin-archive-note" label="メモ">
                     <Textarea id="admin-archive-note" rows={3} placeholder="メモ" value={archiveNote} onChange={(event) => setArchiveNote(event.target.value)} />
                   </Field>
-                  <Button type="button" onClick={onCreateArchive} disabled={loading || !selectedAdminEventId} className="w-fit">
+                  <Button type="button" onClick={onCreateArchive} disabled={loading || !selectedArchiveEventId} className="w-fit">
                     アーカイブ作成
                   </Button>
                 </div>

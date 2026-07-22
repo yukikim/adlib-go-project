@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { sendMail } from '@/lib/mailer';
-import { getSessionEventStatusLabel, normalizeSessionEventStatus, type SessionEventStatus } from '@/lib/sessionEventStatus';
+import { getSessionEventStatusLabel, normalizeSessionEventStatus } from '@/lib/sessionEventStatus';
 
 type Recipient = {
   email: string;

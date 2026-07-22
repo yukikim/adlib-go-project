@@ -276,6 +276,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           loading={loading}
           sessionEvents={sessionEvents}
           selectedAdminEventId={admin.selectedAdminEventId}
+          selectedArchiveEventId={admin.selectedArchiveEventId}
           selectedAdminEvent={admin.selectedAdminEvent}
           eventTitle={admin.eventTitle}
           eventVenue={admin.eventVenue}
@@ -348,6 +349,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           columnPublishAt={admin.columnPublishAt}
           columnPublished={admin.columnPublished}
           setSelectedAdminEventId={admin.setSelectedAdminEventId}
+          setSelectedArchiveEventId={admin.setSelectedArchiveEventId}
           setEventTitle={admin.setEventTitle}
           setEventVenue={admin.setEventVenue}
           setEventDate={admin.setEventDate}

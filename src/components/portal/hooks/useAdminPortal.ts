@@ -56,6 +56,9 @@ function hasLocalTime(value?: string | null) {
 
 export function useAdminPortal({ currentUser, members, sessionEvents, runAction, reloadShared }: UseAdminPortalArgs) {
   const [selectedAdminEventId, setSelectedAdminEventId] = useState('');
+  // アーカイブ対象はイベント編集・sessionSet 編集の選択状態から独立させる。
+  // 管理者がアーカイブ欄で「終了」イベントを明示的に確認して選べるようにするための状態。
+  const [selectedArchiveEventId, setSelectedArchiveEventId] = useState('');
   const [eventTitle, setEventTitle] = useState('');
   const [eventVenue, setEventVenue] = useState('');
   const [eventDate, setEventDate] = useState('');
@@ -188,7 +191,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
           fetch(`/api/session-events/${event.id}/ratings-summary`),
         ),
       ),
-      targetAdminEventId ? fetch(`/api/session-events/${targetAdminEventId}/archive-preview`) : Promise.resolve(null),
+      selectedArchiveEventId ? fetch(`/api/session-events/${selectedArchiveEventId}/archive-preview`) : Promise.resolve(null),
       fetch('/api/session-set-drafts'),
     ]);
 
@@ -227,7 +230,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
       setArchivePreview(null);
     }
     setSavedSessionSetDrafts(draftJson.drafts ?? []);
-  }, [isAdmin, selectedAdminEventId, sessionEvents]);
+  }, [isAdmin, selectedAdminEventId, selectedArchiveEventId, sessionEvents]);
 
   useEffect(() => {
     if (!selectedAdminEventId && sessionEvents.length > 0) {
@@ -237,6 +240,15 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
       setSelectedManagedMemberId(members[0].id);
     }
   }, [members, selectedAdminEventId, selectedManagedMemberId, sessionEvents]);
+
+  useEffect(() => {
+    const closedSessionEvents = sessionEvents.filter((event) => event.status === 'closed');
+    const selectedEventIsClosed = closedSessionEvents.some((event) => event.id === selectedArchiveEventId);
+
+    if (!selectedEventIsClosed) {
+      setSelectedArchiveEventId(closedSessionEvents[0]?.id ?? '');
+    }
+  }, [selectedArchiveEventId, sessionEvents]);
 
   useEffect(() => {
     if (!selectedAdminEvent) {
@@ -496,11 +508,11 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
   };
 
   const handleCreateArchive = async () => runAction(async () => {
-    if (!selectedAdminEventId) throw new Error('イベントを選択してください');
+    if (!selectedArchiveEventId) throw new Error('終了したイベントを選択してください');
     const res = await fetch('/api/session-archives', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionEventId: selectedAdminEventId, title: archiveTitle, note: archiveNote }),
+      body: JSON.stringify({ sessionEventId: selectedArchiveEventId, title: archiveTitle, note: archiveNote }),
     });
     const json = await parseJson(res);
     if (!res.ok) throw new Error(json.error ?? 'アーカイブ作成に失敗しました');
@@ -645,6 +657,8 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
   return {
     selectedAdminEventId,
     setSelectedAdminEventId,
+    selectedArchiveEventId,
+    setSelectedArchiveEventId,
     selectedAdminEvent,
     eventTitle,
     setEventTitle,
