@@ -193,6 +193,7 @@ export type RatingSummaryView = {
   sessionSetId: string;
   songTitle: string;
   ratingCount: number;
+  totalRating: number;
   averageRating: number | null;
   comments?: {
     id: string;

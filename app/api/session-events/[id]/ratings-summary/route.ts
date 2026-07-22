@@ -75,11 +75,13 @@ export async function GET(request: NextRequest) {
     const sessionSetRatings = ratingsBySessionSetId.get(sessionSet.id) ?? [];
     const values = sessionSetRatings.map((rating) => rating.rating);
     const ratingCount = values.length;
+    const totalRating = values.reduce((sum, value) => sum + value, 0);
     return {
       sessionSetId: sessionSet.id,
       songTitle: sessionSet.title,
       ratingCount,
-      averageRating: ratingCount === 0 ? null : values.reduce((sum, value) => sum + value, 0) / ratingCount,
+      totalRating,
+      averageRating: ratingCount === 0 ? null : totalRating / ratingCount,
       minRating: ratingCount === 0 ? null : Math.min(...values),
       maxRating: ratingCount === 0 ? null : Math.max(...values),
       distribution: distribution(values),

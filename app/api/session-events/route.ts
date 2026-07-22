@@ -180,6 +180,7 @@ export async function GET(request: NextRequest) {
     sessionSetId: string;
     songTitle: string;
     ratingCount: number;
+    totalRating: number;
     averageRating: number | null;
     comments: Array<{ id: string; rating: number; comment: string }>;
   }>>();
@@ -214,13 +215,15 @@ export async function GET(request: NextRequest) {
           })
           .map((sessionSet) => {
             const ratings = ratingsBySessionSetId.get(sessionSet.id) ?? [];
+            const totalRating = ratings.reduce((sum, rating) => sum + rating.rating, 0);
             return {
               sessionSetId: sessionSet.id,
               songTitle: sessionSet.title,
               ratingCount: ratings.length,
+              totalRating,
               averageRating: ratings.length === 0
                 ? null
-                : ratings.reduce((sum, rating) => sum + rating.rating, 0) / ratings.length,
+                : totalRating / ratings.length,
               comments: ratings
                 .map((rating) => ({
                   id: rating.id,

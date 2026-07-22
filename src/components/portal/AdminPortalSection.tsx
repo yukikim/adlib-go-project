@@ -871,13 +871,21 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
 
   // console.log(generatedResult.forcedSessionSets)
   // console.log(sessionSets)
-  // console.log('selectedAdminEventId', selectedAdminEventId)
+  console.log('selectedAdminEventId', selectedAdminEventId)
   // console.log('isChildVisible', isChildVisible)
   // console.log('savedSessionSetDrafts', savedSessionSetDrafts)
   // console.log('sessionEvents', sessionEvents)
   // console.log('filteredMembers', filteredMembers)
   // console.log(memberSubInstrument("f86759b3-8eb8-45cb-be74-373f538d058c"))
-
+  // console.log(ratingSummaries)
+  const ratingEventIds = [...new Set(ratingSummaries.map((summary) => summary.sessionEventId))];
+  console.log('ratingEventIds', ratingEventIds)
+  // ratingEventIds.map((eventId) => {
+  //     console.log('eventId', eventId)
+  //     const summariesForEvent = ratingSummaries.filter((summary) => summary.sessionEventId === eventId);
+  //     console.log('title ', summariesForEvent[0]?.sessionEventTitle)
+  //     console.log(summariesForEvent)
+  // });
 
   return (
     <div id="admin-portal-section">

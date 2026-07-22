@@ -33,12 +33,14 @@ export async function GET(request: NextRequest) {
 
   const values = sessionSet.ratings.map((rating) => rating.rating);
   const ratingCount = values.length;
+  const totalRating = values.reduce((sum, value) => sum + value, 0);
 
   return NextResponse.json({
     summary: {
       sessionSetId,
       ratingCount,
-      averageRating: ratingCount === 0 ? null : values.reduce((sum, value) => sum + value, 0) / ratingCount,
+      totalRating,
+      averageRating: ratingCount === 0 ? null : totalRating / ratingCount,
       minRating: ratingCount === 0 ? null : Math.min(...values),
       maxRating: ratingCount === 0 ? null : Math.max(...values),
       distribution: distribution(values),
