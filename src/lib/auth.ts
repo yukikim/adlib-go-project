@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from 'crypto';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { canUseMemberFeatures } from '@/lib/memberAccess';
 
 type CookieValueReader = {
   get: (name: string) => { value?: string } | undefined;
@@ -152,7 +153,7 @@ export async function requireMemberUser(request: NextRequest) {
     return auth;
   }
 
-  if (auth.user.role !== 'member' || !auth.user.memberProfile) {
+  if (!canUseMemberFeatures(auth.user)) {
     return {
       response: NextResponse.json(
         { error: 'forbidden', message: 'member profile is required' },

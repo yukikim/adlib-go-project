@@ -11,7 +11,9 @@ export async function GET(request: NextRequest) {
     return auth.response;
   }
 
-  const where = auth.user.role === 'admin' ? undefined : { isPublished: true };
+  // 兼務管理者がメンバーマイページを見ている場合も、メンバー向けには公開済みだけを返す。
+  const isMemberAudience = request.nextUrl.searchParams.get('audience') === 'member';
+  const where = auth.user.role === 'admin' && !isMemberAudience ? undefined : { isPublished: true };
   const announcements = await prisma.announcement.findMany({
     where,
     include: {

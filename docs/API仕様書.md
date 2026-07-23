@@ -6,7 +6,8 @@
 
 前提:
 
-- 認証済みメンバーは member 権限を持つ
+- メンバー系 API は、有効な `MemberProfile` を持つ認証済みユーザーが利用できる
+- `role=admin` でも `MemberProfile` があればメンバー系 API を利用でき、管理者とメンバーを兼務できる
 - 管理系 API は admin 権限を持つユーザーのみ利用できる
 - レスポンスは JSON とする
 
@@ -280,7 +281,7 @@ response 404:
 
 権限:
 
-- member
+- MemberProfile保有ユーザー（member / admin）
 
 補足:
 
@@ -353,7 +354,7 @@ response 400 例:
 
 権限:
 
-- member
+- MemberProfile保有ユーザー（member / admin）
 
 query:
 
@@ -510,7 +511,7 @@ query:
 
 権限:
 
-- member
+- MemberProfile保有ユーザー（member / admin）
 
 ### 4.5.2 PATCH /api/members/me
 
@@ -582,7 +583,7 @@ response 400 例:
 
 権限:
 
-- member
+- MemberProfile保有ユーザー（member / admin）
 
 request:
 

@@ -108,7 +108,9 @@ Adlib-go KICK-OFF 向けの public site、member site、admin site をまとめ�
 
 - `/signin` と `/signup` はメンバー専用
 - 管理者サインインは `/admin/signin`
-- `/member` は member のみ、`/admin` は admin のみサーバーサイドで保護
+- `/member` は有効な `MemberProfile` を持つユーザー、`/admin` は `role=admin` のユーザーに限定してサーバーサイドで保護
+- `role=admin` かつ `MemberProfile` を持つユーザーは管理者とメンバーを兼務し、同じセッションで `/admin` と `/member` の両方を利用可能
+- 兼務管理者が `/member` を利用するとき、お知らせなどは通常メンバーと同じ公開範囲で表示
 - サインアップ時は表示名、メイン楽器、居住地域、性別、年代が必須
 - `/signup` では確認メールを送信し、リンクを開くまでサインインできない
 - vocal 以外はサブ楽器を任意登録できる
@@ -629,7 +631,23 @@ npm run seed:demo
 
 - `npm run seed:columns` は upsert なので再実行しても既存 slug を更新できます
 - demo column には予約公開サンプルが 1 件含まれます
+- `npm run seed:auth` は demo admin にも `MemberProfile` と `Participant` を作成し、管理者・メンバー兼務状態にします
 - `npm run seed:auth` は demo member のメールを `@adlib-go.local` に正規化します。旧 `@adolib-go.local` や同一プロフィール重複が残っている場合は停止するため、先に重複解消を行ってください
+
+既存のプロフィール未登録adminを兼務可能にする場合は、まずdry-runで内容を確認します。
+
+```bash
+npm run setup:admin-member-profile -- \
+  --email=admin@example.com \
+  --display-name="管理者 表示名" \
+  --main-instrument=front \
+  --sub-instrument="ギター" \
+  --gender="回答しない" \
+  --age-range="40代" \
+  --area="東京都"
+```
+
+問題がなければ、同じコマンドの末尾に `--apply` を追加します。この処理は `MemberProfile` と、sessionSet編成に利用する同一人物の `Participant` をトランザクション内で作成します。すでにプロフィールがあるadminは変更しません。
 
 ### Phase 1 実装済み機能
 
@@ -901,6 +919,7 @@ npm run fix:member-duplicates -- --apply
 
 - デモアカウントの passwordHash は seed 時にハッシュ化済みです
 - 管理 API の暫定確認には admin@adlib-go.local を使う想定です
+- demo admin は `role=admin` と `MemberProfile` を併せ持ち、管理ダッシュボードとメンバーマイページの両方を確認できます
 
 ### 画面導線
 
@@ -918,7 +937,7 @@ npm run fix:member-duplicates -- --apply
 
 補足:
 
-- /member と /admin は server-side で認証確認し、未認証時は /signin に redirect します
+- /member と /admin は server-side で認証確認します。/member は `MemberProfile`、/admin は `role=admin` を利用条件とします
 - コラムは Prisma の Column モデルで管理され、admin 画面から作成、更新、削除、公開切替ができます
 
 ### sessionSet 生成

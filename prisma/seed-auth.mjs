@@ -100,12 +100,14 @@ async function resolveSeedMemberUser(participant, index, memberPasswordHash) {
 
 async function main() {
   let adminCount = 0;
+  let adminMemberProfileCount = 0;
   let memberCount = 0;
   const adminPasswordHash = await hashPassword('demo-admin-password');
   const memberPasswordHash = await hashPassword('demo-member-password');
+  const seededAdmins = [];
 
   for (const adminUser of adminSeedUsers) {
-    await prisma.userAccount.upsert({
+    const user = await prisma.userAccount.upsert({
       where: { email: adminUser.email },
       update: {
         passwordHash: adminPasswordHash,
@@ -118,11 +120,43 @@ async function main() {
         role: 'admin',
         status: 'active',
       },
+      select: { id: true },
     });
+
+    await prisma.memberProfile.upsert({
+      where: { userAccountId: user.id },
+      update: {
+        displayName: adminUser.displayName,
+        mainInstrument: adminUser.mainInstrument,
+        subInstrument: adminUser.subInstrument ?? null,
+        gender: adminUser.gender ?? null,
+        ageRange: adminUser.ageRange ?? null,
+        area: adminUser.area ?? null,
+      },
+      create: {
+        userAccountId: user.id,
+        displayName: adminUser.displayName,
+        mainInstrument: adminUser.mainInstrument,
+        subInstrument: adminUser.subInstrument ?? null,
+        gender: adminUser.gender ?? null,
+        ageRange: adminUser.ageRange ?? null,
+        area: adminUser.area ?? null,
+        bio: `${adminUser.displayName} のデモプロフィールです。`,
+      },
+    });
+
+    seededAdmins.push(adminUser);
     adminCount += 1;
+    adminMemberProfileCount += 1;
   }
 
   const dbParticipants = await prisma.participant.findMany({
+    where: {
+      OR: participants.map((participant) => ({
+        name: participant.name,
+        instrument: participant.instrument,
+      })),
+    },
     orderBy: [{ instrument: 'asc' }, { name: 'asc' }],
     select: { id: true, name: true, instrument: true },
   });
@@ -162,7 +196,26 @@ async function main() {
     memberCount += 1;
   }
 
-  console.log(JSON.stringify({ adminCount, memberCount }, null, 2));
+  for (const adminUser of seededAdmins) {
+    const existingParticipant = await prisma.participant.findFirst({
+      where: {
+        name: adminUser.displayName,
+        instrument: adminUser.mainInstrument,
+      },
+      select: { id: true },
+    });
+
+    if (!existingParticipant) {
+      await prisma.participant.create({
+        data: {
+          name: adminUser.displayName,
+          instrument: adminUser.mainInstrument,
+        },
+      });
+    }
+  }
+
+  console.log(JSON.stringify({ adminCount, adminMemberProfileCount, memberCount }, null, 2));
 }
 
 main()

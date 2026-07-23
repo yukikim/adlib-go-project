@@ -62,9 +62,10 @@ async function sendBulkMail(params: {
 async function findActiveMemberRecipients() {
   const users = await prisma.userAccount.findMany({
     where: {
-      role: 'member',
       status: 'active',
       emailVerifiedAt: { not: null },
+      // role=admin でも MemberProfile があれば、メンバー向け通知の対象に含める。
+      memberProfile: { isNot: null },
     },
     select: {
       email: true,

@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 import { getAuthenticatedUserByToken, getSessionTokenFromCookieStore } from '@/lib/auth';
 import { HeaderSignOutButton } from './HeaderSignOutButton';
 import { AppHeaderNav } from './AppHeaderNav';
+import { canUseMemberFeatures } from '@/lib/memberAccess';
 
 export async function AppHeader() {
   const cookieStore = await cookies();
@@ -9,9 +10,9 @@ export async function AppHeader() {
   const currentUser = await getAuthenticatedUserByToken(token);
   const displayName = currentUser?.memberProfile?.displayName?.trim() || currentUser?.email || '表示名未設定';
   const isSignedIn = Boolean(currentUser);
-  const isMember = currentUser?.role === 'member';
+  const isMember = canUseMemberFeatures(currentUser);
   const isAdmin = currentUser?.role === 'admin';
-  const roleLabel = isAdmin ? '管理者' : isMember ? 'メンバー' : null;
+  const roleLabel = isAdmin && isMember ? '管理者・メンバー' : isAdmin ? '管理者' : isMember ? 'メンバー' : null;
   // console.log('currentUser in AppHeader:', currentUser);
 
   return (

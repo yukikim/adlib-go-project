@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
@@ -19,6 +19,7 @@ import {
   type SessionEventView,
 } from '@/components/portal/types';
 import { parseJson } from '@/components/portal/utils';
+import { canUseMemberFeatures } from '@/lib/memberAccess';
 // import MainHeader from '@/components/portal/MainHeader';
 
 export default function PortalWorkspace({ view }: { view: PortalView }) {
@@ -52,7 +53,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
     }
   };
 
-  const reloadShared = async () => {
+  const reloadShared = useCallback(async () => {
     setLoading(true);
     try {
       const meRes = await fetch('/api/auth/me');
@@ -68,7 +69,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
       }
 
       const [announcementRes, memberRes, eventRes] = await Promise.all([
-        fetch("/api/announcements"),
+        fetch(view === 'member' ? '/api/announcements?audience=member' : '/api/announcements'),
         fetch("/api/members"),
         fetch("/api/session-events"),
       ]);
@@ -90,7 +91,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [view]);
 
   const auth = useAuthPortal({
     runAction,
@@ -107,7 +108,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
   // console.log('admin', admin);
   // console.log('currentUser', currentUser);
 
-  const isMember = currentUser?.role === 'member';
+  const isMember = canUseMemberFeatures(currentUser);
   const isAdmin = currentUser?.role === 'admin';
 
   useEffect(() => {
@@ -116,7 +117,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
       setMessage('データ取得に失敗しました');
       setLoading(false);
     });
-  }, []);
+  }, [reloadShared]);
 
   return (
     <main className={view === "admin" ? "mx-0 min-w-lvw flex w-full flex-col mt-15" : "mx-auto flex max-w-6xl flex-col px-2 xl:px-6 py-8 md:px-8 mt-15"}>

@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { getAuthenticatedUserByToken, getSessionTokenFromCookieStore } from '@/lib/auth';
+import { canUseMemberFeatures } from '@/lib/memberAccess';
 
 type PageRole = 'member' | 'admin';
 
@@ -13,8 +14,12 @@ export async function requirePageUser(role?: PageRole, signInPath = '/signin') {
     redirect(signInPath);
   }
 
-  if (role && user.role !== role) {
-    redirect(user.role === 'admin' ? '/admin' : '/member');
+  if (role === 'member' && !canUseMemberFeatures(user)) {
+    redirect(user.role === 'admin' ? '/admin' : signInPath);
+  }
+
+  if (role === 'admin' && user.role !== 'admin') {
+    redirect('/member');
   }
 
   return user;

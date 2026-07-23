@@ -15,6 +15,7 @@ import type {
 } from '../types';
 import { getEventEntryState, parseJson, type RunPortalAction, type RunPortalActionOptions } from '../utils';
 import { isSessionEventFinished } from '@/lib/sessionEventStatus';
+import { canUseMemberFeatures } from '@/lib/memberAccess';
 
 type UseMemberPortalArgs = {
   currentUser: AuthUser | null;
@@ -68,7 +69,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
   const isVocalMember = currentUser?.memberProfile?.mainInstrument === 'vocal';
 
   const loadMemberData = useCallback(async () => {
-    if (currentUser?.role !== 'member') {
+    if (!canUseMemberFeatures(currentUser)) {
       setSessionEntries([]);
       setArchives([]);
       setMemberSessionSets([]);
@@ -79,7 +80,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     const [entryRes, setRes, archiveRes] = await Promise.all([
       fetch('/api/session-entries'),
       memberEventId ? fetch(`/api/session-sets?sessionEventId=${memberEventId}`) : Promise.resolve(null),
-      fetch('/api/session-archives'),
+      fetch('/api/session-archives?audience=member'),
     ]);
     const entryJson = await parseJson(entryRes);
     const archiveJson = await parseJson(archiveRes);
@@ -138,7 +139,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
       }, {}),
       ...current,
     }));
-  }, [currentUser?.role, memberEventId, sessionEvents]);
+  }, [currentUser, memberEventId, sessionEvents]);
 
   useEffect(() => {
     if (currentUser?.memberProfile) {

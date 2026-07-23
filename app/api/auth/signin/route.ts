@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { applySessionCookie, createSession } from '@/lib/auth';
 import { verifyPassword } from '@/lib/password';
 import { getZodErrorMessage, signInRequestSchema } from '@/lib/authSchemas';
+import { canUseMemberFeatures } from '@/lib/memberAccess';
 
 export async function POST(request: NextRequest) {
   const parsed = signInRequestSchema.safeParse(await request.json().catch(() => null));
@@ -26,8 +27,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'メールアドレスまたはパスワードが無効です。' }, { status: 401 });
   }
 
-  if (roleTarget === 'member' && user.role !== 'member') {
-    return NextResponse.json({ error: 'このサインイン画面はメンバー専用です。管理者は /admin/signin を利用してください。' }, { status: 403 });
+  if (roleTarget === 'member' && !canUseMemberFeatures(user)) {
+    return NextResponse.json({ error: 'メンバープロフィールが登録されていません。管理者は /admin/signin を利用してください。' }, { status: 403 });
   }
 
   if (roleTarget === 'admin' && user.role !== 'admin') {

@@ -61,6 +61,11 @@ export const adminSeedUsers = [
     email: 'admin@adlib-go.local',
     passwordHash: 'demo-admin-password',
     displayName: '運営 管理者',
+    mainInstrument: 'front',
+    subInstrument: 'ギター',
+    gender: '回答しない',
+    ageRange: '40代',
+    area: '東京都',
   },
 ];
 

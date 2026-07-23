@@ -24,7 +24,10 @@ async function main() {
   });
 
   const memberUsers = await prisma.userAccount.findMany({
-    where: { role: 'member', status: 'active' },
+    where: {
+      status: 'active',
+      memberProfile: { isNot: null },
+    },
     orderBy: { email: 'asc' },
     select: { id: true, email: true },
   });

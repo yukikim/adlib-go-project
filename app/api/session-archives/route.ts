@@ -29,9 +29,12 @@ export async function GET(request: NextRequest) {
     return auth.response;
   }
 
+  const isMemberAudience = request.nextUrl.searchParams.get('audience') === 'member';
+
   // メンバーには通常のアーカイブ一覧だけを公開し、削除済み履歴の参照は管理者に限定する。
   const includeDeleted =
     auth.user.role === 'admin'
+    && !isMemberAudience
     && request.nextUrl.searchParams.get('includeDeleted') === 'true';
 
   const archives = await prisma.sessionArchive.findMany({
@@ -104,7 +107,7 @@ export async function GET(request: NextRequest) {
     deletedAt: archive.deletedAt,
     createdAt: archive.createdAt,
     // 作成者アカウントは管理情報のため、メンバー向けレスポンスには含めない。
-    createdBy: auth.user.role === 'admin' ? archive.createdBy : undefined,
+    createdBy: auth.user.role === 'admin' && !isMemberAudience ? archive.createdBy : undefined,
   }));
 
   return NextResponse.json({ archives: data, includeDeleted });
