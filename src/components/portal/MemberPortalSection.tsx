@@ -2042,8 +2042,8 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
       </Section> */}
 
       <Section
-        title="自分の履歴 / 公開情報"
-        description="過去エントリー、公開中イベントのコメント、レイティングを確認できます。"
+        title="自分の履歴"
+        description="過去エントリーを確認できます。"
       >
         <h3 className="font-medium">エントリー履歴</h3>
         {sessionEntries.length === 0 ? (
