@@ -806,6 +806,7 @@ npm run seed:reset
 npm run seed:participants
 npm run seed:participants:members
 npm run seed:requests
+npm run seed:black-book-songs
 npm run seed:auth
 npm run seed:columns
 npm run seed:events
@@ -818,6 +819,26 @@ npm run seed:ratings-archives
 - `npm run seed:participants` は prisma/demo-data.mjs の参加者を Participant に投入します
 - `npm run seed:participants:members` は現在の MemberProfile の `displayName` と `mainInstrument` を Participant に投入します
 - どちらのコマンドも既存 Participant を削除せず、不足分だけを追加します
+
+黒本曲カタログを更新した場合:
+
+1. [prisma/black-book-song-catalog.mjs](prisma/black-book-song-catalog.mjs) の対象リストへ曲名を追加します
+2. リポジトリ直下で以下を実行します
+
+```bash
+npm run seed:black-book-songs
+```
+
+このコマンドは `.env` / `.env.local` の `DATABASE_URL` が指す DB の `Song` テーブルへ曲名を upsert します。
+未登録の曲は新規作成し、既存の曲は対象に応じて `isJazzStandardBible1` または `isJazzStandardBible2` を `true` に更新します。
+曲データの更新だけなので Prisma マイグレーションは不要です。
+
+反映結果はコマンド終了時に表示される `uniqueSongCount` と `upsertedCount` で確認できます。
+DB の内容を直接確認する場合は以下を実行します。
+
+```bash
+npm run prisma:studio
+```
 
 現在の DB 内容を seed スナップショットとして保存 / 復元:
 

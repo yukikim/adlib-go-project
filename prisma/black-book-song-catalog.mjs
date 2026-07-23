@@ -209,6 +209,7 @@ export const jazzStandardBible1Titles = [
     'VALSE HOT',
     'WALKIN',
     'WALTZ FOR DEBBY',
+    'WATERMELON MAN',
     'WAVE',
     'WAY YOU LOOK TONIGHT, The',
     'WE LL BE TOGETHER AGAIN',
