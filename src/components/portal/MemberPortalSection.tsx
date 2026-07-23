@@ -2249,17 +2249,9 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
               }
             />
           </Field>
-          <div className="flex flex-wrap gap-3 md:col-span-2">
+          <div className="flex flex-wrap gap-3 justify-end md:col-span-2">
             <Button type="submit" disabled={loading}>
               プロフィール保存
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onSignOut}
-              disabled={loading}
-            >
-              サインアウト
             </Button>
           </div>
         </form>
