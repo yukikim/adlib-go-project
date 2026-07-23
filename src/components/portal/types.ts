@@ -204,12 +204,44 @@ export type RatingSummaryView = {
 
 export type ArchiveView = {
   id: string;
+  sessionEventId: string;
   title: string;
   version: number;
   sessionEventTitle: string;
+  eventDate: string;
+  venue: string;
+  participantCount: number;
+  participants: {
+    id: string;
+    displayName: string;
+    mainInstrument?: Instrument | null;
+  }[];
   setCount: number;
   ratingCount: number;
+  sets: {
+    id: string;
+    songTitle: string;
+    setOrder?: number | null;
+    drumName?: string | null;
+    bassName?: string | null;
+    pianoName?: string | null;
+    frontSnapshot: string[];
+    vocalSnapshot: string[];
+    keyName?: string | null;
+    ratingSummary: {
+      ratingCount: number;
+      averageRating?: number | null;
+      minRating?: number | null;
+      maxRating?: number | null;
+      distribution: Record<string, number>;
+    } | null;
+  }[];
   deletedAt?: string | null;
+  createdAt: string;
+  createdBy: {
+    id: string;
+    email: string;
+  };
 };
 
 export type ActivityLogView = {

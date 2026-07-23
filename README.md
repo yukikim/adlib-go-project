@@ -1,3 +1,4 @@
+-- Active: 1782193642844@@127.0.0.1@5432
 # Jazz Session Planner
 
 Adlib-go KICK-OFF 向けの public site、member site、admin site をまとめた Next.js + Prisma + PostgreSQL アプリです。
@@ -1022,3 +1023,9 @@ node -e 'fetch("http://localhost:3000/api/session-sets/generate",{method:"POST"}
 - アーカイブとして保存する
 - アーカイブ名はイベント名と開催日を合わせる
 - 各アーカイブはダッシュボードでリスト表示(プルダウンで内容を表示)
+- アーカイブで保存する項目
+	- アーカイブ名称
+	- イベント開催日
+	- 参加者
+	- sessionSet
+	- レイティング結果

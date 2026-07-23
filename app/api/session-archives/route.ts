@@ -5,6 +5,22 @@ import { createSessionArchive } from '@/lib/sessionArchive';
 import { getZodErrorMessage } from '@/lib/authSchemas';
 import { sessionArchiveCreateRequestSchema } from '@/lib/apiSchemas';
 
+function stringArrayFromJson(value: unknown) {
+  return Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
+}
+
+function ratingDistributionFromJson(value: unknown) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return {};
+  }
+
+  return Object.fromEntries(
+    Object.entries(value).filter(
+      (entry): entry is [string, number] => typeof entry[1] === 'number',
+    ),
+  );
+}
+
 // GET /api/session-archives?includeDeleted=true
 export async function GET(request: NextRequest) {
   const { response } = await requireAdmin(request);
@@ -55,6 +71,26 @@ export async function GET(request: NextRequest) {
       id: participant.id,
       displayName: participant.displayName,
       mainInstrument: participant.mainInstrument,
+    })),
+    sets: archive.sets.map((set) => ({
+      id: set.id,
+      songTitle: set.songTitle,
+      setOrder: set.setOrder,
+      drumName: set.drumName,
+      bassName: set.bassName,
+      pianoName: set.pianoName,
+      frontSnapshot: stringArrayFromJson(set.frontSnapshot),
+      vocalSnapshot: stringArrayFromJson(set.vocalSnapshot),
+      keyName: set.keyName,
+      ratingSummary: set.ratingSummary
+        ? {
+            ratingCount: set.ratingSummary.ratingCount,
+            averageRating: set.ratingSummary.averageRating,
+            minRating: set.ratingSummary.minRating,
+            maxRating: set.ratingSummary.maxRating,
+            distribution: ratingDistributionFromJson(set.ratingSummary.distributionJson),
+          }
+        : null,
     })),
     setCount: archive.sets.length,
     ratingCount: archive.sets.reduce(

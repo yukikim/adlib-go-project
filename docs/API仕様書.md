@@ -664,6 +664,32 @@ response 200:
           "mainInstrument": "drum"
         }
       ],
+      "sets": [
+        {
+          "id": "archive-set-id",
+          "songTitle": "Autumn Leaves",
+          "setOrder": 1,
+          "drumName": "佐藤 匠",
+          "bassName": "鈴木 健",
+          "pianoName": "高橋 葵",
+          "frontSnapshot": ["田中 陽"],
+          "vocalSnapshot": ["伊藤 凛"],
+          "keyName": "Gm",
+          "ratingSummary": {
+            "ratingCount": 4,
+            "averageRating": 4.25,
+            "minRating": 3,
+            "maxRating": 5,
+            "distribution": {
+              "1": 0,
+              "2": 0,
+              "3": 1,
+              "4": 1,
+              "5": 2
+            }
+          }
+        }
+      ],
       "setCount": 12,
       "ratingCount": 48,
       "deletedAt": null,

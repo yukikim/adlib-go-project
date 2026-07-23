@@ -31,13 +31,20 @@ async function main() {
   const sessionSets = await prisma.sessionSet.findMany({
     where: { sessionEventId: event.id },
     include: {
+      drum: true,
+      bass: true,
+      piano: true,
       members: { include: { participant: true } },
     },
     orderBy: [{ setOrder: 'asc' }, { title: 'asc' }],
   });
-  const attendingProfiles = await prisma.memberProfile.findMany({
-    orderBy: { displayName: 'asc' },
-    select: { id: true, displayName: true, mainInstrument: true },
+  const attendingEntries = await prisma.sessionEntry.findMany({
+    where: {
+      sessionEventId: event.id,
+      attendanceStatus: 'attending',
+    },
+    include: { memberProfile: true },
+    orderBy: { memberProfile: { displayName: 'asc' } },
   });
 
   for (const [setIndex, sessionSet] of sessionSets.entries()) {
@@ -76,18 +83,18 @@ async function main() {
       title: archiveSeed.title,
       eventDate: event.eventDate,
       venue: event.venue,
-      participantCount: attendingProfiles.length,
+      participantCount: attendingEntries.length,
       note: archiveSeed.note,
       createdById: admin.id,
     },
   });
 
-  for (const profile of attendingProfiles) {
+  for (const entry of attendingEntries) {
     await prisma.sessionArchiveParticipant.create({
       data: {
         sessionArchiveId: archive.id,
-        displayName: profile.displayName,
-        mainInstrument: profile.mainInstrument,
+        displayName: entry.memberProfile.displayName,
+        mainInstrument: entry.memberProfile.mainInstrument,
       },
     });
   }
@@ -103,9 +110,9 @@ async function main() {
         sessionArchiveId: archive.id,
         songTitle: sessionSet.title,
         setOrder: sessionSet.setOrder,
-        drumName: null,
-        bassName: null,
-        pianoName: null,
+        drumName: sessionSet.drum?.name ?? null,
+        bassName: sessionSet.bass?.name ?? null,
+        pianoName: sessionSet.piano?.name ?? null,
         frontSnapshot: sessionSet.members
           .filter((member) => member.role === 'front')
           .map((member) => member.participant.name),
