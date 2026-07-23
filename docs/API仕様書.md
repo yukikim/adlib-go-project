@@ -670,12 +670,13 @@ response 200:
 
 用途:
 
-- 管理者がアーカイブ一覧を取得する
+- ログインユーザーが終了イベントのアーカイブ一覧を取得する
 
 権限:
 
-- admin
-- includeDeleted=true を付与すると削除済みを含めて返す
+- member / admin
+- admin が includeDeleted=true を付与すると削除済みを含めて返す
+- member が includeDeleted=true を付与しても削除済みは返さない
 
 response 200:
 
@@ -742,6 +743,7 @@ response 200:
 
 - 元イベント削除後もアーカイブは取得でき、その場合の `sessionEventId` は `null`
 - `title`、開催日、会場、参加者、sessionSet、評価集計はアーカイブ自身のスナップショットから返す
+- member のレスポンスには管理情報である `createdBy` を含めない
 
 ### 6.2 GET /api/session-events/:id/archive-preview
 

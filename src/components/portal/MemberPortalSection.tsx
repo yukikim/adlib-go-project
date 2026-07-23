@@ -24,23 +24,21 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { ArchiveList } from "./ArchiveList";
 import { Section } from "./Section";
-import { RatingSummaryList } from "./RatingSummaryList";
 import { getEventEntryState } from "./utils";
 import {
   AGE_RANGE_OPTIONS,
   GENDER_OPTIONS,
   PREFECTURE_OPTIONS,
 } from "@/lib/memberProfile";
-import {
-  getSessionEventStatusLabel,
-  isSessionEventFinished,
-} from "@/lib/sessionEventStatus";
+import { getSessionEventStatusLabel } from "@/lib/sessionEventStatus";
 import { formatRoundCandidateSong } from "@/lib/sessionEventWindow";
 import { formatEventDate, formatEventSchedule, formatYen } from "@/lib/utils";
 import { ChevronDown, FileDown, Star } from "lucide-react";
 import type {
   AnnouncementView,
+  ArchiveView,
   AttendanceStatus,
   AuthUser,
   Instrument,
@@ -316,6 +314,7 @@ type MemberPortalSectionProps = {
   selectedMemberId: string;
   selectedMemberDetail: MemberDetailView | null;
   selectedMemberRatings: MemberRatingHistoryView[];
+  archives: ArchiveView[];
   sessionEvents: SessionEventView[];
   sessionEntries: SessionEntryView[];
   memberSessionSets: SessionSetView[];
@@ -401,9 +400,9 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     selectedMemberDetail,
     selectedMemberId,
     selectedMemberRatings,
+    archives,
     sessionEvents,
     sessionEntries,
-    memberSessionSets,
     publishedSessionSets,
     memberEventId,
     memberAttendanceStatus,
@@ -421,7 +420,6 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     round1SongOptions,
     memberRatings,
     memberRatingComments,
-    memberEventComment,
     entryState,
     setSelectedMemberId,
     setMemberEventId,
@@ -439,7 +437,6 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     setMemberRound1Key4,
     setMemberRatings,
     setMemberRatingComments,
-    setMemberEventComment,
     onProfileDisplayNameChange,
     onProfileMainInstrumentChange,
     onProfileNicknameChange,
@@ -465,9 +462,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     onProfileUpdate,
     onSignOut,
     onSubmitEntry,
-    onSaveRating,
     onSaveEventRatings,
-    onSaveEventComment,
   } = props;
   const [isRound1EntryDialogOpen, setIsRound1EntryDialogOpen] = useState(false);
 
@@ -480,16 +475,6 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     onProfileUpdate();
   };
 
-  const selectedMemberEvent =
-    sessionEvents.find((event) => event.id === memberEventId) ?? null;
-  const visibleSessionEvents = sessionEvents.filter(
-    (event) => event.isVisibleToMembers,
-  );
-  const closedEvents = visibleSessionEvents.filter((event) =>
-    isSessionEventFinished(event.status),
-  );
-  const canPostEventComment = selectedMemberEvent?.status === "published";
-  const canRateSelectedEvent = selectedMemberEvent?.status === "rating";
   const isVocalMember = currentUser?.memberProfile?.mainInstrument === "vocal";
 
   const announcedEvents = sessionEvents.filter(
@@ -507,17 +492,12 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
   const ratingEvents = sessionEvents.filter(
     (event) => event.status === "rating",
   );
-  const completedEvents = sessionEvents.filter(
-    (event) => event.status === "closed",
-  );
 
   // console.log('announcedEvents:', announcedEvents);
   // console.log("sessionEvent:", sessionEvents);
   // console.log('round2RecruitingEvents:', round2RecruitingEvents);
   // console.log('publishedEvents:', publishedEvents);
   // console.log('ratingEvents:', ratingEvents);
-  // console.log('completedEvents:', completedEvents);
-  // console.log('selectedMemberEvent:', selectedMemberEvent);
   // console.log('round2CandidateSongs:', round2CandidateSongs);
   const selectedRound1Event =
     round1RecruitingEvents.find((event) => event.id === memberEventId) ?? null;
@@ -1910,58 +1890,13 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
           <CardTitle className="text-sm font-semibold text-neutral-600 bg-neutral-50 px-4 py-1">
             終了イベント
           </CardTitle>
-          <CardDescription
-            className={completedEvents.length === 0 ? "hidden" : ""}
-          >
-            既に終了したイベントです。
+          <CardDescription className={archives.length === 0 ? "hidden" : ""}>
+            終了イベントのアーカイブです。項目を開くと参加者、sessionSet、レイティング結果を確認できます。
           </CardDescription>
-          {completedEvents.length === 0 ? (
-            <p className="text-sm text-gray-50 bg-gray-400 p-2">
-              表示できる終了イベントはありません。
-            </p>
-          ) : (
-            <ul className="space-y-3">
-              {completedEvents.map((event) => (
-                <li
-                  key={event.id}
-                  className="rounded-xl border bg-background/20 p-4"
-                >
-                  <div className="flex flex-wrap items-center gap-2">
-                    <strong className="text-sm text-neutral-600">
-                      {event.title}
-                    </strong>
-                    <Badge variant="outline">
-                      {getSessionEventStatusLabel(event.status)}
-                    </Badge>
-                  </div>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    {formatEventSchedule(
-                      event.eventDate,
-                      event.startTime,
-                      event.endTime,
-                    )}{" "}
-                    / {event.venue}
-                  </p>
-                  <EventMeta
-                    participantLimit={event.participantLimit}
-                    attendingEntryCount={event.attendingEntryCount}
-                    remainingEntryCapacity={event.remainingEntryCapacity}
-                    isEntryCapacityFull={event.isEntryCapacityFull}
-                    participationFee={event.participationFee}
-                    hasAfterParty={event.hasAfterParty}
-                    afterPartyFee={event.afterPartyFee}
-                    sessionEntries={event.sessionEntries}
-                    notes={event.notes}
-                  />
-                  {event.entryReason ? (
-                    <p className="mt-2 text-sm text-muted-foreground">
-                      {event.entryReason}
-                    </p>
-                  ) : null}
-                </li>
-              ))}
-            </ul>
-          )}
+          <ArchiveList
+            archives={archives}
+            emptyMessage="表示できる終了イベントのアーカイブはありません。"
+          />
         </Card>
       </Card>
 
@@ -2108,7 +2043,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
 
       <Section
         title="自分の履歴 / 公開情報"
-        description="過去エントリー、公開中イベントのコメント、レイティング、終了イベントの結果を確認できます。"
+        description="過去エントリー、公開中イベントのコメント、レイティングを確認できます。"
       >
         <h3 className="font-medium">エントリー履歴</h3>
         {sessionEntries.length === 0 ? (
@@ -2177,50 +2112,6 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
               );
             })}
           </ul>
-        )}
-        <Separator className="my-4" />
-        <h3 className="font-medium">終了イベント</h3>
-        {closedEvents.length === 0 ? (
-          <p className="mt-3 text-sm text-muted-foreground">
-            終了イベントはまだありません。
-          </p>
-        ) : (
-          <div className="mt-3 space-y-3">
-            {closedEvents.map((event) => (
-              <details
-                key={event.id}
-                className="rounded-xl border bg-background/60 p-4"
-              >
-                <summary className="cursor-pointer list-none">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <strong>{event.title}</strong>
-                    <Badge variant="outline">
-                      {formatEventSchedule(
-                        event.eventDate,
-                        event.startTime,
-                        event.endTime,
-                      )}
-                    </Badge>
-                  </div>
-                </summary>
-                <div className="mt-4 space-y-3 text-sm">
-                  <p className="text-muted-foreground">{event.venue}</p>
-                  <EventMeta
-                    participantLimit={event.participantLimit}
-                    attendingEntryCount={event.attendingEntryCount}
-                    remainingEntryCapacity={event.remainingEntryCapacity}
-                    isEntryCapacityFull={event.isEntryCapacityFull}
-                    participationFee={event.participationFee}
-                    hasAfterParty={event.hasAfterParty}
-                    afterPartyFee={event.afterPartyFee}
-                    sessionEntries={event.sessionEntries}
-                    notes={event.notes}
-                  />
-                  <RatingSummaryList summaries={event.ratingSummaries ?? []} />
-                </div>
-              </details>
-            ))}
-          </div>
         )}
       </Section>
       <Section

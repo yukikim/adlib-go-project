@@ -201,6 +201,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           selectedMemberId={member.selectedMemberId}
           selectedMemberDetail={member.selectedMemberDetail}
           selectedMemberRatings={member.selectedMemberRatings}
+          archives={member.archives}
           sessionEvents={sessionEvents}
           sessionEntries={member.sessionEntries}
           memberSessionSets={member.memberSessionSets}

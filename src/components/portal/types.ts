@@ -238,7 +238,7 @@ export type ArchiveView = {
   }[];
   deletedAt?: string | null;
   createdAt: string;
-  createdBy: {
+  createdBy?: {
     id: string;
     email: string;
   };

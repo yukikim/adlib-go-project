@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { AGE_RANGE_OPTIONS, GENDER_OPTIONS, PREFECTURE_OPTIONS } from '@/lib/memberProfile';
 import { formatRoundCandidateSong } from '@/lib/sessionEventWindow';
 import type {
+  ArchiveView,
   AttendanceStatus,
   AuthUser,
   Instrument,
@@ -39,6 +40,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
   const [selectedMemberDetail, setSelectedMemberDetail] = useState<MemberDetailView | null>(null);
   const [selectedMemberRatings, setSelectedMemberRatings] = useState<MemberRatingHistoryView[]>([]);
   const [sessionEntries, setSessionEntries] = useState<SessionEntryView[]>([]);
+  const [archives, setArchives] = useState<ArchiveView[]>([]);
   const [memberSessionSets, setMemberSessionSets] = useState<SessionSetView[]>([]);
   const [publishedSessionSets, setPublishedSessionSets] = useState<SessionSetView[]>([]);
   const [memberEventId, setMemberEventId] = useState('');
@@ -68,18 +70,25 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
   const loadMemberData = useCallback(async () => {
     if (currentUser?.role !== 'member') {
       setSessionEntries([]);
+      setArchives([]);
       setMemberSessionSets([]);
       setPublishedSessionSets([]);
       return;
     }
 
-    const [entryRes, setRes] = await Promise.all([
+    const [entryRes, setRes, archiveRes] = await Promise.all([
       fetch('/api/session-entries'),
       memberEventId ? fetch(`/api/session-sets?sessionEventId=${memberEventId}`) : Promise.resolve(null),
+      fetch('/api/session-archives'),
     ]);
     const entryJson = await parseJson(entryRes);
+    const archiveJson = await parseJson(archiveRes);
+    if (!archiveRes.ok) {
+      throw new Error(archiveJson.error ?? 'アーカイブの取得に失敗しました');
+    }
     const entries = (entryJson.entries ?? []) as SessionEntryView[];
     setSessionEntries(entries);
+    setArchives((archiveJson.archives ?? []) as ArchiveView[]);
     if (setRes) {
       const setJson = await parseJson(setRes);
       setMemberSessionSets((setJson.sessionSets ?? []).filter((item: SessionSetView) => item.isPublished));
@@ -478,6 +487,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     selectedMemberDetail,
     selectedMemberRatings,
     sessionEntries,
+    archives,
     memberSessionSets,
     publishedSessionSets,
     memberEventId,

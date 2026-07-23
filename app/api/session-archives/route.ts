@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/adminApi';
+import { requireAuthenticatedUser } from '@/lib/auth';
 import { createSessionArchive } from '@/lib/sessionArchive';
 import { getZodErrorMessage } from '@/lib/authSchemas';
 import { sessionArchiveCreateRequestSchema } from '@/lib/apiSchemas';
@@ -23,12 +24,15 @@ function ratingDistributionFromJson(value: unknown) {
 
 // GET /api/session-archives?includeDeleted=true
 export async function GET(request: NextRequest) {
-  const { response } = await requireAdmin(request);
-  if (response) {
-    return response;
+  const auth = await requireAuthenticatedUser(request);
+  if ('response' in auth) {
+    return auth.response;
   }
 
-  const includeDeleted = request.nextUrl.searchParams.get('includeDeleted') === 'true';
+  // メンバーには通常のアーカイブ一覧だけを公開し、削除済み履歴の参照は管理者に限定する。
+  const includeDeleted =
+    auth.user.role === 'admin'
+    && request.nextUrl.searchParams.get('includeDeleted') === 'true';
 
   const archives = await prisma.sessionArchive.findMany({
     where: includeDeleted ? undefined : { deletedAt: null },
@@ -99,7 +103,8 @@ export async function GET(request: NextRequest) {
     ),
     deletedAt: archive.deletedAt,
     createdAt: archive.createdAt,
-    createdBy: archive.createdBy,
+    // 作成者アカウントは管理情報のため、メンバー向けレスポンスには含めない。
+    createdBy: auth.user.role === 'admin' ? archive.createdBy : undefined,
   }));
 
   return NextResponse.json({ archives: data, includeDeleted });
