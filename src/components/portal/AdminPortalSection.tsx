@@ -1934,7 +1934,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
             </Section>
 
             <Section sectionId="admin-members" title="メンバー / 管理者管理" description="プロフィール、権限、状態をこの画面で更新できます。" className={cn(!isGroupVisible('admin-members') && 'hidden')}>
-              <div className={cn('grid gap-4 xl:grid-cols-[320px_1fr]', activeGroupId === 'admin-members' && activeChildId && 'xl:grid-cols-1')}>
+              <div className="flex w-full flex-col gap-4 xl:flex-row xl:[&>div]:min-w-0 xl:[&>div]:basis-0 xl:[&>div]:flex-1">
                 <div id="admin-members-invitation" className={cn('rounded-xl border p-4 scroll-mt-24', !isChildVisible('admin-members', 'admin-members-invitation') && 'hidden')}>
                   <h3 className="font-medium">新規メンバー仮登録</h3>
                   <p className="mt-1 text-sm text-muted-foreground">紹介を受けた方のメールアドレスへ、1か月間有効な登録リンクを送信します。</p>
