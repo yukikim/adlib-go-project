@@ -236,6 +236,40 @@ request 例:
 - `draft` → `recruiting_round1` → `recruiting_round2` → `generating` / `published` / `closed` の順で使う
 - SessionEntry 受付可否は `status` と round ごとの期間で判定する
 
+### 3.3 DELETE /api/session-events/:id
+
+用途:
+
+- 管理者が SessionEvent と通常の関連データを削除する
+
+権限:
+
+- admin
+
+動作:
+
+- SessionEntry、希望曲、sessionSet、評価、コメント、保存済み sessionSet 下書きを削除する
+- 作成済み SessionArchive はイベントとの参照を切り離して保持する
+- 削除後のイベントと通常の関連データは、メンバーページの「自分の履歴」を含む一覧に表示しない
+
+response 200:
+
+```json
+{
+  "deleted": true,
+  "eventId": "event-id",
+  "retainedArchiveCount": 1
+}
+```
+
+response 404:
+
+```json
+{
+  "error": "SessionEvent not found"
+}
+```
+
 ## 4. セッション参加 API
 
 ### 4.1 POST /api/session-entries
@@ -703,6 +737,11 @@ response 200:
   "includeDeleted": false
 }
 ```
+
+補足:
+
+- 元イベント削除後もアーカイブは取得でき、その場合の `sessionEventId` は `null`
+- `title`、開催日、会場、参加者、sessionSet、評価集計はアーカイブ自身のスナップショットから返す
 
 ### 6.2 GET /api/session-events/:id/archive-preview
 

@@ -242,13 +242,18 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
   }, [members, selectedAdminEventId, selectedManagedMemberId, sessionEvents]);
 
   useEffect(() => {
-    const closedSessionEvents = sessionEvents.filter((event) => event.status === 'closed');
-    const selectedEventIsClosed = closedSessionEvents.some((event) => event.id === selectedArchiveEventId);
+    const archivedSessionEventIds = new Set(archives.map((archive) => archive.sessionEventId));
+    const archivableSessionEvents = sessionEvents.filter(
+      (event) => event.status === 'closed' && !archivedSessionEventIds.has(event.id),
+    );
+    const selectedEventIsArchivable = archivableSessionEvents.some(
+      (event) => event.id === selectedArchiveEventId,
+    );
 
-    if (!selectedEventIsClosed) {
-      setSelectedArchiveEventId(closedSessionEvents[0]?.id ?? '');
+    if (!selectedEventIsArchivable) {
+      setSelectedArchiveEventId(archivableSessionEvents[0]?.id ?? '');
     }
-  }, [selectedArchiveEventId, sessionEvents]);
+  }, [archives, selectedArchiveEventId, sessionEvents]);
 
   useEffect(() => {
     if (!selectedAdminEvent) {
@@ -386,6 +391,16 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     await reloadShared();
     await loadAdminData();
   }, 'イベントを更新しました');
+
+  const handleDeleteEvent = async (eventId: string) => runAction(async () => {
+    const res = await fetch(`/api/session-events/${eventId}`, { method: 'DELETE' });
+    const json = await parseJson(res);
+    if (!res.ok) throw new Error(json.error ?? 'イベント削除に失敗しました');
+
+    setSelectedAdminEventId((current) => current === eventId ? '' : current);
+    setSelectedArchiveEventId((current) => current === eventId ? '' : current);
+    await reloadShared();
+  }, 'イベントを削除しました');
 
   const handleGenerateSets = async (eventId?: string) => runAction(async () => {
     const targetEventId = eventId ?? selectedAdminEventId;
@@ -784,6 +799,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     setColumnPublished,
     handleCreateEvent,
     handleUpdateEvent,
+    handleDeleteEvent,
     handleGenerateSets,
     handlePublishSets,
     handleUpdateSessionSet,

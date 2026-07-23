@@ -340,6 +340,7 @@ type AdminPortalSectionProps = {
   setColumnPublished: (value: boolean) => void;
   onCreateEvent: () => void;
   onUpdateEvent: () => void;
+  onDeleteEvent: (eventId: string) => void;
   onGenerateSets: (eventId?: string) => void;
   onPublishSets: () => void;
   onUpdateSessionSet: (sessionSet: SessionSetView) => void;
@@ -495,6 +496,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     setColumnPublished,
     onCreateEvent,
     onUpdateEvent,
+    onDeleteEvent,
     onGenerateSets,
     onPublishSets,
     onUpdateSessionSet,
@@ -591,7 +593,13 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     ].some((value) => value.toLowerCase().includes(query));
   });
   const generatableSessionEvents = sessionEvents.filter((sessionEvent) => sessionEvent.canGenerateSessionSets);
-  const closedSessionEvents = sessionEvents.filter((sessionEvent) => sessionEvent.status === 'closed');
+  const archivedSessionEventIds = new Set(archives.map((archive) => archive.sessionEventId));
+  const archivableSessionEvents = sessionEvents.filter(
+    (sessionEvent) => sessionEvent.status === 'closed' && !archivedSessionEventIds.has(sessionEvent.id),
+  );
+  const selectedArchiveEventIsArchivable = archivableSessionEvents.some(
+    (sessionEvent) => sessionEvent.id === selectedArchiveEventId,
+  );
   const savedDraftEventIdSet = new Set(savedSessionSetDrafts.map((draft) => draft.sessionEventId));
   const hasSavedDraftForSelectedEvent = selectedAdminEventId ? savedDraftEventIdSet.has(selectedAdminEventId) : false;
   const isSessionSetSaveDisabled = loading
@@ -875,15 +883,15 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
 
   // console.log(generatedResult.forcedSessionSets)
   // console.log(sessionSets)
-  console.log('selectedAdminEventId', selectedAdminEventId)
+  // console.log('selectedAdminEventId', selectedAdminEventId)
   // console.log('isChildVisible', isChildVisible)
   // console.log('savedSessionSetDrafts', savedSessionSetDrafts)
   // console.log('sessionEvents', sessionEvents)
   // console.log('filteredMembers', filteredMembers)
   // console.log(memberSubInstrument("f86759b3-8eb8-45cb-be74-373f538d058c"))
   // console.log(ratingSummaries)
-  const ratingEventIds = [...new Set(ratingSummaries.map((summary) => summary.sessionEventId))];
-  console.log('ratingEventIds', ratingEventIds)
+  // const ratingEventIds = [...new Set(ratingSummaries.map((summary) => summary.sessionEventId))];
+  // console.log('ratingEventIds', ratingEventIds)
   // ratingEventIds.map((eventId) => {
   //     console.log('eventId', eventId)
   //     const summariesForEvent = ratingSummaries.filter((summary) => summary.sessionEventId === eventId);
@@ -1255,6 +1263,36 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                                 </DialogFooter>
                               </DialogContent>
                             </form>
+                          </Dialog>
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button type="button" variant="destructive" disabled={loading}>
+                                イベント削除
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-lg bg-neutral-200">
+                              <DialogHeader>
+                                <DialogTitle>イベントを削除しますか</DialogTitle>
+                                <DialogDescription>
+                                  「{sessionEvent.title}」を削除すると、参加履歴・リクエスト・sessionSet・評価・コメントは表示されなくなります。作成済みのアーカイブだけは残ります。
+                                </DialogDescription>
+                              </DialogHeader>
+                              <DialogFooter>
+                                <DialogClose asChild>
+                                  <Button type="button" variant="outline">キャンセル</Button>
+                                </DialogClose>
+                                <DialogClose asChild>
+                                  <Button
+                                    type="button"
+                                    variant="destructive"
+                                    onClick={() => onDeleteEvent(sessionEvent.id)}
+                                    disabled={loading}
+                                  >
+                                    削除する
+                                  </Button>
+                                </DialogClose>
+                              </DialogFooter>
+                            </DialogContent>
                           </Dialog>
                         </div>
                         {isOpen ? (
@@ -1834,29 +1872,33 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                     <p className="text-sm text-muted-foreground">終了したイベントの状態をスナップショット保存します。</p>
                   </div>
                   <Field htmlFor="admin-archive-event" label="対象イベント">
-                    <Select value={selectedArchiveEventId} onValueChange={setSelectedArchiveEventId} disabled={closedSessionEvents.length === 0}>
+                    <Select
+                      value={selectedArchiveEventIsArchivable ? selectedArchiveEventId : ''}
+                      onValueChange={setSelectedArchiveEventId}
+                      disabled={archivableSessionEvents.length === 0}
+                    >
                       <SelectTrigger id="admin-archive-event" className="w-full">
-                        <SelectValue placeholder="終了したイベントを選択" />
+                        <SelectValue placeholder={archivableSessionEvents.length === 0 ? '対象イベントはありません' : '終了したイベントを選択'} />
                       </SelectTrigger>
                       <SelectContent>
-                        {closedSessionEvents.map((sessionEvent) => (
+                        {archivableSessionEvents.map((sessionEvent) => (
                           <SelectItem key={sessionEvent.id} value={sessionEvent.id}>
                             {sessionEvent.title} / {formatEventSchedule(sessionEvent.eventDate, sessionEvent.startTime, sessionEvent.endTime)}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
-                    {closedSessionEvents.length === 0 ? (
-                      <p className="text-sm text-muted-foreground">ステータスが「終了」のイベントはありません。</p>
+                    {archivableSessionEvents.length === 0 ? (
+                      <p className="text-sm text-muted-foreground">対象イベントはありません。</p>
                     ) : null}
                   </Field>
                   <Field htmlFor="admin-archive-title" label="アーカイブ名">
-                    <Input id="admin-archive-title" type="text" placeholder="アーカイブ名" value={archiveTitle} onChange={(event) => setArchiveTitle(event.target.value)} />
+                    <Input id="admin-archive-title" type="text" placeholder="空の場合は上記がアーカイブ名になります" value={archiveTitle} onChange={(event) => setArchiveTitle(event.target.value)} />
                   </Field>
                   <Field htmlFor="admin-archive-note" label="メモ">
                     <Textarea id="admin-archive-note" rows={3} placeholder="メモ" value={archiveNote} onChange={(event) => setArchiveNote(event.target.value)} />
                   </Field>
-                  <Button type="button" onClick={onCreateArchive} disabled={loading || !selectedArchiveEventId} className="w-fit">
+                  <Button type="button" onClick={onCreateArchive} disabled={loading || !selectedArchiveEventIsArchivable} className="w-fit">
                     アーカイブ作成
                   </Button>
                 </div>

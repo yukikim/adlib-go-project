@@ -636,7 +636,7 @@ npm run seed:demo
 - Cookie セッションによるサインイン / サインアップ / サインアウト
 - nodemailer ベースのパスワード再設定メール送信基盤
 - メンバーのプロフィール自己編集とパスワード変更
-- 管理者向け SessionEvent 作成 / 更新 / ステータス切替 API / 画面
+- 管理者向け SessionEvent 作成 / 更新 / ステータス切替 / 削除 API / 画面
 - メンバー向け SessionEntry 登録 API / 画面
 - Round 1 / Round 2 の募集期間に応じた入力制御
 - SessionEntry ベースの sessionSet 生成
@@ -667,6 +667,7 @@ npm run seed:demo
 - `published` への切替は `POST /api/session-events/:id/publish` で行い、公開対象の参加メンバーへメール送信します
 - `published` 中のみ `POST /api/session-events/:id/comments` でイベントコメントを受け付け、投稿時に管理者へ通知します
 - `rating` 中のみ `POST /api/session-sets/:id/ratings` を受け付けます
+- イベント削除時は参加履歴・希望曲・sessionSet・評価・コメント・下書きを削除し、作成済みアーカイブだけを独立したスナップショットとして残します
 
 ### Phase 1 API 確認例
 
@@ -701,6 +702,13 @@ curl -sS -X PATCH http://localhost:3000/api/session-events/event-id \
 	-H "Content-Type: application/json" \
 	-b cookies.txt -c cookies.txt \
 	-d '{"status":"announced"}'
+```
+
+SessionEvent 削除:
+
+```bash
+curl -sS -X DELETE http://localhost:3000/api/session-events/event-id \
+	-b cookies.txt -c cookies.txt
 ```
 
 SessionEntry 登録:

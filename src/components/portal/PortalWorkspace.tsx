@@ -405,6 +405,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           setColumnPublished={admin.setColumnPublished}
           onCreateEvent={admin.handleCreateEvent}
           onUpdateEvent={admin.handleUpdateEvent}
+          onDeleteEvent={admin.handleDeleteEvent}
           onGenerateSets={admin.handleGenerateSets}
           onPublishSets={admin.handlePublishSets}
           onUpdateSessionSet={admin.handleUpdateSessionSet}

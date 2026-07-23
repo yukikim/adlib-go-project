@@ -115,3 +115,39 @@ export async function PATCH(request: NextRequest) {
 
   return NextResponse.json({ sessionEvent, mailSummary, archiveSummary });
 }
+
+export async function DELETE(request: NextRequest) {
+  const { response } = await requireAdmin(request);
+  if (response) {
+    return response;
+  }
+
+  const eventId = request.nextUrl.pathname.split('/').pop();
+  if (!eventId) {
+    return NextResponse.json({ error: 'event id is required' }, { status: 400 });
+  }
+
+  const sessionEvent = await prisma.sessionEvent.findUnique({
+    where: { id: eventId },
+    select: {
+      id: true,
+      sessionArchives: {
+        where: { deletedAt: null },
+        select: { id: true },
+      },
+    },
+  });
+
+  if (!sessionEvent) {
+    return NextResponse.json({ error: 'SessionEvent not found' }, { status: 404 });
+  }
+
+  // DB の参照制約により、通常データは連鎖削除し、アーカイブの参照だけを切り離して保持する。
+  await prisma.sessionEvent.delete({ where: { id: eventId } });
+
+  return NextResponse.json({
+    deleted: true,
+    eventId,
+    retainedArchiveCount: sessionEvent.sessionArchives.length,
+  });
+}

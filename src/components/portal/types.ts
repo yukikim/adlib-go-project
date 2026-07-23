@@ -204,7 +204,7 @@ export type RatingSummaryView = {
 
 export type ArchiveView = {
   id: string;
-  sessionEventId: string;
+  sessionEventId: string | null;
   title: string;
   version: number;
   sessionEventTitle: string;
