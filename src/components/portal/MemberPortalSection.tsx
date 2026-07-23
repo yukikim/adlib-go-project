@@ -2061,6 +2061,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
       <Section
         title="プロフィール"
         description="プロフィール更新とパスワード変更をこの画面で行います。"
+        collapsible
       >
         <div className="mb-4 flex flex-wrap items-center gap-2">
           <Badge variant="outline">{currentUser?.role ?? "member"}</Badge>

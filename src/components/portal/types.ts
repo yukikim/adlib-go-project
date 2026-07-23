@@ -297,6 +297,8 @@ export type SectionProps = {
   description?: string;
   children: ReactNode;
   action?: ReactNode;
+  collapsible?: boolean;
+  defaultOpen?: boolean;
   sectionId?: string;
   className?: string;
   contentClassName?: string;
