@@ -172,7 +172,7 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
           onSubmit={handleAuthSubmit}
         >
           {view === "signup" && !signupInvitationToken && (
-            <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 bg-[oklch(0.3_0.2_100/0.6)]">
+            <div className="fixed inset-0 z-[9] flex items-center justify-center p-2 bg-[oklch(0.3_0.2_100/0.6)]">
               <Alert
                 className="md:col-span-2 max-w-sm bg-gray-200"
                 variant="destructive"
