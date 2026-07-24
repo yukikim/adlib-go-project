@@ -85,6 +85,9 @@ export function AppHeaderNav({ isSignedIn, isMember, isAdmin, children }: AppHea
                 <Link href="/about" onClick={closeMenu}>
                   adlib-go について
                 </Link>
+                <Link href="/contact" onClick={closeMenu}>
+                  お問い合わせ
+                </Link>
                 {!isSignedIn ? (
                   <Link href="/signin" onClick={closeMenu}>
                     メンバーサインイン

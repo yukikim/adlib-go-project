@@ -5,7 +5,7 @@ Adlib-go KICK-OFF 向けの public site、member site、admin site をまとめ�
 
 このリポジトリには以下が含まれます。
 
-- 公開トップ、コラム一覧、コラム詳細、about ページ
+- 公開トップ、コラム一覧、コラム詳細、about、お問い合わせページ
 - メンバー用サインアップ / サインイン、管理者用サインイン、パスワード再設定 API
 - メンバーサインアップ時の確認メール送信とメールアドレス認証
 - メンバーサインアップ時の楽器、居住地域、性別、年代登録
@@ -123,11 +123,18 @@ Adlib-go KICK-OFF 向けの public site、member site、admin site をまとめ�
 - `DATABASE_URL`
 - `APP_BASE_URL`
 - `MAIL_FROM`
+- `CONTACT_TO_EMAIL`
 - `SMTP_HOST`
 - `SMTP_PORT`
 - `SMTP_SECURE`
 - `SMTP_USER`
 - `SMTP_PASS`
+- `CONTACT_RATE_LIMIT_MAX`（任意。既定値: 3回）
+- `CONTACT_RATE_LIMIT_WINDOW_MS`（任意。既定値: 600000ミリ秒）
+
+`CONTACT_TO_EMAIL` は公開お問い合わせフォームの送信先です。お問い合わせ本文は 10〜2,000 文字に制限し、制御文字を除去したプレーンテキストとして送信します。Honeypot、同一オリジン確認、16KB のリクエスト上限、プロセス内の IP 単位レート制限を適用しています。
+
+プロセス内レート制限は単一インスタンス向けの簡易対策です。複数インスタンスや Serverless の本番環境では、Vercel Firewall、Redis / KV などの共有ストア、必要に応じて CAPTCHA を併用してください。
 
 ### メンバー重複登録の扱い
 
@@ -176,11 +183,14 @@ Vercel プロジェクトには少なくとも以下を設定してください�
 - `DATABASE_URL`
 - `APP_BASE_URL`
 - `MAIL_FROM`
+- `CONTACT_TO_EMAIL`
 - `SMTP_HOST`
 - `SMTP_PORT`
 - `SMTP_SECURE`
 - `SMTP_USER`
 - `SMTP_PASS`
+- `CONTACT_RATE_LIMIT_MAX`（任意）
+- `CONTACT_RATE_LIMIT_WINDOW_MS`（任意）
 
 `APP_BASE_URL` は本番 URL に合わせて設定してください。例: `https://your-project.vercel.app`
 

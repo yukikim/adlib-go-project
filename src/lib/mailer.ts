@@ -109,6 +109,7 @@ function buildTransport() {
 type SendMailInput = {
   mailType: string;
   to: string;
+  replyTo?: string;
   subject: string;
   text: string;
   createdById?: string;
@@ -135,6 +136,7 @@ export async function sendMail(input: SendMailInput) {
       transporter.sendMail({
         from,
         to: delivery.actualTo,
+        replyTo: input.replyTo,
         subject: delivery.subject,
         text: delivery.text,
         headers: delivery.headers,
