@@ -17,6 +17,7 @@ export default function AuthWorkspace({ view }: AuthWorkspaceProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const signupInvitationToken = searchParams.get('token') ?? '';
+  const passwordResetToken = searchParams.get('resetToken') ?? '';
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [, setCurrentUser] = useState<AuthUser | null>(null);
@@ -61,6 +62,7 @@ export default function AuthWorkspace({ view }: AuthWorkspaceProps) {
     runAction,
     setCurrentUser,
     reloadShared: reloadCurrentUser,
+    initialResetToken: passwordResetToken,
     // defaultAuthTarget: view === 'admin-signin' ? 'admin' : 'member',
     onSignInSuccess: (roleTarget) => {
       if (roleTarget === 'admin') {

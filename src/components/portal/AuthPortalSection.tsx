@@ -1,19 +1,23 @@
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Section } from './Section';
-import type { Instrument } from './types';
-import { AGE_RANGE_OPTIONS, GENDER_OPTIONS, PREFECTURE_OPTIONS } from '@/lib/memberProfile';
+} from "@/components/ui/select";
+import { Section } from "./Section";
+import type { Instrument } from "./types";
+import {
+  AGE_RANGE_OPTIONS,
+  GENDER_OPTIONS,
+  PREFECTURE_OPTIONS,
+} from "@/lib/memberProfile";
 
-const NONE_VALUE = '__none__';
+const NONE_VALUE = "__none__";
 
 type FieldProps = {
   htmlFor?: string;
@@ -23,19 +27,29 @@ type FieldProps = {
   className?: string;
 };
 
-function Field({ htmlFor, label, children, description, className }: FieldProps) {
+function Field({
+  htmlFor,
+  label,
+  children,
+  description,
+  className,
+}: FieldProps) {
   return (
-    <div className={className ?? 'grid gap-2'}>
-      <Label className="mb-1" htmlFor={htmlFor}>{label}</Label>
+    <div className={className ?? "grid gap-2"}>
+      <Label className="mb-1" htmlFor={htmlFor}>
+        {label}
+      </Label>
       {children}
-      {description ? <p className="text-sm text-muted-foreground">{description}</p> : null}
+      {description ? (
+        <p className="text-sm text-muted-foreground">{description}</p>
+      ) : null}
     </div>
   );
 }
 
 type AuthPortalSectionProps = {
-  view: 'signin' | 'signup' | 'admin-signin';
-  authTarget: 'member' | 'admin';
+  view: "signin" | "signup" | "admin-signin";
+  authTarget: "member" | "admin";
   loading: boolean;
   authEmail: string;
   authPassword: string;
@@ -112,7 +126,7 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
       return;
     }
 
-    if (view === 'signup') {
+    if (view === "signup") {
       onSignUp(signupInvitationToken);
       return;
     }
@@ -120,7 +134,9 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
     onSignIn();
   };
 
-  const handleForgotPasswordSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleForgotPasswordSubmit = (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
     event.preventDefault();
     if (loading) {
       return;
@@ -129,7 +145,9 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
     onForgotPassword();
   };
 
-  const handleResetPasswordSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleResetPasswordSubmit = (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
     event.preventDefault();
     if (loading) {
       return;
@@ -140,37 +158,99 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
 
   return (
     <>
+    {!resetToken && (
       <Section
-        title={authTarget === 'admin' ? '管理者認証' : 'メンバー認証'}
-        description={authTarget === 'admin'
-          ? '管理者専用サインインです。'
-          : 'メンバー専用です。'}
+        title={authTarget === "admin" ? "管理者認証" : "メンバー認証"}
+        description={
+          authTarget === "admin"
+            ? "管理者専用サインインです。"
+            : "メンバー専用です。"
+        }
       >
-        <form className="grid max-w-2xl gap-4 md:grid-cols-2" onSubmit={handleAuthSubmit}>
-          {view === 'signup' && !signupInvitationToken && (
+        <form
+          className="grid max-w-2xl gap-4 md:grid-cols-2"
+          onSubmit={handleAuthSubmit}
+        >
+          {view === "signup" && !signupInvitationToken && (
             <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 bg-[oklch(0.3_0.2_100/0.6)]">
-            <Alert className="md:col-span-2 max-w-sm bg-gray-200" variant="destructive">
-              <AlertTitle>招待リンクが必要です</AlertTitle>
-              <AlertDescription>メンバー登録は紹介制です。管理者から届いた招待メールのリンクを開いてください。</AlertDescription>
-            </Alert>
+              <Alert
+                className="md:col-span-2 max-w-sm bg-gray-200"
+                variant="destructive"
+              >
+                <AlertTitle>招待リンクが必要です</AlertTitle>
+                <AlertDescription>
+                  メンバー登録は紹介制です。管理者から届いた招待メールのリンクを開いてください。
+                </AlertDescription>
+              </Alert>
             </div>
           )}
-          <Field htmlFor="auth-email" label="メールアドレス" className="md:col-span-2">
-            <Input id="auth-email" type="email" autoComplete="username" value={authEmail} onChange={(event) => setAuthEmail(event.target.value)} placeholder="メールアドレスを入力" />
+          <Field
+            htmlFor="auth-email"
+            label="メールアドレス"
+            className="md:col-span-2"
+          >
+            <Input
+              id="auth-email"
+              type="email"
+              autoComplete="username"
+              value={authEmail}
+              onChange={(event) => setAuthEmail(event.target.value)}
+              placeholder="メールアドレスを入力"
+            />
           </Field>
-          <Field htmlFor="auth-password" label="パスワード" className="md:col-span-2">
-            <Input id="auth-password" type="password" autoComplete={view === 'signup' ? 'new-password' : 'current-password'} value={authPassword} onChange={(event) => setAuthPassword(event.target.value)} placeholder="パスワードを入力" />
+          <Field
+            htmlFor="auth-password"
+            label="パスワード"
+            className="md:col-span-2"
+          >
+            <Input
+              id="auth-password"
+              type="password"
+              autoComplete={
+                view === "signup" ? "new-password" : "current-password"
+              }
+              value={authPassword}
+              onChange={(event) => setAuthPassword(event.target.value)}
+              placeholder="パスワードを入力"
+            />
           </Field>
-          {view === 'signup' && (
+          {view === "signup" && (
             <>
-              <Field htmlFor="signup-password-confirmation" label="パスワード（確認）" className="md:col-span-2">
-                <Input id="signup-password-confirmation" type="password" autoComplete="new-password" value={signupPasswordConfirmation} onChange={(event) => setSignupPasswordConfirmation(event.target.value)} placeholder="確認のためもう一度入力" />
+              <Field
+                htmlFor="signup-password-confirmation"
+                label="パスワード（確認）"
+                className="md:col-span-2"
+              >
+                <Input
+                  id="signup-password-confirmation"
+                  type="password"
+                  autoComplete="new-password"
+                  value={signupPasswordConfirmation}
+                  onChange={(event) =>
+                    setSignupPasswordConfirmation(event.target.value)
+                  }
+                  placeholder="確認のためもう一度入力"
+                />
               </Field>
-              <Field htmlFor="signup-display-name" label="表示名" className="md:col-span-2">
-                <Input id="signup-display-name" type="text" value={signupDisplayName} onChange={(event) => setSignupDisplayName(event.target.value)} />
+              <Field
+                htmlFor="signup-display-name"
+                label="表示名"
+                className="md:col-span-2"
+              >
+                <Input
+                  id="signup-display-name"
+                  type="text"
+                  value={signupDisplayName}
+                  onChange={(event) => setSignupDisplayName(event.target.value)}
+                />
               </Field>
               <Field label="メイン楽器" htmlFor="signup-instrument">
-                <Select value={signupInstrument} onValueChange={(value) => setSignupInstrument(value as Instrument)}>
+                <Select
+                  value={signupInstrument}
+                  onValueChange={(value) =>
+                    setSignupInstrument(value as Instrument)
+                  }
+                >
                   <SelectTrigger id="signup-instrument" className="w-full">
                     <SelectValue placeholder="メイン楽器を選択" />
                   </SelectTrigger>
@@ -183,69 +263,131 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
                   </SelectContent>
                 </Select>
               </Field>
-              {signupInstrument === 'front' && (
+              {signupInstrument === "front" && (
                 <Field htmlFor="signup-sub-instrument" label="演奏楽器">
-                  <Input id="signup-sub-instrument" type="text" value={signupSubInstrument} onChange={(event) => setSignupSubInstrument(event.target.value)} />
+                  <Input
+                    id="signup-sub-instrument"
+                    type="text"
+                    value={signupSubInstrument}
+                    onChange={(event) =>
+                      setSignupSubInstrument(event.target.value)
+                    }
+                  />
                 </Field>
               )}
               <Field label="居住地域" htmlFor="signup-area">
-                <Select value={signupArea || NONE_VALUE} onValueChange={(value) => setSignupArea(value === NONE_VALUE ? '' : value)}>
+                <Select
+                  value={signupArea || NONE_VALUE}
+                  onValueChange={(value) =>
+                    setSignupArea(value === NONE_VALUE ? "" : value)
+                  }
+                >
                   <SelectTrigger id="signup-area" className="w-full">
                     <SelectValue placeholder="居住地域を選択" />
                   </SelectTrigger>
                   <SelectContent className="bg-background">
                     <SelectItem value={NONE_VALUE}>居住地域を選択</SelectItem>
-                    {PREFECTURE_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
+                    {PREFECTURE_OPTIONS.map((option) => (
+                      <SelectItem key={option} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </Field>
               <Field label="性別" htmlFor="signup-gender">
-                <Select value={signupGender || NONE_VALUE} onValueChange={(value) => setSignupGender(value === NONE_VALUE ? '' : value)}>
+                <Select
+                  value={signupGender || NONE_VALUE}
+                  onValueChange={(value) =>
+                    setSignupGender(value === NONE_VALUE ? "" : value)
+                  }
+                >
                   <SelectTrigger id="signup-gender" className="w-full">
                     <SelectValue placeholder="性別を選択" />
                   </SelectTrigger>
                   <SelectContent className="bg-background">
                     <SelectItem value={NONE_VALUE}>性別を選択</SelectItem>
-                    {GENDER_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
+                    {GENDER_OPTIONS.map((option) => (
+                      <SelectItem key={option} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </Field>
               <Field label="年代" htmlFor="signup-age-range">
-                <Select value={signupAgeRange || NONE_VALUE} onValueChange={(value) => setSignupAgeRange(value === NONE_VALUE ? '' : value)}>
+                <Select
+                  value={signupAgeRange || NONE_VALUE}
+                  onValueChange={(value) =>
+                    setSignupAgeRange(value === NONE_VALUE ? "" : value)
+                  }
+                >
                   <SelectTrigger id="signup-age-range" className="w-full">
                     <SelectValue placeholder="年代を選択" />
                   </SelectTrigger>
                   <SelectContent className="bg-background">
                     <SelectItem value={NONE_VALUE}>年代を選択</SelectItem>
-                    {AGE_RANGE_OPTIONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
+                    {AGE_RANGE_OPTIONS.map((option) => (
+                      <SelectItem key={option} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </Field>
             </>
           )}
           <div className="md:col-span-2 text-right">
-            <Button type="submit" disabled={loading || (view === 'signup' && !signupInvitationToken)}>
-              {view === 'signup' ? 'サインアップ' : 'サインイン'}
+            <Button
+              type="submit"
+              disabled={
+                loading || (view === "signup" && !signupInvitationToken)
+              }
+            >
+              {view === "signup" ? "サインアップ" : "サインイン"}
             </Button>
           </div>
         </form>
       </Section>
+      )}
 
-      {view !== 'signup' && (
-        <Section className="hidden" title="パスワード再設定" description="パスワード再設定トークンの発行と更新を行います。">
+      {view !== "signup" && (
+        <Section
+          sectionId="password-reset"
+          className=""
+          title="パスワードを忘れた方"
+          description="パスワード再設定トークンの発行と更新を行います。"
+          collapsible
+          defaultOpen={Boolean(resetToken)}
+        >
           <div className="grid max-w-2xl gap-4">
-            <form className="grid gap-4" onSubmit={handleForgotPasswordSubmit}>
-              <Field htmlFor="reset-email" label="メールアドレス">
-                <Input id="reset-email" type="email" autoComplete="email" value={resetEmail} onChange={(event) => setResetEmail(event.target.value)} />
-              </Field>
-              <div>
-                <Button type="submit" variant="outline" disabled={loading}>再設定トークンを発行</Button>
-              </div>
-            </form>
+            {!resetToken && (
+              <form
+                className="grid gap-4"
+                onSubmit={handleForgotPasswordSubmit}
+              >
+                <Field htmlFor="reset-email" label="メールアドレス">
+                  <Input
+                    id="reset-email"
+                    type="email"
+                    autoComplete="email"
+                    value={resetEmail}
+                    onChange={(event) => setResetEmail(event.target.value)}
+                  />
+                </Field>
+                <div>
+                  <Button type="submit" variant="outline" disabled={loading}>
+                    再設定トークンを発行
+                  </Button>
+                </div>
+              </form>
+            )}
             {issuedResetToken && (
               <Alert>
                 <AlertTitle>開発用トークン</AlertTitle>
-                <AlertDescription className="break-all">{issuedResetToken}</AlertDescription>
+                <AlertDescription className="break-all">
+                  {issuedResetToken}
+                </AlertDescription>
               </Alert>
             )}
             <form className="grid gap-4" onSubmit={handleResetPasswordSubmit}>
@@ -258,15 +400,38 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
                 aria-hidden="true"
                 className="hidden"
               />
-              <Field htmlFor="reset-token" label="再設定トークン">
-                <Input id="reset-token" type="text" autoComplete="one-time-code" value={resetToken} onChange={(event) => setResetToken(event.target.value)} />
+              <Field
+                // className={resetToken ? "hidden" : ""}
+                className="hidden"
+                htmlFor="reset-token"
+                label="再設定トークン"
+              >
+                <Input
+                  id="reset-token"
+                  type="text"
+                  autoComplete="one-time-code"
+                  value={resetToken}
+                  onChange={(event) => setResetToken(event.target.value)}
+                />
               </Field>
-              <Field htmlFor="reset-password" label="新しいパスワード">
-                <Input id="reset-password" type="password" autoComplete="new-password" value={resetPassword} onChange={(event) => setResetPassword(event.target.value)} />
-              </Field>
-              <div>
-                <Button type="submit" disabled={loading}>パスワード更新</Button>
-              </div>
+              {resetToken && (
+                <div>
+                  <Field htmlFor="reset-password" label="新しいパスワード">
+                    <Input
+                      id="reset-password"
+                      type="password"
+                      autoComplete="new-password"
+                      value={resetPassword}
+                      onChange={(event) => setResetPassword(event.target.value)}
+                    />
+                  </Field>
+                  <div>
+                    <Button type="submit" disabled={loading}>
+                      パスワード更新
+                    </Button>
+                  </div>
+                </div>
+              )}
             </form>
           </div>
         </Section>

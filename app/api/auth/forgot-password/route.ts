@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
 
   const { token, expiresAt } = await createPasswordResetToken(user.id);
   const resetUrlBase = process.env.APP_BASE_URL ?? 'http://localhost:3000';
-  const resetUrl = `${resetUrlBase}/?resetToken=${token}`;
+  const resetUrl = `${resetUrlBase}/signin?resetToken=${encodeURIComponent(token)}#password-reset`;
 
   await sendMail({
     mailType: 'password_reset',

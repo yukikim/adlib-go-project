@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const normalizedEmailSchema = z.string().trim().toLowerCase().email('Invalid email');
 
-export const trimmedPasswordSchema = z.string().trim().min(8, 'Password must be at least 8 characters');
+export const trimmedPasswordSchema = z.string().trim().min(8, 'パスワードは8文字以上である必要があります。');
 
 export const nonEmptyTrimmedStringSchema = z.string().trim().min(1, 'Invalid body');
 

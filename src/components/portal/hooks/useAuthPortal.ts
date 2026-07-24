@@ -7,11 +7,18 @@ type UseAuthPortalArgs = {
   runAction: RunPortalAction;
   setCurrentUser: (user: AuthUser | null) => void;
   reloadShared: () => Promise<void>;
+  initialResetToken?: string;
   onSignInSuccess?: (roleTarget: 'member' | 'admin') => void;
   // defaultAuthTarget?: 'member' | 'admin';
 };
 
-export function useAuthPortal({ runAction, setCurrentUser, reloadShared, onSignInSuccess }: UseAuthPortalArgs) {
+export function useAuthPortal({
+  runAction,
+  setCurrentUser,
+  reloadShared,
+  initialResetToken = '',
+  onSignInSuccess,
+}: UseAuthPortalArgs) {
   const router = useRouter();
   // const defaultAuthEmail = defaultAuthTarget === 'admin' ? 'admin@adlib-go.local' : 'member01@adlib-go.local';
   // const defaultAuthPassword = defaultAuthTarget === 'admin' ? 'demo-admin-password' : 'demo-member-password';
@@ -28,7 +35,7 @@ export function useAuthPortal({ runAction, setCurrentUser, reloadShared, onSignI
   const [signupAgeRange, setSignupAgeRange] = useState('');
   const [signupArea, setSignupArea] = useState('');
   const [resetEmail, setResetEmail] = useState(defaultAuthEmail);
-  const [resetToken, setResetToken] = useState('');
+  const [resetToken, setResetToken] = useState(initialResetToken);
   const [resetPassword, setResetPassword] = useState('');
   const [issuedResetToken, setIssuedResetToken] = useState<string | null>(null);
 
@@ -37,6 +44,12 @@ export function useAuthPortal({ runAction, setCurrentUser, reloadShared, onSignI
     setAuthPassword(defaultAuthPassword);
     setResetEmail(defaultAuthEmail);
   }, [defaultAuthEmail, defaultAuthPassword]);
+
+  useEffect(() => {
+    if (initialResetToken) {
+      setResetToken(initialResetToken);
+    }
+  }, [initialResetToken]);
 
   useEffect(() => {
     if (signupInstrument !== 'front') {

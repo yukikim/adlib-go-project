@@ -133,7 +133,7 @@ export const memberSelfUpdateRequestSchema = memberProfileInputSchema.extend({
     }
     const trimmed = value.trim();
     return trimmed === '' ? undefined : trimmed;
-  }, z.string().min(8, 'Password must be at least 8 characters').optional()),
+  }, z.string().min(8, 'パスワードは8文字以上である必要があります。').optional()),
 }).strict().superRefine((value, ctx) => {
   const hasCurrentPassword = Boolean(value.currentPassword);
   const hasNewPassword = Boolean(value.newPassword);
