@@ -148,10 +148,12 @@ export function AuthPortalSection(props: AuthPortalSectionProps) {
       >
         <form className="grid max-w-2xl gap-4 md:grid-cols-2" onSubmit={handleAuthSubmit}>
           {view === 'signup' && !signupInvitationToken && (
-            <Alert className="md:col-span-2" variant="destructive">
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 bg-[oklch(0.3_0.2_100/0.6)]">
+            <Alert className="md:col-span-2 max-w-sm bg-gray-200" variant="destructive">
               <AlertTitle>招待リンクが必要です</AlertTitle>
               <AlertDescription>メンバー登録は紹介制です。管理者から届いた招待メールのリンクを開いてください。</AlertDescription>
             </Alert>
+            </div>
           )}
           <Field htmlFor="auth-email" label="メールアドレス" className="md:col-span-2">
             <Input id="auth-email" type="email" autoComplete="username" value={authEmail} onChange={(event) => setAuthEmail(event.target.value)} placeholder="メールアドレスを入力" />
