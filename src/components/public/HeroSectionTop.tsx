@@ -24,13 +24,13 @@ export default function HeroSectionTop({ pageName }: PageNameProps) {
             <p className="mt-8 text-2xl text-background">ジャズの世界にどっぷり浸かる体験にぜひご参加ください。</p>
             <div className="mt-20 flex flex-wrap justify-center gap-y-4 gap-x-6">
               <a
-                href="#"
+                href="/signin"
                 className="relative flex h-11 w-full items-center justify-center px-6 rounded-full sm:w-max bg-primary"
               >
                 <span className="relative text-base font-semibold text-on-primary">会員ログイン</span>
               </a>
               <a
-                href="#"
+                href="/signup"
                 className="relative flex h-11 w-full items-center justify-center px-6 rounded-full sm:w-max bg-primary"
               >
                 <span className="relative text-base font-semibold text-on-primary">会員登録</span>

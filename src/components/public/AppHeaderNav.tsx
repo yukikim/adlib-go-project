@@ -90,12 +90,12 @@ export function AppHeaderNav({ isSignedIn, isMember, isAdmin, children }: AppHea
                 </Link>
                 {!isSignedIn ? (
                   <Link href="/signin" onClick={closeMenu}>
-                    メンバーサインイン
+                    会員ログイン
                   </Link>
                 ) : null}
                 {!isSignedIn ? (
                   <Link href="/signup" onClick={closeMenu}>
-                    メンバーサインアップ
+                    会員登録
                   </Link>
                 ) : null}
                 {isMember ? (
