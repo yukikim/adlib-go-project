@@ -266,6 +266,7 @@
 用途:
 
 - メール送信履歴を保持する
+- 直近3か月分を保持し、それ以前は日次処理で削除する
 
 主なカラム案:
 
@@ -296,7 +297,28 @@
 - createdBy
 - status
 
-### 3.14 SessionSetRating
+### 3.14 MemberMessage
+
+用途:
+
+- メンバーマイページから管理者へ送信されたメッセージを保持する
+
+主なカラム案:
+
+- id
+- senderId
+- senderDisplayName
+- senderEmail
+- subject
+- body
+- createdAt
+
+補足:
+
+- 送信者アカウント削除後も管理記録を残すため、表示名とメールアドレスをスナップショットとして保持する
+- senderId は UserAccount 削除時に null とする
+
+### 3.15 SessionSetRating
 
 用途:
 
@@ -382,6 +404,7 @@
 用途:
 
 - 管理者の重要操作の監査ログを保持する
+- 管理画面のアクティビティ履歴として直近3か月分を保持し、それ以前は日次処理で削除する
 
 主なカラム案:
 
@@ -411,6 +434,7 @@
 - SessionArchive 1 : N SessionArchiveSet
 - SessionArchiveSet 1 : 1 SessionArchiveRatingSummary
 - UserAccount 1 : N AdminAuditLog
+- UserAccount 1 : N MemberMessage
 - SessionArchive 1 : N AdminAuditLog
 
 ## 5. マスタ項目案
@@ -443,4 +467,5 @@
 9. Announcement
 10. MailLog
 11. Column
-12. DirectMessage / GroupChat 系
+12. MemberMessage
+13. DirectMessage / GroupChat 系

@@ -60,6 +60,7 @@ import type {
   MailLogView,
   MemberDetailView,
   MemberListView,
+  MemberMessageView,
   RatingSummaryView,
   SavedSessionSetDraftView,
   SessionEventView,
@@ -201,6 +202,7 @@ const adminNavGroups: AdminNavGroup[] = [
     label: 'アクティビティ / 通知',
     icon: <Bell className="size-4" />,
     children: [
+      { id: 'admin-member-messages', label: 'メンバーメッセージ' },
       { id: 'admin-activity-log', label: 'アクティビティ履歴' },
       { id: 'admin-announcement-create', label: 'お知らせ作成' },
       { id: 'admin-mail-log', label: 'MailLog' },
@@ -260,6 +262,7 @@ type AdminPortalSectionProps = {
   savedSessionSetDrafts: SavedSessionSetDraftView[];
   activityLogs: ActivityLogView[];
   mailLogs: MailLogView[];
+  memberMessages: MemberMessageView[];
   members: MemberListView[];
   selectedManagedMemberId: string;
   selectedManagedMemberDetail: MemberDetailView | null;
@@ -418,6 +421,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     savedSessionSetDrafts,
     activityLogs,
     mailLogs,
+    memberMessages,
     members,
     selectedManagedMemberId,
     selectedManagedMemberDetail,
@@ -2285,7 +2289,27 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                   </div>
                   <Button type="button" onClick={onCreateAnnouncement} disabled={loading} className="w-fit">お知らせ作成</Button>
                 </div>
-                <div className={cn('space-y-4', !isChildVisible('admin-activity', 'admin-activity-log') && !isChildVisible('admin-activity', 'admin-mail-log') && 'hidden')}>
+                <div className={cn('space-y-4 xl:min-w-0 xl:flex-1', !isChildVisible('admin-activity', 'admin-member-messages') && !isChildVisible('admin-activity', 'admin-activity-log') && !isChildVisible('admin-activity', 'admin-mail-log') && 'hidden')}>
+                  <div id="admin-member-messages" className={cn('rounded-xl border p-4 scroll-mt-24', !isChildVisible('admin-activity', 'admin-member-messages') && 'hidden')}>
+                    <h3 className="font-medium">メンバーメッセージ</h3>
+                    <p className="mt-1 text-sm text-muted-foreground">マイページから管理者宛てに送信されたメッセージです。</p>
+                    {memberMessages.length === 0 ? <p className="mt-3 text-sm text-muted-foreground">受信したメッセージはありません。</p> : (
+                      <ul className="mt-3 space-y-3">
+                        {memberMessages.map((message) => (
+                          <li key={message.id} className="rounded-xl border bg-background p-4 text-sm">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <Badge variant="secondary">{message.senderDisplayName}</Badge>
+                              <span className="text-muted-foreground">{new Date(message.createdAt).toLocaleString('ja-JP')}</span>
+                            </div>
+                            <p className="mt-2 font-medium">{message.subject}</p>
+                            <p className="mt-1 break-all text-muted-foreground">{message.senderEmail}</p>
+                            <p className="mt-3 whitespace-pre-wrap break-words leading-6">{message.body}</p>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+
                   <div id="admin-activity-log" className={cn('rounded-xl border p-4 scroll-mt-24', !isChildVisible('admin-activity', 'admin-activity-log') && 'hidden')}>
                     <h3 className="font-medium">アクティビティ履歴</h3>
                     {activityLogs.length === 0 ? <p className="mt-3 text-sm text-muted-foreground">履歴はありません。</p> : (

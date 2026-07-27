@@ -849,6 +849,78 @@ response 404:
 }
 ```
 
+## 6.5 メンバーメッセージ API
+
+### 6.5.1 POST /api/member-messages
+
+用途:
+
+- メンバーマイページから管理者へメッセージを送信する
+- メッセージをDBへ保存した後、`CONTACT_TO_EMAIL` へ通知メールを送信する
+
+権限:
+
+- 有効な `MemberProfile` を持つ認証済みユーザー
+
+request:
+
+```json
+{
+  "subject": "次回イベントについて",
+  "body": "管理者への連絡内容"
+}
+```
+
+response 201:
+
+```json
+{
+  "message": {
+    "id": "message-id",
+    "senderDisplayName": "山田 太郎",
+    "senderEmail": "member@example.com",
+    "subject": "次回イベントについて",
+    "body": "管理者への連絡内容",
+    "createdAt": "2026-07-27T03:00:00.000Z"
+  },
+  "notificationSent": true
+}
+```
+
+補足:
+
+- 件名は120文字以内、本文は2,000文字以内
+- 制御文字を除去し、プレーンテキストとして保存・メール送信する
+- 通知メールの `Reply-To` は送信メンバーのメールアドレス
+- 通知に失敗してもメッセージは保存し、`notificationSent: false` と `warning` を返す
+
+### 6.5.2 GET /api/member-messages
+
+用途:
+
+- 管理ダッシュボードに新しい順でメンバーメッセージを表示する
+
+権限:
+
+- admin
+
+response 200:
+
+```json
+{
+  "messages": [
+    {
+      "id": "message-id",
+      "senderDisplayName": "山田 太郎",
+      "senderEmail": "member@example.com",
+      "subject": "次回イベントについて",
+      "body": "管理者への連絡内容",
+      "createdAt": "2026-07-27T03:00:00.000Z"
+    }
+  ]
+}
+```
+
 ## 7. 共通エラー形式
 
 ```json

@@ -8,6 +8,7 @@ import type {
   Instrument,
   MemberDetailView,
   MemberListView,
+  MemberMessageView,
   RatingSummaryView,
   SavedSessionSetDraftView,
   SessionEventView,
@@ -103,6 +104,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
   const [savedSessionSetDrafts, setSavedSessionSetDrafts] = useState<SavedSessionSetDraftView[]>([]);
   const [activityLogs, setActivityLogs] = useState<ActivityLogView[]>([]);
   const [mailLogs, setMailLogs] = useState([] as { id: string; mailType: string; toAddress: string; status: string; createdAt: string; errorMessage?: string | null }[]);
+  const [memberMessages, setMemberMessages] = useState<MemberMessageView[]>([]);
   const [columns, setColumns] = useState<ColumnView[]>([]);
   const [selectedManagedMemberId, setSelectedManagedMemberId] = useState('');
   const [selectedManagedMemberDetail, setSelectedManagedMemberDetail] = useState<MemberDetailView | null>(null);
@@ -181,16 +183,18 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
       setSavedSessionSetDrafts([]);
       setActivityLogs([]);
       setMailLogs([]);
+      setMemberMessages([]);
       setColumns([]);
       return;
     }
 
     const targetAdminEventId = selectedAdminEventId || sessionEvents[0]?.id || '';
     const ratingEvents = sessionEvents.filter((event) => event.status === 'rating');
-    const [archiveRes, activityRes, mailLogRes, columnRes, setRes, ratingSummaryResponses, previewRes, draftRes] = await Promise.all([
+    const [archiveRes, activityRes, mailLogRes, memberMessageRes, columnRes, setRes, ratingSummaryResponses, previewRes, draftRes] = await Promise.all([
       fetch('/api/session-archives'),
       fetch('/api/admin/activity'),
       fetch('/api/admin/mail-logs'),
+      fetch('/api/member-messages'),
       fetch('/api/columns?includeDrafts=1'),
       targetAdminEventId ? fetch(`/api/session-sets?sessionEventId=${targetAdminEventId}`) : Promise.resolve(null),
       Promise.all(
@@ -205,11 +209,13 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     const archiveJson = await parseJson(archiveRes);
     const activityJson = await parseJson(activityRes);
     const mailLogJson = await parseJson(mailLogRes);
+    const memberMessageJson = await parseJson(memberMessageRes);
     const columnJson = await parseJson(columnRes);
     const draftJson = await parseJson(draftRes);
     setArchives(archiveJson.archives ?? []);
     setActivityLogs(activityJson.activity ?? []);
     setMailLogs(mailLogJson.mailLogs ?? []);
+    setMemberMessages(memberMessageJson.messages ?? []);
     setColumns(columnJson.columns ?? []);
     if (setRes) {
       const setJson = await parseJson(setRes);
@@ -752,6 +758,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     savedSessionSetDrafts,
     activityLogs,
     mailLogs,
+    memberMessages,
     columns,
     selectedManagedMemberId,
     setSelectedManagedMemberId,

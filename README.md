@@ -9,8 +9,8 @@ Adlib-go KICK-OFF 向けの public site、member site、admin site をまとめ�
 - メンバー用サインアップ / サインイン、管理者用サインイン、パスワード再設定 API
 - メンバーサインアップ時の確認メール送信とメールアドレス認証
 - メンバーサインアップ時の楽器、居住地域、性別、年代登録
-- メンバーページでのプロフィール編集、パスワード変更、SessionEntry、レイティング
-- 管理ダッシュボードでの SessionEvent、sessionSet、アーカイブ、お知らせ、コラム管理
+- メンバーページでのプロフィール編集、パスワード変更、SessionEntry、レイティング、管理者へのメッセージ送信
+- 管理ダッシュボードでの SessionEvent、sessionSet、アーカイブ、お知らせ、コラム、メンバーメッセージ管理
 - コラムの表示順、予約公開、管理画面プレビュー
 - 管理ダッシュボードでのメンバー検索、role/status 更新、削除
 - PostgreSQL + Prisma の永続化層
@@ -87,6 +87,7 @@ Adlib-go KICK-OFF 向けの public site、member site、admin site をまとめ�
 	- app/api/members/*
 	- app/api/announcements/*
 	- app/api/columns/*
+	- app/api/member-messages/route.ts
 	- app/api/session-events/*
 	- app/api/session-sets/route.ts
 	- app/api/session-sets/generate/route.ts
@@ -129,10 +130,13 @@ Adlib-go KICK-OFF 向けの public site、member site、admin site をまとめ�
 - `SMTP_SECURE`
 - `SMTP_USER`
 - `SMTP_PASS`
+- `CRON_SECRET`（Vercel Cron 認証用。16文字以上のランダム文字列）
 - `CONTACT_RATE_LIMIT_MAX`（任意。既定値: 3回）
 - `CONTACT_RATE_LIMIT_WINDOW_MS`（任意。既定値: 600000ミリ秒）
 
-`CONTACT_TO_EMAIL` は公開お問い合わせフォームの送信先です。お問い合わせ本文は 10〜2,000 文字に制限し、制御文字を除去したプレーンテキストとして送信します。Honeypot、同一オリジン確認、16KB のリクエスト上限、プロセス内の IP 単位レート制限を適用しています。
+`CONTACT_TO_EMAIL` は公開お問い合わせフォームと、メンバーマイページから送信された管理者宛てメッセージの通知先です。公開お問い合わせ本文は 10〜2,000 文字に制限し、制御文字を除去したプレーンテキストとして送信します。Honeypot、同一オリジン確認、16KB のリクエスト上限、プロセス内の IP 単位レート制限を適用しています。
+
+メンバーメッセージは、認証済みで有効な `MemberProfile` を持つユーザーだけが送信できます。件名は120文字、本文は2,000文字までに制限・サニタイズし、先にDBへ保存してから `CONTACT_TO_EMAIL` へ通知します。メール送信に失敗した場合もメッセージ本体は管理ダッシュボードに残り、画面には通知失敗の警告を表示します。
 
 プロセス内レート制限は単一インスタンス向けの簡易対策です。複数インスタンスや Serverless の本番環境では、Vercel Firewall、Redis / KV などの共有ストア、必要に応じて CAPTCHA を併用してください。
 
@@ -189,10 +193,13 @@ Vercel プロジェクトには少なくとも以下を設定してください�
 - `SMTP_SECURE`
 - `SMTP_USER`
 - `SMTP_PASS`
+- `CRON_SECRET`（16文字以上のランダム文字列）
 - `CONTACT_RATE_LIMIT_MAX`（任意）
 - `CONTACT_RATE_LIMIT_WINDOW_MS`（任意）
 
 `APP_BASE_URL` は本番 URL に合わせて設定してください。例: `https://your-project.vercel.app`
+
+`AdminAuditLog`（管理画面のアクティビティ履歴）と `MailLog` は直近3か月分を保持します。`vercel.json` の Cron が毎日 18:00 UTC（日本時間 03:00 頃）に `/api/cron/log-retention` を呼び、実行日時から暦上の3か月前より古いレコードを削除します。Cron は `CRON_SECRET` の Bearer 認証を必須とします。
 
 ### 本番 DB に migration を流す手順
 

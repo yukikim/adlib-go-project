@@ -61,6 +61,12 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
   const [memberRatings, setMemberRatings] = useState<Record<string, number>>({});
   const [memberRatingComments, setMemberRatingComments] = useState<Record<string, string>>({});
   const [memberEventComment, setMemberEventComment] = useState('');
+  const [memberMessageSubject, setMemberMessageSubject] = useState('');
+  const [memberMessageBody, setMemberMessageBody] = useState('');
+  const [memberMessageStatus, setMemberMessageStatus] = useState<{
+    tone: 'success' | 'warning' | 'error';
+    text: string;
+  } | null>(null);
 
   const selectedMemberEvent = sessionEvents.find((event) => event.id === memberEventId) ?? null;
   const visibleSessionEvents = sessionEvents.filter((event) => event.isVisibleToMembers);
@@ -471,6 +477,37 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     await reloadShared();
   }, 'イベントコメントを保存しました');
 
+  const handleSendMemberMessage = async () => {
+    setMemberMessageStatus(null);
+
+    return runAction(async () => {
+      const res = await fetch('/api/member-messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          subject: memberMessageSubject,
+          body: memberMessageBody,
+        }),
+      });
+      const json = await parseJson(res);
+      if (!res.ok) {
+        throw new Error(json.error ?? 'メッセージの送信に失敗しました');
+      }
+
+      setMemberMessageSubject('');
+      setMemberMessageBody('');
+      setMemberMessageStatus({
+        tone: json.notificationSent ? 'success' : 'warning',
+        text: json.warning ?? '管理者へメッセージを送信しました。',
+      });
+    }, undefined, {
+      skipGlobalMessage: true,
+      onError: (text) => {
+        setMemberMessageStatus({ tone: 'error', text });
+      },
+    });
+  };
+
   return {
     profileDisplayName,
     setProfileDisplayName,
@@ -535,11 +572,17 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     setMemberRatingComments,
     memberEventComment,
     setMemberEventComment,
+    memberMessageSubject,
+    setMemberMessageSubject,
+    memberMessageBody,
+    setMemberMessageBody,
+    memberMessageStatus,
     entryState,
     handleProfileUpdate,
     handleSubmitEntry,
     handleSaveRating,
     handleSaveEventRatings,
     handleSaveEventComment,
+    handleSendMemberMessage,
   };
 }

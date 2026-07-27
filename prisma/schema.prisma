@@ -101,6 +101,7 @@ model UserAccount {
   adminAuditLogs          AdminAuditLog[]
   announcements           Announcement[]           @relation("AnnouncementCreator")
   mailLogs                MailLog[]                @relation("MailLogCreator")
+  memberMessages          MemberMessage[]          @relation("MemberMessageSender")
   columns                 Column[]                 @relation("ColumnAuthor")
 }
 
@@ -294,6 +295,8 @@ model AdminAuditLog {
   sessionArchive   SessionArchive? @relation(fields: [sessionArchiveId], references: [id], onDelete: SetNull)
   sessionArchiveId String?
   performedAt      DateTime        @default(now())
+
+  @@index([performedAt])
 }
 
 model AuthSession {
@@ -364,6 +367,21 @@ model MailLog {
   sentAt       DateTime?
   createdBy    UserAccount?  @relation("MailLogCreator", fields: [createdById], references: [id], onDelete: SetNull)
   createdById  String?
+
+  @@index([createdAt])
+}
+
+model MemberMessage {
+  id                String       @id @default(uuid())
+  sender            UserAccount? @relation("MemberMessageSender", fields: [senderId], references: [id], onDelete: SetNull)
+  senderId          String?
+  senderDisplayName String
+  senderEmail       String
+  subject           String
+  body              String
+  createdAt         DateTime     @default(now())
+
+  @@index([createdAt])
 }
 
 model Column {

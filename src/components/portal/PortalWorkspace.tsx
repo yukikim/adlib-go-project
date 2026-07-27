@@ -224,6 +224,9 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           memberRatings={member.memberRatings}
           memberRatingComments={member.memberRatingComments}
           memberEventComment={member.memberEventComment}
+          memberMessageSubject={member.memberMessageSubject}
+          memberMessageBody={member.memberMessageBody}
+          memberMessageStatus={member.memberMessageStatus}
           entryState={member.entryState}
           setSelectedMemberId={member.setSelectedMemberId}
           setMemberEventId={member.setMemberEventId}
@@ -242,6 +245,8 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           setMemberRatings={member.setMemberRatings}
           setMemberRatingComments={member.setMemberRatingComments}
           setMemberEventComment={member.setMemberEventComment}
+          setMemberMessageSubject={member.setMemberMessageSubject}
+          setMemberMessageBody={member.setMemberMessageBody}
           onProfileDisplayNameChange={member.setProfileDisplayName}
           onProfileMainInstrumentChange={member.setProfileMainInstrument}
           onProfileNicknameChange={member.setProfileNickname}
@@ -270,6 +275,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           onSaveRating={member.handleSaveRating}
           onSaveEventRatings={member.handleSaveEventRatings}
           onSaveEventComment={member.handleSaveEventComment}
+          onSendMemberMessage={member.handleSendMemberMessage}
         />
       )}
 
@@ -320,6 +326,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
           savedSessionSetDrafts={admin.savedSessionSetDrafts}
           activityLogs={admin.activityLogs}
           mailLogs={admin.mailLogs}
+          memberMessages={admin.memberMessages}
           members={members}
           selectedManagedMemberId={admin.selectedManagedMemberId}
           selectedManagedMemberDetail={admin.selectedManagedMemberDetail}

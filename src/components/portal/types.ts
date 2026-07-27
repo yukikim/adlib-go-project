@@ -264,6 +264,16 @@ export type MailLogView = {
   errorMessage?: string | null;
 };
 
+export type MemberMessageView = {
+  id: string;
+  senderId?: string | null;
+  senderDisplayName: string;
+  senderEmail: string;
+  subject: string;
+  body: string;
+  createdAt: string;
+};
+
 export type ColumnView = {
   id: string;
   slug: string;

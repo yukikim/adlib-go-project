@@ -336,6 +336,12 @@ type MemberPortalSectionProps = {
   memberRatings: Record<string, number>;
   memberRatingComments: Record<string, string>;
   memberEventComment: string;
+  memberMessageSubject: string;
+  memberMessageBody: string;
+  memberMessageStatus: {
+    tone: "success" | "warning" | "error";
+    text: string;
+  } | null;
   entryState: EntryState;
   setSelectedMemberId: (value: string) => void;
   setMemberEventId: (value: string) => void;
@@ -358,6 +364,8 @@ type MemberPortalSectionProps = {
     updater: (current: Record<string, string>) => Record<string, string>,
   ) => void;
   setMemberEventComment: (value: string) => void;
+  setMemberMessageSubject: (value: string) => void;
+  setMemberMessageBody: (value: string) => void;
   onProfileDisplayNameChange: (value: string) => void;
   onProfileMainInstrumentChange: (value: Instrument) => void;
   onProfileNicknameChange: (value: string) => void;
@@ -389,6 +397,7 @@ type MemberPortalSectionProps = {
   onSaveRating: (sessionSetId: string) => void;
   onSaveEventRatings: (sessionEventId: string) => void;
   onSaveEventComment: () => void;
+  onSendMemberMessage: () => Promise<void>;
 };
 
 export function MemberPortalSection(props: MemberPortalSectionProps) {
@@ -420,6 +429,9 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     round1SongOptions,
     memberRatings,
     memberRatingComments,
+    memberMessageSubject,
+    memberMessageBody,
+    memberMessageStatus,
     entryState,
     setSelectedMemberId,
     setMemberEventId,
@@ -437,6 +449,8 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     setMemberRound1Key4,
     setMemberRatings,
     setMemberRatingComments,
+    setMemberMessageSubject,
+    setMemberMessageBody,
     onProfileDisplayNameChange,
     onProfileMainInstrumentChange,
     onProfileNicknameChange,
@@ -462,6 +476,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     onProfileUpdate,
     onSubmitEntry,
     onSaveEventRatings,
+    onSendMemberMessage,
   } = props;
   const [isRound1EntryDialogOpen, setIsRound1EntryDialogOpen] = useState(false);
   const [isAttendanceEntryDialogOpen, setIsAttendanceEntryDialogOpen] = useState(false);
@@ -473,6 +488,15 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     }
 
     onProfileUpdate();
+  };
+
+  const handleMemberMessageSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (loading) {
+      return;
+    }
+
+    void onSendMemberMessage();
   };
 
   const isVocalMember = currentUser?.memberProfile?.mainInstrument === "vocal";
@@ -2225,6 +2249,68 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             })}
           </ul>
         )}
+      </Section>
+      <Section
+        title="管理者へメッセージ"
+        description="運営への連絡事項を送信できます。内容は管理ダッシュボードへ保存され、管理者へ通知メールが送信されます。"
+        collapsible
+      >
+        <form
+          className="grid max-w-3xl gap-4"
+          onSubmit={handleMemberMessageSubmit}
+        >
+          <Field htmlFor="member-message-subject" label="件名">
+            <Input
+              id="member-message-subject"
+              type="text"
+              maxLength={120}
+              placeholder="例: 次回イベントについて"
+              value={memberMessageSubject}
+              onChange={(event) => setMemberMessageSubject(event.target.value)}
+              required
+            />
+          </Field>
+          <Field
+            htmlFor="member-message-body"
+            label="メッセージ"
+            description="2,000文字以内で入力してください。"
+          >
+            <Textarea
+              id="member-message-body"
+              rows={7}
+              maxLength={2000}
+              placeholder="管理者へのメッセージを入力してください"
+              value={memberMessageBody}
+              onChange={(event) => setMemberMessageBody(event.target.value)}
+              required
+            />
+          </Field>
+          {memberMessageStatus ? (
+            <Alert
+              className={
+                memberMessageStatus.tone === "success"
+                  ? "brand-success-surface"
+                  : memberMessageStatus.tone === "warning"
+                    ? "border-amber-500 bg-amber-50 text-amber-950"
+                    : "border-destructive/50 text-destructive"
+              }
+            >
+              <AlertTitle>
+                {memberMessageStatus.tone === "success"
+                  ? "送信完了"
+                  : memberMessageStatus.tone === "warning"
+                    ? "メッセージ保存済み"
+                    : "送信エラー"}
+              </AlertTitle>
+              <AlertDescription>{memberMessageStatus.text}</AlertDescription>
+            </Alert>
+          ) : null}
+          <div className="flex justify-end">
+            <Button type="submit" disabled={loading}>
+              管理者へ送信
+            </Button>
+          </div>
+        </form>
       </Section>
       <Section
         title="プロフィール"
