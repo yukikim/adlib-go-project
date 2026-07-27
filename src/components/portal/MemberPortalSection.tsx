@@ -1810,62 +1810,6 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
           </Card>
         ) : null}
 
-        {/* <Section title="セッションエントリー" description="ラウンド2はここから追加リクエストを登録します。">
-        <div className="mt-4 grid max-w-3xl gap-4 md:grid-cols-2">
-          <Field label="イベント" htmlFor="member-event-id" className="md:col-span-2">
-            <Select value={memberEventId || NONE_VALUE} onValueChange={(value) => setMemberEventId(value === NONE_VALUE ? '' : value)}>
-              <SelectTrigger id="member-event-id" className="w-full">
-                <SelectValue placeholder="イベントを選択" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={NONE_VALUE}>イベントを選択</SelectItem>
-                {scheduledEvents.map((event) => (
-                  <SelectItem key={event.id} value={event.id}>{event.title}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </Field>
-          {entryState.round === 1 ? (
-            <div className="md:col-span-2">
-              <Alert>
-                <AlertTitle>ラウンド1は上の一覧から登録します</AlertTitle>
-                <AlertDescription>
-                  参加募集中イベント(ラウンド1) の「エントリー」ボタンからモーダルを開いてください。募集期間中は何度でも修正できます。
-                </AlertDescription>
-              </Alert>
-            </div>
-          ) : null}
-          {entryState.round === 2 ? (
-            <>
-              <div className="md:col-span-2">
-                <Alert variant={entryState.canSubmit ? 'default' : 'destructive'}>
-                  <AlertTitle>{entryState.canSubmit ? '入力可能です' : '現在は入力できません'}</AlertTitle>
-                  <AlertDescription>{entryState.canSubmit ? '現在入力できるのは Round 2 です。' : entryState.reason}</AlertDescription>
-                </Alert>
-              </div>
-              <Field label="参加可否" htmlFor="member-attendance-status" className="md:col-span-2">
-                <Select value={memberAttendanceStatus} onValueChange={(value) => setMemberAttendanceStatus(value as AttendanceStatus)}>
-                  <SelectTrigger id="member-attendance-status" className="w-full">
-                    <SelectValue placeholder="参加可否を選択" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="attending">参加</SelectItem>
-                    <SelectItem value="undecided">未定</SelectItem>
-                    <SelectItem value="absent">不参加</SelectItem>
-                  </SelectContent>
-                </Select>
-              </Field>
-              <div className="md:col-span-2">
-                {renderRound2SelectionBlock(memberEventId, round2CandidateSongs, { interactive: true })}
-              </div>
-              <div className="md:col-span-2">
-                <Button type="button" onClick={() => { void onSubmitEntry(); }} disabled={loading || !entryState.canSubmit}>エントリー保存</Button>
-              </div>
-            </>
-          ) : null}
-        </div>
-      </Section> */}
-
         <Card className="border p-2 bg-sky-100">
           <CardTitle className="text-sm font-semibold text-sky-600 bg-neutral-50 px-4 py-1">
             セッションセット確定イベント(公開)
