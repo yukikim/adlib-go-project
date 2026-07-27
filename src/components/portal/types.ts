@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import type { SessionEventStatus } from '@/lib/sessionEventStatus';
+import type { SessionEventType } from '@/lib/sessionEventType';
 
 export type PortalView = 'signin' | 'signup' | 'admin-signin' | 'member' | 'admin';
 export type Instrument = 'drum' | 'bass' | 'piano' | 'front' | 'vocal';
@@ -51,6 +52,7 @@ export type MemberListView = {
 
 export type SessionEventView = {
   id: string;
+  eventType: SessionEventType;
   title: string;
   venue: string;
   eventDate: string;
@@ -71,6 +73,7 @@ export type SessionEventView = {
   status: SessionEventStatus;
   canSubmit?: boolean;
   entryRound?: 1 | 2 | null;
+  entryMode?: 'song_request' | 'attendance_only';
   entryReason?: string | null;
   isVisibleToMembers?: boolean;
   round2CandidateSongs?: string[];

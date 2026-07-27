@@ -46,6 +46,11 @@ import { downloadSessionSetPdf } from './sessionSetPdf';
 import { RatingSummaryList } from './RatingSummaryList';
 import { AGE_RANGE_OPTIONS, GENDER_OPTIONS, PREFECTURE_OPTIONS } from '@/lib/memberProfile';
 import { getSessionEventStatusLabel } from '@/lib/sessionEventStatus';
+import {
+  getAllowedSessionEventStatuses,
+  getSessionEventTypeLabel,
+  type SessionEventType,
+} from '@/lib/sessionEventType';
 import type {
   ActivityLogView,
   ArchiveView,
@@ -66,6 +71,7 @@ import { Tooltip } from "radix-ui";
 // import MainHeader from '@/components/portal/MainHeader';
 
 type ArchivePreview = {
+  eventType: 'song_request' | 'attendance_only';
   participantCount: number;
   setCount: number;
   ratingSummaryIncluded: boolean;
@@ -214,6 +220,7 @@ type AdminPortalSectionProps = {
   selectedAdminEventId: string;
   selectedArchiveEventId: string;
   selectedAdminEvent: SessionEventView | null;
+  eventType: SessionEventType;
   eventTitle: string;
   eventVenue: string;
   eventDate: string;
@@ -286,6 +293,7 @@ type AdminPortalSectionProps = {
   columnPublished: boolean;
   setSelectedAdminEventId: (value: string) => void;
   setSelectedArchiveEventId: (value: string) => void;
+  setEventType: (value: SessionEventType) => void;
   setEventTitle: (value: string) => void;
   setEventVenue: (value: string) => void;
   setEventDate: (value: string) => void;
@@ -370,6 +378,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     selectedAdminEventId,
     selectedArchiveEventId,
     selectedAdminEvent,
+    eventType,
     eventTitle,
     eventVenue,
     eventDate,
@@ -442,6 +451,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     columnPublished,
     setSelectedAdminEventId,
     setSelectedArchiveEventId,
+    setEventType,
     setEventTitle,
     setEventVenue,
     setEventDate,
@@ -1037,6 +1047,22 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                         </DialogDescription>
                       </DialogHeader>
                       <div id="admin-event-edit" className="grid gap-4 py-4 sm:grid-cols-2">
+                        <Field htmlFor="admin-event-type" label="イベント形式" className="sm:col-span-2">
+                          <Select value={eventType} onValueChange={(value) => setEventType(value as SessionEventType)}>
+                            <SelectTrigger id="admin-event-type" className="w-full">
+                              <SelectValue placeholder="イベント形式を選択" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="song_request">リクエスト曲あり（通常）</SelectItem>
+                              <SelectItem value="attendance_only">リクエスト曲なし（参加回答のみ）</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <p className="text-sm text-muted-foreground">
+                            {eventType === 'attendance_only'
+                              ? '参加可否と懇親会参加可否だけを募集し、sessionSet とレイティングは使用しません。'
+                              : '参加可否とリクエスト曲を募集し、sessionSet を作成する従来形式です。'}
+                          </p>
+                        </Field>
                         <Field htmlFor="admin-event-title" label="イベント名" className="sm:col-span-2">
                           <Input id="admin-event-title" type="text" placeholder="イベント名" value={eventTitle} onChange={(event) => setEventTitle(event.target.value)} />
                         </Field>
@@ -1130,6 +1156,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                       <li key={sessionEvent.id} className="overflow-hidden rounded-lg bg-taupe-100 p-2 space-y-2">
                         <div className="flex flex-wrap items-center gap-2 mb-0">
                           <span className="text-lg text-on-primary font-semibold">{sessionEvent.title}</span>
+                          <Badge variant="secondary">{getSessionEventTypeLabel(sessionEvent.eventType)}</Badge>
                           <Badge variant="outline">ステータス: {statusConversion(sessionEvent.status)}</Badge>
                         </div>
                         <div className="text-sm font-semibold bg-background text-on-background p-1 w-auto">
@@ -1143,10 +1170,14 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                           {sessionEvent.hasAfterParty ? <Badge variant="secondary">懇親会 {sessionEvent.afterPartyFee != null ? formatYen(sessionEvent.afterPartyFee) : '料金未定'}</Badge> : null}
                         </div>
                         {sessionEvent.notes ? <p className="text-sm text-gray-700">備考: {sessionEvent.notes}</p> : null}
-                        <div className="pl-4">
-                          <p className="text-sm text-gray-700"><span className="font-semibold text-xs">募集期間(Round1):</span> {formatDateTime(sessionEvent.round1StartAt)} 〜 {formatDateTime(sessionEvent.round1EndAt)}</p>
-                          <p className="text-sm text-gray-700"><span className="font-semibold text-xs">募集期間(Round2):</span> {formatDateTime(sessionEvent.round2StartAt)} 〜 {formatDateTime(sessionEvent.round2EndAt)}</p>
-                        </div>
+                        {sessionEvent.eventType === 'song_request' ? (
+                          <div className="pl-4">
+                            <p className="text-sm text-gray-700"><span className="font-semibold text-xs">募集期間(Round1):</span> {formatDateTime(sessionEvent.round1StartAt)} 〜 {formatDateTime(sessionEvent.round1EndAt)}</p>
+                            <p className="text-sm text-gray-700"><span className="font-semibold text-xs">募集期間(Round2):</span> {formatDateTime(sessionEvent.round2StartAt)} 〜 {formatDateTime(sessionEvent.round2EndAt)}</p>
+                          </div>
+                        ) : (
+                          <p className="pl-4 text-sm text-gray-700">公開ステータスの間、参加回答を受け付けます。</p>
+                        )}
                         <div className="flex flex-wrap items-center gap-4">
 
                           <button
@@ -1172,7 +1203,9 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                                 <DialogHeader>
                                   <DialogTitle>イベント編集</DialogTitle>
                                   <DialogDescription>
-                                    募集ラウンドや公開状態、受付期間を更新できます。
+                                    {selectedAdminEvent
+                                      ? `${getSessionEventTypeLabel(selectedAdminEvent.eventType)}の基本情報と公開状態を更新できます。`
+                                      : 'イベントの基本情報と公開状態を更新できます。'}
                                   </DialogDescription>
                                 </DialogHeader>
                                 <div id="admin-event-edit" className="grid gap-4 py-4">
@@ -1181,6 +1214,9 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                                       <Field htmlFor="admin-edit-event-title" label="イベント名" className="sm:col-span-2">
                                         <Input id="admin-edit-event-title" type="text" placeholder="イベント名" value={editEventTitle} onChange={(event) => setEditEventTitle(event.target.value)} />
                                       </Field>
+                                      <div className="sm:col-span-2">
+                                        <Badge variant="secondary">{getSessionEventTypeLabel(selectedAdminEvent.eventType)}</Badge>
+                                      </div>
                                       <Field htmlFor="admin-edit-event-venue" label="会場">
                                         <Input id="admin-edit-event-venue" type="text" placeholder="会場" value={editEventVenue} onChange={(event) => setEditEventVenue(event.target.value)} />
                                       </Field>
@@ -1205,14 +1241,11 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                                             <SelectValue placeholder="ステータスを選択" />
                                           </SelectTrigger>
                                           <SelectContent className="bg-gray-200">
-                                            <SelectItem value="draft">下書き</SelectItem>
-                                            <SelectItem value="announced">告知</SelectItem>
-                                            <SelectItem value="recruiting_round1">募集（ラウンド1）</SelectItem>
-                                            <SelectItem value="recruiting_round2">募集（ラウンド2）</SelectItem>
-                                            <SelectItem value="generating">生成中</SelectItem>
-                                            <SelectItem value="published">公開</SelectItem>
-                                            <SelectItem value="rating">レイティング</SelectItem>
-                                            <SelectItem value="closed">終了</SelectItem>
+                                            {getAllowedSessionEventStatuses(selectedAdminEvent.eventType).map((status) => (
+                                              <SelectItem key={status} value={status}>
+                                                {getSessionEventStatusLabel(status)}
+                                              </SelectItem>
+                                            ))}
                                           </SelectContent>
                                         </Select>
                                       </Field>
@@ -1228,18 +1261,22 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                                       <Field htmlFor="admin-edit-event-notes" label="備考" className="sm:col-span-2">
                                         <Textarea id="admin-edit-event-notes" rows={4} placeholder="注意事項や持ち物など" value={editEventNotes} onChange={(event) => setEditEventNotes(event.target.value)} />
                                       </Field>
-                                      <Field htmlFor="admin-edit-round1-start" label="Round1 開始">
-                                        <Input id="admin-edit-round1-start" type="datetime-local" value={editRound1StartAt} onChange={(event) => setEditRound1StartAt(event.target.value)} />
-                                      </Field>
-                                      <Field htmlFor="admin-edit-round1-end" label="Round1 終了">
-                                        <Input id="admin-edit-round1-end" type="datetime-local" value={editRound1EndAt} onChange={(event) => setEditRound1EndAt(event.target.value)} />
-                                      </Field>
-                                      <Field htmlFor="admin-edit-round2-start" label="Round2 開始">
-                                        <Input id="admin-edit-round2-start" type="datetime-local" value={editRound2StartAt} onChange={(event) => setEditRound2StartAt(event.target.value)} />
-                                      </Field>
-                                      <Field htmlFor="admin-edit-round2-end" label="Round2 終了">
-                                        <Input id="admin-edit-round2-end" type="datetime-local" value={editRound2EndAt} onChange={(event) => setEditRound2EndAt(event.target.value)} />
-                                      </Field>
+                                      {selectedAdminEvent.eventType === 'song_request' ? (
+                                        <>
+                                          <Field htmlFor="admin-edit-round1-start" label="Round1 開始">
+                                            <Input id="admin-edit-round1-start" type="datetime-local" value={editRound1StartAt} onChange={(event) => setEditRound1StartAt(event.target.value)} />
+                                          </Field>
+                                          <Field htmlFor="admin-edit-round1-end" label="Round1 終了">
+                                            <Input id="admin-edit-round1-end" type="datetime-local" value={editRound1EndAt} onChange={(event) => setEditRound1EndAt(event.target.value)} />
+                                          </Field>
+                                          <Field htmlFor="admin-edit-round2-start" label="Round2 開始">
+                                            <Input id="admin-edit-round2-start" type="datetime-local" value={editRound2StartAt} onChange={(event) => setEditRound2StartAt(event.target.value)} />
+                                          </Field>
+                                          <Field htmlFor="admin-edit-round2-end" label="Round2 終了">
+                                            <Input id="admin-edit-round2-end" type="datetime-local" value={editRound2EndAt} onChange={(event) => setEditRound2EndAt(event.target.value)} />
+                                          </Field>
+                                        </>
+                                      ) : null}
                                       {/* <div className="sm:col-span-2">
                                       <Button type="button" onClick={onUpdateEvent} disabled={loading}>
                                         イベント更新
@@ -1309,7 +1346,6 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
 
                                     return (
                                       <li key={entry.id} className="rounded-lg border bg-card/80 p-4">
-                                        <p>{entry.afterPartyAttendanceStatus}</p>
                                         <div className="flex flex-wrap items-center gap-2">
                                           <span className="font-medium">{entry.memberProfile.displayName}</span>
                                           <Badge variant="secondary">{entry.memberProfile.mainInstrument}</Badge>
@@ -1323,9 +1359,10 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                                             </Badge>
                                           ) : null}
                                         </div>
-                                        <div className="mt-3">
+                                        {sessionEvent.eventType === 'song_request' ? (
+                                          <div className="mt-3">
 
-                                          <div className="">
+                                          <div>
                                             <div className="space-y-2 mb-4">
                                               <p className="text-xs font-medium py-1 px-2 bg-secondary text-on-secondary w-29">Round 1 の希望曲</p>
                                               {round1Requests.length === 0 ? (
@@ -1358,12 +1395,14 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                                             </div>
                                           </div>
 
-                                        </div>
+                                          </div>
+                                        ) : null}
                                       </li>
                                     );
                                   })}
                                 </ul>
-                                <div className="">
+                                {sessionEvent.eventType === 'song_request' ? (
+                                  <div>
                                   <h4 className="text-sm bg-pearl-beige px-2 py-1 mb-4">名寄せしたリクエスト曲リスト({sessionEvent.round2CandidateSongs?.length || 0}曲)</h4>
                                   <div>
                                     {sessionEvent.round2CandidateSongs?.length ? (
@@ -1378,7 +1417,8 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                                       <p className="text-sm text-muted-foreground">登録なし</p>
                                     )}
                                   </div>
-                                </div>
+                                  </div>
+                                ) : null}
                                 <div>
                                   <h4 className="text-sm bg-pearl-beige px-2 py-1 mb-4">懇親会参加人数({afterPartyAttendMemberNames.length || 0}人)</h4>
                                   <div>
@@ -1861,7 +1901,9 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                     <AlertTitle>アーカイブ preview</AlertTitle>
                     <AlertDescription>
                       {archivePreview
-                        ? `参加者 ${archivePreview.participantCount} 名 / sets ${archivePreview.setCount} / 評価 ${archivePreview.ratingSummaryIncluded ? 'あり' : 'なし'}`
+                        ? archivePreview.eventType === 'attendance_only'
+                          ? `参加者 ${archivePreview.participantCount} 名（開催日・場所・参加者リストのみ保存）`
+                          : `参加者 ${archivePreview.participantCount} 名 / sets ${archivePreview.setCount} / 評価 ${archivePreview.ratingSummaryIncluded ? 'あり' : 'なし'}`
                         : 'preview はありません。'}
                     </AlertDescription>
                   </Alert>

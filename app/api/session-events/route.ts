@@ -6,6 +6,7 @@ import { sessionEventCreateRequestSchema } from '@/lib/apiSchemas';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { getRound1CandidateSongs, getSessionEventLifecycleState } from '@/lib/sessionEventWindow';
 import { isSessionEventVisibleToMembers } from '@/lib/sessionEventStatus';
+import { isSessionEventStatusAllowed } from '@/lib/sessionEventType';
 
 export async function GET(request: NextRequest) {
   const authenticatedUser = await getAuthenticatedUser(request);
@@ -250,6 +251,7 @@ export async function GET(request: NextRequest) {
           status: lifecycle.status,
           canSubmit: lifecycle.canSubmit,
           entryRound: lifecycle.round,
+          entryMode: lifecycle.entryMode,
           entryReason: lifecycle.reason,
           canGenerateSessionSets: lifecycle.canGenerateSessionSets,
           canPrepareRound2Candidates: lifecycle.canPrepareRound2Candidates,
@@ -277,9 +279,19 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: getZodErrorMessage(parsed.error) }, { status: 400 });
   }
   const body = parsed.data;
+  const eventType = body.eventType ?? 'song_request';
+  const status = body.status ?? 'draft';
+
+  if (!isSessionEventStatusAllowed(eventType, status)) {
+    return NextResponse.json(
+      { error: 'このイベント形式では選択できないステータスです' },
+      { status: 400 },
+    );
+  }
 
   const sessionEvent = await prisma.sessionEvent.create({
     data: {
+      eventType,
       title: body.title,
       description: body.description ?? null,
       venue: body.venue,
@@ -295,7 +307,7 @@ export async function POST(request: NextRequest) {
       round1EndAt: body.round1EndAt ? new Date(body.round1EndAt) : null,
       round2StartAt: body.round2StartAt ? new Date(body.round2StartAt) : null,
       round2EndAt: body.round2EndAt ? new Date(body.round2EndAt) : null,
-      status: body.status ?? 'draft',
+      status,
     },
   });
 

@@ -5,6 +5,7 @@ import { getZodErrorMessage } from '@/lib/authSchemas';
 import { sessionEventUpdateRequestSchema } from '@/lib/apiSchemas';
 import { sendSessionEventStatusNotification } from '@/lib/sessionEventNotifications';
 import { createSessionArchive } from '@/lib/sessionArchive';
+import { isSessionEventStatusAllowed } from '@/lib/sessionEventType';
 
 export async function PATCH(request: NextRequest) {
   const { admin, response } = await requireAdmin(request);
@@ -30,12 +31,20 @@ export async function PATCH(request: NextRequest) {
       title: true,
       venue: true,
       eventDate: true,
+      eventType: true,
       status: true,
     },
   });
 
   if (!currentSessionEvent) {
     return NextResponse.json({ error: 'SessionEvent not found' }, { status: 404 });
+  }
+
+  if (body.status && !isSessionEventStatusAllowed(currentSessionEvent.eventType, body.status)) {
+    return NextResponse.json(
+      { error: 'このイベント形式では選択できないステータスです' },
+      { status: 400 },
+    );
   }
 
   const data: Record<string, string | number | boolean | Date | null> = {};

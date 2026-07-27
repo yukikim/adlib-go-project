@@ -58,6 +58,7 @@ export function getEventEntryState(event?: SessionEventView | null) {
     return {
       canSubmit: event.canSubmit,
       round: event.entryRound ?? null,
+      entryMode: event.entryMode ?? event.eventType,
       reason: event.entryReason ?? null,
     };
   }
@@ -73,14 +74,22 @@ export function getEventEntryState(event?: SessionEventView | null) {
 
   if (event.status === 'recruiting_round1') {
     const canSubmit = active(event.round1StartAt, event.round1EndAt);
-    return { canSubmit, round: 1 as const, reason: canSubmit ? null : 'round1 の募集期間外です' };
+    return { canSubmit, round: 1 as const, entryMode: 'song_request' as const, reason: canSubmit ? null : 'round1 の募集期間外です' };
   }
   if (event.status === 'recruiting_round2') {
     const canSubmit = active(event.round2StartAt, event.round2EndAt);
-    return { canSubmit, round: 2 as const, reason: canSubmit ? null : 'round2 の募集期間外です' };
+    return { canSubmit, round: 2 as const, entryMode: 'song_request' as const, reason: canSubmit ? null : 'round2 の募集期間外です' };
+  }
+  if (event.eventType === 'attendance_only' && event.status === 'published') {
+    return { canSubmit: true, round: null, entryMode: 'attendance_only' as const, reason: null };
   }
 
-  return { canSubmit: false, round: null as 1 | 2 | null, reason: '現在は募集受付中ではありません' };
+  return {
+    canSubmit: false,
+    round: null as 1 | 2 | null,
+    entryMode: event.eventType,
+    reason: '現在は募集受付中ではありません',
+  };
 }
 
 export async function parseJson(response: Response) {

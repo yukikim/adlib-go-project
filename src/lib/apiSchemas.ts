@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { MAIN_INSTRUMENT_OPTIONS } from './memberProfile';
 import { nonEmptyTrimmedStringSchema } from './authSchemas';
 import { SESSION_EVENT_STATUS_VALUES } from './sessionEventStatus';
+import { SESSION_EVENT_TYPE_VALUES } from './sessionEventType';
 
 const normalizedNullableStringSchema = z.preprocess((value) => {
   if (typeof value !== 'string') {
@@ -57,6 +58,7 @@ export const sessionEntryCreateRequestSchema = z.object({
 }).strict();
 
 export const sessionEventCreateRequestSchema = z.object({
+  eventType: z.enum(SESSION_EVENT_TYPE_VALUES).optional(),
   title: z.string().trim().min(1, 'Invalid body'),
   description: normalizedNullableStringSchema,
   venue: z.string().trim().min(1, 'Invalid body'),

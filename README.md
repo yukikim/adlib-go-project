@@ -679,6 +679,11 @@ npm run setup:admin-member-profile -- \
 
 ### SessionEvent ステータス運用
 
+SessionEvent には 2 種類のイベント形式があります。
+
+- `song_request`: リクエスト曲を募集し、sessionSet の生成・公開・レイティングを行う従来形式
+- `attendance_only`: リクエスト曲を募集せず、参加可否と懇親会参加可否だけを受け付ける形式
+
 現在の SessionEvent ステータス:
 
 - `draft`: 管理者のイベント準備期間。メンバー画面には表示しません
@@ -692,6 +697,10 @@ npm run setup:admin-member-profile -- \
 
 補足:
 
+- `attendance_only` で選択できるステータスは `draft` / `announced` / `published` / `closed` のみです
+- `attendance_only` では `published` を参加受付中として扱い、SessionEntryRequest、sessionSet、レイティングを作成しません
+- `attendance_only` を `published` に切り替えると、アクティブなメンバー全員へ参加受付開始メールを送信します
+- `attendance_only` の終了時アーカイブは、開催日・場所・参加者リストだけを保存します
 - `published` への切替は `POST /api/session-events/:id/publish` で行い、公開対象の参加メンバーへメール送信します
 - `published` 中のみ `POST /api/session-events/:id/comments` でイベントコメントを受け付け、投稿時に管理者へ通知します
 - `rating` 中のみ `POST /api/session-sets/:id/ratings` を受け付けます
@@ -712,6 +721,15 @@ curl -sS -X POST http://localhost:3000/api/session-events \
 	-H "Content-Type: application/json" \
 	-b cookies.txt -c cookies.txt \
 	-d '{"title":"2026年7月セッション","venue":"代官山 Session Lab","eventDate":"2026-07-10"}'
+```
+
+リクエスト曲なしイベントの作成:
+
+```bash
+curl -sS -X POST http://localhost:3000/api/session-events \
+	-H "Content-Type: application/json" \
+	-b cookies.txt -c cookies.txt \
+	-d '{"eventType":"attendance_only","title":"2026年8月 リクエスト曲なしセッション","venue":"代官山 Session Lab","eventDate":"2026-08-10","startTime":"2026-08-10T13:00:00+09:00","endTime":"2026-08-10T17:00:00+09:00","hasAfterParty":true,"participantLimit":30}'
 ```
 
 SessionEvent 更新と募集状態変更:
@@ -748,11 +766,21 @@ curl -sS -X POST http://localhost:3000/api/session-entries \
 	-d '{"sessionEventId":"event-id","attendanceStatus":"attending","requests":[{"songTitle":"Autumn Leaves","round":1,"priority":1}]}'
 ```
 
+リクエスト曲なしイベントへの参加回答:
+
+```bash
+curl -sS -X POST http://localhost:3000/api/session-entries \
+	-H "Content-Type: application/json" \
+	-b cookies.txt -c cookies.txt \
+	-d '{"sessionEventId":"attendance-only-event-id","attendanceStatus":"attending","afterPartyAttendanceStatus":"absent","requests":[]}'
+```
+
 補足:
 
 - `recruiting_round1` の間は Round 1 のみ登録できます
 - `recruiting_round2` の間は Round 2 のみ登録できます
-- `announced` / `generating` / `published` / `rating` / `closed` では SessionEntry を保存できません
+- `song_request` では `announced` / `generating` / `published` / `rating` / `closed` の間、SessionEntry を保存できません
+- `attendance_only` では `published` の間だけ参加回答を保存でき、`requests` は空配列でなければなりません
 - 募集期間外は SessionEntry を保存できません
 
 sessionSet 生成:

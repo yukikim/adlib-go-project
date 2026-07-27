@@ -150,6 +150,7 @@ response 200:
   "sessionEvents": [
     {
       "id": "event-id",
+      "eventType": "song_request",
       "title": "2026年5月セッション",
       "venue": "渋谷 Jazz Spot",
       "eventDate": "2026-05-17T00:00:00.000Z",
@@ -177,6 +178,7 @@ request:
 
 ```json
 {
+  "eventType": "song_request",
   "title": "2026年5月セッション",
   "description": "春の通常セッション",
   "venue": "渋谷 Jazz Spot",
@@ -190,12 +192,18 @@ request:
 }
 ```
 
+`eventType`:
+
+- `song_request`: 希望曲を募集する従来形式。省略時の既定値
+- `attendance_only`: 参加可否と懇親会参加可否だけを募集する形式
+
 response 201:
 
 ```json
 {
   "sessionEvent": {
     "id": "event-id",
+    "eventType": "song_request",
     "title": "2026年5月セッション",
     "venue": "渋谷 Jazz Spot",
     "eventDate": "2026-05-17T00:00:00.000Z",
@@ -236,6 +244,8 @@ request 例:
 
 - `draft` → `recruiting_round1` → `recruiting_round2` → `generating` / `published` / `closed` の順で使う
 - SessionEntry 受付可否は `status` と round ごとの期間で判定する
+- `attendance_only` で指定できる status は `draft` / `announced` / `published` / `closed` のみ
+- `attendance_only` の `published` は参加受付中を表し、sessionSet 公開 APIは使用しない
 
 ### 3.3 DELETE /api/session-events/:id
 
@@ -278,6 +288,7 @@ response 404:
 用途:
 
 - メンバーが対象イベントへの参加可否と希望曲を登録する
+- `attendance_only` では参加可否と懇親会参加可否だけを登録する
 
 権限:
 

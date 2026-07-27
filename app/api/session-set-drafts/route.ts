@@ -54,11 +54,17 @@ export async function POST(request: NextRequest) {
 
   const sessionEvent = await prisma.sessionEvent.findUnique({
     where: { id: body.sessionEventId },
-    select: { id: true, title: true },
+    select: { id: true, title: true, eventType: true },
   });
 
   if (!sessionEvent) {
     return NextResponse.json({ error: 'SessionEvent not found' }, { status: 404 });
+  }
+  if (sessionEvent.eventType === 'attendance_only') {
+    return NextResponse.json(
+      { error: 'リクエスト曲なしイベントでは sessionSet 下書きを保存できません' },
+      { status: 400 },
+    );
   }
 
   const title = buildSessionSetDraftTitle(sessionEvent.title);

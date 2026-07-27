@@ -18,6 +18,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       preview: {
         sessionEventId,
+        eventType: preview.sessionEvent.eventType,
         eventDate: preview.sessionEvent.eventDate,
         venue: preview.sessionEvent.venue,
         participantCount: preview.participantCount,

@@ -58,7 +58,97 @@ export async function POST(request: NextRequest) {
   const nextAllowForcedAssignment = body.allowForcedAssignment ?? true;
 
   const entryState = getSessionEventEntryState(sessionEvent);
-  if (!entryState.canSubmit || !entryState.round) {
+  if (!entryState.canSubmit) {
+    return NextResponse.json({ error: entryState.reason ?? 'Entry is not allowed' }, { status: 400 });
+  }
+
+  if (sessionEvent.eventType === 'attendance_only') {
+    if (body.requests.length > 0) {
+      return NextResponse.json(
+        { error: 'リクエスト曲なしイベントでは曲を登録できません' },
+        { status: 400 },
+      );
+    }
+
+    const memberProfile = auth.user.memberProfile!;
+
+    try {
+      const entry = await prisma.$transaction(async (tx) => {
+        const existingEntry = await tx.sessionEntry.findUnique({
+          where: {
+            sessionEventId_memberProfileId: {
+              sessionEventId: body.sessionEventId,
+              memberProfileId: memberProfile.id,
+            },
+          },
+          select: {
+            attendanceStatus: true,
+          },
+        });
+
+        const isTransitioningToAttending =
+          body.attendanceStatus === 'attending'
+          && existingEntry?.attendanceStatus !== 'attending';
+
+        if (sessionEvent.participantLimit != null && isTransitioningToAttending) {
+          const attendingCount = await tx.sessionEntry.count({
+            where: {
+              sessionEventId: body.sessionEventId,
+              attendanceStatus: 'attending',
+            },
+          });
+
+          if (attendingCount >= sessionEvent.participantLimit) {
+            throw new Error(SESSION_EVENT_CAPACITY_ERROR);
+          }
+        }
+
+        const upsertedEntry = await tx.sessionEntry.upsert({
+          where: {
+            sessionEventId_memberProfileId: {
+              sessionEventId: body.sessionEventId,
+              memberProfileId: memberProfile.id,
+            },
+          },
+          update: {
+            attendanceStatus: body.attendanceStatus,
+            afterPartyAttendanceStatus: afterPartyAttendanceStatusUpdate ?? null,
+            allowForcedAssignment: false,
+          },
+          create: {
+            sessionEventId: body.sessionEventId,
+            memberProfileId: memberProfile.id,
+            attendanceStatus: body.attendanceStatus,
+            afterPartyAttendanceStatus: nextAfterPartyAttendanceStatus,
+            allowForcedAssignment: false,
+          },
+        });
+
+        // この形式では曲情報を一切保持しない。将来の形式変更や直接API呼び出しでも
+        // 古い希望曲が残らないよう、参加回答の保存時に関連リクエストを空にする。
+        await tx.sessionEntryRequest.deleteMany({
+          where: { sessionEntryId: upsertedEntry.id },
+        });
+
+        return tx.sessionEntry.findUniqueOrThrow({
+          where: { id: upsertedEntry.id },
+          include: {
+            sessionEvent: true,
+            requests: true,
+          },
+        });
+      });
+
+      return NextResponse.json({ entry }, { status: 201 });
+    } catch (error: unknown) {
+      if (error instanceof Error && error.message === SESSION_EVENT_CAPACITY_ERROR) {
+        return NextResponse.json({ error: error.message }, { status: 409 });
+      }
+      throw error;
+    }
+  }
+
+  if (!entryState.round) {
     return NextResponse.json({ error: entryState.reason ?? 'Entry is not allowed' }, { status: 400 });
   }
   const activeRound = entryState.round;

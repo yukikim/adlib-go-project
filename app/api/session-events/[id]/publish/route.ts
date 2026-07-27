@@ -22,6 +22,12 @@ export async function POST(request: NextRequest) {
   if (!sessionEvent) {
     return NextResponse.json({ error: 'SessionEvent not found' }, { status: 404 });
   }
+  if (sessionEvent.eventType === 'attendance_only') {
+    return NextResponse.json(
+      { error: 'リクエスト曲なしイベントでは sessionSet を公開できません' },
+      { status: 400 },
+    );
+  }
 
   if (sessionEvent.sessionSets.length === 0) {
     return NextResponse.json({ error: 'No session sets to publish' }, { status: 400 });

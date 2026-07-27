@@ -1,6 +1,8 @@
 import { normalizeSessionEventStatus, type SessionEventStatus } from './sessionEventStatus';
+import type { SessionEventType } from './sessionEventType';
 
 type SessionEventLike = {
+  eventType?: SessionEventType | string;
   status: SessionEventStatus | string;
   round1StartAt: Date | string | null;
   round1EndAt: Date | string | null;
@@ -21,6 +23,7 @@ export type SessionEventLifecycleState = {
   status: SessionEventStatus;
   canSubmit: boolean;
   round: 1 | 2 | null;
+  entryMode: 'song_request' | 'attendance_only';
   canGenerateSessionSets: boolean;
   canPrepareRound2Candidates: boolean;
   reason: string | null;
@@ -136,10 +139,32 @@ function getWindowReason(label: 'round1' | 'round2', start: Date | null, end: Da
 
 export function getSessionEventLifecycleState(sessionEvent: SessionEventLike, now = new Date()): SessionEventLifecycleState {
   const status = normalizeSessionEventStatus(sessionEvent.status);
+  const isAttendanceOnly = sessionEvent.eventType === 'attendance_only';
   const round1StartAt = toDate(sessionEvent.round1StartAt);
   const round1EndAt = toDate(sessionEvent.round1EndAt);
   const round2StartAt = toDate(sessionEvent.round2StartAt);
   const round2EndAt = toDate(sessionEvent.round2EndAt);
+
+  if (isAttendanceOnly) {
+    const canSubmit = status === 'published';
+    const reason = (() => {
+      if (status === 'draft') return '管理者のイベント準備中です';
+      if (status === 'announced') return '開催予定イベントとして告知中です';
+      if (status === 'published') return null;
+      if (status === 'closed') return 'イベントは終了しました';
+      return 'このイベント形式では利用できないステータスです';
+    })();
+
+    return {
+      status,
+      canSubmit,
+      round: null,
+      entryMode: 'attendance_only',
+      canGenerateSessionSets: false,
+      canPrepareRound2Candidates: false,
+      reason,
+    };
+  }
 
   switch (status) {
     case 'draft':
@@ -147,6 +172,7 @@ export function getSessionEventLifecycleState(sessionEvent: SessionEventLike, no
         status,
         canSubmit: false,
         round: null,
+        entryMode: 'song_request',
         canGenerateSessionSets: false,
         canPrepareRound2Candidates: false,
         reason: '管理者のイベント準備中です',
@@ -156,6 +182,7 @@ export function getSessionEventLifecycleState(sessionEvent: SessionEventLike, no
         status,
         canSubmit: false,
         round: null,
+        entryMode: 'song_request',
         canGenerateSessionSets: false,
         canPrepareRound2Candidates: false,
         reason: '開催予定イベントとして告知中です',
@@ -166,6 +193,7 @@ export function getSessionEventLifecycleState(sessionEvent: SessionEventLike, no
         status,
         canSubmit,
         round: canSubmit ? 1 : null,
+        entryMode: 'song_request',
         canGenerateSessionSets: false,
         canPrepareRound2Candidates: Boolean(round1EndAt && now > round1EndAt),
         reason: canSubmit ? null : getWindowReason('round1', round1StartAt, round1EndAt, now),
@@ -177,6 +205,7 @@ export function getSessionEventLifecycleState(sessionEvent: SessionEventLike, no
         status,
         canSubmit,
         round: canSubmit ? 2 : null,
+        entryMode: 'song_request',
         canGenerateSessionSets: false,
         canPrepareRound2Candidates: true,
         reason: canSubmit ? null : getWindowReason('round2', round2StartAt, round2EndAt, now),
@@ -187,6 +216,7 @@ export function getSessionEventLifecycleState(sessionEvent: SessionEventLike, no
         status,
         canSubmit: false,
         round: null,
+        entryMode: 'song_request',
         canGenerateSessionSets: true,
         canPrepareRound2Candidates: true,
         reason: 'sessionSet を作成・編集できます',
@@ -196,6 +226,7 @@ export function getSessionEventLifecycleState(sessionEvent: SessionEventLike, no
         status,
         canSubmit: false,
         round: null,
+        entryMode: 'song_request',
         canGenerateSessionSets: false,
         canPrepareRound2Candidates: true,
         reason: 'sessionSet を公開中です',
@@ -205,6 +236,7 @@ export function getSessionEventLifecycleState(sessionEvent: SessionEventLike, no
         status,
         canSubmit: false,
         round: null,
+        entryMode: 'song_request',
         canGenerateSessionSets: false,
         canPrepareRound2Candidates: true,
         reason: 'レイティング受付中です',
@@ -214,6 +246,7 @@ export function getSessionEventLifecycleState(sessionEvent: SessionEventLike, no
         status,
         canSubmit: false,
         round: null,
+        entryMode: 'song_request',
         canGenerateSessionSets: false,
         canPrepareRound2Candidates: true,
         reason: 'イベントは終了しました',
@@ -235,6 +268,7 @@ export function getSessionEventEntryState(sessionEvent: SessionEventLike, now = 
   return {
     canSubmit: lifecycle.canSubmit,
     round: lifecycle.round,
+    entryMode: lifecycle.entryMode,
     reason: lifecycle.canSubmit ? null : lifecycle.reason,
   };
 }

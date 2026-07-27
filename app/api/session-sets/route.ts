@@ -108,6 +108,7 @@ export async function PATCH(request: NextRequest) {
     where: { id: body.sessionEventId },
     select: {
       id: true,
+      eventType: true,
       sessionSets: {
         select: { isPublished: true },
       },
@@ -116,6 +117,12 @@ export async function PATCH(request: NextRequest) {
 
   if (!sessionEvent) {
     return NextResponse.json({ error: 'SessionEvent not found' }, { status: 404 });
+  }
+  if (sessionEvent.eventType === 'attendance_only') {
+    return NextResponse.json(
+      { error: 'リクエスト曲なしイベントでは sessionSet を保存できません' },
+      { status: 400 },
+    );
   }
 
   const songs = await prisma.song.findMany({

@@ -29,6 +29,7 @@
 主なカラム案:
 
 - id
+- eventType
 - title
 
 ### 2.3 ParticipantSongRequest
@@ -95,6 +96,11 @@
 - status
 - createdAt
 - updatedAt
+
+`eventType`:
+
+- `song_request`: 希望曲・sessionSet・レイティングを使用する
+- `attendance_only`: 参加回答だけを使用し、SessionEntryRequest は作成しない
 
 ### 3.2 MemberProfile
 

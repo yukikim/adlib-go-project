@@ -98,7 +98,11 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     }
 
     const publishedEventIds = sessionEvents
-      .filter((event) => event.status === 'published' || event.status === 'rating')
+      .filter(
+        (event) =>
+          event.eventType === 'song_request'
+          && (event.status === 'published' || event.status === 'rating'),
+      )
       .map((event) => event.id);
     const historyEventIds = [
       ...new Set(
@@ -338,6 +342,7 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
     return runAction(async () => {
       const targetEvent = sessionEvents.find((event) => event.id === targetEventId) ?? null;
       const targetEntryState = getEventEntryState(targetEvent);
+      const isAttendanceOnly = targetEvent?.eventType === 'attendance_only';
       const currentEntry = sessionEntries.find((entry) => entry.sessionEventId === targetEventId) ?? null;
       const attendanceStatus = targetEventId === memberEventId
         ? memberAttendanceStatus
@@ -349,11 +354,17 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
         ? memberAllowForcedAssignment
         : currentEntry?.allowForcedAssignment ?? true;
 
-      if (!targetEventId || !targetEntryState.round || !targetEntryState.canSubmit) {
+      if (
+        !targetEventId
+        || !targetEntryState.canSubmit
+        || (!isAttendanceOnly && !targetEntryState.round)
+      ) {
         throw new Error(targetEntryState.reason ?? '現在は登録できません');
       }
 
-      const requests = targetEntryState.round === 1
+      const requests = isAttendanceOnly
+      ? []
+      : targetEntryState.round === 1
       ? [
           { songTitle: memberRound1Song1.trim(), round: 1, priority: 1, keyName: memberRound1Key1.trim() || null },
           { songTitle: memberRound1Song2.trim(), round: 1, priority: 2, keyName: memberRound1Key2.trim() || null },
@@ -379,10 +390,10 @@ export function useMemberPortal({ currentUser, members, sessionEvents, runAction
         body: JSON.stringify({
           sessionEventId: targetEventId,
           attendanceStatus,
-          afterPartyAttendanceStatus: targetEntryState.round === 1 && targetEvent?.hasAfterParty
+          afterPartyAttendanceStatus: (isAttendanceOnly || targetEntryState.round === 1) && targetEvent?.hasAfterParty
             ? afterPartyAttendanceStatus
             : undefined,
-          allowForcedAssignment,
+          allowForcedAssignment: isAttendanceOnly ? false : allowForcedAssignment,
           requests: requests.filter((item) => item.songTitle),
         }),
       });

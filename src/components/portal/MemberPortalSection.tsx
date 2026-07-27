@@ -460,11 +460,11 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     profileNewPassword,
     profileNewPasswordConfirm,
     onProfileUpdate,
-    onSignOut,
     onSubmitEntry,
     onSaveEventRatings,
   } = props;
   const [isRound1EntryDialogOpen, setIsRound1EntryDialogOpen] = useState(false);
+  const [isAttendanceEntryDialogOpen, setIsAttendanceEntryDialogOpen] = useState(false);
 
   const handleProfileSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -486,11 +486,16 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
   const round2RecruitingEvents = isVocalMember
     ? []
     : sessionEvents.filter((event) => event.status === "recruiting_round2");
+  const attendanceOnlyRecruitingEvents = sessionEvents.filter(
+    (event) =>
+      event.eventType === "attendance_only" && event.status === "published",
+  );
   const publishedEvents = sessionEvents.filter(
-    (event) => event.status === "published",
+    (event) =>
+      event.eventType === "song_request" && event.status === "published",
   );
   const ratingEvents = sessionEvents.filter(
-    (event) => event.status === "rating",
+    (event) => event.eventType === "song_request" && event.status === "rating",
   );
 
   // console.log('announcedEvents:', announcedEvents);
@@ -501,6 +506,9 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
   // console.log('round2CandidateSongs:', round2CandidateSongs);
   const selectedRound1Event =
     round1RecruitingEvents.find((event) => event.id === memberEventId) ?? null;
+  const selectedAttendanceOnlyEvent =
+    attendanceOnlyRecruitingEvents.find((event) => event.id === memberEventId) ??
+    null;
 
   const isCurrentMemberAttendingEvent = (eventId: string) =>
     getSessionEntryForEvent(eventId)?.attendanceStatus === "attending";
@@ -927,6 +935,26 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     setIsRound1EntryDialogOpen(true);
   };
 
+  const handleAttendanceEntryOpen = (eventId: string) => {
+    setMemberEventId(eventId);
+    setIsAttendanceEntryDialogOpen(true);
+  };
+
+  const handleAttendanceEntrySubmit = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault();
+    if (loading) {
+      return;
+    }
+
+    await onSubmitEntry({
+      onSuccess: () => {
+        setIsAttendanceEntryDialogOpen(false);
+      },
+    });
+  };
+
   const handleRound1EntrySubmit = async (
     event: React.FormEvent<HTMLFormElement>,
   ) => {
@@ -1053,6 +1081,202 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             </ul>
           )}
         </Card>
+
+        <Card className="border p-2 bg-cyan-100">
+          <CardTitle className="text-sm font-semibold text-cyan-700 bg-neutral-50 px-4 py-1">
+            参加募集中イベント（リクエスト曲なし）
+          </CardTitle>
+          <CardDescription
+            className={
+              attendanceOnlyRecruitingEvents.length === 0 ? "hidden" : ""
+            }
+          >
+            参加可否と、懇親会がある場合は懇親会の参加可否だけを回答します。
+          </CardDescription>
+          {attendanceOnlyRecruitingEvents.length === 0 ? (
+            <p className="text-sm text-gray-50 bg-gray-400 p-2">
+              表示できる参加募集中イベントはありません。
+            </p>
+          ) : (
+            <ul className="space-y-3">
+              {attendanceOnlyRecruitingEvents.map((event) => {
+                const eventEntry = getSessionEntryForEvent(event.id);
+
+                return (
+                  <li
+                    key={event.id}
+                    className="rounded-xl border bg-background/30 p-4"
+                  >
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div className="space-y-2">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <strong className="text-sm text-cyan-700">
+                            {event.title}
+                          </strong>
+                          <Badge variant="outline">
+                            {getSessionEventStatusLabel(event.status)}
+                          </Badge>
+                          <Badge variant={eventEntry ? "default" : "secondary"}>
+                            回答: {eventEntry ? "済" : "未"}
+                          </Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          {formatEventSchedule(
+                            event.eventDate,
+                            event.startTime,
+                            event.endTime,
+                          )}{" "}
+                          / {event.venue}
+                        </p>
+                        <EventMeta
+                          participantLimit={event.participantLimit}
+                          attendingEntryCount={event.attendingEntryCount}
+                          remainingEntryCapacity={event.remainingEntryCapacity}
+                          isEntryCapacityFull={event.isEntryCapacityFull}
+                          participationFee={event.participationFee}
+                          hasAfterParty={event.hasAfterParty}
+                          afterPartyFee={event.afterPartyFee}
+                          sessionEntries={event.sessionEntries}
+                          notes={event.notes}
+                        />
+                        {eventEntry ? (
+                          <div className="rounded-lg border bg-background/70 p-3 text-sm">
+                            <p className="font-medium">
+                              参加可否:{" "}
+                              {formatAttendanceStatusLabel(
+                                eventEntry.attendanceStatus,
+                              )}
+                            </p>
+                            {event.hasAfterParty ? (
+                              <p className="mt-1 font-medium">
+                                懇親会:{" "}
+                                {formatOptionalAttendanceStatusLabel(
+                                  eventEntry.afterPartyAttendanceStatus,
+                                )}
+                              </p>
+                            ) : null}
+                          </div>
+                        ) : null}
+                      </div>
+                    </div>
+                    <div className="text-right mt-2">
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => handleAttendanceEntryOpen(event.id)}
+                        disabled={loading}
+                      >
+                        {eventEntry ? "変更" : "エントリー"}
+                      </Button>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </Card>
+
+        <Dialog
+          open={isAttendanceEntryDialogOpen}
+          onOpenChange={setIsAttendanceEntryDialogOpen}
+        >
+          <DialogContent className="sm:max-w-xl bg-neutral-200">
+            <DialogHeader>
+              <DialogTitle>
+                {selectedAttendanceOnlyEvent
+                  ? `${selectedAttendanceOnlyEvent.title} の参加回答`
+                  : "イベント参加回答"}
+              </DialogTitle>
+              <DialogDescription>
+                リクエスト曲の登録はありません。参加可否のみ回答してください。
+              </DialogDescription>
+            </DialogHeader>
+
+            {!selectedAttendanceOnlyEvent ? (
+              <Alert variant="destructive">
+                <AlertTitle>イベントが選択されていません</AlertTitle>
+                <AlertDescription>
+                  対象イベントの「回答する」ボタンから開いてください。
+                </AlertDescription>
+              </Alert>
+            ) : (
+              <form
+                className="grid gap-4"
+                onSubmit={handleAttendanceEntrySubmit}
+              >
+                <Field
+                  label="参加可否"
+                  htmlFor="member-attendance-only-status"
+                >
+                  <Select
+                    value={memberAttendanceStatus}
+                    onValueChange={(value) =>
+                      setMemberAttendanceStatus(value as AttendanceStatus)
+                    }
+                  >
+                    <SelectTrigger
+                      id="member-attendance-only-status"
+                      className="w-full bg-background"
+                    >
+                      <SelectValue placeholder="参加可否を選択" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="attending">参加</SelectItem>
+                      <SelectItem value="undecided">未定</SelectItem>
+                      <SelectItem value="absent">不参加</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </Field>
+
+                {selectedAttendanceOnlyEvent.hasAfterParty ? (
+                  <Field
+                    label="懇親会参加可否"
+                    htmlFor="member-attendance-only-after-party-status"
+                  >
+                    <Select
+                      value={memberAfterPartyAttendanceStatus}
+                      onValueChange={(value) =>
+                        setMemberAfterPartyAttendanceStatus(
+                          value as AttendanceStatus,
+                        )
+                      }
+                    >
+                      <SelectTrigger
+                        id="member-attendance-only-after-party-status"
+                        className="w-full bg-background"
+                      >
+                        <SelectValue placeholder="懇親会参加可否を選択" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="attending">参加</SelectItem>
+                        <SelectItem value="undecided">未定</SelectItem>
+                        <SelectItem value="absent">不参加</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                ) : null}
+
+                <DialogFooter>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setIsAttendanceEntryDialogOpen(false)}
+                    disabled={loading}
+                  >
+                    閉じる
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={loading || !entryState.canSubmit}
+                  >
+                    回答を保存
+                  </Button>
+                </DialogFooter>
+              </form>
+            )}
+          </DialogContent>
+        </Dialog>
 
         <Card className="border p-2 bg-orange-100">
           <CardTitle className="text-sm font-semibold text-orange-600 bg-neutral-50 px-4 py-1">

@@ -45,9 +45,11 @@ export function ArchiveList({
                     ) : null}
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    {formatEventDate(archive.eventDate)} / 参加者{" "}
-                    {archive.participantCount} 名 / sessionSet {archive.setCount} 件
-                    / レイティング {archive.ratingCount} 件
+                    {formatEventDate(archive.eventDate)} / {archive.venue} / 参加者{" "}
+                    {archive.participantCount} 名
+                    {archive.setCount > 0
+                      ? ` / sessionSet ${archive.setCount} 件 / レイティング ${archive.ratingCount} 件`
+                      : ""}
                   </p>
                 </div>
                 <ChevronDown className="size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" />
@@ -64,6 +66,12 @@ export function ArchiveList({
                   <dt className="font-medium">イベント開催日</dt>
                   <dd className="mt-1 text-muted-foreground">
                     {formatEventDate(archive.eventDate)}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="font-medium">場所</dt>
+                  <dd className="mt-1 text-muted-foreground">
+                    {archive.venue}
                   </dd>
                 </div>
               </dl>
@@ -95,15 +103,11 @@ export function ArchiveList({
                 )}
               </div>
 
-              <div>
+              {archive.sets.length > 0 ? (
+                <div>
                 <h4 className="font-medium">
                   sessionSet / レイティング結果
                 </h4>
-                {archive.sets.length === 0 ? (
-                  <p className="mt-2 text-muted-foreground">
-                    sessionSet はありません。
-                  </p>
-                ) : (
                   <ol className="mt-2 space-y-3">
                     {archive.sets.map((sessionSet, index) => {
                       const rating = sessionSet.ratingSummary;
@@ -178,8 +182,8 @@ export function ArchiveList({
                       );
                     })}
                   </ol>
-                )}
-              </div>
+                </div>
+              ) : null}
 
               {renderActions?.(archive)}
             </div>

@@ -9,14 +9,14 @@ generator client {
 }
 
 model Participant {
-  id        String   @id @default(uuid())
-  name      String
+  id         String     @id @default(uuid())
+  name       String
   instrument Instrument
 
   requestedSongs ParticipantSongRequest[]
-  drumSessions   SessionSet[]        @relation("DrumSessions")
-  bassSessions   SessionSet[]        @relation("BassSessions")
-  pianoSessions  SessionSet[]        @relation("PianoSessions")
+  drumSessions   SessionSet[]             @relation("DrumSessions")
+  bassSessions   SessionSet[]             @relation("BassSessions")
+  pianoSessions  SessionSet[]             @relation("PianoSessions")
   sessionMembers SessionSetMember[]
 }
 
@@ -32,13 +32,13 @@ model Song {
 }
 
 model ParticipantSongRequest {
-  id             String       @id @default(uuid())
-  participant    Participant  @relation(fields: [participantId], references: [id], onDelete: Cascade)
-  participantId  String
-  song           Song         @relation(fields: [songId], references: [id], onDelete: Cascade)
-  songId         String
-  keyName        String?      // vocal の場合のみ必須（アプリ側でバリデーション）
-  round          Int          // 1 or 2（アプリ側でバリデーション）
+  id            String      @id @default(uuid())
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  participantId String
+  song          Song        @relation(fields: [songId], references: [id], onDelete: Cascade)
+  songId        String
+  keyName       String? // vocal の場合のみ必須（アプリ側でバリデーション）
+  round         Int // 1 or 2（アプリ側でバリデーション）
 
   @@unique([participantId, songId])
 }
@@ -55,226 +55,227 @@ model SessionSet {
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @default(now()) @updatedAt
 
-  drum           Participant?  @relation("DrumSessions", fields: [drumId], references: [id])
-  drumId         String?
-  bass           Participant?  @relation("BassSessions", fields: [bassId], references: [id])
-  bassId         String?
-  piano          Participant?  @relation("PianoSessions", fields: [pianoId], references: [id])
-  pianoId        String?
+  drum    Participant? @relation("DrumSessions", fields: [drumId], references: [id])
+  drumId  String?
+  bass    Participant? @relation("BassSessions", fields: [bassId], references: [id])
+  bassId  String?
+  piano   Participant? @relation("PianoSessions", fields: [pianoId], references: [id])
+  pianoId String?
 
-  keyName        String?
+  keyName String?
 
-  members        SessionSetMember[]
-  ratings        SessionSetRating[]
+  members SessionSetMember[]
+  ratings SessionSetRating[]
 }
 
 model SessionSetMember {
-  id             String      @id @default(uuid())
-  sessionSet     SessionSet  @relation(fields: [sessionSetId], references: [id], onDelete: Cascade)
-  sessionSetId   String
-  participant    Participant @relation(fields: [participantId], references: [id])
-  participantId  String
-  role           MemberRole
+  id            String      @id @default(uuid())
+  sessionSet    SessionSet  @relation(fields: [sessionSetId], references: [id], onDelete: Cascade)
+  sessionSetId  String
+  participant   Participant @relation(fields: [participantId], references: [id])
+  participantId String
+  role          MemberRole
 
   @@unique([sessionSetId, participantId, role])
 }
 
 model UserAccount {
-  id                String             @id @default(uuid())
-  email             String             @unique
-  passwordHash      String
-  emailVerifiedAt   DateTime?
-  role              UserRole           @default(member)
-  status            AccountStatus      @default(active)
-  lastSignedInAt    DateTime?
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
+  id              String        @id @default(uuid())
+  email           String        @unique
+  passwordHash    String
+  emailVerifiedAt DateTime?
+  role            UserRole      @default(member)
+  status          AccountStatus @default(active)
+  lastSignedInAt  DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 
-  memberProfile     MemberProfile?
-  authSessions      AuthSession[]
-  passwordResetTokens PasswordResetToken[]
+  memberProfile           MemberProfile?
+  authSessions            AuthSession[]
+  passwordResetTokens     PasswordResetToken[]
   emailVerificationTokens EmailVerificationToken[]
-  memberInvitationTokens MemberInvitationToken[]
-  sessionRatings    SessionSetRating[]
-  sessionEventComments SessionEventComment[]
-  sessionArchives   SessionArchive[]   @relation("ArchiveCreator")
-  adminAuditLogs    AdminAuditLog[]
-  announcements     Announcement[]     @relation("AnnouncementCreator")
-  mailLogs          MailLog[]          @relation("MailLogCreator")
-  columns           Column[]           @relation("ColumnAuthor")
+  memberInvitationTokens  MemberInvitationToken[]
+  sessionRatings          SessionSetRating[]
+  sessionEventComments    SessionEventComment[]
+  sessionArchives         SessionArchive[]         @relation("ArchiveCreator")
+  adminAuditLogs          AdminAuditLog[]
+  announcements           Announcement[]           @relation("AnnouncementCreator")
+  mailLogs                MailLog[]                @relation("MailLogCreator")
+  columns                 Column[]                 @relation("ColumnAuthor")
 }
 
 model MemberProfile {
-  id                String             @id @default(uuid())
-  userAccount       UserAccount        @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
-  userAccountId     String             @unique
-  displayName       String
-  nickname          String?
-  mainInstrument    Instrument
-  subInstrument     String?
-  gender            String?
-  ageRange          String?
-  area              String?
-  bio               String?
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
+  id             String      @id @default(uuid())
+  userAccount    UserAccount @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
+  userAccountId  String      @unique
+  displayName    String
+  nickname       String?
+  mainInstrument Instrument
+  subInstrument  String?
+  gender         String?
+  ageRange       String?
+  area           String?
+  bio            String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
 
-  sessionEntries    SessionEntry[]
+  sessionEntries SessionEntry[]
 }
 
 model SessionEvent {
-  id                String               @id @default(uuid())
-  title             String
-  description       String?
-  venue             String
-  eventDate         DateTime
-  startTime         DateTime?
-  endTime           DateTime?
-  participantLimit  Int?
-  participationFee  Int?
-  hasAfterParty     Boolean              @default(false)
-  afterPartyFee     Int?
-  notes             String?
-  round1StartAt     DateTime?
-  round1EndAt       DateTime?
-  round2StartAt     DateTime?
-  round2EndAt       DateTime?
-  status            SessionEventStatus   @default(draft)
-  createdAt         DateTime             @default(now())
-  updatedAt         DateTime             @updatedAt
+  id               String             @id @default(uuid())
+  eventType        SessionEventType   @default(song_request)
+  title            String
+  description      String?
+  venue            String
+  eventDate        DateTime
+  startTime        DateTime?
+  endTime          DateTime?
+  participantLimit Int?
+  participationFee Int?
+  hasAfterParty    Boolean            @default(false)
+  afterPartyFee    Int?
+  notes            String?
+  round1StartAt    DateTime?
+  round1EndAt      DateTime?
+  round2StartAt    DateTime?
+  round2EndAt      DateTime?
+  status           SessionEventStatus @default(draft)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
 
-  sessionEntries    SessionEntry[]
-  sessionSets       SessionSet[]
-  sessionSetDrafts  SessionSetDraft[]
-  sessionRatings    SessionSetRating[]
-  comments          SessionEventComment[]
-  sessionArchives   SessionArchive[]
+  sessionEntries   SessionEntry[]
+  sessionSets      SessionSet[]
+  sessionSetDrafts SessionSetDraft[]
+  sessionRatings   SessionSetRating[]
+  comments         SessionEventComment[]
+  sessionArchives  SessionArchive[]
 }
 
 model SessionSetDraft {
-  id                  String        @id @default(uuid())
-  sessionEvent        SessionEvent  @relation(fields: [sessionEventId], references: [id], onDelete: Cascade)
-  sessionEventId      String
-  title               String
-  sessionSetsJson     Json
-  skippedSongsJson    Json?
+  id                    String       @id @default(uuid())
+  sessionEvent          SessionEvent @relation(fields: [sessionEventId], references: [id], onDelete: Cascade)
+  sessionEventId        String
+  title                 String
+  sessionSetsJson       Json
+  skippedSongsJson      Json?
   forcedSessionSetsJson Json?
-  createdAt           DateTime      @default(now())
-  updatedAt           DateTime      @updatedAt
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
 
   @@unique([sessionEventId, title])
 }
 
 model SessionEntry {
-  id                String             @id @default(uuid())
-  sessionEvent      SessionEvent       @relation(fields: [sessionEventId], references: [id], onDelete: Cascade)
-  sessionEventId    String
-  memberProfile     MemberProfile      @relation(fields: [memberProfileId], references: [id], onDelete: Cascade)
-  memberProfileId   String
-  attendanceStatus  AttendanceStatus   @default(attending)
+  id                         String            @id @default(uuid())
+  sessionEvent               SessionEvent      @relation(fields: [sessionEventId], references: [id], onDelete: Cascade)
+  sessionEventId             String
+  memberProfile              MemberProfile     @relation(fields: [memberProfileId], references: [id], onDelete: Cascade)
+  memberProfileId            String
+  attendanceStatus           AttendanceStatus  @default(attending)
   afterPartyAttendanceStatus AttendanceStatus?
-  allowForcedAssignment Boolean        @default(true)
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
+  allowForcedAssignment      Boolean           @default(true)
+  createdAt                  DateTime          @default(now())
+  updatedAt                  DateTime          @updatedAt
 
-  requests          SessionEntryRequest[]
+  requests SessionEntryRequest[]
 
   @@unique([sessionEventId, memberProfileId])
 }
 
 model SessionEntryRequest {
-  id                String         @id @default(uuid())
-  sessionEntry      SessionEntry   @relation(fields: [sessionEntryId], references: [id], onDelete: Cascade)
+  id                String       @id @default(uuid())
+  sessionEntry      SessionEntry @relation(fields: [sessionEntryId], references: [id], onDelete: Cascade)
   sessionEntryId    String
-  song              Song?          @relation(fields: [songId], references: [id], onDelete: SetNull)
+  song              Song?        @relation(fields: [songId], references: [id], onDelete: SetNull)
   songId            String?
   songTitleSnapshot String
   keyName           String?
   round             Int
   priority          Int
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
 }
 
 model SessionSetRating {
-  id                String         @id @default(uuid())
-  sessionEvent      SessionEvent   @relation(fields: [sessionEventId], references: [id], onDelete: Cascade)
-  sessionEventId    String
-  sessionSet        SessionSet     @relation(fields: [sessionSetId], references: [id], onDelete: Cascade)
-  sessionSetId      String
-  userAccount       UserAccount    @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
-  userAccountId     String
-  rating            Int
-  comment           String?
-  ratedAt           DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
+  id             String       @id @default(uuid())
+  sessionEvent   SessionEvent @relation(fields: [sessionEventId], references: [id], onDelete: Cascade)
+  sessionEventId String
+  sessionSet     SessionSet   @relation(fields: [sessionSetId], references: [id], onDelete: Cascade)
+  sessionSetId   String
+  userAccount    UserAccount  @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
+  userAccountId  String
+  rating         Int
+  comment        String?
+  ratedAt        DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 
   @@unique([sessionSetId, userAccountId])
 }
 
 model SessionEventComment {
-  id                String         @id @default(uuid())
-  sessionEvent      SessionEvent   @relation(fields: [sessionEventId], references: [id], onDelete: Cascade)
-  sessionEventId    String
-  userAccount       UserAccount    @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
-  userAccountId     String
-  body              String
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
+  id             String       @id @default(uuid())
+  sessionEvent   SessionEvent @relation(fields: [sessionEventId], references: [id], onDelete: Cascade)
+  sessionEventId String
+  userAccount    UserAccount  @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
+  userAccountId  String
+  body           String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 }
 
 model SessionArchive {
-  id                String                      @id @default(uuid())
+  id               String        @id @default(uuid())
   // 元イベントを削除しても、確定済みスナップショットは独立した記録として残す。
-  sessionEvent      SessionEvent?               @relation(fields: [sessionEventId], references: [id], onDelete: SetNull)
-  sessionEventId    String?
-  version           Int
-  title             String
-  eventDate         DateTime
-  venue             String
-  participantCount  Int
-  note              String?
-  deletedAt         DateTime?
-  createdBy         UserAccount                 @relation("ArchiveCreator", fields: [createdById], references: [id])
-  createdById       String
-  createdAt         DateTime                    @default(now())
+  sessionEvent     SessionEvent? @relation(fields: [sessionEventId], references: [id], onDelete: SetNull)
+  sessionEventId   String?
+  version          Int
+  title            String
+  eventDate        DateTime
+  venue            String
+  participantCount Int
+  note             String?
+  deletedAt        DateTime?
+  createdBy        UserAccount   @relation("ArchiveCreator", fields: [createdById], references: [id])
+  createdById      String
+  createdAt        DateTime      @default(now())
 
-  participants      SessionArchiveParticipant[]
-  sets              SessionArchiveSet[]
-  auditLogs         AdminAuditLog[]
+  participants SessionArchiveParticipant[]
+  sets         SessionArchiveSet[]
+  auditLogs    AdminAuditLog[]
 
   @@unique([sessionEventId, version])
 }
 
 model SessionArchiveParticipant {
-  id                String          @id @default(uuid())
-  sessionArchive    SessionArchive  @relation(fields: [sessionArchiveId], references: [id], onDelete: Cascade)
-  sessionArchiveId  String
-  displayName       String
-  mainInstrument    Instrument?
+  id               String         @id @default(uuid())
+  sessionArchive   SessionArchive @relation(fields: [sessionArchiveId], references: [id], onDelete: Cascade)
+  sessionArchiveId String
+  displayName      String
+  mainInstrument   Instrument?
 }
 
 model SessionArchiveSet {
-  id                  String                       @id @default(uuid())
-  sessionArchive      SessionArchive               @relation(fields: [sessionArchiveId], references: [id], onDelete: Cascade)
-  sessionArchiveId    String
-  songTitle           String
-  setOrder            Int?
-  drumName            String?
-  bassName            String?
-  pianoName           String?
-  frontSnapshot       Json?
-  vocalSnapshot       Json?
-  keyName             String?
+  id               String         @id @default(uuid())
+  sessionArchive   SessionArchive @relation(fields: [sessionArchiveId], references: [id], onDelete: Cascade)
+  sessionArchiveId String
+  songTitle        String
+  setOrder         Int?
+  drumName         String?
+  bassName         String?
+  pianoName        String?
+  frontSnapshot    Json?
+  vocalSnapshot    Json?
+  keyName          String?
 
-  ratingSummary       SessionArchiveRatingSummary?
+  ratingSummary SessionArchiveRatingSummary?
 }
 
 model SessionArchiveRatingSummary {
-  id                  String             @id @default(uuid())
-  sessionArchiveSet   SessionArchiveSet  @relation(fields: [sessionArchiveSetId], references: [id], onDelete: Cascade)
-  sessionArchiveSetId String             @unique
-  ratingCount         Int                @default(0)
+  id                  String            @id @default(uuid())
+  sessionArchiveSet   SessionArchiveSet @relation(fields: [sessionArchiveSetId], references: [id], onDelete: Cascade)
+  sessionArchiveSetId String            @unique
+  ratingCount         Int               @default(0)
   averageRating       Float?
   minRating           Int?
   maxRating           Int?
@@ -282,57 +283,57 @@ model SessionArchiveRatingSummary {
 }
 
 model AdminAuditLog {
-  id                String           @id @default(uuid())
-  action            AuditAction
-  targetType        String
-  targetId          String?
-  summary           String?
-  payload           Json?
-  performedBy       UserAccount      @relation(fields: [performedById], references: [id], onDelete: Cascade)
-  performedById     String
-  sessionArchive    SessionArchive?  @relation(fields: [sessionArchiveId], references: [id], onDelete: SetNull)
-  sessionArchiveId  String?
-  performedAt       DateTime         @default(now())
+  id               String          @id @default(uuid())
+  action           AuditAction
+  targetType       String
+  targetId         String?
+  summary          String?
+  payload          Json?
+  performedBy      UserAccount     @relation(fields: [performedById], references: [id], onDelete: Cascade)
+  performedById    String
+  sessionArchive   SessionArchive? @relation(fields: [sessionArchiveId], references: [id], onDelete: SetNull)
+  sessionArchiveId String?
+  performedAt      DateTime        @default(now())
 }
 
 model AuthSession {
-  id               String       @id @default(uuid())
-  userAccount      UserAccount  @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
+  id               String      @id @default(uuid())
+  userAccount      UserAccount @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
   userAccountId    String
-  sessionTokenHash String       @unique
+  sessionTokenHash String      @unique
   expiresAt        DateTime
-  lastAccessedAt   DateTime     @default(now())
-  createdAt        DateTime     @default(now())
+  lastAccessedAt   DateTime    @default(now())
+  createdAt        DateTime    @default(now())
 }
 
 model PasswordResetToken {
-  id               String       @id @default(uuid())
-  userAccount      UserAccount  @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
-  userAccountId    String
-  tokenHash        String       @unique
-  expiresAt        DateTime
-  usedAt           DateTime?
-  createdAt        DateTime     @default(now())
+  id            String      @id @default(uuid())
+  userAccount   UserAccount @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
+  userAccountId String
+  tokenHash     String      @unique
+  expiresAt     DateTime
+  usedAt        DateTime?
+  createdAt     DateTime    @default(now())
 }
 
 model EmailVerificationToken {
-  id               String       @id @default(uuid())
-  userAccount      UserAccount  @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
-  userAccountId    String
-  tokenHash        String       @unique
-  expiresAt        DateTime
-  usedAt           DateTime?
-  createdAt        DateTime     @default(now())
+  id            String      @id @default(uuid())
+  userAccount   UserAccount @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
+  userAccountId String
+  tokenHash     String      @unique
+  expiresAt     DateTime
+  usedAt        DateTime?
+  createdAt     DateTime    @default(now())
 }
 
 model MemberInvitationToken {
-  id          String       @id @default(uuid())
+  id          String      @id @default(uuid())
   email       String
-  tokenHash   String       @unique
+  tokenHash   String      @unique
   expiresAt   DateTime
   usedAt      DateTime?
-  createdAt   DateTime     @default(now())
-  createdBy   UserAccount  @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdAt   DateTime    @default(now())
+  createdBy   UserAccount @relation(fields: [createdById], references: [id], onDelete: Cascade)
   createdById String
 
   @@index([email])
@@ -340,46 +341,46 @@ model MemberInvitationToken {
 }
 
 model Announcement {
-  id               String       @id @default(uuid())
-  title            String
-  body             String
-  isPublished      Boolean      @default(false)
-  publishedAt      DateTime?
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
-  createdBy        UserAccount  @relation("AnnouncementCreator", fields: [createdById], references: [id], onDelete: Cascade)
-  createdById      String
+  id          String      @id @default(uuid())
+  title       String
+  body        String
+  isPublished Boolean     @default(false)
+  publishedAt DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  createdBy   UserAccount @relation("AnnouncementCreator", fields: [createdById], references: [id], onDelete: Cascade)
+  createdById String
 }
 
 model MailLog {
-  id               String         @id @default(uuid())
-  mailType         String
-  toAddress        String
-  subject          String
-  bodySummary      String?
-  status           MailLogStatus
-  errorMessage     String?
-  createdAt        DateTime       @default(now())
-  sentAt           DateTime?
-  createdBy        UserAccount?   @relation("MailLogCreator", fields: [createdById], references: [id], onDelete: SetNull)
-  createdById      String?
+  id           String        @id @default(uuid())
+  mailType     String
+  toAddress    String
+  subject      String
+  bodySummary  String?
+  status       MailLogStatus
+  errorMessage String?
+  createdAt    DateTime      @default(now())
+  sentAt       DateTime?
+  createdBy    UserAccount?  @relation("MailLogCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  createdById  String?
 }
 
 model Column {
-  id               String       @id @default(uuid())
-  slug             String       @unique
-  title            String
-  summary          String
-  body             String
-  thumbnailLabel   String?
-  authorName       String
-  displayOrder     Int          @default(0)
-  isPublished      Boolean      @default(false)
-  publishedAt      DateTime?
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
-  createdBy        UserAccount? @relation("ColumnAuthor", fields: [createdById], references: [id], onDelete: SetNull)
-  createdById      String?
+  id             String       @id @default(uuid())
+  slug           String       @unique
+  title          String
+  summary        String
+  body           String
+  thumbnailLabel String?
+  authorName     String
+  displayOrder   Int          @default(0)
+  isPublished    Boolean      @default(false)
+  publishedAt    DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  createdBy      UserAccount? @relation("ColumnAuthor", fields: [createdById], references: [id], onDelete: SetNull)
+  createdById    String?
 }
 
 enum Instrument {
@@ -410,6 +411,11 @@ enum AttendanceStatus {
   attending
   absent
   undecided
+}
+
+enum SessionEventType {
+  song_request
+  attendance_only
 }
 
 enum SessionEventStatus {

@@ -26,8 +26,14 @@ import {
   DEFAULT_DRUM_FORCED_ASSIGNMENT_MAX,
   DEFAULT_FORCED_ASSIGNMENT_MAX,
 } from '@/lib/sessionSetGenerationConfig';
+import type { SessionEventType } from '@/lib/sessionEventType';
 
-type ArchivePreview = { participantCount: number; setCount: number; ratingSummaryIncluded: boolean } | null;
+type ArchivePreview = {
+  eventType: 'song_request' | 'attendance_only';
+  participantCount: number;
+  setCount: number;
+  ratingSummaryIncluded: boolean;
+} | null;
 
 type UseAdminPortalArgs = {
   currentUser: AuthUser | null;
@@ -59,6 +65,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
   // アーカイブ対象はイベント編集・sessionSet 編集の選択状態から独立させる。
   // 管理者がアーカイブ欄で「終了」イベントを明示的に確認して選べるようにするための状態。
   const [selectedArchiveEventId, setSelectedArchiveEventId] = useState('');
+  const [eventType, setEventType] = useState<SessionEventType>('song_request');
   const [eventTitle, setEventTitle] = useState('');
   const [eventVenue, setEventVenue] = useState('');
   const [eventDate, setEventDate] = useState('');
@@ -335,6 +342,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
+        eventType,
         title: eventTitle,
         venue: eventVenue,
         eventDate: formatDateInputToIso(eventDate),
@@ -351,6 +359,7 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     const json = await parseJson(res);
     if (!res.ok) throw new Error(json.error ?? 'イベント作成に失敗しました');
     await reloadShared();
+    setEventType('song_request');
     setEventTitle('');
     setEventVenue('');
     setEventDate('');
@@ -675,6 +684,8 @@ export function useAdminPortal({ currentUser, members, sessionEvents, runAction,
     selectedArchiveEventId,
     setSelectedArchiveEventId,
     selectedAdminEvent,
+    eventType,
+    setEventType,
     eventTitle,
     setEventTitle,
     eventVenue,

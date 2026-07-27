@@ -59,7 +59,7 @@ export async function createSessionArchive(params: {
     throw new Error('Only closed session events can be archived');
   }
 
-  if (preview.setCount === 0) {
+  if (preview.sessionEvent.eventType !== 'attendance_only' && preview.setCount === 0) {
     throw new Error('No published session sets found for this event');
   }
 
