@@ -1105,7 +1105,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                 return (
                   <li
                     key={event.id}
-                    className="rounded-xl border bg-background/30 p-4"
+                    className="rounded-xl bg-background/30 p-2"
                   >
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div className="space-y-2">
@@ -1296,7 +1296,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
               {round1RecruitingEvents.map((event) => (
                 <li
                   key={event.id}
-                  className="rounded-xl border bg-background/20 p-4"
+                  className="rounded-xl bg-background/20 p-2"
                 >
                   {(() => {
                     const eventEntry = sessionEntries.find(
@@ -1716,7 +1716,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                   return (
                     <li
                       key={event.id}
-                      className="rounded-xl border bg-background/20 p-4"
+                      className="rounded-xl bg-background/20 p-2"
                     >
                       <div className="flex flex-wrap items-center gap-2">
                         <strong className="text-sm text-pink-600">
@@ -1890,7 +1890,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                 return (
                   <li
                     key={event.id}
-                    className="rounded-xl border bg-background/20 p-4"
+                    className="rounded-xl bg-background/20 p-2"
                   >
                     <div className="flex flex-wrap items-center gap-2">
                       <strong className="text-sm text-sky-600">
@@ -1996,7 +1996,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                 return (
                   <li
                     key={event.id}
-                    className="rounded-xl border bg-background/20 p-4"
+                    className="rounded-xl bg-background/20 p-2"
                   >
                     <div className="flex flex-wrap items-center gap-2">
                       <strong className="text-sm text-emerald-600">
@@ -2254,7 +2254,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
                     )}
                   </p>
                   {playedSessionSets.length > 0 ? (
-                    <div className="mt-3 rounded-lg border bg-background/70 p-3">
+                    <div className="mt-3 rounded-lg bg-background/70 p-2">
                       <p className="font-medium text-foreground">演奏曲</p>
                       <ul className="mt-2 space-y-2 text-muted-foreground">
                         {playedSessionSets.map(({ sessionSet, roles }) => (
