@@ -89,10 +89,10 @@ export default function AuthWorkspace({ view }: AuthWorkspaceProps) {
       </Badge>
       <h1 className="mt-3 text-3xl font-semibold tracking-tight">
         {view === 'signup'
-          ? 'メンバーサインアップ(テスト中)'
+          ? 'メンバーサインアップ'
           : view === 'admin-signin'
-            ? '管理者サインイン(テスト中)'
-            : 'メンバーサインイン(テスト中)'}
+            ? '管理者サインイン'
+            : 'メンバーサインイン'}
       </h1>
       {message && (
         <Alert className="brand-success-surface mt-4">
