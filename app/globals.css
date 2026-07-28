@@ -138,6 +138,10 @@ body {
 
 }
 
+.bg-primary {
+  background-color: #553e10;
+}
+
 @layer components {
   .admin-content-stage {
     animation: admin-content-enter 220ms cubic-bezier(0.22, 1, 0.36, 1);
