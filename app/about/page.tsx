@@ -1,102 +1,100 @@
-import Link from 'next/link';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
+import {
+  JazzEyebrow,
+  JazzLinkButton,
+  JazzSectionTitle,
+} from "@/components/public/JazzUi";
+
+const principles = [
+  {
+    number: "01",
+    title: "集まる",
+    body: "公開ページで次回開催と読み物を知り、紹介を通じてコミュニティへ参加します。",
+  },
+  {
+    number: "02",
+    title: "持ち寄る",
+    body: "メンバーページから参加可否、リクエスト曲、キーを登録します。",
+  },
+  {
+    number: "03",
+    title: "残す",
+    body: "sessionSet、レイティング、アーカイブを残し、次の演奏へつなげます。",
+  },
+];
 
 export default function AboutPage() {
   return (
-    <main className="mx-auto flex max-w-6xl min-h-[calc(100svh-96px)] flex-col gap-6 px-6 py-8 mt-24 md:px-8">
-      <section className="">
-        <div className="grid gap-6 px-6 py-8 md:grid-cols-[1.3fr_0.8fr] md:px-8 md:py-10">
-          <div className="space-y-5">
-            <Badge variant="outline" className="brand-kicker">
-              About Adlib-go
-            </Badge>
-            <div className="space-y-3">
-              <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">adlib-go について</h1>
-              <p className="max-w-2xl text-sm leading-7 text-muted-foreground md:text-base">
-                Adlib-go KICK-OFF は、セッション主催者の運営業務とメンバー向け導線を 1 つの Web アプリに統合するためのプロジェクトです。
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <Button asChild>
-                <Link href="/signup">参加をはじめる</Link>
-              </Button>
-              <Button asChild variant="outline">
-                <Link href="/columns">コラムを読む</Link>
-              </Button>
-            </div>
+    <main className="jazz-page min-h-svh">
+      <section className="jazz-staff border-b border-[#f4eddf]/15 px-4 py-20 sm:px-6 lg:py-28">
+        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_0.6fr] lg:items-end">
+          <div>
+            <JazzEyebrow>ABOUT ADLIB GO</JazzEyebrow>
+            <h1 className="mt-6 max-w-5xl font-serif text-[clamp(3.8rem,13vw,8rem)] leading-[0.86] tracking-[-0.06em]">
+              Music is
+              <br />
+              a <span className="text-[#d7a94f] italic">conversation.</span>
+            </h1>
           </div>
-
-          <Card className="bg-background backdrop-blur">
-            <CardHeader className="border-on-background/70">
-              <CardTitle className="text-on-background">このサイトでできること</CardTitle>
-              <CardDescription className="text-on-background">運営と参加者の導線を分離しつつ、必要な情報を一箇所に集約します。</CardDescription>
-            </CardHeader>
-            <CardContent className="text-on-background space-y-3 text-sm">
-              <p>公開ページで告知やコラムを確認</p>
-              <p>メンバーサイトでプロフィール管理とエントリー登録</p>
-              <p>管理サイトでイベント公開、評価、通知、アーカイブ管理</p>
-            </CardContent>
-          </Card>
+          <p className="border-l border-[#d7a94f]/60 pl-5 text-sm leading-8 text-[#f4eddf]/65">
+            Adlib Goは、セッション主催者の運営とメンバーの参加導線を
+            ひとつにつなぐ、ジャズセッションコミュニティです。
+            音を出す前の準備から、演奏後の記録までを支えます。
+          </p>
         </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-3">
-        <Card className="shadow-sm">
-          <CardHeader>
-            <CardTitle>活動概要</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm leading-7 text-muted-foreground">
-              公開サイト、メンバーサイト、管理サイトを分離しつつ、sessionSet 生成、イベント管理、レイティング、アーカイブ、通知を一貫して扱える構成を目指しています。
-            </p>
-          </CardContent>
-        </Card>
-        <Card className="shadow-sm">
-          <CardHeader>
-            <CardTitle>参加案内</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm leading-7 text-muted-foreground">
-              参加希望者は既存メンバー、他からの紹介により登録案内メールが送信されます。サインアップ後、メンバーページからプロフィール設定とセッションエントリーを行います。募集期間中は Round ごとの希望曲入力が可能です。
-            </p>
-          </CardContent>
-        </Card>
-        <Card className="shadow-sm">
-          <CardHeader>
-            <CardTitle>運営ポリシー</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm leading-7 text-muted-foreground">
-              運営は募集状況、sessionSet 公開、レイティング、アーカイブを継続的に管理します。通知履歴と監査情報は、再現性のある運用のために保持します。
-            </p>
-          </CardContent>
-        </Card>
+      <section className="jazz-paper-grid bg-[#e9e0cf] px-4 py-20 text-[#153027] sm:px-6 lg:py-28">
+        <div className="mx-auto max-w-7xl">
+          <JazzSectionTitle
+            light
+            eyebrow="OUR FLOW"
+            title="一度きりの演奏を、次につなげる。"
+          />
+          <ol className="mt-12 grid border-t border-[#153027]/25 md:grid-cols-3 md:border-l">
+            {principles.map((principle) => (
+              <li
+                key={principle.number}
+                className="grid grid-cols-[3.5rem_1fr] gap-4 border-b border-[#153027]/25 py-7 md:block md:border-r md:px-6 md:py-8"
+              >
+                <span className="font-serif text-3xl text-[#9c6d25]">
+                  {principle.number}
+                </span>
+                <div>
+                  <h2 className="font-serif text-2xl">{principle.title}</h2>
+                  <p className="mt-3 text-sm leading-7 text-[#153027]/65">
+                    {principle.body}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
       </section>
 
-      <section>
-        <Card className="shadow-sm">
-          <CardHeader>
-            <CardTitle>導線</CardTitle>
-            <CardDescription>公開ページから各導線へ移動できます。</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex flex-wrap gap-3">
-              <Button asChild variant="secondary">
-                <Link href="/signin">メンバーサインイン</Link>
-              </Button>
-              <Button asChild variant="secondary">
-                <Link href="/admin/signin">管理者サインイン</Link>
-              </Button>
-            </div>
-            <Separator />
-            <p className="text-sm text-muted-foreground">
-              まずはコラムや開催案内を確認し、必要に応じてサインアップまたはサインインへ進んでください。
+      <section className="px-4 py-20 sm:px-6 lg:py-28">
+        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.65fr_1fr]">
+          <JazzSectionTitle
+            eyebrow="COMMUNITY"
+            title="上手さより、音で話すこと。"
+          />
+          <div className="space-y-7 border-t border-[#f4eddf]/15 pt-7 text-sm leading-8 text-[#f4eddf]/60">
+            <p>
+              参加者はマイページからプロフィールとエントリーを管理し、
+              募集期間中はRoundごとの希望曲を登録できます。
             </p>
-          </CardContent>
-        </Card>
+            <p>
+              運営は開催情報、sessionSet、通知、レイティング、
+              アーカイブを一貫して管理します。必要な情報を一箇所に集め、
+              当日は演奏そのものに集中できる状態を目指しています。
+            </p>
+            <div className="flex flex-col gap-3 pt-3 min-[420px]:flex-row">
+              <JazzLinkButton href="/columns">コラムを読む</JazzLinkButton>
+              <JazzLinkButton href="/contact" variant="outline">
+                お問い合わせ
+              </JazzLinkButton>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
   );

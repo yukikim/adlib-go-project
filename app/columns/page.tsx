@@ -1,11 +1,17 @@
-import Link from 'next/link';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { prisma } from '@/lib/prisma';
+import Link from "next/link";
+import {
+  JazzEyebrow,
+  JazzLinkButton,
+  JazzSectionTitle,
+} from "@/components/public/JazzUi";
+import { prisma } from "@/lib/prisma";
 
-export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic';
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+function formatPublishedDate(value: Date | null) {
+  return value ? new Date(value).toLocaleDateString("ja-JP") : "公開中";
+}
 
 export default async function ColumnsPage() {
   const now = new Date();
@@ -14,66 +20,150 @@ export default async function ColumnsPage() {
       isPublished: true,
       OR: [{ publishedAt: null }, { publishedAt: { lte: now } }],
     },
-    orderBy: [{ displayOrder: 'asc' }, { publishedAt: 'desc' }, { createdAt: 'desc' }],
+    orderBy: [
+      { displayOrder: "asc" },
+      { publishedAt: "desc" },
+      { createdAt: "desc" },
+    ],
     select: {
       id: true,
       slug: true,
       title: true,
       summary: true,
       authorName: true,
-      displayOrder: true,
       publishedAt: true,
     },
   });
+  const featuredColumn = columns[0] ?? null;
+  const latestColumns = columns.slice(featuredColumn ? 1 : 0);
 
   return (
-    <main className="mx-auto flex max-w-6xl min-h-[calc(100svh-96px)] flex-col gap-6 px-6 py-8 md:px-8 mt-24">
-      <section className="">
-        <div className="grid gap-6 px-6 py-8 md:grid-cols-[1.25fr_0.85fr] md:px-8 md:py-10">
-          <div className="space-y-4">
-            <Badge variant="outline" className="brand-kicker">
-              Columns
-            </Badge>
-            <div className="space-y-3">
-              <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">コラム一覧</h1>
-              <p className="max-w-2xl text-sm leading-7 text-muted-foreground md:text-base">
-                運営からの案内やセッション参加のヒントを掲載します。イベント前後の読み物としても使えるアーカイブです。
-              </p>
-            </div>
+    <main className="jazz-page min-h-svh">
+      <section className="jazz-staff border-b border-[#f4eddf]/15 px-4 py-20 sm:px-6 lg:py-28">
+        <div className="mx-auto max-w-7xl">
+          <JazzEyebrow>PUBLIC STORIES</JazzEyebrow>
+          <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_0.45fr] lg:items-end">
+            <h1 className="max-w-5xl font-serif text-[clamp(3.8rem,14vw,9rem)] leading-[0.84] tracking-[-0.065em]">
+              Listen.
+              <br />
+              Read.
+              <br />
+              <span className="text-[#d7a94f] italic">Play.</span>
+            </h1>
+            <p className="border-l border-[#d7a94f]/60 pl-5 text-sm leading-7 text-[#f4eddf]/65">
+              演奏の前に知ること。
+              <br />
+              演奏のあとに残ること。
+              <br />
+              Adlib Goの活動と、ジャズを楽しむための読み物を届けます。
+            </p>
           </div>
-          <Card className="border-on-background/70 bg-background backdrop-blur">
-            <CardHeader>
-              <CardTitle className="text-on-background">読み進め方</CardTitle>
-              <CardDescription className="text-on-background">運営の方針や参加のコツを段階的に把握できます。</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3 text-sm text-on-background">
-              <p>まず概要を読み、参加導線を把握</p>
-              <p>気になるイベントや募集ルールを確認</p>
-              <p>サインアップ後にメンバーページでエントリー</p>
-            </CardContent>
-          </Card>
         </div>
       </section>
 
-      <section className="grid gap-4">
-        {columns.map((column) => (
-          <Card key={column.slug} className="shadow-sm transition-transform">
-            <CardHeader>
-              <div className="flex flex-wrap items-center gap-2">
-                <Badge variant="outline">{column.publishedAt ? new Date(column.publishedAt).toLocaleDateString('ja-JP') : '-'}</Badge>
-                <Badge variant="secondary">{column.authorName}</Badge>
+      {featuredColumn ? (
+        <section className="bg-[#e9e0cf] px-4 py-20 text-[#153027] sm:px-6 lg:py-28">
+          <div className="mx-auto max-w-7xl">
+            <JazzSectionTitle
+              light
+              eyebrow="FEATURED STORY"
+              title={featuredColumn.title}
+            />
+            <article className="mt-10 grid overflow-hidden border border-[#153027]/25 lg:grid-cols-[0.85fr_1.15fr]">
+              <div className="jazz-paper-grid relative min-h-80 bg-[#153027] p-7 text-[#e9e0cf] sm:p-10">
+                <span className="text-[10px] font-bold tracking-[0.2em] text-[#d7a94f]">
+                  SESSION JOURNAL
+                </span>
+                <p
+                  aria-hidden="true"
+                  className="absolute bottom-2 right-5 font-serif text-[11rem] leading-none text-[#e9e0cf]/8 sm:text-[15rem]"
+                >
+                  01
+                </p>
+                <p className="absolute bottom-8 left-7 right-7 max-w-md font-serif text-3xl leading-tight sm:bottom-10 sm:left-10 sm:right-10 sm:text-4xl">
+                  音を出す前と、
+                  <br />
+                  音が残ったあとに。
+                </p>
               </div>
-              <CardTitle>{column.title}</CardTitle>
-              <CardDescription>表示順 {column.displayOrder}</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm leading-7 text-muted-foreground">{column.summary}</p>
-              <Button asChild variant="outline">
-                <Link href={`/columns/${column.slug}`}>詳細を見る</Link>
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
+              <div className="flex flex-col justify-between p-7 sm:p-10">
+                <div>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="rounded-full border border-[#153027]/25 px-3 py-1 text-[10px] font-bold tracking-[0.12em]">
+                      {featuredColumn.authorName}
+                    </span>
+                    <span className="rounded-full border border-[#153027]/25 px-3 py-1 text-[10px] font-bold tracking-[0.12em]">
+                      {formatPublishedDate(featuredColumn.publishedAt)}
+                    </span>
+                  </div>
+                  <p className="mt-8 max-w-2xl text-sm leading-8 text-[#153027]/70 sm:text-base">
+                    {featuredColumn.summary}
+                  </p>
+                </div>
+                <div className="mt-10 border-t border-[#153027]/20 pt-6">
+                  <JazzLinkButton
+                    href={`/columns/${featuredColumn.slug}`}
+                    variant="ink"
+                  >
+                    続きを読む
+                  </JazzLinkButton>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+      ) : null}
+
+      <section className="px-4 py-20 sm:px-6 lg:py-28">
+        <div className="mx-auto max-w-7xl">
+          <JazzSectionTitle
+            eyebrow="LATEST STORIES"
+            title="最近の読み物"
+            description="セッション参加のヒント、運営からのお知らせ、音楽を楽しむためのノートです。"
+          />
+
+          {latestColumns.length > 0 ? (
+            <div className="mt-12 divide-y divide-[#f4eddf]/15 border-y border-[#f4eddf]/15">
+              {latestColumns.map((column, index) => (
+                <article
+                  key={column.id}
+                  className="group grid gap-5 py-7 md:grid-cols-[5rem_10rem_1fr_auto] md:items-center md:gap-8"
+                >
+                  <p className="font-serif text-4xl text-[#d7a94f]/50">
+                    {String(index + 2).padStart(2, "0")}
+                  </p>
+                  <div>
+                    <p className="text-[10px] font-bold tracking-[0.16em] text-[#d7a94f]">
+                      {column.authorName}
+                    </p>
+                    <p className="mt-2 text-[10px] tracking-[0.1em] text-[#f4eddf]/40">
+                      {formatPublishedDate(column.publishedAt)}
+                    </p>
+                  </div>
+                  <div>
+                    <h2 className="font-serif text-2xl leading-snug transition-colors group-hover:text-[#d7a94f]">
+                      {column.title}
+                    </h2>
+                    <p className="mt-2 max-w-2xl text-sm leading-7 text-[#f4eddf]/55">
+                      {column.summary}
+                    </p>
+                  </div>
+                  <Link
+                    href={`/columns/${column.slug}`}
+                    aria-label={`${column.title}を読む`}
+                    className="grid size-12 place-items-center rounded-full border border-[#f4eddf]/25 transition-colors group-hover:border-[#d7a94f] group-hover:text-[#d7a94f]"
+                  >
+                    →
+                  </Link>
+                </article>
+              ))}
+            </div>
+          ) : featuredColumn ? null : (
+            <p className="mt-12 border-y border-[#f4eddf]/15 py-8 text-sm text-[#f4eddf]/55">
+              現在、公開中のコラムはありません。
+            </p>
+          )}
+        </div>
       </section>
     </main>
   );

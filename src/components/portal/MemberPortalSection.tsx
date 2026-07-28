@@ -521,6 +521,25 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
   const ratingEvents = sessionEvents.filter(
     (event) => event.eventType === "song_request" && event.status === "rating",
   );
+  const nextActionEvent =
+    round1RecruitingEvents[0] ??
+    attendanceOnlyRecruitingEvents[0] ??
+    round2RecruitingEvents[0] ??
+    publishedEvents[0] ??
+    announcedEvents[0] ??
+    null;
+  const nextActionLabel = nextActionEvent
+    ? nextActionEvent.status === "recruiting_round1"
+      ? "参加可否とリクエスト曲を回答"
+      : nextActionEvent.status === "recruiting_round2"
+        ? "追加リクエスト曲を回答"
+        : nextActionEvent.eventType === "attendance_only" &&
+            nextActionEvent.status === "published"
+          ? "参加可否を回答"
+          : nextActionEvent.status === "published"
+            ? "公開sessionSetを確認"
+            : "開催予定を確認"
+    : null;
 
   // console.log('announcedEvents:', announcedEvents);
   // console.log("sessionEvent:", sessionEvents);
@@ -995,15 +1014,100 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
   };
 
   return (
-    <>
-      <div className="text-lg font-semibold text-secondary mb-4 px-4">
-        ようこそ、{profileDisplayName}さん
-      </div>
-      <Card className="rounded-xl border bg-secondary/80 p-4 border-none">
-        <CardTitle className="text-2xl font-semibold text-on-secondary">
+    <div className="member-jazz-content mx-auto max-w-7xl px-4 pb-24 pt-8 sm:px-6 lg:pb-16 lg:pt-12">
+      <section className="mb-8 flex items-center justify-between gap-5 border-b border-[#f4eddf]/15 pb-8">
+        <div>
+          <p className="flex items-center gap-2 text-[10px] font-bold tracking-[0.24em] text-[#d7a94f]">
+            <span aria-hidden="true" className="h-px w-5 bg-[#d7a94f]" />
+            MEMBER HOME
+          </p>
+          <h1 className="mt-4 font-serif text-4xl leading-tight text-[#f4eddf] sm:text-5xl">
+            ようこそ、{profileDisplayName}さん。
+          </h1>
+          <p className="mt-3 text-sm text-[#f4eddf]/50">
+            次のセッションと、いま必要な操作を確認できます。
+          </p>
+        </div>
+        <div
+          aria-hidden="true"
+          className="grid size-14 shrink-0 place-items-center rounded-full border border-[#d7a94f]/50 bg-[#d7a94f]/10 font-serif text-2xl text-[#d7a94f] sm:size-20"
+        >
+          {profileDisplayName.trim().charAt(0).toUpperCase() || "M"}
+        </div>
+      </section>
+
+      {nextActionEvent && nextActionLabel ? (
+        <section className="relative mb-8 overflow-hidden bg-[#d7a94f] p-6 text-[#0c0f0e] sm:p-8">
+          <div
+            aria-hidden="true"
+            className="absolute -right-16 -top-16 size-52 rounded-full border-[28px] border-[#0c0f0e]/8"
+          />
+          <p className="relative text-[10px] font-bold tracking-[0.2em]">
+            YOUR NEXT MOVE
+          </p>
+          <div className="relative mt-7 grid gap-7 sm:grid-cols-[1fr_auto] sm:items-end">
+            <div>
+              <p className="text-xs font-bold tracking-[0.12em]">
+                {getSessionEventStatusLabel(nextActionEvent.status)}
+              </p>
+              <h2 className="mt-4 font-serif text-3xl leading-tight sm:text-4xl">
+                {nextActionLabel}
+              </h2>
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-[#0c0f0e]/65">
+                {nextActionEvent.title}
+                <br />
+                {formatEventSchedule(
+                  nextActionEvent.eventDate,
+                  nextActionEvent.startTime,
+                  nextActionEvent.endTime,
+                )}{" "}
+                / {nextActionEvent.venue}
+              </p>
+            </div>
+            <a
+              href="#event-info"
+              className="inline-flex min-h-12 items-center justify-center border border-[#153027] bg-[#153027] px-5 text-xs font-bold tracking-[0.12em] text-[#f4eddf] transition-colors hover:bg-[#23463a]"
+            >
+              詳細を確認
+              <span aria-hidden="true" className="ml-3">
+                ↓
+              </span>
+            </a>
+          </div>
+        </section>
+      ) : null}
+
+      <nav
+        aria-label="マイページ内のショートカット"
+        className="mb-8 grid gap-px border border-[#f4eddf]/15 bg-[#f4eddf]/15 sm:grid-cols-4"
+      >
+        {[
+          ["イベント", "#event-info"],
+          ["自分の履歴", "#history"],
+          ["運営へ連絡", "#message"],
+          ["プロフィール", "#profile"],
+        ].map(([label, href]) => (
+          <a
+            key={href}
+            href={href}
+            className="flex min-h-14 items-center justify-between bg-[#0c0f0e] px-4 font-serif text-lg text-[#f4eddf] transition-colors hover:text-[#d7a94f]"
+          >
+            {label}
+            <span aria-hidden="true" className="text-[#d7a94f]">
+              →
+            </span>
+          </a>
+        ))}
+      </nav>
+
+      <Card className="member-notice-card border p-5 sm:p-7">
+        <p className="text-[10px] font-bold tracking-[0.2em] text-[#d7a94f]">
+          NOTICE
+        </p>
+        <CardTitle className="mt-3 font-serif text-3xl">
           お知らせ
         </CardTitle>
-        <CardDescription className="text-on-secondary">
+        <CardDescription>
           運営からのお知らせです。
         </CardDescription>
 
@@ -1040,8 +1144,14 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
         )}
       </Card>
 
-      <Card id="event-info" className="rounded-xl border bg-primary p-2 my-4">
-        <CardTitle className="text-2xl font-semibold text-on-primary">
+      <Card
+        id="event-info"
+        className="member-events-card my-8 scroll-mt-28 border p-3 sm:p-5"
+      >
+        <p className="text-[10px] font-bold tracking-[0.2em] text-[#d7a94f]">
+          SESSION BOARD
+        </p>
+        <CardTitle className="mt-3 font-serif text-3xl">
           イベント情報
         </CardTitle>
 
@@ -2180,6 +2290,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
       <Section
         title="自分の履歴"
         description="過去エントリーを確認できます。"
+        sectionId="history"
       >
         <h3 className="font-medium">エントリー履歴</h3>
         {sessionEntries.length === 0 ? (
@@ -2254,6 +2365,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
         title="管理者へメッセージ"
         description="運営への連絡事項を送信できます。内容は管理ダッシュボードへ保存され、管理者へ通知メールが送信されます。"
         collapsible
+        sectionId="message"
       >
         <form
           className="grid max-w-3xl gap-4"
@@ -2316,6 +2428,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
         title="プロフィール"
         description="プロフィール更新とパスワード変更をこの画面で行います。"
         collapsible
+        sectionId="profile"
       >
         <div className="mb-4 flex flex-wrap items-center gap-2">
           <Badge variant="outline">{currentUser?.role ?? "member"}</Badge>
@@ -2511,6 +2624,29 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
           </div>
         </form>
       </Section>
-    </>
+
+      <nav
+        aria-label="モバイル用メンバーナビゲーション"
+        className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-4 border-t border-[#f4eddf]/15 bg-[#0c0f0e]/95 px-2 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
+      >
+        {[
+          ["HOME", "#"],
+          ["EVENT", "#event-info"],
+          ["HISTORY", "#history"],
+          ["PROFILE", "#profile"],
+        ].map(([label, href], index) => (
+          <a
+            key={label}
+            href={href}
+            className={[
+              "grid min-h-16 place-items-center text-[9px] font-bold tracking-[0.12em]",
+              index === 0 ? "text-[#d7a94f]" : "text-[#f4eddf]/45",
+            ].join(" ")}
+          >
+            {label}
+          </a>
+        ))}
+      </nav>
+    </div>
   );
 }

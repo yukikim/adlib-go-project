@@ -21,7 +21,7 @@ const racingSansOne = Racing_Sans_One({
 
 export const metadata = {
   title: 'Adlib-go KICK-OFF',
-  description: 'ただいま工事中, 公開ページ、メンバーサイト、管理サイトを持つセッション運営アプリ',
+  description: 'ジャズを愛する人が集まり、その日だけの音楽をつくるセッションコミュニティ。',
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -29,9 +29,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="ja" className={`${mPlus.variable} ${racingSansOne.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-white">
         <AppHeader />
-        {/* <div id="top-container" className="min-h-screen overflow-hidden"> */}
-          {children}
-        {/* </div> */}
+        {children}
         <AppFooter />
         <Analytics />
       </body>

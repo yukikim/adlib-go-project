@@ -13,19 +13,21 @@ export async function AppHeader() {
   const isMember = canUseMemberFeatures(currentUser);
   const isAdmin = currentUser?.role === 'admin';
   const roleLabel = isAdmin && isMember ? '管理者・メンバー' : isAdmin ? '管理者' : isMember ? 'メンバー' : null;
-  // console.log('currentUser in AppHeader:', currentUser);
 
   return (
-    <header className="h-15 fixed group z-10 w-full bg-background/90">
+    <header className="sticky top-0 z-50 w-full border-b border-[#f4eddf]/15 bg-[#0c0f0e]/95 text-[#f4eddf] backdrop-blur-sm">
       <AppHeaderNav isSignedIn={isSignedIn} isMember={isMember} isAdmin={isAdmin}>
-      {currentUser ? (
-          <div className="flex gap-2 flex-wrap items-center text-gray-600">
-            {roleLabel ? <p className="text-xs font-medium tracking-wide">{roleLabel}</p> : null}
+        {currentUser ? (
+          <div className="flex flex-wrap items-center gap-2 border-t border-[#f4eddf]/15 pt-4 text-[#f4eddf]/60 lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0">
+            {roleLabel ? (
+              <p className="text-[9px] font-bold tracking-[0.14em] text-[#d7a94f]">
+                {roleLabel}
+              </p>
+            ) : null}
             <p className="text-xs">{displayName}</p>
-            <p className="text-xs">{currentUser.email}</p>
             <HeaderSignOutButton />
           </div>
-      ) : null}
+        ) : null}
       </AppHeaderNav>
     </header>
   );

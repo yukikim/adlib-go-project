@@ -120,7 +120,15 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
   }, [reloadShared]);
 
   return (
-    <main className={view === "admin" ? "mx-0 min-w-lvw flex w-full flex-col mt-15" : "mx-auto flex max-w-6xl flex-col px-2 xl:px-6 py-8 md:px-8 mt-15"}>
+    <main
+      className={
+        view === "admin"
+          ? "mx-0 flex w-full min-w-lvw flex-col"
+          : view === "member"
+            ? "member-jazz min-h-svh w-full"
+            : "mx-auto flex w-full max-w-6xl flex-col px-2 py-8 md:px-8 xl:px-6"
+      }
+    >
       {/* <MainHeader
         view={currentUser?.role === 'admin' ? '管理者' : 'メンバー'}
         currentUser={{ role: currentUser?.role, displayName: admin.adminMemberDisplayName }}
@@ -129,7 +137,7 @@ export default function PortalWorkspace({ view }: { view: PortalView }) {
         admin={{ adminMemberDisplayName: admin.adminMemberDisplayName }}
         memberProfile={{ memberDisplayName: currentUser?.memberProfile?.displayName }}
       /> */}
-      <div className="space-y-3 p-4">
+      <div className={view === "member" ? "sr-only" : "space-y-3 p-4"}>
         <Badge variant="outline" className="w-fit">
           {view === "admin" ? "Admin" : view === "member" ? "Member" : "Auth"}
         </Badge>

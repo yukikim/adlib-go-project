@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { useState } from 'react';
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
 
 type AppHeaderNavProps = {
   isSignedIn: boolean;
@@ -11,107 +11,113 @@ type AppHeaderNavProps = {
   children?: React.ReactNode;
 };
 
-export function AppHeaderNav({ isSignedIn, isMember, isAdmin, children }: AppHeaderNavProps) {
+const publicLinks = [
+  { href: "/", label: "トップ" },
+  { href: "/columns", label: "コラム" },
+  { href: "/about", label: "Adlib Goについて" },
+  { href: "/contact", label: "お問い合わせ" },
+];
+
+export function AppHeaderNav({
+  isSignedIn,
+  isMember,
+  isAdmin,
+  children,
+}: AppHeaderNavProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setIsMenuOpen((current) => !current);
-  };
-
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-  };
+  const closeMenu = () => setIsMenuOpen(false);
 
   return (
     <nav
-      id="nav"
-      data-state={isMenuOpen ? 'active' : undefined}
-      className="absolute group z-10 w-full"
+      aria-label="メインナビゲーション"
+      data-state={isMenuOpen ? "open" : "closed"}
+      className="group mx-auto max-w-7xl px-4 sm:px-6"
     >
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
-        <div id="header-nav" className="relative flex flex-wrap items-center justify-between gap-6 md:gap-0">
-          <div className="relative z-20 flex w-full justify-between md:px-0 lg:w-fit">
-            <Link href="/" aria-label="logo" className="flex items-center space-x-2" onClick={closeMenu}>
-              <Image
-                src="/images/main_logo.svg"
-                alt="Hero Image"
-                width={140}
-                height={60}
-                loading="eager"
-                style={{ height: '60px', width: '140px' }}
-              />
-            </Link>
+      <div className="flex min-h-16 items-center justify-between gap-4">
+        <Link
+          href="/"
+          aria-label="Adlib Go トップへ"
+          className="relative z-50 shrink-0"
+          onClick={closeMenu}
+        >
+          <Image
+            src="/images/ag-logo.svg"
+            alt="Adlib Go"
+            width={200}
+            height={80}
+            priority
+            className="h-7 w-auto"
+          />
+        </Link>
 
-            <div className="relative flex max-h-10 items-center lg:hidden">
-              <button
-                type="button"
-                aria-label="hamburger"
-                aria-controls="navlinks"
-                aria-expanded={isMenuOpen}
-                id="hamburger"
-                className="relative -mr-6 p-6 active:scale-95 duration-300"
-                onClick={toggleMenu}
+        <button
+          type="button"
+          aria-label={isMenuOpen ? "メニューを閉じる" : "メニューを開く"}
+          aria-controls="main-navigation-links"
+          aria-expanded={isMenuOpen}
+          className="relative z-50 grid size-11 place-items-center lg:hidden"
+          onClick={() => setIsMenuOpen((current) => !current)}
+        >
+          <span className="sr-only">メニュー</span>
+          <span className="grid gap-1.5">
+            <span className="h-px w-5 bg-[#f4eddf] transition-transform group-data-[state=open]:translate-y-[3.5px] group-data-[state=open]:rotate-45" />
+            <span className="h-px w-5 bg-[#f4eddf] transition-transform group-data-[state=open]:-translate-y-[3.5px] group-data-[state=open]:-rotate-45" />
+          </span>
+        </button>
+
+        <div
+          id="main-navigation-links"
+          className="invisible fixed inset-x-0 top-16 z-40 flex max-h-[calc(100svh-4rem)] translate-y-2 flex-col gap-6 overflow-y-auto border-b border-[#f4eddf]/15 bg-[#0c0f0e] px-4 py-7 opacity-0 transition-all group-data-[state=open]:visible group-data-[state=open]:translate-y-0 group-data-[state=open]:opacity-100 sm:px-6 lg:visible lg:static lg:max-h-none lg:translate-y-0 lg:flex-row lg:items-center lg:gap-5 lg:overflow-visible lg:border-0 lg:bg-transparent lg:p-0 lg:opacity-100"
+        >
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-center">
+            {publicLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={closeMenu}
+                className="text-xs font-bold tracking-[0.1em] text-[#f4eddf]/65 transition-colors hover:text-[#d7a94f]"
               >
-                <div
-                  aria-hidden="true"
-                  id="line"
-                  className="m-auto h-0.5 w-5 rounded bg-gray-950 transition duration-300 origin-top group-data-[state=active]:rotate-45 group-data-[state=active]:translate-y-1.5"
-                ></div>
-                <div
-                  aria-hidden="true"
-                  id="line2"
-                  className="m-auto mt-2 h-0.5 w-5 rounded bg-gray-950 transition duration-300 origin-bottom group-data-[state=active]:-rotate-45 group-data-[state=active]:-translate-y-1"
-                ></div>
-              </button>
-            </div>
+                {link.label}
+              </Link>
+            ))}
+            {!isSignedIn ? (
+              <Link
+                href="/signin"
+                onClick={closeMenu}
+                className="text-xs font-bold tracking-[0.1em] text-[#f4eddf]/65 transition-colors hover:text-[#d7a94f]"
+              >
+                会員ログイン
+              </Link>
+            ) : null}
+            {!isSignedIn ? (
+              <Link
+                href="/signup"
+                onClick={closeMenu}
+                className="inline-flex min-h-10 items-center justify-center border border-[#d7a94f] bg-[#d7a94f] px-4 text-xs font-bold tracking-[0.1em] text-[#0c0f0e] transition-colors hover:bg-[#ecc671]"
+              >
+                会員登録
+              </Link>
+            ) : null}
+            {isMember ? (
+              <Link
+                href="/member"
+                onClick={closeMenu}
+                className="text-xs font-bold tracking-[0.1em] text-[#d7a94f]"
+              >
+                マイページ
+              </Link>
+            ) : null}
+            {isAdmin ? (
+              <Link
+                href="/admin"
+                onClick={closeMenu}
+                className="text-xs font-bold tracking-[0.1em] text-[#d7a94f]"
+              >
+                管理画面
+              </Link>
+            ) : null}
           </div>
-          <div
-            id="navLayer"
-            aria-hidden="true"
-            className="fixed inset-0 z-10 h-screen w-screen origin-bottom scale-y-0 bg-white/5 backdrop-blur-2xl transition duration-500 group-data-[state=active]:origin-top group-data-[state=active]:scale-y-100 dark:bg-gray-950/70 lg:hidden"
-          ></div>
-          <div
-            id="navlinks"
-            className="invisible absolute top-full left-0 z-20 w-full origin-top-right translate-y-1 scale-90 flex-col flex-wrap justify-end gap-6 rounded-3xl border border-gray-100 bg-white p-8 opacity-0 shadow-2xl shadow-gray-600/10 transition-all duration-300 dark:border-gray-700 dark:bg-gray-800 dark:shadow-none lg:visible lg:relative lg:flex lg:w-fit lg:translate-y-0 lg:scale-100 lg:flex-row lg:items-center lg:gap-0 lg:border-none lg:bg-transparent lg:p-0 lg:opacity-100 lg:shadow-none lg:dark:bg-transparent group-data-[state=active]:visible group-data-[state=active]:scale-100 group-data-[state=active]:opacity-100 lg:group-data-[state=active]:translate-y-0"
-          >
-            <div className="w-full text-on-background font-semibold lg:w-auto lg:pr-4 lg:pt-0">
-              <div id="links-group" className="flex flex-col gap-6 tracking-wide lg:flex-row lg:gap-6 lg:text-sm">
-                <Link href="/" onClick={closeMenu}>
-                  トップ
-                </Link>
-                <Link href="/columns" onClick={closeMenu}>
-                  コラム
-                </Link>
-                <Link href="/about" onClick={closeMenu}>
-                  adlib-go について
-                </Link>
-                <Link href="/contact" onClick={closeMenu}>
-                  お問い合わせ
-                </Link>
-                {!isSignedIn ? (
-                  <Link href="/signin" onClick={closeMenu}>
-                    会員ログイン
-                  </Link>
-                ) : null}
-                {!isSignedIn ? (
-                  <Link href="/signup" onClick={closeMenu}>
-                    会員登録
-                  </Link>
-                ) : null}
-                {isMember ? (
-                  <Link href="/member" onClick={closeMenu}>
-                    マイページ
-                  </Link>
-                ) : null}
-                {isAdmin ? (
-                  <Link href="/admin" onClick={closeMenu}>
-                    ダッシュボード
-                  </Link>
-                ) : null}
-      {children}
-              </div>
-            </div>
-          </div>
+          {children}
         </div>
       </div>
     </nav>

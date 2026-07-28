@@ -69,7 +69,7 @@ export function ContactForm() {
   const isSubmitting = submission.status === 'submitting';
 
   return (
-    <form ref={formRef} className="space-y-5" onSubmit={handleSubmit}>
+    <form ref={formRef} className="space-y-6" onSubmit={handleSubmit}>
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="contact-name">お名前</Label>
@@ -80,6 +80,7 @@ export function ContactForm() {
             maxLength={80}
             required
             disabled={isSubmitting}
+            className="h-12 rounded-none border-[#153027]/30 bg-[#f4eddf]/60 text-[#153027]"
           />
         </div>
         <div className="space-y-2">
@@ -93,6 +94,7 @@ export function ContactForm() {
             maxLength={254}
             required
             disabled={isSubmitting}
+            className="h-12 rounded-none border-[#153027]/30 bg-[#f4eddf]/60 text-[#153027]"
           />
         </div>
       </div>
@@ -105,6 +107,7 @@ export function ContactForm() {
           maxLength={120}
           required
           disabled={isSubmitting}
+          className="h-12 rounded-none border-[#153027]/30 bg-[#f4eddf]/60 text-[#153027]"
         />
       </div>
 
@@ -119,7 +122,7 @@ export function ContactForm() {
         <Textarea
           id="contact-message"
           name="message"
-          className="min-h-48 resize-y"
+          className="min-h-48 resize-y rounded-none border-[#153027]/30 bg-[#f4eddf]/60 text-[#153027]"
           minLength={10}
           maxLength={MESSAGE_MAX_LENGTH}
           aria-describedby="contact-message-help contact-message-count"
@@ -164,7 +167,12 @@ export function ContactForm() {
         </div>
       ) : null}
 
-      <Button type="submit" size="lg" disabled={isSubmitting}>
+      <Button
+        type="submit"
+        size="lg"
+        className="min-h-12 rounded-none border-[#153027] bg-[#153027] px-6 text-xs font-bold tracking-[0.12em] text-[#f4eddf] hover:bg-[#23463a]"
+        disabled={isSubmitting}
+      >
         {isSubmitting ? '送信中…' : 'お問い合わせを送信'}
       </Button>
       <p className="text-xs leading-5 text-muted-foreground">
@@ -173,4 +181,3 @@ export function ContactForm() {
     </form>
   );
 }
-

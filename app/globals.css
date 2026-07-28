@@ -220,6 +220,94 @@ body {
   }
 }
 
+/* The member portal is intentionally restyled through a scoped shell so its data and actions stay unchanged. */
+.member-jazz-content [data-slot="card"] {
+  border-color: rgb(244 237 223 / 16%) !important;
+  border-radius: 0 !important;
+  background: #121715 !important;
+  color: #f4eddf !important;
+  box-shadow: none !important;
+}
+
+.member-jazz-content [data-slot="card-title"] {
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: #f4eddf !important;
+}
+
+.member-jazz-content [data-slot="card-description"],
+.member-jazz-content .text-muted-foreground {
+  color: rgb(244 237 223 / 56%) !important;
+}
+
+.member-jazz-content [data-slot="card"] [class*="bg-background"],
+.member-jazz-content [data-slot="card"] [class*="bg-neutral"],
+.member-jazz-content [data-slot="card"] [class*="bg-gray"] {
+  border-color: rgb(244 237 223 / 14%) !important;
+  background: #181f1c !important;
+  color: #f4eddf !important;
+}
+
+.member-jazz-content [data-slot="card"] [class*="text-cyan"],
+.member-jazz-content [data-slot="card"] [class*="text-orange"],
+.member-jazz-content [data-slot="card"] [class*="text-pink"],
+.member-jazz-content [data-slot="card"] [class*="text-sky"],
+.member-jazz-content [data-slot="card"] [class*="text-emerald"],
+.member-jazz-content [data-slot="card"] [class*="text-slate"],
+.member-jazz-content [data-slot="card"] [class*="text-neutral"],
+.member-jazz-content [data-slot="card"] .text-foreground {
+  color: #f4eddf !important;
+}
+
+.member-jazz-content [data-slot="card"] [class*="bg-cyan"],
+.member-jazz-content [data-slot="card"] [class*="bg-orange"],
+.member-jazz-content [data-slot="card"] [class*="bg-pink"],
+.member-jazz-content [data-slot="card"] [class*="bg-sky"],
+.member-jazz-content [data-slot="card"] [class*="bg-emerald"] {
+  background: #141b18 !important;
+}
+
+.member-jazz-content [data-slot="badge"] {
+  border-color: rgb(215 169 79 / 38%) !important;
+  background: rgb(215 169 79 / 10%) !important;
+  color: #d7a94f !important;
+}
+
+.member-jazz-content [data-slot="button"] {
+  min-height: 2.75rem;
+  border-radius: 0 !important;
+  border-color: #d7a94f !important;
+  background: #d7a94f !important;
+  color: #0c0f0e !important;
+}
+
+.member-jazz-content [data-slot="button"]:hover {
+  background: #ecc671 !important;
+}
+
+.member-jazz-content [data-slot="input"],
+.member-jazz-content [data-slot="textarea"],
+.member-jazz-content [data-slot="select-trigger"] {
+  min-height: 2.75rem;
+  border-radius: 0 !important;
+  border-color: rgb(21 48 39 / 28%) !important;
+  background: #f4eddf !important;
+  color: #153027 !important;
+}
+
+.member-jazz-content .member-notice-card li {
+  border-left: 2px solid #d66958 !important;
+}
+
+.member-jazz-content .member-events-card > [data-slot="card"] {
+  margin-top: 1rem;
+  padding: 1rem;
+}
+
+.member-jazz-content details > summary {
+  min-height: 2.75rem;
+}
+
 .glass_like {
   overflow: hidden;
   border-radius: 2rem;
@@ -234,4 +322,50 @@ body {
   border: 1px solid rgba(74, 96, 140, 0.15);
   background-image: linear-gradient(135deg, rgba(163, 186, 217, 0.45), var(--background), rgba(74, 96, 140, 0.1));
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* Jazz Mobile Concept: public pages and member portal share these lightweight motifs. */
+.jazz-page,
+.member-jazz {
+  background: #0c0f0e;
+  color: #f4eddf;
+}
+
+.jazz-page ::selection,
+.member-jazz ::selection {
+  background: #d7a94f;
+  color: #0c0f0e;
+}
+
+.jazz-grooves {
+  background-image:
+    radial-gradient(circle at center, transparent 0 24%, rgb(215 169 79 / 18%) 24.3% 24.8%, transparent 25.1% 34%, rgb(244 237 223 / 10%) 34.3% 34.8%, transparent 35.1% 45%, rgb(215 169 79 / 14%) 45.3% 45.8%, transparent 46.1%),
+    radial-gradient(circle at center, #1e2623 0, #0c0f0e 68%);
+}
+
+.jazz-staff {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0 18px,
+    rgb(244 237 223 / 7%) 18px 19px
+  );
+}
+
+.jazz-paper-grid {
+  background-image:
+    linear-gradient(rgb(21 48 39 / 8%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(21 48 39 / 8%) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jazz-page *,
+  .jazz-page *::before,
+  .jazz-page *::after,
+  .member-jazz *,
+  .member-jazz *::before,
+  .member-jazz *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }
