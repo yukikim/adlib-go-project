@@ -676,15 +676,13 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
     setActiveGroupId(groupId);
     setActiveChildId(null);
     setOpenMobileGroupId(groupId);
-  };
 
-  const handleChildSelect = (groupId: string, childId: string) => {
-    setActiveGroupId(groupId);
-    setActiveChildId(childId);
-    setOpenMobileGroupId(groupId);
-    if (groupId === 'admin-session-sets' && (childId === 'admin-session-sets-list' || childId === 'admin-session-sets-results')) {
-      setShowSessionSetContainer(true);
-    }
+    requestAnimationFrame(() => {
+      document.getElementById('select-content')?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    });
   };
 
   const toggleSessionEventOpen = (sessionEventId: string) => {
@@ -926,7 +924,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
               <p className="text-sm text-muted-foreground">左のメニューから表示するセクションとサブメニューを切り替えます。</p>
             </div>
             <Separator className="my-4 bg-secondary" />
-            <nav id="mobil-dashboard" className="space-y-3 xl:hidden" aria-label="管理ダッシュボードメニュー（モバイル）">
+            <nav id="mobil-dashboard" className="space-y-3 xl:hidden mb-4" aria-label="管理ダッシュボードメニュー（モバイル）">
               {adminNavGroups.map((group) => {
                 const isOpen = openMobileGroupId === group.id;
 
@@ -949,24 +947,8 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                         className="inline-flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                         onClick={() => setOpenMobileGroupId(isOpen ? '' : group.id)}
                       >
-                        <ChevronDown className={cn('size-4 transition-transform', isOpen ? 'rotate-180' : 'rotate-0')} />
                       </button>
                     </div>
-                    {isOpen ? (
-                      <div id={`${group.id}-submenu`} className="border-t border-border/70 px-2 pb-2 pt-1">
-                        {group.children.map((child) => (
-                          <button
-                            type="button"
-                            key={child.id}
-                            aria-current={activeChildId === child.id ? 'location' : undefined}
-                            className={cn(getChildLinkClassName(child.id), 'w-full text-left')}
-                            onClick={() => handleChildSelect(group.id, child.id)}
-                          >
-                            {child.label}
-                          </button>
-                        ))}
-                      </div>
-                    ) : null}
                   </div>
                 );
               })}
@@ -998,26 +980,13 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                     {group.icon}
                     <span>{group.label}</span>
                   </button>
-                  {/* <div className="space-y-1 border-l border-border/80 pl-4">
-                  {group.children.map((child) => (
-                    <button
-                      type="button"
-                      key={child.id}
-                      aria-current={activeChildId === child.id ? 'location' : undefined}
-                      className={cn(getChildLinkClassName(child.id), 'w-full text-left')}
-                      onClick={() => handleChildSelect(group.id, child.id)}
-                    >
-                      {child.label}
-                    </button>
-                  ))}
-                </div> */}
                 </div>
               ))}
             </nav>
           </div>
         </aside>
 
-        <div className="min-w-0 pr-4">
+        <div id="select-content" className="min-w-0 scroll-mt-24 px-2">
           <div className="rounded-2xl bg-tertiary p-4 shadow-sm">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="space-y-1">
