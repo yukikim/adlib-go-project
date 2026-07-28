@@ -5,136 +5,68 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
+  /* Change the two source values in :root to retheme every Jazz surface. */
+  --color-jazz-brass: var(--jazz-brass);
+  --color-jazz-green: var(--jazz-green);
+  --color-jazz-brass-hover: color-mix(in srgb, var(--jazz-brass) 82%, white);
+  --color-jazz-green-hover: color-mix(in srgb, var(--jazz-green) 88%, white);
+  --color-brand-main: var(--brand-main);
+  --color-brand-base: var(--brand-base);
 
-    --color-primary: #e7eff2;
-    --color-secondary: #666a86;
-    --color-tertiary: #b5dbd5;
-    --color-background: #d0dad1;
-    --color-accent: #9f2b2b;
+  --color-primary: #e7eff2;
+  --color-secondary: #666a86;
+  --color-tertiary: #b5dbd5;
+  --color-background: #d0dad1;
+  --color-accent: #9f2b2b;
 
-    --color-on-primary: #5C3413;
-    --color-on-secondary: #FDDEC6;
-    --color-on-tertiary: #6B3308;
-    --color-on-background: #6B3308;
-    --color-on-accent: #B4CAB4;
+  --color-on-primary: #5c3413;
+  --color-on-secondary: #fddec6;
+  --color-on-tertiary: #6b3308;
+  --color-on-background: #6b3308;
 
-    --color-destructive: #f80303;
+  --color-destructive: #f80303;
+  --color-error: #f85d03;
 
-    --color-error: #f85d03;
-    --color-on-error: #8c8c8c;
+  /* These two legacy utilities are still used by portal controls. */
+  --color-slate-grey-100: oklch(92.03% 0.008 253.86);
+  --color-pearl-beige: #e8ddb5;
 
---color-blue-slate-50: oklch(95.82% 0.004 271.37);
---color-blue-slate-100: oklch(91.68% 0.008 278.63);
---color-blue-slate-200: oklch(83.17% 0.017 278.46);
---color-blue-slate-300: oklch(74.25% 0.027 280.93);
---color-blue-slate-400: oklch(65.28% 0.037 279.91);
---color-blue-slate-500: oklch(56.03% 0.048 278.98);
---color-blue-slate: #666a86;
---color-blue-slate-600: oklch(47.82% 0.040 279.40);
---color-blue-slate-700: oklch(39.25% 0.032 280.10);
---color-blue-slate-800: oklch(30.43% 0.022 277.60);
---color-blue-slate-900: oklch(20.63% 0.012 277.83);
---color-blue-slate-950: oklch(17.38% 0.008 274.39);
+  --animate-orb: orb 20s infinite linear;
 
---color-slate-grey-50: oklch(96.05% 0.005 258.32);
---color-slate-grey-100: oklch(92.03% 0.008 253.86);
---color-slate-grey-200: oklch(83.65% 0.019 258.36);
---color-slate-grey-300: oklch(75.32% 0.028 257.04);
---color-slate-grey-400: oklch(66.80% 0.038 256.38);
---color-slate-grey: #788aa3;
---color-slate-grey-500: oklch(57.78% 0.051 257.61);
---color-slate-grey-600: oklch(49.49% 0.040 256.42);
---color-slate-grey-700: oklch(40.55% 0.033 257.09);
---color-slate-grey-800: oklch(31.08% 0.024 258.36);
---color-slate-grey-900: oklch(21.15% 0.012 254.09);
---color-slate-grey-950: oklch(17.62% 0.010 255.65);
-
---color-muted-teal-50: oklch(96.61% 0.005 183.03);
---color-muted-teal-100: oklch(93.12% 0.012 184.07);
---color-muted-teal-200: oklch(86.02% 0.022 185.94);
---color-muted-teal-300: oklch(79% 0.034 186.97);
---color-muted-teal-400: oklch(71.70% 0.044 186.78);
---color-muted-teal: #92b6b1;
---color-muted-teal-500: oklch(64.48% 0.056 185.14);
---color-muted-teal-600: oklch(54.83% 0.045 186.16);
---color-muted-teal-700: oklch(44.93% 0.037 185.87);
---color-muted-teal-800: oklch(34.20% 0.026 184.51);
---color-muted-teal-900: oklch(22.80% 0.016 182.38);
---color-muted-teal-950: oklch(18.81% 0.011 185.58);
-
---color-celadon-50: oklch(96.55% 0.009 134.87);
---color-celadon-100: oklch(93.10% 0.017 137.03);
---color-celadon-200: oklch(86.03% 0.035 138.57);
---color-celadon-300: oklch(78.94% 0.053 138.13);
---color-celadon: #b2c9ab;
---color-celadon-400: oklch(71.69% 0.073 138.64);
---color-celadon-500: oklch(64.66% 0.094 138.23);
---color-celadon-600: oklch(54.84% 0.077 138.72);
---color-celadon-700: oklch(44.86% 0.060 138.28);
---color-celadon-800: oklch(34.22% 0.043 138.69);
---color-celadon-900: oklch(22.75% 0.024 137.29);
---color-celadon-950: oklch(19.09% 0.018 137.95);
-
---color-pearl-beige-50: oklch(97.25% 0.015 94.20);
---color-pearl-beige-100: oklch(94.52% 0.028 93.76);
---color-pearl-beige-200: oklch(89.06% 0.057 93.98);
---color-pearl-beige: #e8ddb5;
---color-pearl-beige-300: oklch(83.63% 0.084 94.05);
---color-pearl-beige-400: oklch(78.45% 0.109 94.57);
---color-pearl-beige-500: oklch(73.16% 0.127 93.52);
---color-pearl-beige-600: oklch(62.16% 0.107 93.78);
---color-pearl-beige-700: oklch(50.43% 0.084 93.08);
---color-pearl-beige-800: oklch(38.20% 0.061 93.31);
---color-pearl-beige-900: oklch(24.89% 0.036 93.72);
---color-pearl-beige-950: oklch(20.49% 0.027 94.95);
-
-
-
-    --animate-orb: orb 20s infinite linear;
-
-    @keyframes orb {
-
-        0%,
-        100% {
-            transform: translate(0, 0) scale(1);
-        }
-
-        33% {
-            transform: translate(630px, -250px) scale(1.5);
-        }
-
-        66% {
-            transform: translate(-520px, 120px) scale(0.7);
-        }
+  @keyframes orb {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
     }
+
+    33% {
+      transform: translate(630px, -250px) scale(1.5);
+    }
+
+    66% {
+      transform: translate(-520px, 120px) scale(0.7);
+    }
+  }
 }
 
 :root {
-
+  --jazz-brass: #d7a94f;
+  --jazz-green: #153027;
   --brand-main: #4a608c;
   --brand-base: #a3bad9;
-  --background: #0b0f13;
 }
 
-/* .dark {
-} */
-
 @layer base {
-
   html,
   body {
     margin: 0;
     padding: 0;
   }
 
-body {
-  font-family: var(--font-m-plus, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", YuGothic, Meiryo, sans-serif);
-  color: #4f4f4f;
-}
-
-.font-racing-sans-one {
-  font-family: var(--font-racing-sans-one, "Arial Narrow", Arial, sans-serif);
-}
+  body {
+    font-family: var(--font-m-plus, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", YuGothic, Meiryo, sans-serif);
+    color: #4f4f4f;
+  }
 
 }
 
@@ -147,26 +79,16 @@ body {
     animation: admin-content-enter 220ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  .brand-hero-surface {
-    border-color: color-mix(in srgb, var(--brand-main) 14%, white);
-    background-image: linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--brand-base) 46%, white),
-      var(--background) 52%,
-      color-mix(in srgb, var(--brand-main) 12%, white)
-    );
-  }
-
   .brand-kicker {
     border-color: color-mix(in srgb, var(--brand-main) 20%, white);
     background-color: color-mix(in srgb, var(--brand-base) 44%, white);
-    color: var(--brand-sub);
+    color: var(--jazz-green);
   }
 
   .brand-success-surface {
     border-color: color-mix(in srgb, var(--brand-main) 24%, white);
     background-color: color-mix(in srgb, var(--brand-base) 34%, white);
-    color: var(--brand-sub);
+    color: var(--jazz-green);
   }
 }
 
@@ -236,21 +158,21 @@ body {
 }
 
 .member-jazz-content [data-slot="badge"] {
-  border-color: rgb(215 169 79 / 38%) !important;
-  background: rgb(215 169 79 / 10%) !important;
-  color: #d7a94f !important;
+  border-color: color-mix(in srgb, var(--jazz-brass) 38%, transparent) !important;
+  background: color-mix(in srgb, var(--jazz-brass) 10%, transparent) !important;
+  color: var(--jazz-brass) !important;
 }
 
 .member-jazz-content [data-slot="button"] {
   min-height: 2.75rem;
   border-radius: 0 !important;
-  border-color: #d7a94f !important;
-  background: #d7a94f !important;
+  border-color: var(--jazz-brass) !important;
+  background: var(--jazz-brass) !important;
   color: #0c0f0e !important;
 }
 
 .member-jazz-content [data-slot="button"]:hover {
-  background: #ecc671 !important;
+  background: color-mix(in srgb, var(--jazz-brass) 82%, white) !important;
 }
 
 .member-jazz-content [data-slot="input"],
@@ -258,9 +180,9 @@ body {
 .member-jazz-content [data-slot="select-trigger"] {
   min-height: 2.75rem;
   border-radius: 0 !important;
-  border-color: rgb(21 48 39 / 28%) !important;
+  border-color: color-mix(in srgb, var(--jazz-green) 28%, transparent) !important;
   background: #f4eddf !important;
-  color: #153027 !important;
+  color: var(--jazz-green) !important;
 }
 
 .member-jazz-content .member-notice-card li {
@@ -276,22 +198,6 @@ body {
   min-height: 2.75rem;
 }
 
-.glass_like {
-  overflow: hidden;
-  border-radius: 2rem;
-  border: 2px solid rgba(74, 96, 140, 0.15);
-  background-image: linear-gradient(165deg, rgba(110, 164, 235, 0.379), var(--background), rgba(36, 61, 111, 0.1));
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.glass_section {
-  overflow: hidden;
-  border-radius: 2rem;
-  border: 1px solid rgba(74, 96, 140, 0.15);
-  background-image: linear-gradient(135deg, rgba(163, 186, 217, 0.45), var(--background), rgba(74, 96, 140, 0.1));
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-}
-
 /* Jazz Mobile Concept: public pages and member portal share these lightweight motifs. */
 .jazz-page,
 .member-jazz {
@@ -301,13 +207,13 @@ body {
 
 .jazz-page ::selection,
 .member-jazz ::selection {
-  background: #d7a94f;
+  background: var(--jazz-brass);
   color: #0c0f0e;
 }
 
 .jazz-grooves {
   background-image:
-    radial-gradient(circle at center, transparent 0 24%, rgb(215 169 79 / 18%) 24.3% 24.8%, transparent 25.1% 34%, rgb(244 237 223 / 10%) 34.3% 34.8%, transparent 35.1% 45%, rgb(215 169 79 / 14%) 45.3% 45.8%, transparent 46.1%),
+    radial-gradient(circle at center, transparent 0 24%, color-mix(in srgb, var(--jazz-brass) 18%, transparent) 24.3% 24.8%, transparent 25.1% 34%, rgb(244 237 223 / 10%) 34.3% 34.8%, transparent 35.1% 45%, color-mix(in srgb, var(--jazz-brass) 14%, transparent) 45.3% 45.8%, transparent 46.1%),
     radial-gradient(circle at center, #1e2623 0, #0c0f0e 68%);
 }
 
@@ -321,8 +227,8 @@ body {
 
 .jazz-paper-grid {
   background-image:
-    linear-gradient(rgb(21 48 39 / 8%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(21 48 39 / 8%) 1px, transparent 1px);
+    linear-gradient(color-mix(in srgb, var(--jazz-green) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--jazz-green) 8%, transparent) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 

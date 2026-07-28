@@ -22,6 +22,19 @@
 
 ## デザイン方針
 
+### テーマカラーの変更
+
+Jazzデザインの基準色は `app/globals.css` の `:root` に集約しています。
+
+```css
+:root {
+  --jazz-brass: #d7a94f;
+  --jazz-green: #153027;
+}
+```
+
+この2値を変更すると、`text-jazz-brass`、`bg-jazz-green`などのTailwindユーティリティ、ホバー色、レコードの溝、譜面グリッド、メンバーページのフォーム色へまとめて反映されます。
+
 ### Jazz の表現
 
 - 夜の会場を思わせる Ink Black

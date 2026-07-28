@@ -48,7 +48,7 @@ export default function JazzMemberPreviewPage() {
             </div>
             <div
               aria-label="メンバーのイニシャル M"
-              className="grid size-14 shrink-0 place-items-center rounded-full border border-[#d7a94f]/50 bg-[#d7a94f]/10 font-serif text-2xl text-[#d7a94f] sm:size-20"
+              className="grid size-14 shrink-0 place-items-center rounded-full border border-jazz-brass/50 bg-jazz-brass/10 font-serif text-2xl text-jazz-brass sm:size-20"
             >
               M
             </div>
@@ -59,7 +59,7 @@ export default function JazzMemberPreviewPage() {
           <div className="space-y-8">
             <section
               id="entry"
-              className="relative overflow-hidden bg-[#d7a94f] p-6 text-[#0c0f0e] sm:p-8"
+              className="relative overflow-hidden bg-jazz-brass p-6 text-[#0c0f0e] sm:p-8"
             >
               <div
                 aria-hidden="true"
@@ -100,7 +100,7 @@ export default function JazzMemberPreviewPage() {
                   </h2>
                 </div>
                 <div className="text-right">
-                  <p className="font-serif text-5xl leading-none text-[#d7a94f]">
+                  <p className="font-serif text-5xl leading-none text-jazz-brass">
                     23
                   </p>
                   <p className="mt-1 text-[10px] tracking-[0.16em] text-[#f4eddf]/45">
@@ -135,7 +135,7 @@ export default function JazzMemberPreviewPage() {
                   参加状況・リクエスト曲を見る
                   <span
                     aria-hidden="true"
-                    className="text-[#d7a94f] group-open:rotate-45"
+                    className="text-jazz-brass group-open:rotate-45"
                   >
                     ＋
                   </span>
@@ -150,22 +150,22 @@ export default function JazzMemberPreviewPage() {
               </details>
             </section>
 
-            <section className="bg-[#e9e0cf] p-5 text-[#153027] sm:p-7">
+            <section className="bg-[#e9e0cf] p-5 text-jazz-green sm:p-7">
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
-                  <p className="text-[10px] font-bold tracking-[0.18em] text-[#153027]/55">
+                  <p className="text-[10px] font-bold tracking-[0.18em] text-jazz-green/55">
                     PUBLISHED SESSION SET
                   </p>
                   <h2 className="mt-3 font-serif text-3xl">
                     July Session Set
                   </h2>
                 </div>
-                <span className="rounded-full border border-[#153027]/25 px-3 py-1 text-[10px] font-bold tracking-[0.1em]">
+                <span className="rounded-full border border-jazz-green/25 px-3 py-1 text-[10px] font-bold tracking-[0.1em]">
                   公開済み
                 </span>
               </div>
 
-              <ol className="mt-7 divide-y divide-[#153027]/20 border-y border-[#153027]/20">
+              <ol className="mt-7 divide-y divide-jazz-green/20 border-y border-jazz-green/20">
                 {setList.map((song) => (
                   <li
                     key={song.order}
@@ -176,7 +176,7 @@ export default function JazzMemberPreviewPage() {
                     </span>
                     <div>
                       <p className="font-serif text-lg">{song.title}</p>
-                      <p className="mt-1 text-xs text-[#153027]/55">
+                      <p className="mt-1 text-xs text-jazz-green/55">
                         {song.meta}
                       </p>
                     </div>
@@ -214,7 +214,7 @@ export default function JazzMemberPreviewPage() {
               </article>
               <a
                 href="#"
-                className="mt-6 inline-flex text-xs font-bold tracking-[0.1em] text-[#d7a94f]"
+                className="mt-6 inline-flex text-xs font-bold tracking-[0.1em] text-jazz-brass"
               >
                 お知らせ一覧 →
               </a>
@@ -229,14 +229,14 @@ export default function JazzMemberPreviewPage() {
                   <a
                     key={link.label}
                     href={link.href}
-                    className="group flex min-h-16 items-center justify-between border-t border-[#f4eddf]/15 text-sm transition-colors last:border-b hover:text-[#d7a94f]"
+                    className="group flex min-h-16 items-center justify-between border-t border-[#f4eddf]/15 text-sm transition-colors last:border-b hover:text-jazz-brass"
                   >
                     <span className="font-serif text-xl">{link.label}</span>
                     <span className="flex items-center gap-4 text-[10px] tracking-[0.1em] text-[#f4eddf]/40">
                       {link.meta}
                       <span
                         aria-hidden="true"
-                        className="text-base text-[#d7a94f]"
+                        className="text-base text-jazz-brass"
                       >
                         →
                       </span>
@@ -263,7 +263,7 @@ export default function JazzMemberPreviewPage() {
               href={href}
               className={[
                 "grid min-h-16 place-items-center text-[9px] font-bold tracking-[0.12em]",
-                index === 0 ? "text-[#d7a94f]" : "text-[#f4eddf]/45",
+                index === 0 ? "text-jazz-brass" : "text-[#f4eddf]/45",
               ].join(" ")}
             >
               {label}

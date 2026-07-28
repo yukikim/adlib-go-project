@@ -48,9 +48,9 @@ export default async function ColumnsPage() {
               <br />
               Read.
               <br />
-              <span className="text-[#d7a94f] italic">Play.</span>
+              <span className="text-jazz-brass italic">Play.</span>
             </h1>
-            <p className="border-l border-[#d7a94f]/60 pl-5 text-sm leading-7 text-[#f4eddf]/65">
+            <p className="border-l border-jazz-brass/60 pl-5 text-sm leading-7 text-[#f4eddf]/65">
               演奏の前に知ること。
               <br />
               演奏のあとに残ること。
@@ -62,16 +62,16 @@ export default async function ColumnsPage() {
       </section>
 
       {featuredColumn ? (
-        <section className="bg-[#e9e0cf] px-4 py-20 text-[#153027] sm:px-6 lg:py-28">
+        <section className="bg-[#e9e0cf] px-4 py-20 text-jazz-green sm:px-6 lg:py-28">
           <div className="mx-auto max-w-7xl">
             <JazzSectionTitle
               light
               eyebrow="FEATURED STORY"
               title={featuredColumn.title}
             />
-            <article className="mt-10 grid overflow-hidden border border-[#153027]/25 lg:grid-cols-[0.85fr_1.15fr]">
-              <div className="jazz-paper-grid relative min-h-80 bg-[#153027] p-7 text-[#e9e0cf] sm:p-10">
-                <span className="text-[10px] font-bold tracking-[0.2em] text-[#d7a94f]">
+            <article className="mt-10 grid overflow-hidden border border-jazz-green/25 lg:grid-cols-[0.85fr_1.15fr]">
+              <div className="jazz-paper-grid relative min-h-80 bg-jazz-green p-7 text-[#e9e0cf] sm:p-10">
+                <span className="text-[10px] font-bold tracking-[0.2em] text-jazz-brass">
                   SESSION JOURNAL
                 </span>
                 <p
@@ -89,18 +89,18 @@ export default async function ColumnsPage() {
               <div className="flex flex-col justify-between p-7 sm:p-10">
                 <div>
                   <div className="flex flex-wrap gap-2">
-                    <span className="rounded-full border border-[#153027]/25 px-3 py-1 text-[10px] font-bold tracking-[0.12em]">
+                    <span className="rounded-full border border-jazz-green/25 px-3 py-1 text-[10px] font-bold tracking-[0.12em]">
                       {featuredColumn.authorName}
                     </span>
-                    <span className="rounded-full border border-[#153027]/25 px-3 py-1 text-[10px] font-bold tracking-[0.12em]">
+                    <span className="rounded-full border border-jazz-green/25 px-3 py-1 text-[10px] font-bold tracking-[0.12em]">
                       {formatPublishedDate(featuredColumn.publishedAt)}
                     </span>
                   </div>
-                  <p className="mt-8 max-w-2xl text-sm leading-8 text-[#153027]/70 sm:text-base">
+                  <p className="mt-8 max-w-2xl text-sm leading-8 text-jazz-green/70 sm:text-base">
                     {featuredColumn.summary}
                   </p>
                 </div>
-                <div className="mt-10 border-t border-[#153027]/20 pt-6">
+                <div className="mt-10 border-t border-jazz-green/20 pt-6">
                   <JazzLinkButton
                     href={`/columns/${featuredColumn.slug}`}
                     variant="ink"
@@ -129,11 +129,11 @@ export default async function ColumnsPage() {
                   key={column.id}
                   className="group grid gap-5 py-7 md:grid-cols-[5rem_10rem_1fr_auto] md:items-center md:gap-8"
                 >
-                  <p className="font-serif text-4xl text-[#d7a94f]/50">
+                  <p className="font-serif text-4xl text-jazz-brass/50">
                     {String(index + 2).padStart(2, "0")}
                   </p>
                   <div>
-                    <p className="text-[10px] font-bold tracking-[0.16em] text-[#d7a94f]">
+                    <p className="text-[10px] font-bold tracking-[0.16em] text-jazz-brass">
                       {column.authorName}
                     </p>
                     <p className="mt-2 text-[10px] tracking-[0.1em] text-[#f4eddf]/40">
@@ -141,7 +141,7 @@ export default async function ColumnsPage() {
                     </p>
                   </div>
                   <div>
-                    <h2 className="font-serif text-2xl leading-snug transition-colors group-hover:text-[#d7a94f]">
+                    <h2 className="font-serif text-2xl leading-snug transition-colors group-hover:text-jazz-brass">
                       {column.title}
                     </h2>
                     <p className="mt-2 max-w-2xl text-sm leading-7 text-[#f4eddf]/55">
@@ -151,7 +151,7 @@ export default async function ColumnsPage() {
                   <Link
                     href={`/columns/${column.slug}`}
                     aria-label={`${column.title}を読む`}
-                    className="grid size-12 place-items-center rounded-full border border-[#f4eddf]/25 transition-colors group-hover:border-[#d7a94f] group-hover:text-[#d7a94f]"
+                    className="grid size-12 place-items-center rounded-full border border-[#f4eddf]/25 transition-colors group-hover:border-jazz-brass group-hover:text-jazz-brass"
                   >
                     →
                   </Link>

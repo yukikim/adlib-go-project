@@ -20,7 +20,7 @@ export async function AppHeader() {
         {currentUser ? (
           <div className="flex flex-wrap items-center gap-2 border-t border-[#f4eddf]/15 pt-4 text-[#f4eddf]/60 lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0">
             {roleLabel ? (
-              <p className="text-[9px] font-bold tracking-[0.14em] text-[#d7a94f]">
+              <p className="text-[9px] font-bold tracking-[0.14em] text-jazz-brass">
                 {roleLabel}
               </p>
             ) : null}

@@ -29,7 +29,7 @@ export default function AppFooter() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-[10px] font-bold tracking-[0.14em] text-[#f4eddf]/50 transition-colors hover:text-[#d7a94f]"
+                    className="text-[10px] font-bold tracking-[0.14em] text-[#f4eddf]/50 transition-colors hover:text-jazz-brass"
                   >
                     {link.label}
                   </Link>

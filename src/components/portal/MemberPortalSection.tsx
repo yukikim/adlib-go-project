@@ -1017,8 +1017,8 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
     <div className="member-jazz-content mx-auto max-w-7xl px-4 pb-24 pt-8 sm:px-6 lg:pb-16 lg:pt-12">
       <section className="mb-8 flex items-center justify-between gap-5 border-b border-[#f4eddf]/15 pb-8">
         <div>
-          <p className="flex items-center gap-2 text-[10px] font-bold tracking-[0.24em] text-[#d7a94f]">
-            <span aria-hidden="true" className="h-px w-5 bg-[#d7a94f]" />
+          <p className="flex items-center gap-2 text-[10px] font-bold tracking-[0.24em] text-jazz-brass">
+            <span aria-hidden="true" className="h-px w-5 bg-jazz-brass" />
             MEMBER HOME
           </p>
           <h1 className="mt-4 font-serif text-4xl leading-tight text-[#f4eddf] sm:text-5xl">
@@ -1030,14 +1030,14 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
         </div>
         <div
           aria-hidden="true"
-          className="grid size-14 shrink-0 place-items-center rounded-full border border-[#d7a94f]/50 bg-[#d7a94f]/10 font-serif text-2xl text-[#d7a94f] sm:size-20"
+          className="grid size-14 shrink-0 place-items-center rounded-full border border-jazz-brass/50 bg-jazz-brass/10 font-serif text-2xl text-jazz-brass sm:size-20"
         >
           {profileDisplayName.trim().charAt(0).toUpperCase() || "M"}
         </div>
       </section>
 
       {nextActionEvent && nextActionLabel ? (
-        <section className="relative mb-8 overflow-hidden bg-[#d7a94f] p-6 text-[#0c0f0e] sm:p-8">
+        <section className="relative mb-8 overflow-hidden bg-jazz-brass p-6 text-[#0c0f0e] sm:p-8">
           <div
             aria-hidden="true"
             className="absolute -right-16 -top-16 size-52 rounded-full border-[28px] border-[#0c0f0e]/8"
@@ -1066,7 +1066,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             </div>
             <a
               href="#event-info"
-              className="inline-flex min-h-12 items-center justify-center border border-[#153027] bg-[#153027] px-5 text-xs font-bold tracking-[0.12em] text-[#f4eddf] transition-colors hover:bg-[#23463a]"
+              className="inline-flex min-h-12 items-center justify-center border border-jazz-green bg-jazz-green px-5 text-xs font-bold tracking-[0.12em] text-[#f4eddf] transition-colors hover:bg-jazz-green-hover"
             >
               詳細を確認
               <span aria-hidden="true" className="ml-3">
@@ -1090,10 +1090,10 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
           <a
             key={href}
             href={href}
-            className="flex min-h-14 items-center justify-between bg-[#0c0f0e] px-4 font-serif text-lg text-[#f4eddf] transition-colors hover:text-[#d7a94f]"
+            className="flex min-h-14 items-center justify-between bg-[#0c0f0e] px-4 font-serif text-lg text-[#f4eddf] transition-colors hover:text-jazz-brass"
           >
             {label}
-            <span aria-hidden="true" className="text-[#d7a94f]">
+            <span aria-hidden="true" className="text-jazz-brass">
               →
             </span>
           </a>
@@ -1101,7 +1101,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
       </nav>
 
       <Card className="member-notice-card border p-5 sm:p-7">
-        <p className="text-[10px] font-bold tracking-[0.2em] text-[#d7a94f]">
+        <p className="text-[10px] font-bold tracking-[0.2em] text-jazz-brass">
           NOTICE
         </p>
         <CardTitle className="mt-3 font-serif text-3xl">
@@ -1148,7 +1148,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
         id="event-info"
         className="member-events-card my-8 scroll-mt-28 border p-3 sm:p-5"
       >
-        <p className="text-[10px] font-bold tracking-[0.2em] text-[#d7a94f]">
+        <p className="text-[10px] font-bold tracking-[0.2em] text-jazz-brass">
           SESSION BOARD
         </p>
         <CardTitle className="mt-3 font-serif text-3xl">
@@ -2640,7 +2640,7 @@ export function MemberPortalSection(props: MemberPortalSectionProps) {
             href={href}
             className={[
               "grid min-h-16 place-items-center text-[9px] font-bold tracking-[0.12em]",
-              index === 0 ? "text-[#d7a94f]" : "text-[#f4eddf]/45",
+              index === 0 ? "text-jazz-brass" : "text-[#f4eddf]/45",
             ].join(" ")}
           >
             {label}

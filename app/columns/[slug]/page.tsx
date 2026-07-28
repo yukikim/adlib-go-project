@@ -59,28 +59,28 @@ export default async function ColumnDetailPage({
         </div>
       </header>
 
-      <article className="jazz-paper-grid bg-[#e9e0cf] px-4 py-16 text-[#153027] sm:px-6 lg:py-24">
+      <article className="jazz-paper-grid bg-[#e9e0cf] px-4 py-16 text-jazz-green sm:px-6 lg:py-24">
         <div className="mx-auto max-w-3xl">
-          <p className="font-serif text-xl leading-9 text-[#153027]/70 sm:text-2xl sm:leading-10">
+          <p className="font-serif text-xl leading-9 text-jazz-green/70 sm:text-2xl sm:leading-10">
             演奏の前後に読み返せる、Adlib Goからのセッションノートです。
           </p>
-          <div className="mt-12 border-t border-[#153027]/20">
+          <div className="mt-12 border-t border-jazz-green/20">
             {paragraphs.map((paragraph, index) => (
               <p
                 key={`${index}-${paragraph.slice(0, 24)}`}
-                className="border-b border-[#153027]/15 py-7 text-sm leading-9 text-[#153027]/85 sm:text-base"
+                className="border-b border-jazz-green/15 py-7 text-sm leading-9 text-jazz-green/85 sm:text-base"
               >
                 {paragraph}
               </p>
             ))}
           </div>
           <div className="mt-12 flex flex-col gap-4 border-l-2 border-[#9c6d25] pl-5 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm leading-7 text-[#153027]/65">
+            <p className="text-sm leading-7 text-jazz-green/65">
               次のセッション情報と参加登録は、メンバーマイページで確認できます。
             </p>
             <Link
               href="/signin"
-              className="shrink-0 text-xs font-bold tracking-[0.12em] text-[#153027]"
+              className="shrink-0 text-xs font-bold tracking-[0.12em] text-jazz-green"
             >
               マイページへ →
             </Link>

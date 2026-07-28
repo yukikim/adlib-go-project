@@ -80,7 +80,7 @@ export function ContactForm() {
             maxLength={80}
             required
             disabled={isSubmitting}
-            className="h-12 rounded-none border-[#153027]/30 bg-[#f4eddf]/60 text-[#153027]"
+            className="h-12 rounded-none border-jazz-green/30 bg-[#f4eddf]/60 text-jazz-green"
           />
         </div>
         <div className="space-y-2">
@@ -94,7 +94,7 @@ export function ContactForm() {
             maxLength={254}
             required
             disabled={isSubmitting}
-            className="h-12 rounded-none border-[#153027]/30 bg-[#f4eddf]/60 text-[#153027]"
+            className="h-12 rounded-none border-jazz-green/30 bg-[#f4eddf]/60 text-jazz-green"
           />
         </div>
       </div>
@@ -107,7 +107,7 @@ export function ContactForm() {
           maxLength={120}
           required
           disabled={isSubmitting}
-          className="h-12 rounded-none border-[#153027]/30 bg-[#f4eddf]/60 text-[#153027]"
+          className="h-12 rounded-none border-jazz-green/30 bg-[#f4eddf]/60 text-jazz-green"
         />
       </div>
 
@@ -122,7 +122,7 @@ export function ContactForm() {
         <Textarea
           id="contact-message"
           name="message"
-          className="min-h-48 resize-y rounded-none border-[#153027]/30 bg-[#f4eddf]/60 text-[#153027]"
+          className="min-h-48 resize-y rounded-none border-jazz-green/30 bg-[#f4eddf]/60 text-jazz-green"
           minLength={10}
           maxLength={MESSAGE_MAX_LENGTH}
           aria-describedby="contact-message-help contact-message-count"
@@ -170,7 +170,7 @@ export function ContactForm() {
       <Button
         type="submit"
         size="lg"
-        className="min-h-12 rounded-none border-[#153027] bg-[#153027] px-6 text-xs font-bold tracking-[0.12em] text-[#f4eddf] hover:bg-[#23463a]"
+        className="min-h-12 rounded-none border-jazz-green bg-jazz-green px-6 text-xs font-bold tracking-[0.12em] text-[#f4eddf] hover:bg-jazz-green-hover"
         disabled={isSubmitting}
       >
         {isSubmitting ? '送信中…' : 'お問い合わせを送信'}

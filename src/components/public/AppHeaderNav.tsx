@@ -75,7 +75,7 @@ export function AppHeaderNav({
                 key={link.href}
                 href={link.href}
                 onClick={closeMenu}
-                className="text-xs font-bold tracking-[0.1em] text-[#f4eddf]/65 transition-colors hover:text-[#d7a94f]"
+                className="text-xs font-bold tracking-[0.1em] text-[#f4eddf]/65 transition-colors hover:text-jazz-brass"
               >
                 {link.label}
               </Link>
@@ -84,7 +84,7 @@ export function AppHeaderNav({
               <Link
                 href="/signin"
                 onClick={closeMenu}
-                className="text-xs font-bold tracking-[0.1em] text-[#f4eddf]/65 transition-colors hover:text-[#d7a94f]"
+                className="text-xs font-bold tracking-[0.1em] text-[#f4eddf]/65 transition-colors hover:text-jazz-brass"
               >
                 会員ログイン
               </Link>
@@ -93,7 +93,7 @@ export function AppHeaderNav({
               <Link
                 href="/signup"
                 onClick={closeMenu}
-                className="inline-flex min-h-10 items-center justify-center border border-[#d7a94f] bg-[#d7a94f] px-4 text-xs font-bold tracking-[0.1em] text-[#0c0f0e] transition-colors hover:bg-[#ecc671]"
+                className="inline-flex min-h-10 items-center justify-center border border-jazz-brass bg-jazz-brass px-4 text-xs font-bold tracking-[0.1em] text-[#0c0f0e] transition-colors hover:bg-jazz-brass-hover"
               >
                 会員登録
               </Link>
@@ -102,7 +102,7 @@ export function AppHeaderNav({
               <Link
                 href="/member"
                 onClick={closeMenu}
-                className="text-xs font-bold tracking-[0.1em] text-[#d7a94f]"
+                className="text-xs font-bold tracking-[0.1em] text-jazz-brass"
               >
                 マイページ
               </Link>
@@ -111,7 +111,7 @@ export function AppHeaderNav({
               <Link
                 href="/admin"
                 onClick={closeMenu}
-                className="text-xs font-bold tracking-[0.1em] text-[#d7a94f]"
+                className="text-xs font-bold tracking-[0.1em] text-jazz-brass"
               >
                 管理画面
               </Link>

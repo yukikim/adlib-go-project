@@ -859,13 +859,6 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
       : 'text-foreground hover:bg-muted',
   );
 
-  const getChildLinkClassName = (childId: string) => cn(
-    'block rounded-lg px-3 py-1.5 text-sm transition-colors',
-    activeChildId === childId
-      ? 'bg-brand-base/50 text-brand-sub'
-      : 'text-muted-foreground hover:bg-muted hover:text-foreground',
-  );
-
   const statusConversion = (status: string) => {
     return getSessionEventStatusLabel(status);
   };

@@ -70,7 +70,7 @@ export default function JazzTopPreviewPage() {
                 <br />
                 your
                 <br />
-                <span className="ml-[0.35em] text-[#d7a94f] italic">
+                <span className="ml-[0.35em] text-jazz-brass italic">
                   groove.
                 </span>
               </h1>
@@ -94,7 +94,7 @@ export default function JazzTopPreviewPage() {
               id="next-session"
               className="relative border border-[#f4eddf]/20 bg-[#121715]/90 p-5 sm:p-7"
             >
-              <div className="absolute -left-px -top-px h-1 w-24 bg-[#d7a94f]" />
+              <div className="absolute -left-px -top-px h-1 w-24 bg-jazz-brass" />
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <PreviewStatus tone="red">NOW BOOKING</PreviewStatus>
@@ -102,7 +102,7 @@ export default function JazzTopPreviewPage() {
                     NEXT SESSION
                   </p>
                 </div>
-                <p className="text-right font-serif text-5xl leading-none text-[#d7a94f]">
+                <p className="text-right font-serif text-5xl leading-none text-jazz-brass">
                   23
                   <span className="block text-xs tracking-[0.18em]">AUG.</span>
                 </p>
@@ -122,7 +122,7 @@ export default function JazzTopPreviewPage() {
               </dl>
               <a
                 href="#session-flow"
-                className="mt-7 flex min-h-12 items-center justify-between border-t border-[#f4eddf]/15 pt-5 text-xs font-bold tracking-[0.12em] text-[#d7a94f]"
+                className="mt-7 flex min-h-12 items-center justify-between border-t border-[#f4eddf]/15 pt-5 text-xs font-bold tracking-[0.12em] text-jazz-brass"
               >
                 参加までの流れ
                 <span aria-hidden="true">↓</span>
@@ -133,7 +133,7 @@ export default function JazzTopPreviewPage() {
 
         <section
           id="session-flow"
-          className="jazz-paper-grid bg-[#e9e0cf] px-4 py-20 text-[#153027] sm:px-6 lg:py-28"
+          className="jazz-paper-grid bg-[#e9e0cf] px-4 py-20 text-jazz-green sm:px-6 lg:py-28"
         >
           <div className="mx-auto max-w-7xl">
             <PreviewSectionTitle
@@ -142,18 +142,18 @@ export default function JazzTopPreviewPage() {
               title="難しいことは、音を出してから。"
               description="モバイルでは、検討から参加登録までを縦方向の3ステップに絞ります。"
             />
-            <ol className="mt-12 grid border-t border-[#153027]/25 md:grid-cols-3 md:border-l">
+            <ol className="mt-12 grid border-t border-jazz-green/25 md:grid-cols-3 md:border-l">
               {sessionSteps.map((step) => (
                 <li
                   key={step.number}
-                  className="grid grid-cols-[3.5rem_1fr] gap-4 border-b border-[#153027]/25 py-7 md:block md:border-r md:px-6 md:py-8"
+                  className="grid grid-cols-[3.5rem_1fr] gap-4 border-b border-jazz-green/25 py-7 md:block md:border-r md:px-6 md:py-8"
                 >
                   <span className="font-serif text-3xl text-[#9c6d25]">
                     {step.number}
                   </span>
                   <div>
                     <h3 className="font-serif text-2xl">{step.title}</h3>
-                    <p className="mt-2 text-sm leading-7 text-[#153027]/65">
+                    <p className="mt-2 text-sm leading-7 text-jazz-green/65">
                       {step.body}
                     </p>
                   </div>
@@ -172,7 +172,7 @@ export default function JazzTopPreviewPage() {
               />
               <a
                 href="/design-preview/public"
-                className="text-xs font-bold tracking-[0.12em] text-[#d7a94f]"
+                className="text-xs font-bold tracking-[0.12em] text-jazz-brass"
               >
                 すべてのコラム →
               </a>
@@ -188,10 +188,10 @@ export default function JazzTopPreviewPage() {
                     <span>{column.issue}</span>
                     <span>{column.category}</span>
                   </div>
-                  <p className="mt-10 font-serif text-6xl text-[#d7a94f]/25">
+                  <p className="mt-10 font-serif text-6xl text-jazz-brass/25">
                     {String(index + 1).padStart(2, "0")}
                   </p>
-                  <h3 className="mt-6 max-w-sm font-serif text-2xl leading-snug transition-colors group-hover:text-[#d7a94f]">
+                  <h3 className="mt-6 max-w-sm font-serif text-2xl leading-snug transition-colors group-hover:text-jazz-brass">
                     {column.title}
                   </h3>
                   <p className="mt-6 text-xs font-bold tracking-[0.12em] text-[#f4eddf]/55">
@@ -203,7 +203,7 @@ export default function JazzTopPreviewPage() {
           </div>
         </section>
 
-        <section className="border-t border-[#f4eddf]/15 bg-[#d7a94f] px-4 py-16 text-[#0c0f0e] sm:px-6">
+        <section className="border-t border-[#f4eddf]/15 bg-jazz-brass px-4 py-16 text-[#0c0f0e] sm:px-6">
           <div className="mx-auto flex max-w-7xl flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-[10px] font-bold tracking-[0.22em]">
