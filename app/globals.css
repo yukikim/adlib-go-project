@@ -6,28 +6,6 @@
 
 @theme inline {
 
-    /*
-    --color-primary: #667570;
-    --color-secondary: #465051;
-    --color-tertiary: #9db09b;
-    --color-background: #cfd2cb;
-    --color-accent: #9f2b2b;
-
-    --color-on-primary: #C9DDD6;
-    --color-on-secondary: #8CC5B1;
-    --color-on-tertiary: #efebe0;
-    --color-on-background: #313a25;
-    --color-on-accent: #B4CAB4;
-    */
-
-    /*
-    primary:明るく
-    secondary:
-    tertiary:
-    background:より明るく
-    accent:
-    */
-
     --color-primary: #e7eff2;
     --color-secondary: #666a86;
     --color-tertiary: #b5dbd5;
@@ -41,20 +19,6 @@
     --color-on-accent: #B4CAB4;
 
     --color-destructive: #f80303;
-
-    /*
-    --color-primary: #c9c9c9;
-    --color-secondary: #6f6f6f;
-    --color-tertiary: #454545;
-    --color-background: #e7e7e7;
-    --color-accent: #9f2b2b;
-
-    --color-on-primary: #112A46;
-    --color-on-secondary: #D5E8FD;
-    --color-on-tertiary: #D5E8FD;
-    --color-on-background: #765C43;
-    --color-on-accent: #B4CAB4;
-    */
 
     --color-error: #f85d03;
     --color-on-error: #8c8c8c;
