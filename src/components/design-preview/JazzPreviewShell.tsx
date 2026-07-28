@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import Image from "next/image";
 
 type PreviewPage = "top" | "public" | "member";
 
@@ -36,15 +37,25 @@ export function JazzPreviewShell({
             className="group flex min-w-0 items-center gap-3"
             aria-label="Adlib Go デザインプレビューのトップへ"
           >
-            <span
-              aria-hidden="true"
-              className="grid size-9 shrink-0 place-items-center rounded-full border border-[#d7a94f]/70 text-[10px] font-bold tracking-[0.08em] text-[#d7a94f] transition-colors group-hover:bg-[#d7a94f] group-hover:text-[#0c0f0e]"
-            >
-              AG
+            <span>
+              <Image
+                src="/images/ag-logo.svg"
+                alt="header logo"
+                width={200}
+                height={80}
+                className="h-7 w-auto"
+              />
             </span>
-            <span className="truncate font-serif text-lg leading-none tracking-[0.04em]">
-              Adlib Go
-            </span>
+            {/* <span>
+              <Image
+                src="/images/ag-logo.svg"
+                alt="Adlib Go"
+                width={200}
+                height={80}
+                className="h-10 w-auto lg:h-16"
+              />
+            </span> */}
+            <span className="sr-only">デザインプレビューのトップへ</span>
           </Link>
 
           <span className="rounded-full border border-[#f4eddf]/15 px-2.5 py-1 text-[9px] font-bold tracking-[0.2em] text-[#f4eddf]/55">

@@ -5,6 +5,7 @@ import {
   PreviewSectionTitle,
   PreviewStatus,
 } from "@/components/design-preview/JazzPreviewShell";
+import Image from "next/image";
 
 const sessionSteps = [
   {
@@ -51,20 +52,27 @@ export default function JazzTopPreviewPage() {
             aria-hidden="true"
             className="jazz-grooves absolute -right-36 top-12 -z-10 aspect-square w-[34rem] rounded-full opacity-80 sm:-right-24 lg:right-[4vw] lg:top-20 lg:w-[44rem]"
           />
-          <div
-            aria-hidden="true"
-            className="absolute left-[8%] top-24 -z-10 size-3 rounded-full bg-[#d66958] shadow-[0_0_36px_rgba(214,105,88,0.75)]"
-          />
-
-          <div className="mx-auto grid min-h-[82svh] max-w-7xl content-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1.05fr_0.75fr] lg:items-end lg:gap-16 lg:py-24">
+              <div className="px-2.5 pt-8 flex justify-center lg:justify-end lg:pr-8">
+                <Image
+                  src="/images/ag-logo-g2.svg"
+                  alt="Adlib Go"
+                  width={200}
+                  height={80}
+                  className="h-14 w-auto lg:h-30"
+                />
+              </div>
+          <div className="mx-auto grid min-h-[82svh] max-w-7xl content-center gap-12 px-4 pt-4 pb-12 sm:px-6 lg:grid-cols-[1.05fr_0.75fr] lg:items-end lg:gap-16 lg:py-24">
             <div>
+
               <PreviewEyebrow>JAZZ SESSION · TOKYO</PreviewEyebrow>
               <h1 className="mt-6 max-w-4xl font-serif text-[clamp(4.5rem,20vw,10rem)] leading-[0.76] tracking-[-0.075em]">
                 Find
                 <br />
                 your
                 <br />
-                <span className="ml-[0.35em] text-[#d7a94f] italic">groove.</span>
+                <span className="ml-[0.35em] text-[#d7a94f] italic">
+                  groove.
+                </span>
               </h1>
               <p className="mt-8 max-w-xl text-sm leading-7 text-[#f4eddf]/65 sm:text-base">
                 上手さより、音で話すこと。
