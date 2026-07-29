@@ -75,7 +75,7 @@ export function SearchableCombobox({
       </Button>
 
       {open ? (
-        <div className="absolute top-full z-50 mt-2 w-full rounded-xl border bg-popover p-3 text-popover-foreground shadow-lg ring-1 ring-foreground/10">
+        <div className="absolute top-full z-50 mt-2 w-full rounded-xl border bg-popover p-3 text-popover-foreground shadow-lg ring-1 ring-foreground/10 bg-gray-500">
           <div className="relative">
             <Search className="pointer-events-none absolute top-1/2 left-2 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input

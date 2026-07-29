@@ -1676,7 +1676,7 @@ export function AdminPortalSection(props: AdminPortalSectionProps) {
                   </Button>
                 </div>
                 <Dialog open={Boolean(editingSessionSet)} onOpenChange={(open) => { if (!open) setEditingSessionSet(null); }}>
-                  <DialogContent className="sm:max-w-2xl">
+                  <DialogContent className="sm:max-w-2xl bg-gray-50">
                     <DialogHeader>
                       <DialogTitle>sessionSet を編集</DialogTitle>
                       <DialogDescription>各セッションの曲名、key、担当メンバーを個別に調整できます。</DialogDescription>
